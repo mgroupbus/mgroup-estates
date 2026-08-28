@@ -5746,3 +5746,19 @@ html.mg-entered nav,html.mg-entered #mainNav,html.mg-entered .det-topbar{
 .footer-org-name{font-size:13px!important;font-weight:400!important;
   letter-spacing:.06em!important;line-height:1.85!important;
   color:rgba(255,255,255,.55)!important;margin-bottom:2px!important}
+
+/* ═══ FOOTER — tidy the copyright / policy line ═══════════════════
+   The two policy links were flex-packed left while the copyright above
+   them centred, so on a phone the block sat crooked. They also floated
+   as two loose words with only a gap between them; a middot reads as
+   one line of fine print. */
+.footer-legal{gap:0!important;align-items:baseline;margin-top:7px!important;
+  letter-spacing:.1em}
+.footer-legal a{letter-spacing:.1em}
+.footer-legal a + a::before{content:'·';display:inline-block;
+  margin:0 9px;color:rgba(255,255,255,.28)}
+
+@media(max-width:900px){
+  .footer-bottom > div:first-child{text-align:center;width:100%}
+  .footer-legal{justify-content:center}
+}
