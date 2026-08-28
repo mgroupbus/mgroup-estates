@@ -5907,3 +5907,10 @@ nav,nav.scrolled,.det-jump,.det-topbar,.mobile-nav,#mobileNav{
   flex:0 0 auto;min-width:58px;text-align:right;
   font-variant-numeric:tabular-nums lining-nums;
   letter-spacing:.04em;white-space:nowrap}
+
+/* The jump bar was white while the page around it is the warm off-white
+   --page, so the strip stood out as a band across the top of the
+   sections. Same ground as the page now — only its hairline separates
+   it, and it still hides content passing underneath because it is
+   opaque. */
+.det-jump{background:var(--page,#FCFAF7)!important}
