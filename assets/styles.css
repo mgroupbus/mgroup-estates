@@ -5879,3 +5879,24 @@ nav,nav.scrolled,.det-jump,.det-topbar,.mobile-nav,#mobileNav{
   border:1px solid rgba(160,60,45,.28)!important;
   color:#8A3B2C!important}
 #sidAcc1 .sid-inp{margin-top:8px}
+
+/* ═══ Location & Nearby — three tidy columns ══════════════════════
+   The icon sits inside the name span, so it never formed a column, and
+   the distances were only right-aligned: "1.5 km" started 8px left of
+   "2 km", so the numbers read as a ragged edge rather than a list.
+   Fixed icon slot, one text start, and a distance column with tabular
+   figures so the digits line up under each other. */
+#detNearby .det-near{
+  display:flex;align-items:center;gap:12px;
+  padding:9px 2px;border-bottom:1px solid rgba(51,41,31,.07)}
+#detNearby .det-near:last-child{border-bottom:0}
+
+#detNearby .det-near-name{
+  display:flex;align-items:center;gap:11px;flex:1 1 auto;min-width:0}
+#detNearby .det-near-name svg,#detNearby .det-near-name .mgi{
+  flex:0 0 16px;width:16px;height:16px;opacity:.62}
+
+#detNearby .det-near-dist{
+  flex:0 0 auto;min-width:58px;text-align:right;
+  font-variant-numeric:tabular-nums lining-nums;
+  letter-spacing:.04em;white-space:nowrap}
