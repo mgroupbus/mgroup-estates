@@ -5975,5 +5975,5 @@ p + p{margin-top:14px}
    sub-line at 16px. */
 .ct-ok p{margin-bottom:20px}
 .calc-disclaimer{line-height:1.7}
-.det-desc p{line-height:1.8}
+.det-desc,.det-desc p{line-height:1.8!important}
 .sid-brochure-sub{margin-bottom:14px}
