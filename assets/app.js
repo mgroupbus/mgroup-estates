@@ -2993,8 +2993,16 @@ document.addEventListener('DOMContentLoaded', function(){
 function svcSlide(dir){
   var rail=document.getElementById('svcRail'); if(!rail) return;
   var card=rail.querySelector('.svc3-card'); if(!card) return;
-  var step=card.getBoundingClientRect().width+18;
-  rail.scrollBy({left:dir*step,behavior:'smooth'});
+  var gap  = parseFloat(getComputedStyle(rail).gap) || 18;
+  var step = card.getBoundingClientRect().width + gap;
+  var max  = Math.max(0, rail.scrollWidth - rail.clientWidth);
+  var at   = rail.scrollLeft;
+  /* wrap at the ends so the rail keeps cycling instead of dead-ending
+     on the last card — the same behaviour as the Similar rail */
+  var next = dir > 0
+    ? (at >= max - 4 ? 0 : Math.min(at + step, max))
+    : (at <= 4 ? max : Math.max(at - step, 0));
+  rail.scrollTo({left:next,behavior:'smooth'});
 }
 
 ;/* ── Home quick enquiry form ────────────────────────────────────
