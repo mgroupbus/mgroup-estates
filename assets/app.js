@@ -3351,7 +3351,7 @@ var MG_MUTED = [107, 90, 71];
    `resize=contain` is not optional: without it only the width is
    applied and the image comes back stretched.
    Non-Supabase URLs (Unsplash fallbacks) pass through untouched. */
-function mgImg(url, w){
+function mgImg(url, w, exact){
   var u = String(url || '');
   if (!u) return u;
   var isObj = u.indexOf('/storage/v1/object/public/') !== -1;
@@ -3366,7 +3366,20 @@ function mgImg(url, w){
   var keep  = (parts[1] || '').split('&').filter(function(p){
     return p && !/^(width|height|resize|quality)=/.test(p);
   });
-  keep.push('width=' + (w || 900), 'resize=contain', 'quality=72');
+  /* Never ask for more pixels than the screen can show. A phone was
+     pulling the 1600px gallery photo for a 375px-wide viewport — four
+     times the data for the same picture, which is why images arrived
+     late and out of order on a property page. */
+  var want = w || 900;
+  var px   = want;
+  if (!exact) {
+    /* `exact` is for the PDF: a brochure is printed, not shown on this
+       screen, so the viewport cap must not shrink its photos. */
+    var cap = Math.ceil((window.innerWidth || 1440) * (window.devicePixelRatio || 1));
+    px = Math.max(200, Math.min(want, cap));
+  }
+
+  keep.push('width=' + px, 'resize=contain', 'quality=72');
   return path + '?' + keep.join('&');
 }
 
@@ -3395,7 +3408,7 @@ function mgLoadImage(url){
       }catch(e){ resolve(null); }          /* tainted canvas / CORS */
     };
     img.onerror = function(){ resolve(null); };
-    img.src = mgImg(url, 1200);
+    img.src = mgImg(url, 1200, true);
   });
 }
 
