@@ -5809,3 +5809,38 @@ nav.scrolled{
   backdrop-filter:blur(20px) saturate(150%);
   -webkit-backdrop-filter:blur(20px) saturate(150%);
   border-bottom:1px solid rgba(255,255,255,.07)}
+
+/* ═══ Service card label — readable without a haze over the photo ═══
+   The label sat directly on the photograph with an underline running
+   through it. On the Buy Properties shot the sea horizon lands at the
+   same height, so the two lines read as text overlapping text. A shadow
+   lifts the label off any background without dimming the image, which
+   was removed on purpose. */
+.svc3-name{
+  text-shadow:0 1px 16px rgba(0,0,0,.6),0 1px 3px rgba(0,0,0,.45);
+  text-underline-offset:7px;
+  text-decoration-thickness:1px;
+  text-decoration-color:rgba(255,255,255,.55)}
+
+/* ═══ Hero buttons + service labels: white only on hover ══════════
+   Both hero buttons now sit transparent over the video and fill white
+   on hover, so the pair reads as one set instead of one solid and one
+   outline. The service labels get the same treatment — which also
+   settles the readability problem, since the white bar separates the
+   text from the photograph without dimming the image. */
+.btn-hero-primary,.btn-hero-ghost{
+  background:transparent!important;color:#fff!important;
+  border:1px solid rgba(255,255,255,.45)!important;
+  transition:background .3s,color .3s,border-color .3s,transform .3s}
+.btn-hero-primary:hover,.btn-hero-ghost:hover,
+.btn-hero-primary:focus-visible,.btn-hero-ghost:focus-visible{
+  background:#fff!important;color:var(--ink,#33291F)!important;
+  border-color:#fff!important;transform:translateY(-1px)}
+
+.svc3-name{
+  display:inline-block!important;padding:9px 20px;border-radius:2px;
+  width:auto!important;
+  background:transparent;text-decoration:none!important;
+  transition:background .32s ease,color .32s ease}
+.svc3-card:hover .svc3-name,.svc3-card:focus-visible .svc3-name{
+  background:#fff;color:var(--ink,#33291F);text-shadow:none}
