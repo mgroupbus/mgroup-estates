@@ -5740,3 +5740,9 @@ html.mg-entered nav,html.mg-entered #mainNav,html.mg-entered .det-topbar{
 @media screen and (max-width:768px){
   body{padding-bottom:0!important}
 }
+
+/* The company line read as a heading against its own address. Same
+   weight, size and colour as the address now — it is one block. */
+.footer-org-name{font-size:13px!important;font-weight:400!important;
+  letter-spacing:.06em!important;line-height:1.85!important;
+  color:rgba(255,255,255,.55)!important;margin-bottom:2px!important}
