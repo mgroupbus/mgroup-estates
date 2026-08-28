@@ -413,7 +413,7 @@ function renderRentalGrid() {
 
     return '<div class="rent-card" onclick="openRentDetail(\'' + villaId + '\')">' +
       '<div class="rent-card-img">' +
-        '<div class="rent-card-img-inner" style="background-image:url(' + img + ')"></div>' +
+        '<div class="rent-card-img-inner" style="background-image:url(' + mgImg(img, 760) + ')"></div>' +
         '<div class="rent-card-img-overlay"></div>' +
         '<div class="rent-card-badges">' +
           (v.is_featured ? '<span class="rent-badge featured">Featured</span>' : '') +
@@ -482,7 +482,7 @@ var _rentGalleryIdx = 0;
 function rentDetThumb(idx) {
   _rentGalleryIdx = idx;
   var mainImg = document.getElementById('rentDetMainImg');
-  if (mainImg) mainImg.src = _rentGalleryImgs[idx];
+  if (mainImg) mainImg.src = mgImg(_rentGalleryImgs[idx], 1600);
   // Update active thumb
   document.querySelectorAll('.rent-det-thumb').forEach(function(t, i) {
     t.classList.toggle('active', i === idx);
@@ -541,7 +541,7 @@ function _rentDetLbKey(e) {
 function rentDetLbNav(dir) {
   _rentGalleryIdx = (_rentGalleryIdx + dir + _rentGalleryImgs.length) % _rentGalleryImgs.length;
   var img = document.getElementById('rentDetLbImg');
-  if (img) img.src = _rentGalleryImgs[_rentGalleryIdx];
+  if (img) img.src = mgImg(_rentGalleryImgs[_rentGalleryIdx], 1600);
   var cnt = document.getElementById('rentDetLbCounter');
   if (cnt) cnt.textContent = (_rentGalleryIdx + 1) + ' / ' + _rentGalleryImgs.length;
 }
@@ -802,7 +802,7 @@ function renderGrid() {
     return `
     <div class="prop-card" onclick="location.href='property.html?id=${p.id}'">
       <div class="prop-card-img">
-        <div class="prop-card-img-inner" style="background-color:#0a0a0a;background-image:${p.img ? 'url('+p.img+')' : p.bg};background-size:cover;background-position:center;background-repeat:no-repeat;"></div>
+        <div class="prop-card-img-inner" style="background-color:#0a0a0a;background-image:${p.img ? 'url('+mgImg(p.img,760)+')' : p.bg};background-size:cover;background-position:center;background-repeat:no-repeat;"></div>
         <div class="prop-card-img-overlay"></div>
         <div class="prop-badges">
           ${p.badge ? `<span class="prop-badge">${p.badge}</span>` : ''}
@@ -976,7 +976,7 @@ function renderInvSlider() {
     return `
     <div class="inv-card" onclick="${c.propId ? `location.href='property.html?id='+${c.propId}` : ''}" data-idx="${i}" style="${c.propId ? 'cursor:pointer' : 'cursor:default'}">
       <div class="inv-card-img">
-        <div class="inv-card-img-inner" style="background-color:#0a0a0a;background-image:${c.img ? 'url('+c.img+')' : c.bg};background-size:cover;background-position:center;background-repeat:no-repeat;width:100%;height:100%;"></div>
+        <div class="inv-card-img-inner" style="background-color:#0a0a0a;background-image:${c.img ? 'url('+mgImg(c.img,760)+')' : c.bg};background-size:cover;background-position:center;background-repeat:no-repeat;width:100%;height:100%;"></div>
         <div class="inv-card-img-overlay"></div>
         ${c.badge ? `<div class="inv-yield-badge">${c.badge}</div>` : ''}
         <button class="inv-save" onclick="event.stopPropagation()">♡</button>
@@ -1392,7 +1392,7 @@ function galNav(dir) {
   _galIdx = (_galIdx + dir + total) % total;
   const gm = document.getElementById('detGalleryMain');
   if (_galIdx < imgs.length) {
-    gm.style.backgroundImage = 'url(' + imgs[_galIdx] + ')';
+    gm.style.backgroundImage = 'url(' + mgImg(imgs[_galIdx], 1600) + ')';
     gm.style.backgroundSize = 'cover';
     gm.style.backgroundPosition = 'center';
     gm.innerHTML = '';
@@ -1429,7 +1429,7 @@ function showFpImage(url, label) {
     return;
   }
   if(ph) ph.style.display='none';
-  if(img) img.src=url;
+  if(img) img.src=url;   /* floor plans stay original: they can be transparent PNGs, and the resize endpoint returns JPEG */
   if(wrap) wrap.style.display='block';
 }
 
@@ -1699,7 +1699,7 @@ async function openDetail(id) {
   window._detVideo = det.video || null;
   const gm=document.getElementById('detGalleryMain');
   if (imgs.length > 0) {
-    gm.style.cssText=`background-image:url(${imgs[0]});background-size:cover;background-position:center;width:100%;height:100%;`;
+    gm.style.cssText=`background-image:url(${mgImg(imgs[0],1600)});background-size:cover;background-position:center;width:100%;height:100%;`;
     gm.innerHTML='';
   } else {
     gm.style.cssText=`background:${p.bg};width:100%;height:100%;display:flex;align-items:center;justify-content:center;`;
@@ -1708,9 +1708,9 @@ async function openDetail(id) {
   const totalMedia = imgs.length + (hasVideo ? 1 : 0);
   document.getElementById('detGalleryCount').textContent=`1 / ${totalMedia || 1}`;
   // Build thumbnails from real images
-  let thumbsHtml = imgs.map((url,i)=>`<div class="det-thumb${i===0?' active':''}" style="background-image:url(${url})" onclick="swThumb(this,${i},event)"></div>`).join('');
+  let thumbsHtml = imgs.map((url,i)=>`<div class="det-thumb${i===0?' active':''}" style="background-image:url(${mgImg(url,200)})" onclick="swThumb(this,${i},event)"></div>`).join('');
   if (hasVideo) {
-    thumbsHtml += `<div class="det-thumb det-thumb-video" style="background-image:url(${imgs[0]||''})" onclick="openVideoLightbox(event)"></div>`;
+    thumbsHtml += `<div class="det-thumb det-thumb-video" style="background-image:url(${mgImg(imgs[0]||'',200)})" onclick="openVideoLightbox(event)"></div>`;
   }
   document.getElementById('detThumbs').innerHTML = thumbsHtml;
   // Header
@@ -1772,7 +1772,7 @@ async function openDetail(id) {
     if(x.sqm) specs.push(`<span style="display:inline-flex;align-items:center;gap:3px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10.6 9-7.1 9 7.1"/><path d="M5.4 9.2V20a.8.8 0 0 0 .8.8h11.6a.8.8 0 0 0 .8-.8V9.2"/><path d="M10 20.8v-5h4v5"/></svg><span style="font-family:'Lato',sans-serif;font-size:13px;color:rgba(255,255,255,0.9)">${x.sqm}</span><span style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:0.13em;text-transform:uppercase;color:rgba(255,255,255,0.6)">sqm</span></span>`);
     const specsHtml=specs.length?`<div style="display:flex;gap:10px;margin-top:6px;">${specs.join('')}</div>`:'';
     const collDisplay=x.coll?(x.coll.charAt(0).toUpperCase()+x.coll.slice(1).replace(/-/g,' ')):'';
-    return `<div class="det-sim-card" onclick=\"location.href='property.html?id=${x.id}'\"><div class="det-sim-img" style="background-image:url(${x.img||''});"><div class="det-sim-img-overlay"></div><div class="det-sim-over">${collDisplay?`<div class="inv-card-coll">${collDisplay}</div>`:''}<div class="det-sim-name">${x.name}</div>${specsHtml}<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.15);display:flex;align-items:baseline;justify-content:space-between;"><span class="inv-card-price" style="font-family:'Lato',sans-serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap;">${x.price}</span><span class="det-sim-loc" style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);text-align:right;">${x.loc||''}</span></div></div></div></div>`;
+    return `<div class="det-sim-card" onclick=\"location.href='property.html?id=${x.id}'\"><div class="det-sim-img" style="background-image:url(${mgImg(x.img||'',760)});"><div class="det-sim-img-overlay"></div><div class="det-sim-over">${collDisplay?`<div class="inv-card-coll">${collDisplay}</div>`:''}<div class="det-sim-name">${x.name}</div>${specsHtml}<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.15);display:flex;align-items:baseline;justify-content:space-between;"><span class="inv-card-price" style="font-family:'Lato',sans-serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap;">${x.price}</span><span class="det-sim-loc" style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);text-align:right;">${x.loc||''}</span></div></div></div></div>`;
   }).join('');
 
   // Land size
@@ -1891,7 +1891,7 @@ function swThumb(el,idx,e) {
   document.getElementById('detGalleryCount').textContent=`${idx+1} / ${totalMedia || 1}`;
   const gm=document.getElementById('detGalleryMain');
   if (imgs[idx]) {
-    gm.style.cssText=`background-image:url(${imgs[idx]});background-size:cover;background-position:center;width:100%;height:100%;`;
+    gm.style.cssText=`background-image:url(${mgImg(imgs[idx],1600)});background-size:cover;background-position:center;width:100%;height:100%;`;
     gm.innerHTML='';
   }
 }
@@ -3334,6 +3334,34 @@ var MG_MUTED = [107, 90, 71];
 /* Gallery thumbs are <div> elements carrying a background-image, not
    <img> tags — querying for images returned nothing and the PDF came
    out with no photos. Read whichever the element actually uses. */
+
+/* ── Right-sized images ─────────────────────────────────────────
+   Storage was serving originals: a property page pulled 11 photos at
+   full resolution — 5MB, up to 2560x1441 for a card a few hundred
+   pixels wide, and the PDF then re-downloaded the same giants. Supabase
+   can resize on delivery, so ask for roughly what is actually painted.
+   `resize=contain` is not optional: without it only the width is
+   applied and the image comes back stretched.
+   Non-Supabase URLs (Unsplash fallbacks) pass through untouched. */
+function mgImg(url, w){
+  var u = String(url || '');
+  if (!u) return u;
+  var isObj = u.indexOf('/storage/v1/object/public/') !== -1;
+  var isRnd = u.indexOf('/storage/v1/render/image/public/') !== -1;
+  if (!isObj && !isRnd) return u;                       /* Unsplash etc — leave alone */
+
+  /* Re-ask, never pass through: the PDF reads its photos off the 200px
+     thumbnail strip, so keeping an existing width would have printed
+     thumbnails. Strip any sizing already on the URL and apply ours. */
+  var parts = u.split('?');
+  var path  = parts[0].replace('/storage/v1/object/public/', '/storage/v1/render/image/public/');
+  var keep  = (parts[1] || '').split('&').filter(function(p){
+    return p && !/^(width|height|resize|quality)=/.test(p);
+  });
+  keep.push('width=' + (w || 900), 'resize=contain', 'quality=72');
+  return path + '?' + keep.join('&');
+}
+
 function mgImgUrl(el){
   if (!el) return null;
   if (el.tagName === 'IMG') return el.currentSrc || el.src || null;
@@ -3359,7 +3387,7 @@ function mgLoadImage(url){
       }catch(e){ resolve(null); }          /* tainted canvas / CORS */
     };
     img.onerror = function(){ resolve(null); };
-    img.src = url;
+    img.src = mgImg(url, 1200);
   });
 }
 
@@ -3710,3 +3738,17 @@ function mgNearbyIcon(cat){
   };
   return (typeof MGI === 'undefined') ? '' : MGI.svg(ICON[cat] || 'star');
 }
+
+
+;/* ── Entrance-animation safety net ─────────────────────────────
+   The page-open animation is pure CSS and ends visible on its own, but
+   an animation that gets cancelled or never starts would leave the
+   header at opacity 0 — which is how this site lost its content once
+   before. Two seconds in, switch the animations off entirely; the rule
+   this class enables can only reveal, never hide. */
+(function(){
+  var reveal = function(){ document.documentElement.classList.add('mg-entered'); };
+  setTimeout(reveal, 2000);
+  /* bfcache restores skip load events, so arm it on the way back too */
+  window.addEventListener('pageshow', function(e){ if (e.persisted) reveal(); });
+})();

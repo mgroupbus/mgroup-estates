@@ -5637,3 +5637,106 @@ footer{background:var(--black)}
   object-fit:cover}
 .det-desc-cap{margin-top:9px;font-family:var(--font-body);font-size:11px;letter-spacing:.09em;
   text-transform:uppercase;color:var(--stone,#9A8467)}
+
+/* ═══ FOOTER — the rule and the padding were stranded at the bottom ═══
+   .footer-bottom sits inside .footer-top, so .footer-top's border and
+   48px padding landed *below* the last content instead of between the
+   columns and the copyright row: ~96px of empty dark space, most
+   obvious on a phone. Move the divider to where it belongs. */
+.footer-top{padding-bottom:0!important;border-bottom:0!important}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);margin-top:34px;padding-top:24px}
+footer{padding-bottom:26px!important}
+@media(max-width:640px){
+  footer{padding:34px 22px 20px!important}
+  .footer-bottom{margin-top:26px;padding-top:20px}
+}
+
+/* ═══ SIMILAR CARDS — no dead black band under the photo ═══════════
+   The image had a fixed 380px height inside a card sized by
+   aspect-ratio, so the card's own near-black background showed through
+   below it; the scrim on top of it then ran to 90% opacity, which
+   swallowed the bottom third of the picture. */
+.det-sim-card{background:var(--charcoal,#4A3B2C)}
+.det-sim-img{height:100%!important;min-height:0}
+.det-sim-img-overlay{background:linear-gradient(to top,
+  rgba(0,0,0,.78) 0%, rgba(0,0,0,.44) 24%, rgba(0,0,0,.12) 46%, transparent 64%)!important}
+
+/* ═══ PAGE ENTRANCE — the same motion language as the home hero ═════
+   Every page opens the way tytasset.com does: a 10px rise-and-fade on
+   cubic-bezier(.22,1,.36,1), stepped ~90ms apart so the header
+   assembles rather than appearing all at once. Same timing function and
+   distance that site uses, and like it, no animation library.
+
+   `html.mg-entered` (set by a timer in app.js) switches the whole thing
+   off a couple of seconds in. That is the safety net: this page has
+   been blanked before by a reveal system whose JS failed to arm, and
+   the net can only ever make content visible, never hide it. */
+@keyframes mg-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+#hero .hero-content > *,
+.hub-hero-inner > *,
+.pg-hero > *,
+.proc-hero > *,
+.ins-hero > *,
+.det-gallery{
+  animation:mg-enter .58s cubic-bezier(.22,1,.36,1) both}
+
+#hero .hero-content > *:nth-child(2),
+.hub-hero-inner > *:nth-child(2),
+.pg-hero > *:nth-child(2),
+.proc-hero > *:nth-child(2),
+.ins-hero > *:nth-child(2){animation-delay:.09s}
+
+#hero .hero-content > *:nth-child(3),
+.hub-hero-inner > *:nth-child(3),
+.pg-hero > *:nth-child(3),
+.proc-hero > *:nth-child(3),
+.ins-hero > *:nth-child(3){animation-delay:.18s}
+
+#hero .hero-content > *:nth-child(n+4),
+.hub-hero-inner > *:nth-child(n+4),
+.pg-hero > *:nth-child(n+4),
+.proc-hero > *:nth-child(n+4),
+.ins-hero > *:nth-child(n+4){animation-delay:.27s}
+
+/* the bar settles in first, without shifting the page under it */
+nav,#mainNav,.det-topbar{animation:mg-fade-in .5s ease-out both}
+@keyframes mg-fade-in{from{opacity:0}to{opacity:1}}
+
+/* hero stills drift like the home video does */
+.hub-hero-bg,.pg-hero-bg,.proc-hero-bg,.ins-hero-bg,.det-gallery-main{
+  animation:mg-slow-zoom 20s ease-in-out infinite alternate;will-change:transform}
+
+html.mg-entered #hero .hero-content > *,
+html.mg-entered .hub-hero-inner > *,
+html.mg-entered .pg-hero > *,
+html.mg-entered .proc-hero > *,
+html.mg-entered .ins-hero > *,
+html.mg-entered .det-gallery,
+html.mg-entered nav,html.mg-entered #mainNav,html.mg-entered .det-topbar{
+  animation:none!important;opacity:1!important;transform:none!important}
+
+@media (prefers-reduced-motion: reduce){
+  #hero .hero-content > *,.hub-hero-inner > *,.pg-hero > *,.proc-hero > *,
+  .ins-hero > *,.det-gallery,nav,#mainNav,.det-topbar{
+    animation:none!important;opacity:1!important;transform:none!important}
+  .hub-hero-bg,.pg-hero-bg,.proc-hero-bg,.ins-hero-bg,.det-gallery-main{animation:none}
+}
+
+/* ═══ FOOTER — centre the Follow Us block on narrow screens ═══════ */
+.footer-bottom{grid-column:1/-1}
+@media(max-width:900px){
+  .footer-bottom{flex-direction:column;align-items:center;text-align:center;gap:18px}
+  .footer-follow{align-items:center}
+  .footer-follow-lbl{text-align:center}
+  .footer-socials{justify-content:center}
+}
+
+/* ═══ No dead strip under the footer ══════════════════════════════
+   Two mobile rules reserved 58px at the bottom of <body> for
+   .mob-bottom-nav — the old single-file app's fixed bottom bar. The
+   split site never renders that element, so all the padding did was
+   show the cream page background below the brown footer. */
+@media screen and (max-width:768px){
+  body{padding-bottom:0!important}
+}
