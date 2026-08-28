@@ -5794,9 +5794,9 @@ html.mg-entered nav,html.mg-entered #mainNav,html.mg-entered .det-topbar{
    as two things stacked on each other. The gradient is right over the
    hero video; past it the bar needs a real surface. */
 nav.scrolled{
-  background:rgba(51,41,31,.93)!important;
-  backdrop-filter:blur(20px) saturate(150%);
-  -webkit-backdrop-filter:blur(20px) saturate(150%);
+  background:#33291F!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
   border-bottom:1px solid rgba(255,255,255,.07)}
 
 /* ═══ Service card label — readable without a haze over the photo ═══
@@ -5844,3 +5844,30 @@ nav.scrolled{
   .svc3-next{right:6px}
 }
 .svc3-arrow[disabled]{opacity:.25;cursor:default}
+
+/* ═══ No see-through blurred layers anywhere ══════════════════════
+   A translucent bar with backdrop-filter shows a blurred ghost of the
+   page underneath it. On a phone that reads as a second background
+   stacked on the first, which is exactly what was reported. Every bar
+   that sits over content is opaque now. */
+nav,nav.scrolled,.det-jump,.det-topbar,.mobile-nav,#mobileNav{
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+
+/* ═══ Closed overlays must not paint at all ═══════════════════════
+   .video-lightbox and .book-overlay are full-screen fixed layers that
+   were "closed" with opacity:0 alone, while keeping a dark background
+   and, on the booking one, backdrop-filter:blur(8px). Safari on iOS
+   still rasterises a backdrop-filter on a fully transparent element,
+   so an invisible sheet was blurring the whole page — a second
+   background stacked over the first, on every screen, permanently.
+   Closed now means display:none: nothing to composite, nothing to
+   stack. Opening still works; the .open rules below restore display. */
+/* .det-overlay is deliberately NOT in this list: on the property page
+   it is the page itself, and cleanup code strips its `open` class —
+   hiding it would blank the whole listing. It is opaque anyway. */
+.video-lightbox:not(.open),
+.book-overlay:not(.open),
+#mobileNavOverlay:not(.open){
+  display:none!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.video-lightbox.open,.book-overlay.open{display:flex!important}
