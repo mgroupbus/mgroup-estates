@@ -5683,9 +5683,12 @@ footer{padding-bottom:26px!important}
 .hub-hero-inner > *,
 .pg-hero > *,
 .proc-hero > *,
-.ins-hero > *,
-.det-gallery{
+.ins-hero > *{
   animation:mg-enter 1.15s cubic-bezier(.22,1,.36,1) both}
+
+/* The album is the first thing anyone came to see — it paints as soon
+   as the photo is there, with no entrance of its own. */
+.det-gallery{animation:none!important;opacity:1!important;transform:none!important}
 
 #hero .hero-content > *:nth-child(2),
 .hub-hero-inner > *:nth-child(2),
@@ -5914,3 +5917,24 @@ nav,nav.scrolled,.det-jump,.det-topbar,.mobile-nav,#mobileNav{
    it, and it still hides content passing underneath because it is
    opaque. */
 .det-jump{background:var(--page,#FCFAF7)!important}
+
+/* ═══ Sections rise as you scroll to them ═════════════════════════
+   Driven by a scroll listener, not IntersectionObserver: the observer
+   is the one thing on this page that fails silently, and it already
+   took the section scrollspy down with it once.
+
+   The hidden state is scoped to html.mg-sr, which only JS ever adds. If
+   the script never runs, nothing is hidden — a page cannot be blanked
+   by this. */
+/* !important is required, not decorative: these sections still carry
+   the old .mg-reveal.mg-in classes, whose rule is an `animation`, and a
+   running or filling animation beats any ordinary declaration. Once
+   .mg-shown lands the :not() stops matching, so nothing fights. */
+html.mg-sr .det-open-section:not(.mg-shown){
+  opacity:0!important;transform:translateY(20px)!important;animation:none!important}
+html.mg-sr .det-open-section.mg-shown{
+  opacity:1;transform:none;animation:none!important;
+  transition:opacity .95s cubic-bezier(.22,1,.36,1),transform .95s cubic-bezier(.22,1,.36,1)}
+@media (prefers-reduced-motion: reduce){
+  html.mg-sr .det-open-section{opacity:1;transform:none;transition:none}
+}

@@ -577,6 +577,40 @@ const COLLECTIONS = [
   { id:'mountain',         label:'Mountain View',        emoji:'⛰', desc:'Hillside & forest villas' },
 ];
 
+/* ── One request per URL ─────────────────────────────────────────
+   A property page was making eleven REST calls in four sequential
+   waves — 2.7 seconds before the last one even started, so photos could
+   not begin loading until then. Among them the same
+   property_videos?property_id=eq.N was fetched twice, and the
+   catalogue-wide image query ran more than once.
+
+   Reads are deduplicated here rather than at each call site: a GET to
+   /rest/v1/ returns the promise already in flight for that exact URL.
+   Nothing in this data changes while a visitor is on the page, and
+   writes (POST) are untouched. */
+(function(){
+  var inflight = {};
+  var _fetch = window.fetch.bind(window);
+  window.fetch = function(input, init){
+    var url = typeof input === 'string' ? input : (input && input.url) || '';
+    var method = ((init && init.method) || 'GET').toUpperCase();
+    if (method !== 'GET' || url.indexOf('/rest/v1/') === -1) {
+      return _fetch(input, init);
+    }
+    if (inflight[url]) {
+      /* hand back a fresh clone — a Response body can only be read once */
+      return inflight[url].then(function(r){ return r.clone(); });
+    }
+    var p = _fetch(input, init).then(function(r){
+      /* keep only successful reads; let failures retry normally */
+      if (!r.ok) delete inflight[url];
+      return r;
+    }).catch(function(e){ delete inflight[url]; throw e; });
+    inflight[url] = p;
+    return p.then(function(r){ return r.clone(); });
+  };
+})();
+
 // ── SUPABASE CONFIG ─────────────────────────────────────────
 const SB_URL = 'https://iwipvfkjfsveycppqhxc.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3aXB2ZmtqZnN2ZXljcHBxaHhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3NzI5NzYsImV4cCI6MjA5MDM0ODk3Nn0.T_XwpBpNdeqQLjXuulEPwlUvCN9uXHNTj3B7tMxbtFo';
@@ -3863,4 +3897,60 @@ function mgNearbyIcon(cat){
   setTimeout(reveal, 3200);   /* after the longest entrance finishes */
   /* bfcache restores skip load events, so arm it on the way back too */
   window.addEventListener('pageshow', function(e){ if (e.persisted) reveal(); });
+})();
+
+
+;/* ── Reveal property sections on scroll ─────────────────────────
+   The gallery is exempt: it shows the moment its photo lands. Everything
+   below rises in as it comes up the screen.
+
+   State is recomputed on every pass rather than latched. Latching was
+   the bug: photos and Supabase sections keep growing the page for
+   seconds after load, so a section marked "seen" while it sat at 400px
+   was already spent by the time it settled at 900px, and every heading
+   arrived pre-revealed. Recomputing is self-correcting whatever the
+   layout does. Hysteresis on the two thresholds stops a section
+   sitting exactly on the line from flickering.
+
+   Scroll listener rather than IntersectionObserver — the observer does
+   not reliably fire here and fails silently when it doesn't. */
+(function(){
+  if ((document.body && document.body.getAttribute('data-page')) !== 'property') return;
+
+  function arm(){
+    var secs = [].slice.call(document.querySelectorAll('.det-open-section'));
+    if (secs.length < 2) return false;
+    document.documentElement.classList.add('mg-sr');
+
+    var ticking = false;
+    function pass(){
+      ticking = false;
+      var showAt = window.innerHeight * 0.88;
+      var hideAt = window.innerHeight * 1.06;
+      secs.forEach(function(el){
+        if (!el.offsetHeight) return;
+        var top = el.getBoundingClientRect().top;
+        if (top < showAt) el.classList.add('mg-shown');
+        else if (top > hideAt) el.classList.remove('mg-shown');
+      });
+    }
+    function schedule(){
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(pass);
+    }
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule);
+    /* the page keeps growing as photos land; keep re-checking for a while */
+    var t = 0, iv = setInterval(function(){ pass(); if (++t > 40) clearInterval(iv); }, 400);
+    pass();
+    return true;
+  }
+
+  var tries = 0;
+  (function attempt(){
+    if (arm() || ++tries > 60) return;
+    setTimeout(attempt, 300);
+  })();
 })();
