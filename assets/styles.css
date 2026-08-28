@@ -1750,7 +1750,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .sid-sent { font-size:10px; color:var(--mid); margin-top:10px; text-align:center; padding:8px; background:var(--page); border:1px solid var(--line2); letter-spacing:0.04em; }
 /* Enquiry agent card */
 .enq-agent-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--line); }
-.enq-agent-av { width:42px; height:42px; border-radius:50%; background:url('img-cb93871e44.jpg') center 15% / cover; flex-shrink:0; border:2px solid var(--line2); }
+.enq-agent-av { width:42px; height:42px; border-radius:50%; background:url('img-cb93871e44.jpg?v=123') center 15% / cover; flex-shrink:0; border:2px solid var(--line2); }
 .enq-agent-info { flex:1; min-width:0; }
 .enq-agent-name { font-size:12px; font-weight:600; color:var(--white); letter-spacing:0.02em; }
 .enq-agent-link { font-size:9px; color:var(--stone); letter-spacing:0.1em; text-transform:uppercase; margin-top:2px; cursor:pointer; }
@@ -2076,7 +2076,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .det-cta-outline:hover{border-color:var(--black);}
 .det-divider{display:none;}
 .det-agent{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
-.det-agent-av{width:56px;height:56px;border-radius:50%;background:url('img-cb93871e44.jpg') center 15% / cover;flex-shrink:0;border:2px solid var(--line2);}
+.det-agent-av{width:56px;height:56px;border-radius:50%;background:url('img-cb93871e44.jpg?v=123') center 15% / cover;flex-shrink:0;border:2px solid var(--line2);}
 .det-agent-name{font-size:13px;font-weight:600;color:var(--black);letter-spacing:0.02em;}
 .det-agent-display{font-size:11px;color:var(--stone);font-weight:400;margin-top:1px;}
 .det-agent-title{font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--silver);margin-top:3px;}
@@ -5762,3 +5762,50 @@ html.mg-entered nav,html.mg-entered #mainNav,html.mg-entered .det-topbar{
   .footer-bottom > div:first-child{text-align:center;width:100%}
   .footer-legal{justify-content:center}
 }
+
+/* ═══ FOOTER — Menu and Destinations share a row on phones ════════
+   Below 560px the grid collapsed to one column, so six menu links and
+   three destinations stacked into ~270px of near-empty footer. They sit
+   side by side now; the company block and the copyright row still span
+   the full width. */
+@media(max-width:560px){
+  .footer-top{grid-template-columns:1fr 1fr!important;gap:26px 20px!important}
+  .footer-top > div:first-child,.footer-bottom{grid-column:1/-1}
+  .footer-col-title{margin-bottom:12px}
+  .footer-col a{margin-bottom:8px}
+}
+
+/* ═══ Photos settle in instead of snapping ════════════════════════
+   Card art is a background-image on a div, so the browser paints it
+   the instant the bytes land — against a near-black box, which is what
+   made the grid look like it was stuttering as photos arrived. A warm
+   placeholder in the brand palette and a short fade smooth that out.
+
+   `both` fill on a keyframe that ends opaque, never a base opacity:0 —
+   an image must not be able to get stuck invisible. */
+@keyframes mg-photo-in{from{opacity:0}to{opacity:1}}
+.inv-card-img-inner,.prop-card-img-inner,.rent-card-img-inner,
+.det-sim-img,.hub-coll-card-bg,.det-thumb{
+  background-color:var(--charcoal,#4A3B2C)!important;
+  animation:mg-photo-in .55s ease-out both}
+html.mg-entered .inv-card-img-inner,html.mg-entered .prop-card-img-inner,
+html.mg-entered .rent-card-img-inner,html.mg-entered .det-sim-img,
+html.mg-entered .hub-coll-card-bg,html.mg-entered .det-thumb{
+  animation:none;opacity:1}
+
+/* Cards keep their footprint before the photo arrives, so nothing
+   jumps as the grid fills in. */
+.inv-card-img,.prop-card-img,.rent-card-img{background:var(--charcoal,#4A3B2C)}
+
+/* ═══ NAV — solid once you scroll off the hero ════════════════════
+   A later `nav { background: linear-gradient(...) !important }` was
+   beating nav.scrolled's own background, so the bar stayed fully
+   transparent at every scroll position. With backdrop-filter:blur on
+   top of that, the page smeared up through the bar and the header read
+   as two things stacked on each other. The gradient is right over the
+   hero video; past it the bar needs a real surface. */
+nav.scrolled{
+  background:rgba(51,41,31,.93)!important;
+  backdrop-filter:blur(20px) saturate(150%);
+  -webkit-backdrop-filter:blur(20px) saturate(150%);
+  border-bottom:1px solid rgba(255,255,255,.07)}

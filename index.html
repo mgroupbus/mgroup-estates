@@ -9,13 +9,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css?v=121">
+<link rel="stylesheet" href="assets/styles.css?v=124">
 
 </head>
 <body data-page="home">
 <div id="mobileNavOverlay" onclick="closeMob()"></div>
 <nav id="mainNav">
-  <a href="index.html" class="nav-logo"><img src="assets/logo.png" class="nav-logo-img" alt="MGROUP Estates"></a>
+  <a href="index.html" class="nav-logo"><img src="assets/logo.png?v=123" class="nav-logo-img" alt="MGROUP Estates"></a>
   <div class="nav-center">
     <a href="index.html">Home</a>
     <a href="collections.html">Collections</a>
@@ -84,7 +84,7 @@
       id="heroBgVideo"
       autoplay muted loop playsinline
       webkit-playsinline
-      preload="auto"
+      preload="metadata"
       disablePictureInPicture
       src="hero.mp4"
     ></video>
@@ -133,16 +133,16 @@
     <div class="svc3-wrap">
     <button class="svc3-arrow svc3-prev" aria-label="Previous" onclick="svcSlide(-1)">&#8249;</button>
     <div class="svc3-rail" id="svcRail">
-      <a class="svc3-card" href="collections.html" style="background-image:url('assets/svc-buy.jpg')">
+      <a class="svc3-card" href="collections.html" style="background-image:url('assets/svc-buy.jpg?v=123')">
         <span class="svc3-name">Buy Properties</span>
       </a>
-      <a class="svc3-card" href="https://rent.mgroupestates.com" style="background-image:url('assets/svc-rent.jpg')">
+      <a class="svc3-card" href="https://rent.mgroupestates.com" style="background-image:url('assets/svc-rent.jpg?v=123')">
         <span class="svc3-name">Rent</span>
       </a>
-      <a class="svc3-card" href="collections.html?coll=branded" style="background-image:url('assets/svc-branded.jpg')">
+      <a class="svc3-card" href="collections.html?coll=branded" style="background-image:url('assets/svc-branded.jpg?v=123')">
         <span class="svc3-name">Branded Residence</span>
       </a>
-      <a class="svc3-card" href="lifestyle.html" style="background-image:url('assets/svc-lifestyle.jpg')">
+      <a class="svc3-card" href="lifestyle.html" style="background-image:url('assets/svc-lifestyle.jpg?v=123')">
         <span class="svc3-name">Lifestyle Concierge</span>
       </a>
     </div>
@@ -266,7 +266,7 @@
 </div><div class="det-overlay" id="detOverlay">
   <div class="det-panel" id="detPanel">
     <div class="det-topbar">
-      <div class="det-topbar-logo"><img src="assets/logo.png" style="height:22px;width:auto;filter:brightness(0);display:block" alt="MGROUP Estates"></div>
+      <div class="det-topbar-logo"><img src="assets/logo.png?v=123" style="height:22px;width:auto;filter:brightness(0);display:block" alt="MGROUP Estates"></div>
       <div class="det-topbar-right">
         <button class="det-icon-btn" title="Share" onclick="if(navigator.share){navigator.share({title:document.getElementById('detTitle').textContent,url:window.location.href})}else{navigator.clipboard&&navigator.clipboard.writeText(window.location.href);alert('Link copied!')}">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -618,7 +618,7 @@
 <footer>
   <div class="footer-top">
     <div>
-      <div class="footer-logo"><img src="assets/logo.png" class="footer-logo-img" alt="MGROUP Estates"></div>
+      <div class="footer-logo"><img src="assets/logo.png?v=123" class="footer-logo-img" alt="MGROUP Estates"></div>
           <div class="footer-org">
             <div class="footer-org-name">M GROUP BUSINESS CO.,LTD</div>
             <address class="footer-org-addr">63/202, Thepkasattri Road, Kohkaew Sub-district,<br>Muang District, Phuket 83000</address>
@@ -739,6 +739,6 @@
     <button onclick="document.getElementById('cookieBanner').style.display='none';localStorage.setItem('ck','1')" style="background:#fff;border:none;color:#0D0D0D;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;padding:8px 22px;cursor:pointer;font-family:'Lato',sans-serif;">Accept All</button>
   </div>
 </div>
-<script src="assets/app.js?v=121"></script>
+<script src="assets/app.js?v=124"></script>
 </body>
 </html>
