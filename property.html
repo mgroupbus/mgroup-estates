@@ -3,16 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MGROUP Estates — Luxury Real Estate Phuket</title>
-<meta name="description" content="Curated luxury villas, branded residences and rentals across Phuket's most coveted addresses.">
+<title>Property — MGROUP Estates</title>
+<meta name="description" content="Property details — MGROUP Estates, Phuket.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/styles.css?v=110">
-
+<style>
+/* the detail panel was an overlay; on its own page it is just content */
+#detOverlay{position:static!important;transform:none!important;inset:auto!important;
+  height:auto!important;overflow:visible!important;pointer-events:auto!important;
+  z-index:auto!important;display:block!important;opacity:1!important;background:transparent!important}
+#detPanel{transform:none!important;position:static!important;max-width:none!important;
+  height:auto!important;min-height:0!important}
+/* the panel carried its own logo bar + close/share buttons because it
+   used to float over the site; on a real page the site nav does that job */
+.det-topbar{display:none!important}
+.det-close,.det-topbar-close,.det-icon-btn{display:none!important}
+/* site nav is fixed — clear its height before the back link */
+.prop-back{max-width:1180px;margin:0 auto;padding:88px 24px 14px}
+@media(max-width:640px){.prop-back{padding:76px 18px 10px}}
+.prop-back a{font-family:var(--font-body);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:600;color:rgba(13,13,13,.6);text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.prop-back a:hover{color:var(--ink,#0D0D0D)}
+.prop-missing{max-width:640px;margin:0 auto;padding:120px 24px;text-align:center}
+</style>
 </head>
-<body data-page="home">
+<body data-page="property">
 <div id="mobileNavOverlay" onclick="closeMob()"></div>
 <nav id="mainNav">
   <a href="index.html" class="nav-logo"><img src="assets/logo.png" class="nav-logo-img" alt="MGROUP Estates"></a>
@@ -51,219 +69,8 @@
   <a href="how-to-buy.html" >How to Buy</a>
   <a href="contact.html" >Contact</a>
 </div>
-<div id="homePage">
-
-<!-- ─── NAV ─── -->
-
-<!-- ─── COOKIE BANNER ─── -->
-
-
-
-
-
-
-
-<!-- ─── HERO ─── -->
-<section id="hero">
-  <div class="hero-visual" id="heroVisual">
-    <!--
-    ══════════════════════════════════════════════════
-    HERO VIDEO — 3 ตัวเลือก เลือกอันที่ต้องการ:
-
-    1. MP4 (ดีที่สุด): ใส่ URL วิดีโอที่ HERO_VIDEO_SRC
-    2. YouTube: ใส่ Video ID ที่ HERO_YT_ID
-    3. ปิด video: ทิ้งทั้งสองไว้เป็น null
-
-    แนะนำ: 15-20 วินาที, 1080p, MP4 H.264, ~8-15MB
-    ══════════════════════════════════════════════════
-    -->
-
-    <!-- MP4 Video element -->
-    <video
-      class="hero-video"
-      id="heroBgVideo"
-      autoplay muted loop playsinline
-      webkit-playsinline
-      preload="auto"
-      disablePictureInPicture
-      src="hero.mp4"
-    ></video>
-
-
-    <!-- Photo fallback with Ken Burns -->
-    <div class="hero-visual-img" id="heroFallbackImg"></div>
-  </div>
-  <div class="hero-fade"></div>
-  <div class="hero-content">
-    <div class="hero-eyebrow hero-eyebrow--trio">
-          <span>Selected Assets</span>
-          <span>Private Property Advisory</span>
-          <span>Local Expertise</span>
-        </div>
-    <h1 class="hero-title">
-          Thailand's<br>
-          <em>Finest</em><br>
-          Addresses
-        </h1>
-    <div class="hero-actions">
-      <a href="collections.html"  class="btn-hero-primary">Explore Collections</a>
-      <a href="#contact" class="btn-hero-ghost">Private Consultation</a>
-    </div>
-      <div class="hero-cities">
-        <span>Phuket</span><span>Samui</span><span>Bangkok</span>
-      </div>
-  </div>
-</section>
-
-<!-- ─── MARQUEE (removed) ─── -->
-
-<!-- ─── INTRO (removed) ─── -->
-
-<!-- ─── GOOD FOR INVESTMENT ─── -->
-<!-- ─── SERVICES ─── -->
-<section id="services" class="svc3">
-  <div class="svc3-head">
-      <h2 class="svc3-heading">
-        <span class="svc3-w1">Ownership,</span>
-        <em class="svc3-w2">Stays</em>
-        <span class="svc3-w3">and Living</span>
-      </h2>
-      <button class="svc3-explore" onclick="document.getElementById('svcRail').scrollIntoView({behavior:'smooth',block:'center'})">Explore Our Services</button>
-    </div>
-    <div class="svc3-wrap">
-    <button class="svc3-arrow svc3-prev" aria-label="Previous" onclick="svcSlide(-1)">&#8249;</button>
-    <div class="svc3-rail" id="svcRail">
-      <a class="svc3-card" href="collections.html" style="background-image:url('assets/svc-buy.jpg')">
-        <span class="svc3-name">Buy Properties</span>
-      </a>
-      <a class="svc3-card" href="https://rent.mgroupestates.com" style="background-image:url('assets/svc-rent.jpg')">
-        <span class="svc3-name">Rent</span>
-      </a>
-      <a class="svc3-card" href="collections.html?coll=branded" style="background-image:url('assets/svc-branded.jpg')">
-        <span class="svc3-name">Branded Residence</span>
-      </a>
-      <a class="svc3-card" href="lifestyle.html" style="background-image:url('assets/svc-lifestyle.jpg')">
-        <span class="svc3-name">Lifestyle Concierge</span>
-      </a>
-    </div>
-    <button class="svc3-arrow svc3-next" aria-label="Next" onclick="svcSlide(1)">&#8250;</button>
-  </div>
-</section>
-
-<!-- ─── COMING SOON MODAL ─── -->
-<div id="comingSoonModal" class="cs-modal" onclick="hideComingSoon(event)">
-  <div class="cs-modal-box" onclick="event.stopPropagation()">
-    <button class="cs-modal-close" onclick="hideComingSoon()" aria-label="Close">×</button>
-    <div class="cs-modal-label">Luxury Wellness Consult</div>
-    <h3 class="cs-modal-title">Coming <em>Soon</em></h3>
-    <p class="cs-modal-desc">We're curating an exclusive wellness partnership with Phuket's finest retreats. Register your interest and we'll reach out when it launches.</p>
-    <div class="cs-modal-actions">
-      <a href="mailto:contact@mgroupestates.com?subject=Luxury%20Wellness%20Consult%20%E2%80%94%20Register%20Interest" class="cs-modal-btn">Register Interest</a>
-      <button class="cs-modal-btn-ghost" onclick="hideComingSoon()">Close</button>
-    </div>
-  </div>
-</div>
-
-
-
-
-<section id="investment">
-  <div class="inv-header">
-    <div>
-      <h2 class="section-title">Recommended <em>Collection</em></h2>
-    </div>
-    <div class="inv-nav-btns">
-      <button class="inv-nav-btn" id="invPrev" onclick="invSlide(-1)">←</button>
-      <button class="inv-nav-btn" id="invNext" onclick="invSlide(1)">→</button>
-    </div>
-  </div>
-  <div class="inv-shell">
-      <button class="inv-arrow inv-arrow--prev" aria-label="Previous property" onclick="invSlide(-1)">&#8249;</button>
-      <div class="inv-track-wrap" id="invWrap">
-        <div class="inv-track" id="invTrack"></div>
-      </div>
-      <button class="inv-arrow inv-arrow--next" aria-label="Next property" onclick="invSlide(1)">&#8250;</button>
-    </div>
-  <div class="inv-dots" id="invDots"></div>
-</section>
-
-
-<!-- ─── DEVELOPER PARTNERS (auto-scrolling marquee) ─── -->
-
-<section class="dev-section">
-  <div class="dev-section-header fade-up">
-    <div class="dev-lbl">Our Developer Partners</div>
-    <h2 class="dev-title">Trusted by <em>Phuket's Finest</em></h2>
-  </div>
-  <div class="dev-strip">
-    <div class="dev-track">
-      <!-- Set A (10 brands) -->
-      <div class="dev-logo"><img src="logos/laguna.png" alt="Laguna Phuket" onerror="this.outerHTML='<span>Laguna Phuket</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/banyan-tree.png" alt="Banyan Tree Group" onerror="this.outerHTML='<span>Banyan Tree</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/botanica.png" alt="Botanica Luxury" onerror="this.outerHTML='<span>Botanica</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/trisara.png" alt="Trisara" onerror="this.outerHTML='<span>Trisara</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/tri-vananda.png" alt="Tri Vananda" onerror="this.outerHTML='<span>Tri Vananda</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/sansiri.png" alt="Sansiri" onerror="this.outerHTML='<span>Sansiri</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/ananda.png" alt="Ananda Development" onerror="this.outerHTML='<span>Ananda</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/cg-capital.png" alt="CG Capital" onerror="this.outerHTML='<span>CG Capital</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/kiara-reserve.png" alt="Kiara Reserve" onerror="this.outerHTML='<span>Kiara Reserve</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/wallaya.png" alt="Wallaya Villas" onerror="this.outerHTML='<span>Wallaya Villas</span>'"></div><div class="dev-sep"></div>
-      <!-- Set B (duplicate for seamless loop) -->
-      <div class="dev-logo"><img src="logos/laguna.png" alt="Laguna Phuket" onerror="this.outerHTML='<span>Laguna Phuket</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/banyan-tree.png" alt="Banyan Tree Group" onerror="this.outerHTML='<span>Banyan Tree</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/botanica.png" alt="Botanica Luxury" onerror="this.outerHTML='<span>Botanica</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/trisara.png" alt="Trisara" onerror="this.outerHTML='<span>Trisara</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/tri-vananda.png" alt="Tri Vananda" onerror="this.outerHTML='<span>Tri Vananda</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/sansiri.png" alt="Sansiri" onerror="this.outerHTML='<span>Sansiri</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/ananda.png" alt="Ananda Development" onerror="this.outerHTML='<span>Ananda</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/cg-capital.png" alt="CG Capital" onerror="this.outerHTML='<span>CG Capital</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/kiara-reserve.png" alt="Kiara Reserve" onerror="this.outerHTML='<span>Kiara Reserve</span>'"></div><div class="dev-sep"></div>
-      <div class="dev-logo"><img src="logos/wallaya.png" alt="Wallaya Villas" onerror="this.outerHTML='<span>Wallaya Villas</span>'"></div>
-    </div>
-  </div>
-</section>
-
-
-
-<!-- ─── CONTACT ─── -->
-<section class="home-cta" id="contact">
-      <h2 class="section-title">Begin Your <em>Journey</em></h2>
-      <p class="home-cta-sub">Tell us what you're looking for&nbsp;— our team will respond personally, and in&nbsp;confidence.</p>
-
-      <form class="quick-form" id="quickForm" onsubmit="return sendQuickForm(event)">
-        <div class="quick-row">
-          <div class="quick-field">
-            <label for="q-name">Name *</label>
-            <input id="q-name" name="name" type="text" required autocomplete="name">
-          </div>
-          <div class="quick-field">
-            <label for="q-email">Email *</label>
-            <input id="q-email" name="email" type="email" required autocomplete="email">
-          </div>
-          <div class="quick-field">
-            <label for="q-phone">Phone</label>
-            <input id="q-phone" name="phone" type="tel" autocomplete="tel">
-          </div>
-        </div>
-        <div class="quick-field">
-          <label for="q-msg">What are you looking for? *</label>
-          <textarea id="q-msg" name="message" rows="3" required></textarea>
-        </div>
-        <div class="quick-actions">
-          <button class="home-cta-primary" id="quickSubmit" type="submit">Send Enquiry</button>
-          <a class="quick-more" href="contact.html">Full contact page &#8594;</a>
-        </div>
-      </form>
-
-      <div class="quick-ok" id="quickOk" hidden>
-        <div class="quick-ok-mark">&#10003;</div>
-        <h3>Thank you</h3>
-        <p>Your enquiry has been received — our team will be in touch shortly.</p>
-      </div>
-    </section>
-
-<!-- ─── FOOTER ─── -->
-</div><div class="det-overlay" id="detOverlay">
+<div class="prop-back"><a href="collections.html">&#8592; Back to Collections</a></div>
+<div class="det-overlay" id="detOverlay">
   <div class="det-panel" id="detPanel">
     <div class="det-topbar">
       <div class="det-topbar-logo"><img src="assets/logo.png" style="height:22px;width:auto;filter:brightness(0);display:block" alt="MGROUP Estates"></div>
@@ -319,7 +126,11 @@
             </div>
             
           </div>
-          <div class="det-sections">
+          
+        <nav class="det-jump" id="detJump" aria-label="Sections">
+          <div class="det-jump-inner" id="detJumpInner"></div>
+        </nav>
+        <div class="det-sections">
       <!-- Key Highlights — from property_details (category 'highlight') -->
       <div class="det-open-section" id="detHighlightsSection" style="display:none">
         <div class="det-section-title">Key Highlights</div>
@@ -505,6 +316,23 @@
                 </div>
               </div>
               </div>
+        <div class="sid-brochure">
+          <div class="sid-brochure-top">
+            <span class="sid-brochure-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7l-4-4z"/><path d="M14 3v4h4"/></svg>
+            </span>
+            <div>
+              <div class="sid-brochure-lbl">Presentation</div>
+              <div class="sid-brochure-title">Full brochure</div>
+            </div>
+          </div>
+          <p class="sid-brochure-sub">Photography, specifications, layouts and pricing — as a print-ready PDF.</p>
+          <button class="sid-brochure-btn pdf-gate-btn" type="button" onclick="downloadPropertyPDF()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            Download PDF
+          </button>
+        </div>
+
 
             </div><!-- /sid-acc-group -->
 
@@ -524,11 +352,13 @@
 
     </div>
   </div>
-</div><div class="video-lightbox" id="videoLightbox" onclick="closeVideoLightbox(event)">
+</div>
+<div class="video-lightbox" id="videoLightbox" onclick="closeVideoLightbox(event)">
   <div class="video-lightbox-inner" id="videoLightboxInner">
     <button class="video-lightbox-close" onclick="closeVideoLightbox()">&times;</button>
   </div>
-</div><div class="book-overlay" id="bookOverlay">
+</div>
+<div class="book-overlay" id="bookOverlay">
   <div class="book-modal">
     <div class="book-hd">
       <div>
@@ -614,6 +444,10 @@
       </div>
     </div>
   </div>
+</div>
+<div class="prop-missing" id="propMissing" hidden>
+  <h1 class="pg-title">Property <em>not found</em></h1>
+  <p class="pg-sub">This listing may have been removed. <a href="collections.html">Browse the collection</a>.</p>
 </div>
 <footer>
   <div class="footer-top">
@@ -729,16 +563,19 @@
     <div class="policy-updated">Last updated: January 2026</div>
   </div>
 </div>
-<div id="cookieBanner" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(13,13,13,0.97);border-top:1px solid rgba(255,255,255,0.08);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
-  <div style="font-size:11px;color:rgba(255,255,255,0.55);font-weight:300;line-height:1.7;max-width:700px;">
-    We use cookies to enhance your experience and analyse site usage. By continuing to browse, you agree to our use of cookies.
-    <a href="#" style="color:rgba(255,255,255,0.8);text-decoration:underline;margin-left:6px;">Privacy Policy</a>
-  </div>
-  <div style="display:flex;gap:10px;flex-shrink:0;">
-    <button onclick="document.getElementById('cookieBanner').style.display='none';localStorage.setItem('ck','1')" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:8px 18px;cursor:pointer;font-family:'Lato',sans-serif;">Decline</button>
-    <button onclick="document.getElementById('cookieBanner').style.display='none';localStorage.setItem('ck','1')" style="background:#fff;border:none;color:#0D0D0D;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;padding:8px 22px;cursor:pointer;font-family:'Lato',sans-serif;">Accept All</button>
-  </div>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="assets/app.js?v=110"></script>
+
+
+
+
+<div class="pdf-only pdf-cover">
+  <img class="pdf-logo" src="assets/logo.png" alt="MGROUP Estates">
+  <div class="pdf-cover-lbl">Property Presentation</div>
+</div>
+<div class="pdf-only pdf-foot">
+  <span>M GROUP BUSINESS CO.,LTD &nbsp;·&nbsp; 63/202 Thepkasattri Road, Kohkaew, Muang, Phuket 83000</span>
+  <span>contact@mgroupestates.com &nbsp;·&nbsp; mgroupestates.com</span>
+</div>
 </body>
 </html>

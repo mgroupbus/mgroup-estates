@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Insights — MGROUP Estates</title>
+<meta name="description" content="Phuket real estate analysis and investment perspectives.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css?v=110">
+
+</head>
+<body data-page="insights">
+<div id="mobileNavOverlay" onclick="closeMob()"></div>
+<nav id="mainNav">
+  <a href="index.html" class="nav-logo"><img src="assets/logo.png" class="nav-logo-img" alt="MGROUP Estates"></a>
+  <div class="nav-center">
+    <a href="index.html">Home</a>
+    <a href="collections.html">Collections</a>
+    <a href="https://rent.mgroupestates.com">Rent</a>
+      <a href="lifestyle.html">Lifestyle Concierge</a>
+    <!-- <a href="insights.html">Insights</a> -->
+    <a href="how-to-buy.html">How to Buy</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-right">
+    <div class="lang-selector" id="langSelector">
+      <button class="lang-btn" onclick="toggleLangMenu(event)"><span id="langCode">EN</span><span class="lang-caret">▾</span></button>
+      <div class="lang-dropdown" id="langDropdown">
+        <div class="lang-option active" data-lang="en" onclick="setLang('en','EN')">EN — English</div>
+        <div class="lang-option" data-lang="th" onclick="setLang('th','TH')">TH — ภาษาไทย</div>
+        <div class="lang-option" data-lang="ru" onclick="setLang('ru','RU')">RU — Русский</div>
+      </div>
+    </div>
+    <button id="hamburgerBtn" aria-label="Menu">
+      <span class="ham-line"></span>
+      <span class="ham-line"></span>
+      <span class="ham-line"></span>
+    </button>
+  </div>
+</nav>
+<div id="mobileNav">
+  <button class="mob-close" onclick="closeMob()">✕</button>
+  <a href="index.html" >Home</a>
+  <a href="collections.html" >Collections</a>
+  <a href="https://rent.mgroupestates.com" >Rent</a>
+  <a href="lifestyle.html" >Lifestyle Concierge</a>
+  <!-- <a href="insights.html" >Insights</a> -->
+  <a href="how-to-buy.html" >How to Buy</a>
+  <a href="contact.html" >Contact</a>
+</div>
+<style>
+/* this panel is a real page now — undo overlay positioning */
+#insightsPage{position:static!important;transform:none!important;inset:auto!important;
+   height:auto!important;min-height:calc(100vh - 0px);overflow:visible!important;
+   pointer-events:auto!important;z-index:auto!important;display:block!important}
+.overlay-close-btn{display:none!important}
+</style><div id="insightsPage">
+  <button class="overlay-close-btn" onclick="goHome();return false">&#x2715;</button>
+
+  <div class="ins-hero">
+    <div class="ins-hero-label">Phuket Real Estate Intelligence</div>
+    <h1 class="ins-hero-title">Market <em>Insights</em></h1>
+    <p class="ins-hero-sub">Expert analysis, investment perspectives and lifestyle intelligence from our team of Phuket property specialists. Updated monthly.</p>
+  </div>
+
+  <div class="ins-grid" id="insightsGrid">
+
+    <!-- Featured Article -->
+    <article class="ins-article featured" onclick="openArticle(1)" style="cursor:pointer">
+      <div class="ins-featured-img"><svg class="mgi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20c1.6 0 1.6 1.2 3.2 1.2S6.8 20 8.4 20s1.6 1.2 3.2 1.2S13.2 20 14.8 20s1.6 1.2 3.2 1.2"/><path d="M12 20V9"/><path d="M12 9c-3 0-5 1.5-6 3 3-1 5-1 6 0zM12 9c3 0 5 1.5 6 3-3-1-5-1-6 0z"/></svg></div>
+      <div>
+        <span class="ins-article-tag">Market Update — March 2025</span>
+        <h2 class="ins-article-title">Phuket Luxury Villa Market: A Record Year in Review</h2>
+        <p class="ins-article-excerpt-short">Demand for branded residences reached an all-time high in 2024 as international buyers returned to Thailand in record numbers. Prices across Bangtao, Laguna and Naiharn rose 14–22% year-on-year, driven by supply constraints and renewed appetite from European and Middle Eastern buyers.</p>
+        <div class="ins-article-meta">
+          <span>MGROUP Research</span>
+          <span>·</span>
+          <span>8 min read</span>
+        </div>
+        <span class="ins-article-read">Read Full Analysis →</span>
+      </div>
+    </article>
+
+    <!-- Article 2 -->
+    <article class="ins-article" onclick="openArticle(2)" style="cursor:pointer">
+      <span class="ins-article-tag">Investment</span>
+      <h2 class="ins-article-title">Why Thai Freehold Condos Remain a Safe Bet in 2025</h2>
+      <p class="ins-article-excerpt-short">With rental yields averaging 6–9% in prime Phuket locations, condo investments continue to outperform regional alternatives in Southeast Asia. Unlike leasehold structures common in Bali and Vietnam, Thai freehold condominiums offer genuine ownership title.</p>
+      <div class="ins-article-meta">
+        <span>February 2025</span>
+        <span>·</span>
+        <span>5 min read</span>
+      </div>
+      <span class="ins-article-read">Read More →</span>
+    </article>
+
+    <!-- Article 3 -->
+    <article class="ins-article" onclick="openArticle(3)" style="cursor:pointer">
+      <span class="ins-article-tag">Legal Guide</span>
+      <h2 class="ins-article-title">Foreign Ownership in Thailand: What Changed in 2025</h2>
+      <p class="ins-article-excerpt-short">A landmark amendment to the Land Code Act introduced the Long-Term Resident (LTR) visa pathway — allowing qualifying foreigners to hold residential land in designated zones. The most significant shift in Thai property law in two decades.</p>
+      <div class="ins-article-meta">
+        <span>January 2025</span>
+        <span>·</span>
+        <span>6 min read</span>
+      </div>
+      <span class="ins-article-read">Read More →</span>
+    </article>
+
+    <!-- Article 4 -->
+    <article class="ins-article" onclick="openArticle(4)" style="cursor:pointer">
+      <span class="ins-article-tag">Neighbourhood Guide</span>
+      <h2 class="ins-article-title">Kohkaew & Koh Sirey: Phuket's Rising Residential Corridor</h2>
+      <p class="ins-article-excerpt-short">Popular with families and long-stay residents, the Kohkaew and Koh Sirey corridor offers an emerging alternative to the crowded west coast — with access to international schools and substantially larger land parcels at a relative discount.</p>
+      <div class="ins-article-meta">
+        <span>December 2024</span>
+        <span>·</span>
+        <span>4 min read</span>
+      </div>
+      <span class="ins-article-read">Read More →</span>
+    </article>
+
+    <!-- Article 5 -->
+    <article class="ins-article" onclick="openArticle(5)" style="cursor:pointer">
+      <span class="ins-article-tag">Wellness & Lifestyle</span>
+      <h2 class="ins-article-title">The Wellness Property Trend Reshaping Phuket Luxury</h2>
+      <p class="ins-article-excerpt-short">From RAKxa Integrative Wellness to Kamalaya and Layan Life, wellness-integrated developments are redefining what buyers expect — moving beyond pools and gyms toward biophilic design, sleep science and longevity programming.</p>
+      <div class="ins-article-meta">
+        <span>November 2024</span>
+        <span>·</span>
+        <span>5 min read</span>
+      </div>
+      <span class="ins-article-read">Read More →</span>
+    </article>
+
+    <!-- Article 6 -->
+    <article class="ins-article" onclick="openArticle(6)" style="cursor:pointer">
+      <span class="ins-article-tag">Branded Residences</span>
+      <h2 class="ins-article-title">The Standard, Anantara, Banyan Tree: Does the Brand Premium Last?</h2>
+      <p class="ins-article-excerpt-short">Our 12-development dataset spanning 2018–2024 shows average resale premiums of 22–38% for tier-1 branded stock. Key drivers include rental programme guarantees, international brand recognition, and superior property management.</p>
+      <div class="ins-article-meta">
+        <span>October 2024</span>
+        <span>·</span>
+        <span>7 min read</span>
+      </div>
+      <span class="ins-article-read">Read More →</span>
+    </article>
+
+    <!-- Article 7 — External -->
+    <article class="ins-article is-external" onclick="openArticle(7)" style="cursor:pointer">
+      <span class="ins-article-tag">Market Update</span>
+      <h2 class="ins-article-title">Thailand Property Market Outlook 2025: Analysts Forecast Continued Growth</h2>
+      <p class="ins-article-excerpt-short">Analysts forecast continued growth across Thailand's property sector in 2025, with Phuket and Bangkok leading demand from both domestic and international buyers.</p>
+      <div class="ins-article-meta">
+        <span>March 2025</span>
+      </div>
+      <div class="ins-article-source">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Bangkok Post
+      </div>
+    </article>
+
+    <!-- Article 8 — External -->
+    <article class="ins-article is-external" onclick="openArticle(8)" style="cursor:pointer">
+      <span class="ins-article-tag">Investment</span>
+      <h2 class="ins-article-title">Phuket Condo Sales Hit 5-Year High as Foreign Buyers Return</h2>
+      <p class="ins-article-excerpt-short">Phuket condominium sales reached a five-year high in early 2025 as international buyers from Europe and the Middle East drove record transaction volumes.</p>
+      <div class="ins-article-meta">
+        <span>February 2025</span>
+      </div>
+      <div class="ins-article-source">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        The Nation Thailand
+      </div>
+    </article>
+
+  </div>
+
+  <!-- ─── ARTICLE DETAIL PANEL ─── -->
+  <div id="insArticlePanel">
+    <div class="ins-art-topbar">
+      <button class="ins-art-back" onclick="closeArticle()">← Back to Insights</button>
+      <button class="ins-art-close" onclick="closeArticle()">&#x2715;</button>
+    </div>
+    <div class="ins-art-body">
+      <span class="ins-art-tag" id="artTag"></span>
+      <h1 class="ins-art-title" id="artTitle"></h1>
+      <div class="ins-art-meta" id="artMeta"></div>
+      <div id="artAuthor"></div>
+      <div id="artSourceWidget" style="display:none"></div>
+      <div class="ins-art-cover" id="artCover"></div>
+      <div class="ins-art-content" id="artContent"></div>
+    </div>
+  </div>
+
+
+</div><div id="insArticlePanel">
+    <div class="ins-art-topbar">
+      <button class="ins-art-back" onclick="closeArticle()">← Back to Insights</button>
+      <button class="ins-art-close" onclick="closeArticle()">&#x2715;</button>
+    </div>
+    <div class="ins-art-body">
+      <span class="ins-art-tag" id="artTag"></span>
+      <h1 class="ins-art-title" id="artTitle"></h1>
+      <div class="ins-art-meta" id="artMeta"></div>
+      <div id="artAuthor"></div>
+      <div id="artSourceWidget" style="display:none"></div>
+      <div class="ins-art-cover" id="artCover"></div>
+      <div class="ins-art-content" id="artContent"></div>
+    </div>
+  </div>
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo"><img src="assets/logo.png" class="footer-logo-img" alt="MGROUP Estates"></div>
+          <div class="footer-org">
+            <div class="footer-org-name">M GROUP BUSINESS CO.,LTD</div>
+            <address class="footer-org-addr">63/202, Thepkasattri Road, Kohkaew Sub-district,<br>Muang District, Phuket 83000</address>
+            <a class="footer-org-mail" href="mailto:contact@mgroupestates.com">contact@mgroupestates.com</a>
+          </div>
+    </div>
+    <div class="footer-col">
+            <div class="footer-col-title">Menu</div>
+            <a href="index.html">Home</a>
+            <a href="collections.html">Collections</a>
+            <a href="https://rent.mgroupestates.com">Rent</a>
+            <a href="lifestyle.html">Lifestyle Concierge</a>
+            <a href="how-to-buy.html">How to Buy</a>
+            <a href="contact.html">Contact</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Destinations</div>
+            <a href="collections.html">Phuket</a>
+            <a href="collections.html">Samui</a>
+            <a href="collections.html">Bangkok</a>
+          </div>
+        <div class="footer-bottom">
+    <div>
+      <div class="footer-copy">© 2026 M GROUP BUSINESS CO.,LTD — All Rights Reserved</div>
+      <div class="footer-legal">
+        <a href="#" onclick="openPrivacy();return false">Privacy Policy</a>
+        <a href="#" onclick="openCookie();return false">Cookie Policy</a>
+      </div>
+    </div>
+    <div class="footer-follow">
+      <div class="footer-follow-lbl">Follow Us</div>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/mgroupestates" target="_blank" rel="noopener" class="footer-soc" title="Instagram" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.7" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@mgroupestates" target="_blank" rel="noopener" class="footer-soc" title="TikTok" aria-label="TikTok">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 7.1c-1.5-.3-2.9-1.1-3.9-2.3-.5-.6-.8-1.2-1-1.9-.1-.4-.2-.8-.2-1.3h-3.3v13.2c0 1.3-1.1 2.4-2.4 2.4-.7 0-1.4-.3-1.9-.8-.4-.5-.7-1.1-.7-1.8 0-1.3 1.1-2.4 2.4-2.4.3 0 .5.1.8.2v-3.3c-.3 0-.5-.1-.8-.1-3.1 0-5.7 2.5-5.7 5.7 0 1.9 1 3.6 2.5 4.6 1 .7 2.1 1.1 3.3 1.1 3.1 0 5.7-2.5 5.7-5.7V9.8c1.2.8 2.6 1.4 4.2 1.5V8c-.3 0-.5 0-.8-.1z"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@mgroupestates" target="_blank" rel="noopener" class="footer-soc" title="YouTube" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5c-.3-1-1-1.8-2-2C19.6 4 12 4 12 4s-7.6 0-9.5.5c-1 .2-1.7 1-2 2C0 8.4 0 12 0 12s0 3.6.5 5.5c.3 1 1 1.8 2 2 1.9.5 9.5.5 9.5.5s7.6 0 9.5-.5c1-.2 1.7-1 2-2 .5-1.9.5-5.5.5-5.5s0-3.6-.5-5.5zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg>
+        </a>
+          <a href="https://wa.me/66899723321" target="_blank" rel="noopener" class="footer-soc" title="WhatsApp" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.6-.92-2.2-.24-.58-.48-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47s1.06 2.86 1.21 3.06c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35z"/><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.24 8.23z"/></svg>
+          </a>
+      </div>
+    </div>
+  </div>
+</footer>
+<div class="policy-modal" id="privacyModal" onclick="if(event.target===this)closePrivacy()">
+  <div class="policy-box">
+    <button class="policy-close" onclick="closePrivacy()" aria-label="Close">&#x2715;</button>
+    <div class="policy-lbl">Legal</div>
+    <h2 class="policy-title">Privacy Policy</h2>
+    <p>MGROUP Estates ("we", "our", "us") respects your privacy. This policy explains how we collect, use and protect the personal information you share with us through our website and property enquiries.</p>
+
+    <h3>Information We Collect</h3>
+    <p>When you contact us or submit an enquiry, we may collect your name, email address, phone number, and any details you include in your message. We also collect anonymous analytics data about how visitors use our website.</p>
+
+    <h3>How We Use Your Information</h3>
+    <ul>
+      <li>To respond to your enquiries and provide property consultancy services</li>
+      <li>To share property listings and market updates relevant to your interest</li>
+      <li>To improve our website and services</li>
+      <li>To comply with legal obligations</li>
+    </ul>
+
+    <h3>Data Sharing</h3>
+    <p>We do not sell your personal information. We may share information with trusted service providers (e.g., email delivery, CRM) strictly for the purpose of operating our business. Property partners may receive your enquiry only when you explicitly request introduction.</p>
+
+    <h3>Your Rights</h3>
+    <p>You have the right to access, correct or delete your personal data. To exercise these rights, contact us at <a href="mailto:contact@mgroupestates.com">contact@mgroupestates.com</a>.</p>
+
+    <h3>Data Security</h3>
+    <p>We take reasonable measures to protect your information from unauthorised access, disclosure or loss. However, no online transmission is completely secure.</p>
+
+    <h3>Contact</h3>
+    <p>For questions regarding this Privacy Policy, please email <a href="mailto:contact@mgroupestates.com">contact@mgroupestates.com</a>.</p>
+
+    <div class="policy-updated">Last updated: January 2026</div>
+  </div>
+</div>
+<div class="policy-modal" id="cookieModal" onclick="if(event.target===this)closeCookie()">
+  <div class="policy-box">
+    <button class="policy-close" onclick="closeCookie()" aria-label="Close">&#x2715;</button>
+    <div class="policy-lbl">Legal</div>
+    <h2 class="policy-title">Cookie Policy</h2>
+    <p>This policy explains how MGROUP Estates uses cookies and similar technologies on our website.</p>
+
+    <h3>What Are Cookies</h3>
+    <p>Cookies are small text files stored on your device when you visit a website. They help websites remember your preferences and understand how visitors interact with content.</p>
+
+    <h3>Cookies We Use</h3>
+    <ul>
+      <li><strong>Essential cookies</strong> — required for the website to function properly (e.g., remembering your cookie consent).</li>
+      <li><strong>Analytics cookies</strong> — help us understand how visitors use our site so we can improve it. These are anonymous.</li>
+      <li><strong>Preference cookies</strong> — remember your language and display settings.</li>
+    </ul>
+
+    <h3>Third-Party Cookies</h3>
+    <p>We may use services such as Google Fonts and embedded video providers that set their own cookies. These third parties have their own privacy policies.</p>
+
+    <h3>Managing Cookies</h3>
+    <p>You can control or delete cookies through your browser settings. Disabling cookies may affect some website features. Most browsers allow you to refuse cookies entirely or be notified before one is set.</p>
+
+    <h3>Contact</h3>
+    <p>For questions about our use of cookies, please email <a href="mailto:contact@mgroupestates.com">contact@mgroupestates.com</a>.</p>
+
+    <div class="policy-updated">Last updated: January 2026</div>
+  </div>
+</div>
+
+<script src="assets/app.js?v=110"></script>
+</body>
+</html>
