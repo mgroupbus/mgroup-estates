@@ -5839,7 +5839,7 @@ nav.scrolled{
   background:transparent;text-decoration:none!important;
   transition:background .32s ease,color .32s ease}
 .svc3-card:hover .svc3-name,.svc3-card:focus-visible .svc3-name{
-  background:#fff;color:var(--ink,#33291F);text-shadow:none}
+  background:var(--hover-brown,#4A3B2C);color:#fff;text-shadow:none}
 
 /* ═══ Services carousel: keep the arrows on phones ════════════════
    They were hidden below 760px, which is where they are needed most —
