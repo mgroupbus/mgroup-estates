@@ -413,7 +413,7 @@ function renderRentalGrid() {
 
     return '<div class="rent-card" onclick="openRentDetail(\'' + villaId + '\')">' +
       '<div class="rent-card-img">' +
-        '<div class="rent-card-img-inner" style="background-image:url(' + mgImg(img, 760) + ')"></div>' +
+        '<div class="rent-card-img-inner" style="background-image:url(' + mgImg(img, mgCardW()) + ')"></div>' +
         '<div class="rent-card-img-overlay"></div>' +
         '<div class="rent-card-badges">' +
           (v.is_featured ? '<span class="rent-badge featured">Featured</span>' : '') +
@@ -836,7 +836,7 @@ function renderGrid() {
     return `
     <div class="prop-card" onclick="location.href='property.html?id=${p.id}'">
       <div class="prop-card-img">
-        <div class="prop-card-img-inner" style="background-color:#0a0a0a;background-image:${p.img ? 'url('+mgImg(p.img,760)+')' : p.bg};background-size:cover;background-position:center;background-repeat:no-repeat;"></div>
+        <div class="prop-card-img-inner" style="background-color:#0a0a0a;background-image:${p.img ? 'url('+mgImg(p.img, mgCardW())+')' : p.bg};background-size:cover;background-position:center;background-repeat:no-repeat;"></div>
         <div class="prop-card-img-overlay"></div>
         <div class="prop-badges">
           ${p.badge ? `<span class="prop-badge">${p.badge}</span>` : ''}
@@ -1010,7 +1010,7 @@ function renderInvSlider() {
     return `
     <div class="inv-card" onclick="${c.propId ? `location.href='property.html?id='+${c.propId}` : ''}" data-idx="${i}" style="${c.propId ? 'cursor:pointer' : 'cursor:default'}">
       <div class="inv-card-img">
-        <div class="inv-card-img-inner" style="background-color:#0a0a0a;background-image:${c.img ? 'url('+mgImg(c.img,760)+')' : c.bg};background-size:cover;background-position:center;background-repeat:no-repeat;width:100%;height:100%;"></div>
+        <div class="inv-card-img-inner" style="background-color:#0a0a0a;background-image:${c.img ? 'url('+mgImg(c.img, mgCardW())+')' : c.bg};background-size:cover;background-position:center;background-repeat:no-repeat;width:100%;height:100%;"></div>
         <div class="inv-card-img-overlay"></div>
         ${c.badge ? `<div class="inv-yield-badge">${c.badge}</div>` : ''}
         <button class="inv-save" onclick="event.stopPropagation()">♡</button>
@@ -1897,7 +1897,7 @@ async function openDetail(id) {
     if(x.sqm) specs.push(`<span style="display:inline-flex;align-items:center;gap:3px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10.6 9-7.1 9 7.1"/><path d="M5.4 9.2V20a.8.8 0 0 0 .8.8h11.6a.8.8 0 0 0 .8-.8V9.2"/><path d="M10 20.8v-5h4v5"/></svg><span style="font-family:'Figtree', sans-serif;font-size:13px;color:rgba(255,255,255,0.9)">${x.sqm}</span><span style="font-family:'Figtree', sans-serif;font-size:9px;letter-spacing:0.13em;text-transform:uppercase;color:rgba(255,255,255,0.6)">sqm</span></span>`);
     const specsHtml=specs.length?`<div style="display:flex;gap:10px;margin-top:6px;">${specs.join('')}</div>`:'';
     const collDisplay=x.coll?(x.coll.charAt(0).toUpperCase()+x.coll.slice(1).replace(/-/g,' ')):'';
-    return `<div class="det-sim-card" onclick=\"location.href='property.html?id=${x.id}'\"><div class="det-sim-img" style="background-image:url(${mgImg(x.img||'',760)});"><div class="det-sim-img-overlay"></div><div class="det-sim-over">${collDisplay?`<div class="inv-card-coll">${collDisplay}</div>`:''}<div class="det-sim-name">${x.name}</div>${specsHtml}<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.15);display:flex;align-items:baseline;justify-content:space-between;"><span class="inv-card-price" style="font-family:'Figtree', sans-serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap;">${x.price}</span><span class="det-sim-loc" style="font-family:'Figtree', sans-serif;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);text-align:right;">${x.loc||''}</span></div></div></div></div>`;
+    return `<div class="det-sim-card" onclick=\"location.href='property.html?id=${x.id}'\"><div class="det-sim-img" style="background-image:url(${mgImg(x.img||'', mgCardW())});"><div class="det-sim-img-overlay"></div><div class="det-sim-over">${collDisplay?`<div class="inv-card-coll">${collDisplay}</div>`:''}<div class="det-sim-name">${x.name}</div>${specsHtml}<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.15);display:flex;align-items:baseline;justify-content:space-between;"><span class="inv-card-price" style="font-family:'Figtree', sans-serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap;">${x.price}</span><span class="det-sim-loc" style="font-family:'Figtree', sans-serif;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);text-align:right;">${x.loc||''}</span></div></div></div></div>`;
   }).join('');
 
   // Land size
@@ -3476,6 +3476,21 @@ var MG_MUTED = [107, 90, 71];
    `resize=contain` is not optional: without it only the width is
    applied and the image comes back stretched.
    Non-Supabase URLs (Unsplash fallbacks) pass through untouched. */
+/* How wide a listing card actually renders, in device pixels. A fixed
+   760 was too small: on a Retina screen a 437px card needs 875, so every
+   card photo was being upscaled by the browser and looked soft. Card
+   width tracks the layout, so derive it from the viewport and multiply
+   by the pixel ratio (capped at 2 — beyond that the extra bytes buy
+   nothing the eye can see). */
+function mgCardW(){
+  var vw = window.innerWidth || 1440;
+  var css = vw >= 1200 ? 560
+          : vw >= 900  ? 470
+          : vw >= 700  ? 420
+          : Math.round(vw * 0.88);
+  return Math.round(css * Math.min(window.devicePixelRatio || 1, 2));
+}
+
 function mgImg(url, w, exact){
   var u = String(url || '');
   if (!u) return u;
@@ -3504,7 +3519,7 @@ function mgImg(url, w, exact){
     px = Math.max(200, Math.min(want, cap));
   }
 
-  keep.push('width=' + px, 'resize=contain', 'quality=72');
+  keep.push('width=' + px, 'resize=contain', 'quality=' + (exact ? 82 : 78));
   return path + '?' + keep.join('&');
 }
 
