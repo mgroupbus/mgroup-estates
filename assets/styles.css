@@ -5677,7 +5677,7 @@ footer{padding-bottom:26px!important}
    off a couple of seconds in. That is the safety net: this page has
    been blanked before by a reveal system whose JS failed to arm, and
    the net can only ever make content visible, never hide it. */
-@keyframes mg-enter{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes mg-enter{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
 
 #hero .hero-content > *,
 .hub-hero-inner > *,
@@ -5685,28 +5685,28 @@ footer{padding-bottom:26px!important}
 .proc-hero > *,
 .ins-hero > *,
 .det-gallery{
-  animation:mg-enter .85s cubic-bezier(.22,1,.36,1) both}
+  animation:mg-enter 1.15s cubic-bezier(.22,1,.36,1) both}
 
 #hero .hero-content > *:nth-child(2),
 .hub-hero-inner > *:nth-child(2),
 .pg-hero > *:nth-child(2),
 .proc-hero > *:nth-child(2),
-.ins-hero > *:nth-child(2){animation-delay:.14s}
+.ins-hero > *:nth-child(2){animation-delay:.20s}
 
 #hero .hero-content > *:nth-child(3),
 .hub-hero-inner > *:nth-child(3),
 .pg-hero > *:nth-child(3),
 .proc-hero > *:nth-child(3),
-.ins-hero > *:nth-child(3){animation-delay:.28s}
+.ins-hero > *:nth-child(3){animation-delay:.40s}
 
 #hero .hero-content > *:nth-child(n+4),
 .hub-hero-inner > *:nth-child(n+4),
 .pg-hero > *:nth-child(n+4),
 .proc-hero > *:nth-child(n+4),
-.ins-hero > *:nth-child(n+4){animation-delay:.42s}
+.ins-hero > *:nth-child(n+4){animation-delay:.58s}
 
 /* the bar settles in first, without shifting the page under it */
-nav,#mainNav,.det-topbar{animation:mg-fade-in .7s ease-out both}
+nav,#mainNav,.det-topbar{animation:mg-fade-in .9s ease-out both}
 @keyframes mg-fade-in{from{opacity:0}to{opacity:1}}
 
 /* hero stills drift like the home video does */

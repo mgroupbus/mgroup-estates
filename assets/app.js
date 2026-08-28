@@ -3860,7 +3860,7 @@ function mgNearbyIcon(cat){
    this class enables can only reveal, never hide. */
 (function(){
   var reveal = function(){ document.documentElement.classList.add('mg-entered'); };
-  setTimeout(reveal, 2600);   /* after the longest entrance finishes */
+  setTimeout(reveal, 3200);   /* after the longest entrance finishes */
   /* bfcache restores skip load events, so arm it on the way back too */
   window.addEventListener('pageshow', function(e){ if (e.persisted) reveal(); });
 })();
