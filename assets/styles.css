@@ -5968,3 +5968,12 @@ p + p{margin-top:14px}
 
 /* fine print stays tighter than body copy, but never `normal` */
 .enq-terms,.ct-note,.footer-copy,.det-near-dist,.sid-note{line-height:1.7}
+
+/* The last four strays, found by measuring the live pages rather than
+   reading the stylesheet: a confirmation note at 28px, the mortgage
+   disclaimer at 1.75, the property description at 1.9, and the brochure
+   sub-line at 16px. */
+.ct-ok p{margin-bottom:20px}
+.calc-disclaimer{line-height:1.7}
+.det-desc p{line-height:1.8}
+.sid-brochure-sub{margin-bottom:14px}
