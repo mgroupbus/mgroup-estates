@@ -5938,3 +5938,33 @@ html.mg-sr .det-open-section.mg-shown{
 @media (prefers-reduced-motion: reduce){
   html.mg-sr .det-open-section{opacity:1;transform:none;transition:none}
 }
+
+/* ═══ Paragraph rhythm ════════════════════════════════════════════
+   Body copy had drifted into seven different paragraph gaps — 10, 20,
+   22, 26, 28 and 34px, plus blocks that spaced themselves with
+   margin-top instead — and several paragraphs were left on the default
+   `normal` line-height, about 1.2, so they read as cramped next to the
+   1.8 used everywhere else.
+
+   One scale now:
+     14px  between paragraphs of running text
+     20px  under a block of copy inside a card
+     34px  between numbered steps, which separate ideas rather than
+           paragraphs, so they keep their larger gap
+   Line-height is 1.8 for body copy and 1.7 for fine print. */
+
+p{line-height:1.8}
+p + p{margin-top:14px}
+
+.det-desc p,.ct-body p,.ins-body p{margin:0 0 14px}
+.det-desc p:last-child,.ins-body p:last-child{margin-bottom:0}
+
+/* card copy: one gap, not 20 / 22 / 26 */
+.lx-desc,.ins-article-excerpt,.ins-art-excerpt,.cs-modal-desc{margin-bottom:20px!important}
+.cs-modal-desc{line-height:1.8!important}
+
+/* the how-to-buy column read a touch looser than the rest */
+.proc-hero-sub,.proc-body{line-height:1.8!important}
+
+/* fine print stays tighter than body copy, but never `normal` */
+.enq-terms,.ct-note,.footer-copy,.det-near-dist,.sid-note{line-height:1.7}
