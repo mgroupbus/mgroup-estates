@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css?v=134">
+<link rel="stylesheet" href="assets/styles.css?v=137">
 <style>
 /* the detail panel was an overlay; on its own page it is just content */
 #detOverlay{position:static!important;transform:none!important;inset:auto!important;
@@ -273,6 +273,10 @@
                         <div class="sid-visit" onclick="sidSelVisit(this,'virtual')"><svg class="mgi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4V8z"/></svg> Virtual</div>
                       </div>
                     </div>
+                    <div class="sid-time-lbl" style="margin-top:16px">Your Details</div>
+                    <input type="text"  class="sid-inp" id="schName"  placeholder="Name">
+                    <input type="tel"   class="sid-inp" id="schPhone" placeholder="Phone or WhatsApp">
+                    <input type="email" class="sid-inp" id="schEmail" placeholder="Email (optional)">
                     <div id="sidSchedSummary" class="sid-summary" style="display:none"></div>
                     <button class="sid-submit-btn" id="sidSchedBtn" onclick="sidConfirmSchedule()" disabled>Confirm Viewing →</button>
                   </div>
@@ -564,7 +568,7 @@
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-<script src="assets/app.js?v=134"></script>
+<script src="assets/app.js?v=137"></script>
 
 
 

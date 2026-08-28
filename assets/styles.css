@@ -5670,7 +5670,7 @@ footer{padding-bottom:26px!important}
    off a couple of seconds in. That is the safety net: this page has
    been blanked before by a reveal system whose JS failed to arm, and
    the net can only ever make content visible, never hide it. */
-@keyframes mg-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes mg-enter{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 
 #hero .hero-content > *,
 .hub-hero-inner > *,
@@ -5678,28 +5678,28 @@ footer{padding-bottom:26px!important}
 .proc-hero > *,
 .ins-hero > *,
 .det-gallery{
-  animation:mg-enter .58s cubic-bezier(.22,1,.36,1) both}
+  animation:mg-enter .85s cubic-bezier(.22,1,.36,1) both}
 
 #hero .hero-content > *:nth-child(2),
 .hub-hero-inner > *:nth-child(2),
 .pg-hero > *:nth-child(2),
 .proc-hero > *:nth-child(2),
-.ins-hero > *:nth-child(2){animation-delay:.09s}
+.ins-hero > *:nth-child(2){animation-delay:.14s}
 
 #hero .hero-content > *:nth-child(3),
 .hub-hero-inner > *:nth-child(3),
 .pg-hero > *:nth-child(3),
 .proc-hero > *:nth-child(3),
-.ins-hero > *:nth-child(3){animation-delay:.18s}
+.ins-hero > *:nth-child(3){animation-delay:.28s}
 
 #hero .hero-content > *:nth-child(n+4),
 .hub-hero-inner > *:nth-child(n+4),
 .pg-hero > *:nth-child(n+4),
 .proc-hero > *:nth-child(n+4),
-.ins-hero > *:nth-child(n+4){animation-delay:.27s}
+.ins-hero > *:nth-child(n+4){animation-delay:.42s}
 
 /* the bar settles in first, without shifting the page under it */
-nav,#mainNav,.det-topbar{animation:mg-fade-in .5s ease-out both}
+nav,#mainNav,.det-topbar{animation:mg-fade-in .7s ease-out both}
 @keyframes mg-fade-in{from{opacity:0}to{opacity:1}}
 
 /* hero stills drift like the home video does */
@@ -5871,3 +5871,11 @@ nav,nav.scrolled,.det-jump,.det-topbar,.mobile-nav,#mobileNav{
   display:none!important;
   backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 .video-lightbox.open,.book-overlay.open{display:flex!important}
+
+/* Viewing / enquiry failures have to look like failures, not like the
+   success message they replaced. */
+.sid-summary--err,.sid-sent--err{
+  background:rgba(160,60,45,.08)!important;
+  border:1px solid rgba(160,60,45,.28)!important;
+  color:#8A3B2C!important}
+#sidAcc1 .sid-inp{margin-top:8px}

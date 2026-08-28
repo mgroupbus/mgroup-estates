@@ -1278,10 +1278,16 @@ const SID_TIMES=['09:00','10:00','11:00','14:00','15:00','16:00','17:00'];
 const SID_MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 function toggleSidAcc(n){
-  const isOpen=document.getElementById('sidAcc'+n).classList.contains('open');
-  [1,2,3].forEach(i=>{ document.getElementById('sidAcc'+i).classList.remove('open'); });
+  /* The brochure box (sidAcc3) was removed when the email gate went, but
+     this still reached for it — getElementById returned null and the
+     whole handler threw, so neither Schedule a Viewing nor Send Enquiry
+     would open at all. Skip whatever is not on the page. */
+  const panel=document.getElementById('sidAcc'+n);
+  if(!panel) return;
+  const isOpen=panel.classList.contains('open');
+  [1,2,3].forEach(i=>{ const el=document.getElementById('sidAcc'+i); if(el) el.classList.remove('open'); });
   if(!isOpen){
-    document.getElementById('sidAcc'+n).classList.add('open');
+    panel.classList.add('open');
     if(n===1){ const now=new Date(); sidState={y:now.getFullYear(),m:now.getMonth(),date:null,time:null,vtype:null}; sidRenderCal(); }
   }
 }
@@ -1329,56 +1335,137 @@ function sidSelVisit(el,type){
   sum.innerHTML=`<strong>${curProp?curProp.name:''}</strong><br>${dtStr} at ${sidState.time}<br>${vtStr}`;
   document.getElementById('sidSchedBtn').disabled=false;
 }
-function sidConfirmSchedule(){
-  const ref='MGE-'+(Math.floor(Math.random()*90000)+10000);
-  document.getElementById('sidSchedSummary').innerHTML=`<strong>✓ Viewing Confirmed!</strong><br>Ref: #${ref}<br>Khun May will contact you within 2 hours.`;
-  document.getElementById('sidSchedBtn').style.display='none';
-}
-function sidSendEnquiry(){
-  var name = document.getElementById('enqName')?.value.trim();
-  var phone = document.getElementById('enqPhone')?.value.trim();
-  var email = document.getElementById('enqEmail')?.value.trim();
-  var msg = document.getElementById('enqMsg')?.value.trim();
-  var role = document.getElementById('enqRole')?.value;
-  if(!name){document.getElementById('enqName')?.focus();return;}
+/* ── Property sidebar: viewing requests and enquiries ────────────
+   Both of these used to be theatre. sidConfirmSchedule() printed
+   "Viewing Confirmed, Khun May will contact you within 2 hours" and a
+   made-up reference number without sending anything anywhere, and it
+   had no name or phone field to send in the first place — every viewing
+   ever booked from a property page was discarded. sidSendEnquiry()
+   POSTed first_name/role, neither of which exists on public.enquiries,
+   with the error swallowed by an empty catch.
 
-  var btn = document.querySelector('#sidAcc2 .sid-submit-btn');
-  btn.textContent = 'Sending...'; btn.disabled = true;
-
-  // Save to Supabase
-  fetch(SB_URL + '/rest/v1/enquiries', {
+   They write to Supabase now, and — this is the point — the customer is
+   only told it worked once the row is actually in. A failure says so
+   and leaves the form filled in so nothing typed is lost. */
+function mgPostEnquiry(payload){
+  return fetch(SB_URL + '/rest/v1/enquiries', {
     method: 'POST',
-    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ first_name: name, phone: phone, email: email, role: role, message: msg, source: 'property_enquiry', property_name: (window._currentPropertyName || '') })
-  }).catch(function(){});
-
-  // Send email via FormSubmit
-  var data = new FormData();
-  data.append('Name', name);
-  data.append('Phone', phone);
-  data.append('Email', email);
-  data.append('Role', role);
-  data.append('Property', window._currentPropertyName || '');
-  data.append('Message', msg);
-  data.append('_subject', 'Property Enquiry: ' + (window._currentPropertyName || 'Unknown') + ' — ' + name);
-  data.append('_captcha', 'false');
-  data.append('_template', 'table');
-
-  fetch('https://formsubmit.co/ajax/contact@mgroupestates.com', {
-    method: 'POST', body: data
-  }).then(function(r){return r.json();}).then(function(res){
-    document.getElementById('enqSent').style.display='block';
-    btn.style.display='none';
-  }).catch(function(){
-    document.getElementById('enqSent').style.display='block';
-    btn.style.display='none';
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
+    },
+    body: JSON.stringify(payload)
+  }).then(function(r){
+    if (!r.ok) return r.text().then(function(t){ throw new Error(r.status + ' ' + t); });
+    return r.json();
   });
 }
-function sidSendBrochure(){
-  const name=document.getElementById('brName')?.value.trim(), email=document.getElementById('brEmail')?.value.trim();
-  if(!name||!email){if(!name)document.getElementById('brName')?.focus();else document.getElementById('brEmail')?.focus();return;}
-  document.getElementById('brSent').style.display='block';
-  document.querySelector('#sidAcc3 .sid-submit-btn').style.display='none';
+
+/* Email is a best-effort extra: FormSubmit needs the address activated
+   from the inbox, so it must never decide what the customer is told. */
+function mgEmailCopy(subject, fields){
+  var d = new FormData();
+  Object.keys(fields).forEach(function(k){ d.append(k, fields[k] || ''); });
+  d.append('_subject', subject);
+  d.append('_captcha', 'false');
+  d.append('_template', 'table');
+  return fetch('https://formsubmit.co/ajax/contact@mgroupestates.com', { method:'POST', body:d })
+    .catch(function(e){ console.warn('MGROUP: email copy failed', e.message); });
+}
+
+function sidConfirmSchedule(){
+  var name  = (document.getElementById('schName')  || {}).value;
+  var phone = (document.getElementById('schPhone') || {}).value;
+  var email = (document.getElementById('schEmail') || {}).value;
+  name = (name || '').trim(); phone = (phone || '').trim(); email = (email || '').trim();
+
+  var box = document.getElementById('sidSchedSummary');
+  var btn = document.getElementById('sidSchedBtn');
+  var show = function(html, ok){
+    box.style.display = 'block';
+    box.innerHTML = html;
+    box.classList.toggle('sid-summary--err', !ok);
+  };
+
+  if (!name)  { show('Please enter your name so Khun May knows who to call.', false);
+                (document.getElementById('schName')  || {}).focus && document.getElementById('schName').focus(); return; }
+  if (!phone && !email) { show('Please leave a phone number or an email so we can confirm.', false);
+                (document.getElementById('schPhone') || {}).focus && document.getElementById('schPhone').focus(); return; }
+
+  /* the calendar keeps its selection in sidState, not on window */
+  var d     = sidState && sidState.date;
+  var when  = d ? d.toDateString() : '';
+  var time  = (sidState && sidState.time) || '';
+  var vtype = (sidState && sidState.vtype) || 'in-person';
+  var label = 'Viewing request — ' + (when || 'no date chosen') +
+              (time ? ' at ' + time : '') + ' — ' + vtype;
+
+  var original = btn.textContent;
+  btn.textContent = 'Sending…'; btn.disabled = true;
+
+  mgPostEnquiry({
+    name: name, phone: phone, email: email,
+    message: label,
+    enquiry_type: 'viewing',
+    source: 'property_viewing',
+    property_id: window._currentPropertyId || null,
+    property_name: window._currentPropertyName || ''
+  }).then(function(rows){
+    var ref = 'MGE-' + (rows && rows[0] && rows[0].id ? String(rows[0].id).padStart(5,'0') : '');
+    show('<strong>Viewing requested</strong><br>' +
+         (ref !== 'MGE-' ? 'Reference ' + ref + '<br>' : '') +
+         label + '<br>Khun May will confirm with you shortly.', true);
+    btn.style.display = 'none';
+    mgEmailCopy('Viewing request: ' + (window._currentPropertyName || 'Property') + ' — ' + name,
+      {Name:name, Phone:phone, Email:email, Property:window._currentPropertyName, Request:label});
+  }).catch(function(e){
+    console.warn('MGROUP: viewing request failed', e.message);
+    show('Sorry — that did not go through. Please try again, or WhatsApp us and we will book it for you.', false);
+    btn.textContent = original; btn.disabled = false;
+  });
+}
+
+function sidSendEnquiry(){
+  var g = function(id){ var el = document.getElementById(id); return el ? el.value.trim() : ''; };
+  var name = g('enqName'), phone = g('enqPhone'), email = g('enqEmail'), msg = g('enqMsg');
+  var role = g('enqRole');
+
+  var btn  = document.querySelector('#sidAcc2 .sid-submit-btn');
+  var sent = document.getElementById('enqSent');
+
+  if (!name)  { document.getElementById('enqName').focus(); return; }
+  if (!phone && !email) { document.getElementById('enqPhone').focus();
+    sent.style.display = 'block';
+    sent.className = 'sid-sent sid-sent--err';
+    sent.textContent = 'Please leave a phone number or an email so we can reply.';
+    return; }
+
+  var original = btn.textContent;
+  btn.textContent = 'Sending…'; btn.disabled = true;
+
+  mgPostEnquiry({
+    name: name, phone: phone, email: email,
+    message: msg + (role ? '\n\nBuyer type: ' + role : ''),
+    enquiry_type: 'property',
+    source: 'property_enquiry',
+    property_id: window._currentPropertyId || null,
+    property_name: window._currentPropertyName || ''
+  }).then(function(){
+    sent.style.display = 'block';
+    sent.className = 'sid-sent';
+    sent.textContent = '✓ Sent. Khun May will be in touch shortly.';
+    btn.style.display = 'none';
+    mgEmailCopy('Property enquiry: ' + (window._currentPropertyName || 'Property') + ' — ' + name,
+      {Name:name, Phone:phone, Email:email, Role:role, Property:window._currentPropertyName, Message:msg});
+  }).catch(function(e){
+    console.warn('MGROUP: enquiry failed', e.message);
+    sent.style.display = 'block';
+    sent.className = 'sid-sent sid-sent--err';
+    sent.textContent = 'Sorry — that did not send. Please try again.';
+    btn.textContent = original; btn.disabled = false;
+  });
 }
 
 /* ─── DETAIL PANEL (openDetail) ─── */
@@ -1755,9 +1842,13 @@ async function openDetail(id) {
   // detNearby set below with category support
   // Pre-fill enquiry form
   window._currentPropertyName=p.name;
+  window._currentPropertyId=p.id;          /* the enquiry rows key off this */
   document.getElementById('enqMsg').value='Hello, I am interested in '+p.name;
   document.getElementById('enqRole').value='';
   document.getElementById('enqName').value='';
+  ['schName','schPhone','schEmail'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
   document.getElementById('enqPhone').value='';
   document.getElementById('enqEmail').value='';
   document.getElementById('enqSent').style.display='none';
@@ -3769,7 +3860,7 @@ function mgNearbyIcon(cat){
    this class enables can only reveal, never hide. */
 (function(){
   var reveal = function(){ document.documentElement.classList.add('mg-entered'); };
-  setTimeout(reveal, 2000);
+  setTimeout(reveal, 2600);   /* after the longest entrance finishes */
   /* bfcache restores skip load events, so arm it on the way back too */
   window.addEventListener('pageshow', function(e){ if (e.persisted) reveal(); });
 })();
