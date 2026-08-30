@@ -1,0 +1,26 @@
+{
+  "name": "MGROUP \u2014 Add Listing",
+  "short_name": "Add Listing",
+  "description": "Add a property listing to mgroupestates.com",
+  "start_url": "index.html",
+  "scope": "./",
+  "id": "mgroup-add-listing",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#eef0f2",
+  "theme_color": "#2f5069",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxOTInIGhlaWdodD0nMTkyJz48cmVjdCB3aWR0aD0nMTkyJyBoZWlnaHQ9JzE5Micgcng9JzQyJyBmaWxsPScjMmY1MDY5Jy8+PHRleHQgeD0nNTAlJyB5PSc2OCUnIGZvbnQtc2l6ZT0nMTE1JyBmb250LWZhbWlseT0nR2VvcmdpYSxzZXJpZicgZmlsbD0nI2ZmZicgdGV4dC1hbmNob3I9J21pZGRsZSc+TTwvdGV4dD48L3N2Zz4=",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc1MTInIGhlaWdodD0nNTEyJz48cmVjdCB3aWR0aD0nNTEyJyBoZWlnaHQ9JzUxMicgcng9JzExMicgZmlsbD0nIzJmNTA2OScvPjx0ZXh0IHg9JzUwJScgeT0nNjglJyBmb250LXNpemU9JzMwNycgZm9udC1mYW1pbHk9J0dlb3JnaWEsc2VyaWYnIGZpbGw9JyNmZmYnIHRleHQtYW5jaG9yPSdtaWRkbGUnPk08L3RleHQ+PC9zdmc+",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

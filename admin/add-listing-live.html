@@ -1,0 +1,397 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MGROUP · Add Listing (Live)</title>
+<script>if(sessionStorage.getItem('mg_admin')!=='ok'){location.replace('admin-login.html');}</script>
+<meta name="theme-color" content="#2f5069">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Add Listing">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' rx='40' fill='%232f5069'/%3E%3Ctext x='90' y='122' font-size='96' font-family='Georgia' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Figtree:wght@400;500;600;700;800&display=swap');
+  :root{--s9:#22384a;--s8:#2a465b;--s7:#2f5069;--s6:#38617f;--s5:#4a7595;--s-t:#e9f0f5;
+    --cream:#eef0f2;--card:#fff;--line:#dfe3e7;--hair:#eef1f4;--ink:#1a2129;--muted:#63707b;--faint:#93a0ab;
+    --ai:#6d4aa8;--ai-t:#efeafa;--gold:#b08d57;--red:#b5533a;--red-t:#f7e7e2;--ok:#2c8a5f;--ok-t:#e4f2ea;
+    --serif:'Cormorant Garamond',Georgia,serif;--font:'Figtree',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:ui-monospace,'SF Mono',Menlo,monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--cream);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;font-size:14px;padding:26px 18px 96px;display:flex;justify-content:center}
+  .wrap{width:100%;max-width:880px}
+  .head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
+  .head .crumb{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--s6);font-weight:700}
+  .head h1{font-size:28px;font-weight:800;letter-spacing:-.02em;margin-top:3px}
+  .head .live{font-size:11px;font-weight:700;color:var(--ok);background:var(--ok-t);border:1px solid #bfe4d0;padding:5px 11px;border-radius:20px;font-family:var(--mono)}
+  .head .seg{display:flex;background:#e2e6ea;border-radius:9px;padding:3px;margin-top:8px}
+  .head .seg button{font-family:var(--font);font-size:12.5px;font-weight:600;border:none;background:none;padding:7px 16px;border-radius:7px;cursor:pointer;color:var(--muted)}
+  .head .seg button.on{background:#fff;color:var(--s7);box-shadow:0 1px 3px rgba(0,0,0,.07)}
+
+  .ai{background:linear-gradient(135deg,#2a465b,#22384a);color:#fff;border-radius:16px;padding:20px 24px;margin-bottom:16px;position:relative;overflow:hidden}
+  .ai::after{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 100% 0,rgba(109,74,168,.5),transparent 55%);pointer-events:none}
+  .ai .tag{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#b9a8e0;font-weight:700}
+  .ai h2{font-family:var(--serif);font-size:24px;font-weight:600;margin:5px 0 4px}
+  .ai p{font-size:12.5px;color:#b6c4d1;max-width:56ch}
+  .ai .bar{display:flex;gap:9px;margin-top:14px}
+  .ai .bar input{flex:1;font-family:var(--font);font-size:13.5px;padding:11px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.1);color:#fff;outline:none}
+  .ai .bar input::placeholder{color:#9fb2c1}
+  .ai .go{font-family:var(--font);font-weight:700;font-size:13.5px;border:none;border-radius:10px;padding:11px 18px;background:#fff;color:var(--s8);cursor:pointer;white-space:nowrap}
+
+  .mbar{display:none;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px 20px;margin-bottom:16px}
+  .mbar .ic{width:32px;height:32px;border-radius:9px;background:var(--s-t);color:var(--s6);display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+  .mbar b{font-size:13.5px}.mbar span{font-size:12px;color:var(--faint)}
+
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;grid-auto-flow:row dense}
+  .fsec{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:18px 20px}
+  .fsec.span2{grid-column:1/-1}
+  .fsec h3{font-size:13px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;margin-bottom:3px;display:flex;align-items:center;gap:9px}
+  .fsec .hint{font-size:12px;color:var(--faint);margin-bottom:14px}
+  .req{color:var(--red);font-size:11px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:11px}
+  .unitwrap{position:relative}.unitwrap input{padding-right:48px}
+  .unitwrap .u{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--faint);font-weight:600;pointer-events:none}
+  .fld{display:flex;flex-direction:column;gap:6px}.fld.wide{grid-column:1/-1}.fld.sp2{grid-column:span 2}
+  .fld label{font-size:12px;font-weight:600;color:var(--muted)}
+  .fld input,.fld select,.fld textarea{font-family:var(--font);font-size:13.5px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fbfcfd;color:var(--ink);outline:none;width:100%}
+  .fld input:focus,.fld textarea:focus,.fld select:focus{border-color:var(--s5);background:#fff}
+  .fld input.err{border-color:var(--red);background:#fdf3f0}
+
+  .pricegrp{display:flex;gap:6px;align-items:center;flex-wrap:nowrap}
+  .pricegrp select{flex:0 0 88px;padding:10px 8px}
+  .pricegrp input[data-k=amount]{flex:1;min-width:0}
+  .pricegrp .frm{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;padding:0 2px;cursor:pointer}
+  .pricegrp .frm input{flex:none;width:16px;height:16px}
+
+  .hlist{display:flex;flex-direction:column;gap:8px}
+  .kv{display:grid;grid-template-columns:1fr 1.5fr 24px;gap:8px;align-items:center}
+  .kv input{font-family:var(--font);font-size:13px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fbfcfd;outline:none;width:100%}
+  .kv .rm{background:none;border:none;color:var(--faint);cursor:pointer}
+  .addrow{font-family:var(--font);font-size:12px;font-weight:600;color:var(--s6);background:var(--s-t);border:1px solid #cddbe6;border-radius:8px;padding:6px 12px;cursor:pointer;margin-top:9px}
+
+  /* nearby reference checklist */
+  .nbgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+  .nref{display:grid;grid-template-columns:16px 20px 1fr 40px;gap:6px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:#fbfcfd}
+  .nref input[type=checkbox]{width:15px;height:15px;accent-color:var(--s6)}
+  .nref .cat{font-size:14px;text-align:center;cursor:help}
+  .nref .nm,.nref .ds{font-family:var(--font);font-size:11.5px;padding:5px 7px;border:1px solid var(--line);border-radius:6px;background:#fff;outline:none;width:100%}
+  .nref .nm:focus,.nref .ds:focus{border-color:var(--s5)}
+  .nref:has(input:checked){border-color:var(--s5);background:#fff}
+  .nref:has(input:checked) .cat{color:var(--s7)}
+
+  /* amenities checklist */
+  .amgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(124px,1fr));gap:5px}
+  .amchk{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);cursor:pointer;padding:5px 9px;border:1px solid var(--line);border-radius:7px;background:#fbfcfd;user-select:none;transition:.12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .amchk input{display:none}
+  .amchk .em{font-size:12px;opacity:.45;filter:grayscale(.3);flex:none}
+  .amchk:hover{border-color:var(--s5)}
+  .amchk:has(input:checked){background:var(--s-t);border-color:var(--s5);color:var(--s7);font-weight:600}
+  .amchk:has(input:checked) .em{opacity:1;filter:none}
+  .amadd{margin-top:11px}
+  .aigen{font-family:var(--font);font-size:11px;font-weight:700;color:var(--ai);background:var(--ai-t);border:1px solid #d9cdf1;border-radius:6px;padding:3px 10px;cursor:pointer}
+  .aigen:hover{background:#e6ddf7}
+  .lblrow{display:flex;justify-content:space-between;align-items:center}
+
+  body[data-mode="manual"] .ai{display:none}
+  body[data-mode="manual"] .mbar{display:flex}
+
+  .savebar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:11px 18px;display:flex;justify-content:center;z-index:40}
+  .savebar .inner{width:100%;max-width:880px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .savebar .live{font-size:12px;color:var(--faint)}.savebar .live b{color:var(--s7);font-family:var(--mono)}
+  .savebar .grp{display:flex;gap:9px}
+  .btn{font-family:var(--font);font-weight:600;font-size:13px;border-radius:9px;padding:10px 18px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
+  .btn:disabled{opacity:.5;cursor:progress}
+  .btn.primary{background:var(--s6);color:#fff;border-color:var(--s6)}.btn.primary:hover{background:var(--s7)}
+
+  .result{display:none;border-radius:13px;padding:16px 18px;margin-bottom:16px;font-size:13.5px;line-height:1.6}
+  .result.ok{display:block;background:var(--ok-t);border:1px solid #bfe4d0;color:#1c5c3d}
+  .result.bad{display:block;background:var(--red-t);border:1px solid #e6bfb2;color:#7c3020}
+  .result a{color:inherit;font-weight:700}.result .big{font-size:15px;font-weight:800;margin-bottom:4px}
+  .result code{font-family:var(--mono);font-size:11.5px;background:rgba(0,0,0,.06);padding:1px 5px;border-radius:4px;white-space:pre-wrap;word-break:break-all}
+  @media(max-width:680px){.form-grid,.grid3,.grid2,.grid4,.grid5,.nbgrid{grid-template-columns:1fr}.amgrid{grid-template-columns:1fr 1fr}.fld.sp2{grid-column:auto}
+    .fld input,.fld select,.fld textarea,.kv input,.nref .nm,.nref .ds{font-size:16px}
+    body{padding:16px 12px 96px}.wrap{max-width:100%}.savebar .live{display:none}.savebar .inner{justify-content:stretch}.savebar .grp{flex:1}.savebar .btn{flex:1}}
+</style></head><body data-mode="ai">
+
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="crumb">For Sale · Live Data Entry</div><h1>Add Listing</h1>
+      <div class="seg"><button class="on" data-m="ai" onclick="setMode('ai')">✨ AI import</button><button data-m="manual" onclick="setMode('manual')">✎ Manual</button></div>
+    </div>
+    <div class="live">● LIVE → Supabase</div>
+  </div>
+
+  <div id="result" class="result"></div>
+
+  <div class="ai">
+    <div class="tag">✦ AI-ASSISTED</div>
+    <h2>Let AI do the typing</h2>
+    <p>Paste a developer or listing link, or a brochure. AI fills the fields — you review, then Publish writes straight to the live site.</p>
+    <div class="bar"><input id="srcUrl" value="" placeholder="https://… listing or developer URL"><button class="go" onclick="extract(this)">✨ Extract with AI</button></div>
+  </div>
+  <div class="mbar"><div class="ic">✎</div><div><b>Manual entry</b><br><span>Fill the fields yourself and Publish.</span></div></div>
+
+  <div class="form-grid">
+    <!-- BASICS -->
+    <div class="fsec span2">
+      <h3>① Basics</h3>
+      <div class="grid3">
+        <div class="fld wide"><label>Listing name <span class="req">*required</span></label><input data-k="name"></div>
+        <div class="fld"><label>Location <span class="req">*required</span></label><input data-k="location"></div>
+        <div class="fld"><label>District</label><input data-k="district"></div>
+        <div class="fld"><label>Property type</label><select data-k="type">
+          <option value="">— select —</option>
+          <option>Villa</option><option>House</option><option>Condominium</option>
+          <option>Penthouse</option><option>Land</option><option>Pre-sale</option>
+        </select></div>
+        <div class="fld sp2"><label>Price <span class="req">*required</span></label>
+          <div class="pricegrp">
+            <select data-k="currency"><option value="THB">฿ THB</option><option value="USD">$ USD</option></select>
+            <input data-k="amount" inputmode="numeric">
+            <label class="frm"><input type="checkbox" data-k="fromflag" checked>From</label>
+          </div>
+        </div>
+        <div class="fld"><label>Collection <span class="req">*required</span></label><select data-k="collection">
+          <option value="">— select —</option>
+          <option value="exclusive">★ Exclusive Listings</option>
+          <option value="branded">◆ Branded Residences</option>
+          <option value="beachfront">~ Beachfront</option>
+          <option value="seaview">▲ Seaview</option>
+          <option value="investment">📈 Investment</option>
+          <option value="lakeview">◉ Lakeview</option>
+          <option value="school">● International School</option>
+          <option value="mountain">▲ Mountain View</option>
+          <option value="wellness">◎ Wellness</option>
+          <option value="condo">◻ Condo Collection</option>
+          <option value="land">◼ Land Collection</option>
+        </select></div>
+        <div class="fld"><label>Developer</label><input data-k="developer"></div>
+        <div class="fld"><label>Ownership</label><input data-k="ownership"></div>
+        <div class="fld"><label>Completion</label><input data-k="completion"></div>
+      </div>
+    </div>
+
+    <!-- SPECS -->
+    <div class="fsec span2">
+      <h3>② Specs</h3>
+      <div class="grid5">
+        <div class="fld"><label>Beds <span class="req">*</span></label><select data-k="beds"><option value="">—</option><option>Studio</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10+</option></select></div>
+        <div class="fld"><label>Baths <span class="req">*</span></label><select data-k="baths"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10+</option></select></div>
+        <div class="fld"><label>Floors</label><select data-k="floors"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select></div>
+        <div class="fld"><label>Buildings</label><select data-k="buildings"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select></div>
+        <div class="fld"><label>Total units</label><input data-k="units" inputmode="numeric"></div>
+      </div>
+      <div class="grid5" style="margin-top:11px">
+        <div class="fld"><label>Living area <span class="req">*req</span></label><div class="unitwrap"><input data-k="sqm" inputmode="numeric"><span class="u">sq.m.</span></div></div>
+        <div class="fld"><label>Plot size</label><div class="unitwrap"><input data-k="land" inputmode="numeric"><span class="u">sq.m.</span></div></div>
+        <div class="fld"><label>Pool</label><input data-k="pool"></div>
+        <div class="fld"><label>View</label><select data-k="view">
+          <option value="">— none —</option>
+          <option>Seaview</option><option>Oceanview</option><option>Garden</option>
+          <option>Mountain</option><option>Lake</option><option>Golf Course</option>
+        </select></div>
+        <div class="fld"><label>Est. yield</label><input data-k="yield"></div>
+      </div>
+    </div>
+
+    <!-- HIGHLIGHTS -->
+    <div class="fsec span2">
+      <h3>③ Highlights</h3><p class="hint">Top selling points — title → short description.</p>
+      <div class="hlist" id="hlList"></div>
+      <button class="addrow" onclick="addKV('hlList')">+ Add highlight</button>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="fsec span2">
+      <h3>④ Property Description</h3>
+      <div class="fld" style="margin-bottom:14px">
+        <div class="lblrow"><label>Description</label><button type="button" class="aigen" onclick="genDesc()">✨ Write with AI</button></div>
+        <textarea data-k="desc" rows="4" placeholder="About this property…"></textarea>
+      </div>
+      <div class="grid3">
+        <div class="fld"><label>Photos — image URLs</label><textarea data-k="photos" rows="3" placeholder="one URL per line"></textarea></div>
+        <div class="fld"><label>Floor plan / Layout — URLs</label><textarea data-k="floorplans" rows="3" placeholder="one URL per line"></textarea></div>
+        <div class="fld"><label>Video — YouTube URL</label><input data-k="video"></div>
+      </div>
+      <div class="grid2" style="margin-top:13px">
+        <div class="fld"><div class="lblrow"><label>URL slug (SEO)</label><button type="button" class="aigen" onclick="genSlug()">✨ AI</button></div><input data-k="slug"></div>
+        <div class="fld"><label>&nbsp;</label><div style="font-size:11.5px;color:var(--faint);padding-top:9px">Photos → <code style="font-family:var(--mono)">property_images</code> · Video → <code style="font-family:var(--mono)">property_videos</code> · Floor plans tagged <code style="font-family:var(--mono)">floorplan</code></div></div>
+      </div>
+    </div>
+    <!-- AMENITIES -->
+    <div class="fsec span2">
+      <h3>⑤ Amenities <span class="req">*required</span></h3><p class="hint">Tick everything this property has. Add custom for anything not listed.</p>
+      <div class="amgrid" id="amGrid"></div>
+      <button class="addrow amadd" onclick="addAmenity()">+ Add custom amenity</button>
+    </div>
+
+    <!-- NEARBY -->
+    <div class="fsec span2">
+      <h3>⑥ Nearby <span class="req">*required</span></h3><p class="hint">Fixed reference points on the site — tick what's relevant, add the name &amp; distance. Only named ones show.</p>
+      <div class="fld" style="margin-bottom:13px"><label>📍 Google Maps link <span class="req">*required</span></label><input data-k="mapurl"></div>
+      <div class="nbgrid" id="nbGrid"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="savebar"><div class="inner">
+  <div class="live">Writes to <b>iwipvfkjfsveycppqhxc</b> · properties</div>
+  <div class="grp">
+    <button class="btn" id="btnDraft" onclick="publish(false,this)">Save draft</button>
+    <button class="btn primary" id="btnPub" onclick="publish(true,this)">Publish live →</button>
+  </div>
+</div></div>
+
+<script>
+  const SB_URL='https://iwipvfkjfsveycppqhxc.supabase.co';
+  const SB_KEY=atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW1sM2FYQjJabXRxWm5OMlpYbGpjSEJ4YUhoaklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTnpRM056STVOellzSW1WNGNDSTZNakE1TURNME9EazNObjAuVF9Yd3BCcE5kZXFRTGpYdXVsRVB3bFV2Q045dVhITlRqM0I3dE14YnRGbw==');
+  const H={apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json'};
+
+  // reference sets (from the website schema)
+  const NEARBY=[['beach','🏖','Beach','Layan Beach'],['golf','⛳','Golf','Laguna Golf'],['school','🎓','School','UWC Thailand'],
+    ['hospital','🏥','Hospital','Bangkok Hospital'],['airport','✈️','Airport','Phuket Airport'],['mall','🛍','Mall','Boat Avenue'],
+    ['convenience','🏪','Convenience','7-Eleven'],['gym','🏋','Gym','Fitness'],['padel','🎾','Padel','Padel Club'],['foresta','🌳','Foresta','Foresta']];
+  const AMENITIES=[['🏊','Private Pool'],['♾️','Private Infinity Pool'],['🏙️','Rooftop Pool'],['💦','Common Pool'],
+    ['🏖️','Direct Beach Access'],
+    ['🏠','Smart Home Tech'],['🎬','Home Cinema'],['🔌','EV Charging'],['🛡️','24/7 Security'],['📹','CCTV Surveillance'],
+    ['🚪','Gated Community'],['🛎️','24/7 Concierge'],['🏢','Reception'],['🧰','Property Management'],['🧹','Housekeeping'],
+    ['🍽️','Butler / Chef Service'],['🏋️','Fitness & Gym'],['💆','Spa & Sauna'],['🧘','Yoga / Wellness Deck'],
+    ['💼','Co-working Space'],['🧸','Kids Area'],['🅿️','Parking'],['🌿','Landscaped Garden'],['🌤️','Open-air Living'],['🐾','Pet-friendly']];
+
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+  function setMode(m){document.body.dataset.mode=m;document.querySelectorAll('.seg button').forEach(function(b){b.classList.toggle('on',b.dataset.m===m);});}
+  function val(k){var e=document.querySelector('[data-k='+k+']');return e?e.value.trim():'';}
+  function intOrNull(s){s=(s||'').replace(/[^0-9]/g,'');return s?parseInt(s,10):null;}
+  function numOrNull(s){s=(s||'').replace(/[^0-9.]/g,'');return s?parseFloat(s):null;}
+  function slugify(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
+
+  // build reference UIs
+  (function(){
+    var nb=document.getElementById('nbGrid');
+    NEARBY.forEach(function(r){var d=document.createElement('div');d.className='nref';d.dataset.type=r[0];
+      d.innerHTML='<input type="checkbox"><span class="cat" title="'+esc(r[2])+'">'+r[1]+'</span><input class="nm" placeholder="'+esc(r[2])+'"><input class="ds" placeholder="km">';
+      var nm=d.querySelector('.nm'),cb=d.querySelector('input[type=checkbox]');
+      nm.addEventListener('input',function(){cb.checked=!!nm.value.trim();});
+      nb.appendChild(d);});
+    var am=document.getElementById('amGrid');
+    AMENITIES.forEach(function(f){var l=document.createElement('label');l.className='amchk';
+      l.innerHTML='<input type="checkbox" value="'+esc(f[1])+'"><span class="em">'+f[0]+'</span>'+esc(f[1]);am.appendChild(l);});
+  })();
+
+  function addKV(id,a,b){var d=document.createElement('div');d.className='kv';
+    d.innerHTML='<input value="'+esc(a)+'" placeholder="Title"><input value="'+esc(b)+'" placeholder="Description"><button class="rm" onclick="this.closest(\'.kv\').remove()">✕</button>';
+    document.getElementById(id).appendChild(d);}
+  function addAmenity(v){var t=v||prompt('Amenity name:');if(!t)return;var l=document.createElement('label');l.className='amchk';
+    l.innerHTML='<input type="checkbox" value="'+esc(t)+'" checked><span class="em">✨</span>'+esc(t);document.getElementById('amGrid').appendChild(l);}
+
+  function genSlug(){var n=val('name');if(n)document.querySelector('[data-k=slug]').value=slugify(n);}
+  function genDesc(){
+    var name=val('name')||'This property',loc=val('location'),type=(val('type')||'residence').toLowerCase(),beds=val('beds'),
+        dev=val('developer'),view=val('view'),yld=val('yield'),coll=document.querySelector('[data-k=collection]');
+    var s=name+' is a '+(beds&&beds!=='Studio'?beds+'-bedroom ':(beds==='Studio'?'studio ':''))+type+(loc?' in '+loc:'')+'.';
+    if(coll&&coll.value)s+=' Part of our '+coll.options[coll.selectedIndex].text.replace(/^[^A-Za-z0-9]+/,'').trim()+' collection.';
+    if(dev)s+=' Developed by '+dev+'.';
+    if(view)s+=' With '+view.toLowerCase()+' views.';
+    var hs=Array.prototype.slice.call(document.querySelectorAll('#hlList .kv')).map(function(r){var i=r.querySelectorAll('input');return (i[1].value.trim()||i[0].value.trim());}).filter(Boolean);
+    if(hs.length)s+=' Highlights include '+hs.slice(0,3).join(', ').replace(/\.$/,'')+'.';
+    if(yld)s+=' Projected rental yield of '+yld+'.';
+    document.querySelector('[data-k=desc]').value=s;
+  }
+
+  function extract(btn){ // demo prefill (swap for real extraction endpoint later)
+    var t=btn.textContent;btn.textContent='✨ Extracting…';btn.disabled=true;
+    setTimeout(function(){
+      var set=function(k,v){var e=document.querySelector('[data-k='+k+']');if(e)e.value=v;};
+      set('name','Kiara Reserve Villas');set('location','Layan, Phuket');set('district','Choeng Thale');set('type','Villa');
+      set('currency','THB');set('amount','75,000,000');set('collection','branded');set('developer','Minor International');
+      set('ownership','Freehold / Leasehold');set('completion','Q1 2026');
+      set('beds','3');set('baths','3');set('floors','3');set('sqm','501');set('land','800');set('units','17');set('pool','Private');set('view','Seaview');set('yield','6–8%');
+      set('desc','Kiara Reserve is a collection of 17 branded villas in Layan, managed by Anantara — private pools, sea views over Layan Bay, and a 6–8% managed yield.');
+      set('slug','kiara-reserve-villas-layan');
+      document.getElementById('hlList').innerHTML='';
+      addKV('hlList','Anantara Managed','Managed by Anantara Hotels & Resorts');addKV('hlList','Managed Returns','6–8% managed yield with occupancy programme');
+      var fill={beach:'Layan Beach:500 m',golf:'Laguna Golf:2 km',airport:'Phuket Airport:22 km'};
+      document.querySelectorAll('.nref').forEach(function(row){var f=fill[row.dataset.type];if(f){var p=f.split(':');row.querySelector('.nm').value=p[0];row.querySelector('.ds').value=p[1];row.querySelector('input[type=checkbox]').checked=true;}});
+      ['Private Pool','Smart Home Tech','24/7 Security','Property Management'].forEach(function(f){
+        document.querySelectorAll('#amGrid .amchk input').forEach(function(cb){if(cb.value===f)cb.checked=true;});});
+      btn.textContent='✓ Filled';setTimeout(function(){btn.textContent=t;btn.disabled=false;},1000);
+    },700);
+  }
+
+  async function sbInsert(table,rows,rep){
+    var r=await fetch(SB_URL+'/rest/v1/'+table,{method:'POST',headers:Object.assign({},H,{Prefer:rep?'return=representation':'return=minimal'}),body:JSON.stringify(rows)});
+    if(!r.ok){throw new Error(table+' → '+r.status+': '+(await r.text()));}
+    return rep?await r.json():null;}
+  function showResult(cls,html){var el=document.getElementById('result');el.className='result '+cls;el.innerHTML=html;window.scrollTo({top:0,behavior:'smooth'});}
+
+  async function publish(active,btn){
+    document.querySelectorAll('.fld input.err').forEach(function(e){e.classList.remove('err');});
+    var name=val('name'),loc=val('location'),amount=val('amount'),area=val('sqm'),coll=val('collection'),beds=val('beds'),baths=val('baths'),mapurl=val('mapurl');
+    var amCount=document.querySelectorAll('#amGrid .amchk input:checked').length;
+    var nbCount=Array.prototype.slice.call(document.querySelectorAll('.nref')).filter(function(r){return r.querySelector('input[type=checkbox]').checked&&r.querySelector('.nm').value.trim();}).length;
+    var miss=[];if(!name)miss.push('name');if(!loc)miss.push('location');if(!amount)miss.push('price');if(!area)miss.push('living area');
+    if(!coll)miss.push('collection');if(!beds)miss.push('beds');if(!baths)miss.push('baths');if(!mapurl)miss.push('google map');
+    if(amCount===0)miss.push('amenities (tick ≥1)');if(nbCount===0)miss.push('nearby (fill ≥1)');
+    if(miss.length){var mapk={'name':'name','location':'location','price':'amount','living area':'sqm','collection':'collection','beds':'beds','baths':'baths','google map':'mapurl'};miss.forEach(function(k){var kk=mapk[k];if(kk){var e=document.querySelector('[data-k='+kk+']');if(e)e.classList.add('err');}});
+      showResult('bad','<div class="big">Missing required fields</div>Please fill: '+miss.join(', ')+'.');return;}
+
+    var b1=document.getElementById('btnDraft'),b2=document.getElementById('btnPub');b1.disabled=b2.disabled=true;var bt=btn.textContent;btn.textContent='Saving…';
+    try{
+      // price
+      var cur=val('currency')||'THB',amt=intOrNull(amount),isFrom=document.querySelector('[data-k=fromflag]').checked;
+      var sym=cur==='USD'?'$':'฿';
+      var price_display=(isFrom?'From ':'')+sym+' '+(amt?amt.toLocaleString('en-US'):amount);
+      // collection
+      var cSel=document.querySelector('[data-k=collection]'),cId=cSel.value||null,cLabel=cSel.value?cSel.options[cSel.selectedIndex].text.replace(/^[^A-Za-z0-9]+/,'').trim():null;
+
+      var prop={name:name,location:loc,price_display:price_display,
+        price_thb:cur==='THB'?amt:null,property_type:val('type')||null,district:val('district')||null,
+        developer:val('developer')||null,ownership:val('ownership')||null,completion:val('completion')||null,
+        collection_id:cId,collections:cLabel,
+        beds:intOrNull(val('beds')),baths:intOrNull(val('baths')),sqm:intOrNull(val('sqm')),
+        land_sqm:numOrNull(val('land')),floors:intOrNull(val('floors')),pool:val('pool')||null,
+        est_yield:val('yield')||null,description:val('desc')||null,
+        slug:val('slug')||slugify(name),source_url:val('srcUrl')||null,
+        is_active:!!active,is_featured:false,is_sold:false};
+      var ins=await sbInsert('properties',[prop],true);var pid=ins[0].id;
+
+      // details: highlights, nearby, key facts
+      var details=[];
+      Array.prototype.slice.call(document.querySelectorAll('#hlList .kv')).forEach(function(r,i){var x=r.querySelectorAll('input');if(x[0].value.trim())details.push({property_id:pid,category:'highlight',key:x[0].value.trim(),value:x[1].value.trim(),sort_order:i});});
+      Array.prototype.slice.call(document.querySelectorAll('.nref')).forEach(function(row,i){var nm=row.querySelector('.nm').value.trim();if(row.querySelector('input[type=checkbox]').checked&&nm){details.push({property_id:pid,category:'nearby',place_type:row.dataset.type,key:nm,value:row.querySelector('.ds').value.trim(),sort_order:i});}});
+      [['Type',val('type')],['Ownership',val('ownership')],['Completion',val('completion')],['Developer',val('developer')],['View',val('view')],['Total Units',val('units')],['Buildings',val('buildings')]].forEach(function(kv,i){if(kv[1])details.push({property_id:pid,category:'details',key:kv[0],value:kv[1],sort_order:i});});
+      if(details.length)await sbInsert('property_details',details,false);
+
+      // amenities
+      var featWarn='';
+      var feats=Array.prototype.slice.call(document.querySelectorAll('#amGrid .amchk input:checked')).map(function(cb,i){return{property_id:pid,feature:cb.value,sort_order:i};});
+      if(feats.length){try{await sbInsert('property_features',feats,false);}catch(e){featWarn='<br><small>⚠ Amenities need an RLS insert policy on property_features.</small>';}}
+
+      // media: photos + floor plans → property_images, video → property_videos
+      var lines=function(k){return (val(k)||'').split('\n').map(function(u){return u.trim();}).filter(Boolean);};
+      var imgs=[];lines('photos').forEach(function(u,i){imgs.push({property_id:pid,url:u,is_hero:i===0,image_type:'project',sort_order:i});});
+      lines('floorplans').forEach(function(u,i){imgs.push({property_id:pid,url:u,is_hero:false,image_type:'floorplan',sort_order:i});});
+      if(imgs.length){try{await sbInsert('property_images',imgs,false);}catch(e){featWarn+='<br><small>⚠ Photos/floor plans need an RLS insert policy on property_images.</small>';}}
+      var vid=val('video');
+      if(vid){try{await sbInsert('property_videos',[{property_id:pid,url:vid,video_type:'youtube',is_hero:true,sort_order:0}],false);}catch(e){featWarn+='<br><small>⚠ Video needs an RLS insert policy on property_videos.</small>';}}
+
+      // location — Google Maps link (+ lat/lng if the URL carries them)
+      var mu=val('mapurl'),lat=null,lng=null;
+      var mm=mu.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)||mu.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/)||mu.match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+      if(mm){lat=parseFloat(mm[1]);lng=parseFloat(mm[2]);}
+      if(mu){try{await sbInsert('property_location',[{property_id:pid,maps_link:mu,lat:lat,lng:lng,district:val('district')||null}],false);}catch(e){featWarn+='<br><small>⚠ Location not saved (property_location policy).</small>';}}
+
+      var url='https://mgroupestates.com/property?id='+pid;
+      if(active)showResult('ok','<div class="big">✓ Published live — id '+pid+'</div>Now on <a href="'+url+'" target="_blank">'+url+'</a>'+featWarn);
+      else showResult('ok','<div class="big">✓ Saved as draft — id '+pid+'</div>Hidden (is_active=false). Flip it active in the admin to publish.'+featWarn);
+    }catch(e){showResult('bad','<div class="big">Could not save</div><code>'+esc(String(e.message||e))+'</code>');}
+    finally{b1.disabled=b2.disabled=false;btn.textContent=bt;}
+  }
+
+  addKV('hlList'); // one empty highlight to show the shape
+
+  // PWA — installable on mobile home screen
+  if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
+</script>
+</body></html>

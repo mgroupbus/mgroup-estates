@@ -1,0 +1,378 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MGROUP Admin — New Booking</title>
+<script>if(sessionStorage.getItem("mg_admin")!=="ok"){location.replace("index.html");}</script>
+<meta name="theme-color" content="#1d3a30"><link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap');
+  :root{
+    --green-900:#1d3a30;--green-800:#22453a;--green-700:#2b5646;--green-600:#356b56;
+    --green-500:#3f8062;--green-400:#57a07d;--green-tint:#e7efe9;
+    --cream:#f0eee7;--cream-2:#e7e4da;--card:#fff;--line:#e6e2d7;
+    --ink:#1a201d;--muted:#6f776f;--faint:#9aa199;--gold:#cf9f49;
+    --blue:#2f6f9e;--amber:#b7842a;--red:#b5533a;
+    --font:'Figtree',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --mono:ui-monospace,'SF Mono',Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--cream);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;font-size:14px}
+  .shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+
+  /* SIDEBAR */
+  .side{background:var(--green-900);color:#cfe0d6;display:flex;flex-direction:column;padding:18px 13px;position:sticky;top:0;height:100vh}
+  .brand{display:flex;gap:11px;align-items:center;padding:4px 8px 18px}
+  .brand .mark{width:32px;height:32px;border-radius:8px;background:var(--green-tint);color:var(--green-800);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px}
+  .brand h1{font-size:14px;font-weight:700;color:#fff}
+  .brand p{font-size:10px;color:#7fa392;font-family:var(--mono)}
+  .nav-label{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#6f9384;padding:9px 10px 5px}
+  .nav a{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:8px;color:#bcd2c6;font-size:13px;text-decoration:none;font-weight:500}
+  .nav a svg{width:16px;height:16px;opacity:.85;flex:none}
+  .nav a:hover{background:var(--green-800);color:#fff}
+  .nav a.active{background:var(--green-600);color:#fff;font-weight:600}
+  .side .user{margin-top:auto;background:var(--green-800);border-radius:11px;padding:10px;display:flex;gap:10px;align-items:center}
+  .avatar{width:32px;height:32px;border-radius:8px;background:var(--gold);color:#3a2a08;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .side .user .nm{font-size:12px;color:#fff;font-weight:600}
+  .side .user .rl{font-size:10px;color:#89ab9b}
+
+  /* MAIN */
+  .main{padding:24px 30px 40px}
+  .head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px}
+  .head .crumb{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint)}
+  .head h2{font-size:26px;font-weight:700;letter-spacing:-.02em;margin-top:2px}
+  .btn{font-family:var(--font);font-weight:600;font-size:13px;border-radius:9px;padding:10px 18px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+  .btn.primary{background:var(--green-600);color:#fff;border-color:var(--green-600)}
+  .btn.primary:hover{background:var(--green-700)}
+
+  .layout{display:grid;grid-template-columns:1fr 330px;gap:20px;align-items:start;max-width:1100px}
+  .col{display:flex;flex-direction:column;gap:16px}
+
+  .fsec{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:20px 22px}
+  .fsec h3{font-size:14px;font-weight:700;display:flex;align-items:center;gap:9px}
+  .fsec .n{width:22px;height:22px;border-radius:6px;background:var(--green-tint);color:var(--green-600);font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+  .fsec .hint{font-size:12px;color:var(--faint);margin:2px 0 16px 31px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px}
+  .fld{display:flex;flex-direction:column;gap:6px}
+  .fld.wide{grid-column:1/-1}
+  .fld label{font-size:12px;font-weight:600;color:var(--muted)}
+  .fld .req{color:var(--red)}
+  .fld input,.fld select,.fld textarea{font-family:var(--font);font-size:13.5px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fdfcf9;color:var(--ink);outline:none;width:100%}
+  .fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--green-500);background:#fff}
+  .fld input[readonly]{background:var(--green-tint);color:var(--green-700);font-weight:600;border-color:transparent}
+  .inline-note{font-size:11.5px;color:var(--green-600);margin-left:31px;display:flex;align-items:center;gap:6px}
+  .ownerbadge{margin-top:9px;display:inline-flex;align-items:center;gap:7px;font-size:13px;padding:8px 13px;border-radius:9px;background:var(--green-tint);color:var(--green-700);font-weight:500}
+  .ownerbadge b{font-weight:700}
+  .ownerbadge.warn{background:#f6ecdf;color:var(--amber)}
+  .ownerbadge .link{margin-left:6px;color:var(--green-600);text-decoration:underline;cursor:pointer;font-weight:600}
+  .prefix{display:flex;align-items:center;border:1px solid var(--line);border-radius:9px;background:#fdfcf9;overflow:hidden}
+  .prefix span{padding:0 11px;color:var(--faint);font-size:13px;border-right:1px solid var(--line);background:#f6f4ee}
+  .prefix input{border:none;background:none;border-radius:0}
+  .prefix select.cur{border:none;border-right:1px solid var(--line);border-radius:0;background:#f6f4ee;color:var(--muted);font-size:13px;font-weight:600;padding:0 8px 0 11px;font-family:var(--font);outline:none;cursor:pointer;width:auto}
+  .toggle{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);padding-top:4px}
+  .sw{width:38px;height:22px;border-radius:999px;background:var(--green-500);position:relative;flex:none}
+  .sw::after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;right:3px}
+  .drops{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+  .drop{border:1.4px dashed var(--line);border-radius:10px;padding:16px;text-align:center;color:var(--faint);background:#fdfcf9;font-size:12.5px}
+  .drop b{color:var(--green-600)}
+
+  /* SUMMARY SIDEBAR */
+  .summary{position:sticky;top:24px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .sum-head{background:var(--green-800);color:#eaf2ec;padding:16px 18px;background-image:radial-gradient(120% 140% at 100% 0,rgba(87,160,125,.4),transparent 55%)}
+  .sum-head .vn{font-size:15px;font-weight:700}
+  .sum-head .meta{font-size:12px;color:#a9c6b6;margin-top:4px;font-variant-numeric:tabular-nums}
+  .sum-body{padding:16px 18px}
+  .line{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;font-variant-numeric:tabular-nums}
+  .line .lb{color:var(--muted)}
+  .line.sub .lb{color:var(--faint);font-size:12px}
+  .line.total{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;font-size:16px;font-weight:800}
+  .line.dep{color:var(--muted);font-size:12px}
+  .split-h{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:600;margin:16px 0 10px}
+  .splitbar{display:flex;height:10px;border-radius:5px;overflow:hidden;margin-bottom:12px}
+  .splitbar i{display:block}
+  .sp{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:5px 0}
+  .sp .k{display:flex;align-items:center;gap:8px;color:var(--muted)}
+  .sp .k .d{width:9px;height:9px;border-radius:3px}
+  .sp .v{font-weight:700;font-variant-numeric:tabular-nums}
+  .actions{display:flex;flex-direction:column;gap:9px;padding:0 18px 18px}
+  .actionbar{position:sticky;bottom:0;margin:22px -30px -40px;padding:14px 30px;background:rgba(240,238,231,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px;z-index:20}
+  .ab-sum{font-size:14px;color:var(--muted)}
+  .ab-sum b{color:var(--ink);font-weight:800;font-size:17px;font-variant-numeric:tabular-nums}
+  .ab-sum span{color:var(--faint);font-variant-numeric:tabular-nums}
+  .ab-btns{display:flex;gap:10px}
+
+  @media(max-width:980px){.layout{grid-template-columns:1fr}.summary{position:static}}
+  @media(max-width:720px){.shell{grid-template-columns:1fr}.side{display:none}.main{padding:18px}.grid2,.grid3,.drops{grid-template-columns:1fr}}
+</style></head><body>
+
+<div class="shell">
+  <aside class="side">
+    <div class="brand"><div class="mark">M</div><div><h1>MGROUP Admin</h1><p>Back Office · v2</p></div></div>
+    <div class="nav-label">Menu</div>
+    <div class="nav">
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>Bookings</a>
+      <a class="active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>New Booking</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 4l9 6.5M5 9.5V20h14V9.5"/></svg>Rentals</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg>Owners</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.3 3-5 7-5M16 11l2 2 4-4"/></svg>Guests</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3v5h5M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>Contracts</a>
+    </div>
+    <div class="user"><div class="avatar">A</div><div><div class="nm">Admin</div><div class="rl">Sign out</div></div></div>
+  </aside>
+
+  <main class="main">
+    <div class="head">
+      <div><div class="crumb">Bookings / New</div><h2>New Booking</h2></div>
+    </div>
+
+    <div class="layout">
+      <!-- FORM -->
+      <div class="col">
+        <div class="fsec">
+          <h3><span class="n">1</span>Villa &amp; Stay</h3>
+          <p class="hint">Pick the villa and the dates — nights are calculated for you.</p>
+          <div class="fld wide"><label>Villa <span class="req">*</span></label>
+            <select id="villaSel" onchange="onVilla()"><option value="">Loading villas…</option></select>
+            <div id="ownerBadge" class="ownerbadge">👤 Owner: <b>Khun Bank</b></div>
+          </div>
+          <div class="grid3" style="margin-top:13px">
+            <div class="fld"><label>Check-in <span class="req">*</span></label><input type="date" value="2026-08-06"></div>
+            <div class="fld"><label>Check-out <span class="req">*</span></label><input type="date" value="2026-08-13"></div>
+            <div class="fld"><label>Nights</label><input readonly value="7 nights"></div>
+          </div>
+          <div class="grid3" style="margin-top:13px">
+            <div class="fld"><label>Adults</label><select onchange="recalcGuests()" id="adultsSel"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
+            <div class="fld"><label>Children</label><select onchange="recalcGuests()" id="childSel"><option selected>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+            <div class="fld"><label>Pets</label><select id="petSel"><option>None</option><option selected>1 dog</option><option>2 dogs</option><option>1 cat</option><option>2 cats</option><option>Dog + cat</option></select></div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <h3><span class="n">2</span>Guest</h3>
+          <p class="hint">Pick an existing guest, or add a new one — a client login is set up either way.</p>
+          <div class="seg" style="margin-bottom:14px">
+            <button type="button" class="on" onclick="guestMode('existing',this)">Existing guest</button>
+            <button type="button" onclick="guestMode('new',this)">+ New guest</button>
+          </div>
+          <div class="fld" id="guestPick" style="margin-bottom:13px">
+            <label>Search existing guest</label>
+            <select id="guestSel" onchange="fillGuest()"><option value="">Loading…</option></select>
+          </div>
+          <div class="grid2">
+            <div class="fld"><label>Full name <span class="req">*</span></label><input id="gName" value="Alexander Gribanov"></div>
+            <div class="fld"><label>Email</label><input id="gEmail" value="alexander@email.com"></div>
+            <div class="fld"><label>Phone</label><input id="gPhone" value="+66 81 234 5678"></div>
+            <div class="fld"><label>Nationality</label><input id="gNat" value="Russian"></div>
+            <div class="fld"><label>Source</label><select id="srcSel"><option>Direct</option><option>Agent</option><option>Website</option><option>Airbnb</option><option>Booking.com</option></select></div>
+          </div>
+          <div class="fld wide" style="margin-top:14px"><label>Passport</label>
+            <div class="drop" style="text-align:left;padding:12px 14px">🪪 <b>Attach passport</b> <span style="color:var(--faint)">— photo or PDF, used at check-in</span></div>
+          </div>
+          <div class="inline-note" style="margin-top:12px" id="guestNote">✓ Linked to existing guest profile</div>
+        </div>
+
+        <div class="fsec">
+          <h3><span class="n">3</span>Pricing</h3>
+          <p class="hint">Choose the rate period — subtotal and total update live on the right.</p>
+          <div class="grid3">
+            <div class="fld"><label>Price</label><div class="prefix"><select id="curSel" class="cur" onchange="setCur()"><option value="฿">฿ THB</option><option value="$">$ USD</option></select><input id="rateInput" value="12,000" oninput="recalc()"></div></div>
+            <div class="fld"><label>Per</label><select id="ratePeriod" onchange="recalc()"><option value="night">Night</option><option value="week">Week</option><option value="month">Month</option><option value="year">Year</option></select></div>
+            <div class="fld"><label>Subtotal</label><input readonly id="subInput" value="฿84,000"></div>
+            <div class="fld"><label>Discount</label><div class="prefix"><span id="curDisc">฿</span><input id="discInput" value="0" oninput="recalc()"></div></div>
+            <div class="fld"><label>Security deposit <span style="color:var(--faint);font-weight:400">· at check-in</span></label><div class="prefix"><span id="curDep">฿</span><input id="depInput" value="20,000"></div></div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <h3><span class="n">4</span>Commission split</h3>
+          <p class="hint">Owner is set from the villa above. Enter the amounts — owner net is calculated automatically.</p>
+          <div class="grid2">
+            <div class="fld"><label>Client paid</label><div class="prefix"><span>฿</span><input id="clientPaid" value="84,000" oninput="recalcSplit()"></div></div>
+            <div class="fld"><label>Co-agent commission</label><div class="prefix"><span>฿</span><input id="coAgent" value="8,000" oninput="recalcSplit()"></div></div>
+            <div class="fld"><label>MGROUP commission</label><div class="prefix"><span>฿</span><input id="mgroupComm" value="17,500" oninput="recalcSplit()"></div></div>
+            <div class="fld"><label>Owner net <span style="color:var(--faint);font-weight:400">· auto</span></label><input id="ownerNet" readonly value="฿62,000"></div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <h3><span class="n">5</span>TM30 &amp; documents</h3>
+          <p class="hint">TM30 for Thai immigration — multiple files allowed.</p>
+          <div class="drops">
+            <div class="drop">📄 TM30<br><b>browse</b> · multiple files</div>
+            <div class="drop">📎 Other<br><b>browse</b> · contract, ID, etc.</div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <h3><span class="n">6</span>Notes</h3>
+          <div class="fld wide" style="margin-top:6px"><textarea id="notesArea" rows="2" placeholder="Special requests, early check-in, airport transfer…"></textarea></div>
+        </div>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="summary">
+        <div class="sum-head">
+          <div class="vn" id="sumVilla">The Aqua Residence</div>
+          <div class="meta" id="sumMeta">Aug 6 → Aug 13 · 7 nights · 4 adults</div>
+        </div>
+        <div class="sum-body">
+          <div class="line"><span class="lb" id="sumSubLbl">Subtotal (7 nights × ฿12,000)</span><span id="sumSub">฿84,000</span></div>
+          <div class="line"><span class="lb">Discount</span><span id="sumDisc">−฿0</span></div>
+          <div class="line total"><span>Total</span><span id="sumTotal">฿84,000</span></div>
+          <div class="line dep"><span class="lb">Security deposit · at check-in</span><span>฿20,000</span></div>
+
+          <div class="split-h">Revenue split</div>
+          <div class="splitbar">
+            <i id="barOwner" style="width:71%;background:var(--green-500)"></i>
+            <i id="barMgroup" style="width:20%;background:var(--gold)"></i>
+            <i id="barCo" style="width:9%;background:var(--blue)"></i>
+          </div>
+          <div class="sp"><span class="k"><span class="d" style="background:var(--green-500)"></span><span id="spOwnerName">Owner net · Bank</span></span><span class="v" id="spOwnerV">฿62,000</span></div>
+          <div class="sp"><span class="k"><span class="d" style="background:var(--gold)"></span>MGROUP</span><span class="v" id="spMgroupV">฿17,500</span></div>
+          <div class="sp"><span class="k"><span class="d" style="background:var(--blue)"></span>Co-agent</span><span class="v" id="spCoV">฿8,000</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actionbar">
+      <div class="ab-sum">Total <b id="abTotal">฿84,000</b> <span id="abSplit">· Owner net <span id="abOwner">฿58,500</span></span></div>
+      <div class="ab-btns"><button class="btn" onclick="createBooking(false,this)">Save as draft</button><button class="btn primary" onclick="createBooking(true,this)">Create booking</button></div>
+    </div>
+  </main>
+</div>
+<script>
+  var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmt(n){return (window.CUR||'฿')+Number(n).toLocaleString();}
+  function setCur(){ window.CUR=document.getElementById('curSel').value; document.getElementById('curDisc').textContent=window.CUR; document.getElementById('curDep').textContent=window.CUR; recalc(); recalcSplit(); }
+  function fmtDate(s){ if(!s) return '—'; var p=s.split('-'); return M[+p[1]-1]+' '+(+p[2]); }
+  function nights(){ var d=document.querySelectorAll('input[type=date]'); if(!d[0].value||!d[1].value)return 0; var n=Math.round((Date.parse(d[1].value)-Date.parse(d[0].value))/86400000); return n>0?n:0; }
+
+  function onVilla(){
+    var o=document.getElementById('villaSel').selectedOptions[0];
+    var owner=o.dataset.owner, rate=parseInt(o.dataset.rate)||0;
+    var badge=document.getElementById('ownerBadge');
+    if(owner){ badge.className='ownerbadge'; badge.innerHTML='👤 Owner: <b>'+owner+'</b>'; }
+    else{ badge.className='ownerbadge warn'; badge.innerHTML='⚠ No owner linked to this villa <span class="link">+ Add owner</span>'; }
+    document.getElementById('spOwnerName').textContent='Owner net · '+(owner||'—');
+    document.getElementById('sumVilla').textContent=o.textContent;
+    if(rate>0) document.getElementById('rateInput').value=rate.toLocaleString();
+    recalc();
+  }
+  function num(id){return parseInt((document.getElementById(id).value||'0').replace(/[^\d]/g,''))||0;}
+  function recalc(){
+    var rate=num('rateInput'), period=document.getElementById('ratePeriod').value, n=nights();
+    var count=n, unit='nights';
+    if(period==='week'){ count=Math.max(1,Math.round(n/7)); unit='weeks'; }
+    else if(period==='month'){ count=Math.max(1,Math.round(n/30)); unit='months'; }
+    else if(period==='year'){ count=Math.max(1,Math.round(n/365)); unit='years'; }
+    var sub=rate*count, disc=num('discInput'), total=Math.max(0,sub-disc);
+    document.getElementById('subInput').value=fmt(sub);
+    document.getElementById('sumSubLbl').textContent='Subtotal ('+count+' '+unit+' × '+fmt(rate)+')';
+    document.getElementById('sumSub').textContent=fmt(sub);
+    document.getElementById('sumDisc').textContent='−'+fmt(disc);
+    document.getElementById('sumTotal').textContent=fmt(total);
+    document.getElementById('abTotal').textContent=fmt(total);
+    recalcGuests();
+  }
+  function recalcSplit(){
+    var paid=num('clientPaid'), co=num('coAgent'), mg=num('mgroupComm'), owner=Math.max(0,paid-co-mg);
+    document.getElementById('ownerNet').value=fmt(owner);
+    document.getElementById('spOwnerV').textContent=fmt(owner);
+    document.getElementById('abOwner').textContent=fmt(owner);
+    document.getElementById('spMgroupV').textContent=fmt(mg);
+    document.getElementById('spCoV').textContent=fmt(co);
+    var t=paid||1;
+    document.getElementById('barOwner').style.width=(owner/t*100)+'%';
+    document.getElementById('barMgroup').style.width=(mg/t*100)+'%';
+    document.getElementById('barCo').style.width=(co/t*100)+'%';
+  }
+  function recalcGuests(){
+    var a=document.getElementById('adultsSel').value, c=document.getElementById('childSel').value;
+    var g=a+' adults'+(c!=='0'?', '+c+' children':'');
+    var d=document.querySelectorAll('input[type=date]');
+    document.getElementById('sumMeta').textContent=fmtDate(d[0].value)+' → '+fmtDate(d[1].value)+' · '+nights()+' nights · '+g;
+  }
+  function guestMode(m,el){ window.gMode=m;
+    Array.prototype.forEach.call(el.parentElement.children,function(b){b.classList.remove('on');});
+    el.classList.add('on');
+    var ids=['gName','gEmail','gPhone','gNat'];
+    if(m==='new'){ document.getElementById('guestPick').style.display='none'; ids.forEach(function(i){var e=document.getElementById(i);e.value='';e.readOnly=false;}); document.getElementById('guestNote').textContent='✓ New guest — a client login will be created automatically'; document.getElementById('gName').focus(); }
+    else{ document.getElementById('guestPick').style.display=''; ids.forEach(function(i){document.getElementById(i).readOnly=true;}); fillGuest(); document.getElementById('guestNote').textContent='✓ Linked to existing guest profile'; }
+  }
+  function fillGuest(){
+    var o=document.getElementById('guestSel').selectedOptions[0];
+    document.getElementById('gName').value=o.textContent;
+    document.getElementById('gEmail').value=o.dataset.email;
+    document.getElementById('gPhone').value=o.dataset.phone;
+    document.getElementById('gNat').value=o.dataset.nat;
+  }
+  ['gName','gEmail','gPhone','gNat'].forEach(function(i){document.getElementById(i).readOnly=true;});
+  document.querySelectorAll('input[type=date]').forEach(function(d){d.addEventListener('change',recalc);});
+
+  // ===== LIVE DATA =====
+  const SB_URL='https://iwipvfkjfsveycppqhxc.supabase.co';
+  const SB_KEY=atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW1sM2FYQjJabXRxWm5OMlpYbGpjSEJ4YUhoaklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTnpRM056STVOellzSW1WNGNDSTZNakE1TURNME9EazNObjAuVF9Yd3BCcE5kZXFRTGpYdXVsRVB3bFV2Q045dVhITlRqM0I3dE14YnRGbw==');
+  const H={apikey:SB_KEY,Authorization:'Bearer '+SB_KEY};
+  window.gMode='existing';
+  function esc(x){return (x==null?'':String(x)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+  function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+  async function sbPost(t,row,rep){var r=await fetch(SB_URL+'/rest/v1/'+t,{method:'POST',headers:Object.assign({},H,{'Content-Type':'application/json',Prefer:rep?'return=representation':'return=minimal'}),body:JSON.stringify(row)});if(!r.ok)throw new Error(t+': '+r.status+' '+(await r.text()));return rep?r.json():null;}
+
+  async function loadRefs(){
+    try{
+      var q=function(t,sel){return fetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel),{headers:H}).then(function(r){return r.json();});};
+      var res=await Promise.all([q('rental_villas','id,name,area,owner_id,price_per_night,security_deposit'),q('owners','id,name'),q('guests','id,name,email,phone,nationality')]);
+      var villas=res[0]||[], owners=res[1]||[], guests=res[2]||[], om={};
+      owners.forEach(function(o){om[o.id]=o.name;});
+      document.getElementById('villaSel').innerHTML=villas.map(function(v){
+        return '<option value="'+v.id+'" data-id="'+v.id+'" data-ownerid="'+(v.owner_id||'')+'" data-owner="'+esc(om[v.owner_id]||'')+'" data-rate="'+(v.price_per_night||0)+'" data-area="'+esc(v.area||'')+'" data-dep="'+(v.security_deposit||0)+'">'+esc(v.name)+'</option>';
+      }).join('');
+      document.getElementById('guestSel').innerHTML=guests.map(function(g){
+        return '<option value="'+g.id+'" data-id="'+g.id+'" data-email="'+esc(g.email||'')+'" data-phone="'+esc(g.phone||'')+'" data-nat="'+esc(g.nationality||'')+'">'+esc(g.name)+'</option>';
+      }).join('');
+      onVilla(); fillGuest();
+    }catch(e){ alert('Load failed: '+e.message); }
+  }
+
+  async function createBooking(confirm, btn){
+    var vo=document.getElementById('villaSel').selectedOptions[0];
+    if(!vo||!vo.value){return alert('Select a villa');}
+    var d=document.querySelectorAll('input[type=date]');
+    if(!d[0].value||!d[1].value){return alert('Select check-in and check-out');}
+    var gname=val('gName'); if(!gname){return alert('Guest name required');}
+    var bs=document.querySelectorAll('.actionbar .btn'); bs.forEach(function(b){b.disabled=true;}); var t0=btn.textContent; btn.textContent='Saving…';
+    try{
+      var guestId;
+      if(window.gMode==='new'){
+        var g=await sbPost('guests',{name:gname,email:val('gEmail')||null,phone:val('gPhone')||null,nationality:val('gNat')||null,source:val('srcSel')},true);
+        guestId=g[0].id;
+      }else{
+        var go=document.getElementById('guestSel').selectedOptions[0];
+        guestId=go?go.getAttribute('data-id'):null;
+        if(!guestId){throw new Error('Pick a guest or switch to + New guest');}
+      }
+      var n=nights(), period=document.getElementById('ratePeriod').value, count=n;
+      if(period==='week')count=Math.max(1,Math.round(n/7)); else if(period==='month')count=Math.max(1,Math.round(n/30)); else if(period==='year')count=Math.max(1,Math.round(n/365));
+      var rate=num('rateInput'), disc=num('discInput'), sub=rate*count, total=Math.max(0,sub-disc);
+      var paid=num('clientPaid'), co=num('coAgent'), mg=num('mgroupComm'), ownerNet=Math.max(0,paid-co-mg);
+      var pets=document.getElementById('petSel').value!=='None';
+      var gc=(parseInt(document.getElementById('adultsSel').value)||0)+(parseInt(document.getElementById('childSel').value)||0);
+      var payload={
+        booking_ref:'MG-'+new Date().getFullYear()+'-'+String(Date.now()).slice(-4),
+        villa_id:vo.getAttribute('data-id'), guest_id:guestId, owner_id:vo.getAttribute('data-ownerid')||null,
+        check_in:d[0].value, check_out:d[1].value, guests_count:gc, pets_allowed:pets,
+        rate_per_night:rate, subtotal:sub, cleaning_fee:0, discount:disc, total:total, security_deposit:num('depInput'),
+        currency:(document.getElementById('curSel').value==='$'?'USD':'THB'),
+        client_pay:paid, agent_commission:co, co_agent_net:co, mgroup_commission:mg, owner_net:ownerNet,
+        source:val('srcSel'), special_requests:val('notesArea')||null,
+        status: confirm?'confirmed':'inquiry'
+      };
+      var ins=await sbPost('bookings',[payload],true);
+      alert('✓ Saved '+payload.booking_ref+' ('+payload.status+')');
+      location.href='rent-admin-new.html';
+    }catch(e){ alert('Could not save: '+e.message); bs.forEach(function(b){b.disabled=false;}); btn.textContent=t0; }
+  }
+  loadRefs();
+
+  onVilla(); recalcSplit();
+</script>
+</body></html>

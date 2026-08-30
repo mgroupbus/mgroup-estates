@@ -1,0 +1,419 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MGROUP Admin — Rentals</title>
+<script>if(sessionStorage.getItem("mg_admin")!=="ok"){location.replace("index.html");}</script>
+<meta name="theme-color" content="#1d3a30"><link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap');
+  :root{--g900:#1d3a30;--g800:#22453a;--g700:#2b5646;--g600:#356b56;--g500:#3f8062;--tint:#e7efe9;
+    --cream:#f0eee7;--cream2:#e7e4da;--card:#fff;--line:#e6e2d7;--ink:#1a201d;--muted:#6f776f;--faint:#9aa199;
+    --gold:#c29a45;--blue:#2f6f9e;--amber:#b7842a;--red:#b5533a;--ok:#2c8a5f;
+    --font:'Figtree',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:ui-monospace,'SF Mono',Menlo,monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--cream);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;font-size:14px}
+  .shell{display:grid;grid-template-columns:224px 1fr;min-height:100vh}
+  .side{background:var(--g900);color:#cfe0d6;display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100vh}
+  .brand{display:flex;gap:10px;align-items:center;padding:4px 8px 16px}
+  .brand .mark{width:30px;height:30px;border-radius:8px;background:var(--tint);color:var(--g800);display:flex;align-items:center;justify-content:center;font-weight:800}
+  .brand h1{font-size:13.5px;font-weight:700;color:#fff}.brand p{font-size:9.5px;color:#7fa392;font-family:var(--mono)}
+  .nl{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:#6f9384;padding:10px 10px 4px}
+  .nav{display:flex;flex-direction:column;gap:1px}
+  .nav button{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:8px;color:#bcd2c6;font-size:13px;background:none;border:none;cursor:pointer;font-family:var(--font);text-align:left;width:100%;font-weight:500}
+  .nav button .em{width:18px;text-align:center;opacity:.9}
+  .nav button:hover{background:var(--g800);color:#fff}.nav button.active{background:var(--g600);color:#fff;font-weight:600}
+  .side .user{margin-top:auto;background:var(--g800);border-radius:10px;padding:9px 10px;display:flex;gap:9px;align-items:center}
+  .avatar{width:30px;height:30px;border-radius:8px;background:var(--gold);color:#3a2a08;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .user .nm{font-size:12px;color:#fff;font-weight:600}.user .rl{font-size:10.5px;color:#8fb0a0;cursor:pointer}
+  .main{padding:22px 26px 44px;max-width:1160px}
+  .view{display:none}.view.on{display:block}
+  .head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
+  .crumb{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:700}
+  .head h2{font-size:25px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
+  .btn{font-family:var(--font);font-weight:600;font-size:13px;border-radius:9px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
+  .btn.primary{background:var(--g600);color:#fff;border-color:var(--g600)}.btn.primary:hover{background:var(--g700)}
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .tile .l{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .tile .v{font-size:23px;font-weight:800;margin-top:6px;font-variant-numeric:tabular-nums}
+  .tile .s{font-size:11px;color:var(--faint);margin-top:2px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0;overflow:hidden;margin-bottom:16px}
+  .card .ch{font-size:12px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);padding:13px 16px;border-bottom:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead th{text-align:left;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);font-weight:700;padding:10px 14px;background:#faf9f5;border-bottom:1px solid var(--line);white-space:nowrap}
+  tbody td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tbody tr:last-child td{border-bottom:none}tbody tr:hover{background:#faf9f5}
+  .tablecard{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+  .money{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
+  .num{text-align:center;font-variant-numeric:tabular-nums;color:var(--muted)}
+  .ref{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .vn{font-weight:600}.sub{font-size:11px;color:var(--faint)}
+  .st-select{font-family:var(--font);font-size:11.5px;font-weight:600;border-radius:7px;padding:5px 8px;border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--muted)}
+  .st-select.confirmed{color:var(--g600);border-color:#bcdcc9;background:#eef7f1}
+  .st-select.checkedin{color:var(--blue);border-color:#bcd6e6;background:#eef4f9}
+  .st-select.checkedout{color:var(--faint)}
+  .st-select.cancelled,.st-select.no_show{color:var(--red);border-color:#e6c3b8;background:#f9edea}
+  .bal{color:var(--red);font-weight:700}.paid{color:var(--ok);font-weight:700}
+  .pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--tint);color:var(--g700)}
+  .doc{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-right:5px}
+  .doc.on{background:#eef7f1;color:var(--ok)}.doc.off{background:#f4f2ec;color:var(--faint)}
+  .link{color:var(--g600);cursor:pointer;font-weight:600}
+  .state{padding:36px;text-align:center;color:var(--faint)}
+  .rowbtn{font-size:11px;font-weight:600;border:1px solid var(--line);background:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;color:var(--g600)}
+  /* modal */
+  .ov{position:fixed;inset:0;background:rgba(20,28,24,.55);display:none;align-items:flex-start;justify-content:center;padding:34px 16px;overflow:auto;z-index:60}
+  .ov.open{display:flex}
+  .modal{width:100%;max-width:660px;background:#fff;border-radius:14px;overflow:hidden}
+  .modal .mh{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+  .modal .mh h3{font-size:18px}.modal .mb{padding:18px 20px}
+  .cls{background:none;border:none;font-size:13px;font-weight:700;color:var(--g600);cursor:pointer}
+  .kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13px}
+  .kv b{font-weight:700}
+  .chk{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);padding:4px 0;cursor:pointer}
+  @media(max-width:1000px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:760px){.shell{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px}.side .user,.nl{display:none}.nav{flex-direction:row;flex-wrap:wrap}.main{padding:16px}}
+  /* generated document paper */
+  .paper{font-family:var(--font);color:#1a201d}
+  .paper .top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--g700);padding-bottom:14px;margin-bottom:18px}
+  .paper .co h4{font-size:20px;font-weight:800;letter-spacing:-.01em}.paper .co p{font-size:11px;color:var(--muted);line-height:1.5;margin-top:3px}
+  .paper .dt{text-align:right}.paper .dt .t{font-size:22px;font-weight:800;color:var(--g700)}.paper .dt .m{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:4px}
+  .paper .parties{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .paper .pt{font-size:10px;font-weight:800;text-transform:uppercase;color:var(--faint);margin-bottom:4px}
+  .paper .pv{font-size:13px;line-height:1.55}
+  .paper table.doc{width:100%;border-collapse:collapse;margin:8px 0 14px}
+  .paper table.doc th{text-align:left;font-size:10px;text-transform:uppercase;color:var(--faint);border-bottom:1px solid var(--line);padding:8px 6px}
+  .paper table.doc td{padding:9px 6px;border-bottom:1px solid var(--line);font-size:13px}
+  .paper .tot{display:flex;justify-content:space-between;font-size:15px;font-weight:800;padding:10px 6px;border-top:2px solid var(--g700)}
+  .paper .terms{font-size:11px;color:var(--muted);line-height:1.6;margin-top:14px}
+  .paper .sign{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:36px}
+  .paper .sign .ln{border-top:1px solid #333;padding-top:6px;font-size:11px;color:var(--muted)}
+  /* real MGROUP invoice/receipt */
+  .inv{font-family:'Times New Roman',Georgia,serif;color:#111;font-size:12.5px;line-height:1.45}
+  .inv .h{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+  .inv .title{font-size:34px;font-weight:800;color:#2f6f9e;line-height:1;text-align:right}
+  .inv .orig{font-size:12px;color:#666;text-align:right;margin-top:3px}
+  .inv .co b{font-size:13px}.inv .co{margin:4px 0 14px}
+  .inv .cols{display:flex;justify-content:space-between;gap:24px;margin-bottom:14px}
+  .inv .client{max-width:58%}.inv .lbl{font-weight:700}
+  .inv .meta div{display:flex;gap:8px;justify-content:flex-end}.inv .meta b{min-width:90px}
+  table.inv-t{width:100%;border-collapse:collapse;margin:4px 0}
+  table.inv-t th{background:#5b9bd5;color:#fff;font-size:10.5px;font-weight:700;padding:8px;border:1px solid #b9cee2;text-align:center;line-height:1.2}
+  table.inv-t td{border:1px solid #b9cee2;padding:9px;vertical-align:top;font-size:12px}
+  table.inv-t .desc{white-space:pre-wrap;line-height:1.5}
+  .inv-tot{display:flex;justify-content:flex-end;margin-top:-1px}
+  .inv-tot table{border-collapse:collapse;min-width:280px}
+  .inv-tot td{border:1px solid #b9cee2;padding:8px 12px}.inv-tot .l{font-weight:700;text-align:center;width:120px}.inv-tot .v{text-align:right}
+  .inv-rem{margin-top:16px;font-size:11.5px;line-height:1.55}.inv-rem .rt{font-weight:700;font-size:13px;margin-bottom:4px}
+  .inv-pay{margin-top:16px;font-size:12px}.inv-pay .row{margin:8px 0;border-bottom:1px solid #ccc;padding-bottom:2px}
+  .inv-sign{display:flex;justify-content:space-around;gap:40px;margin-top:40px;text-align:center;font-size:12px}
+  .inv-sign .col{flex:1}.inv-sign .line{margin:22px 10px 4px;border-top:1px dotted #333}
+  [contenteditable]:hover{outline:1px dashed #9cc7ea}[contenteditable]:focus{outline:1px solid #5b9bd5;background:#f3f9ff}
+  @media print{
+    [contenteditable]{outline:none!important}
+    body.pmode-doc .shell,body.pmode-own .shell{display:none!important}
+    body.pmode-doc #ownOv{display:none!important}body.pmode-own #docOv{display:none!important}
+    body.pmode-doc #docOv,body.pmode-own #ownOv{position:static!important;display:block!important;background:#fff;padding:0;overflow:visible}
+    #docOv .mh,#ownOv .mh{display:none}
+    .modal{max-width:100%!important;box-shadow:none;border-radius:0}
+  }
+</style></head><body>
+
+<div class="shell">
+  <aside class="side">
+    <div class="brand"><div class="mark">M</div><div><h1>MGROUP Rentals</h1><p>Back Office</p></div></div>
+    <div class="nl">Menu</div>
+    <div class="nav" id="nav">
+      <button class="active" data-v="dash" onclick="go('dash',this)"><span class="em">▦</span>Dashboard</button>
+      <button data-v="bookings" onclick="go('bookings',this)"><span class="em">📅</span>All Bookings</button>
+      <button data-v="finance" onclick="go('finance',this)"><span class="em">฿</span>Finance</button>
+      <button data-v="owners" onclick="go('owners',this)"><span class="em">🏠</span>Owners</button>
+      <button data-v="clients" onclick="go('clients',this)"><span class="em">👥</span>Clients</button>
+      <button data-v="agents" onclick="go('agents',this)"><span class="em">🤝</span>Agents</button>
+      <button data-v="docs" onclick="go('docs',this)"><span class="em">📄</span>Documents</button>
+    </div>
+    <div class="user"><div class="avatar">A</div><div><div class="nm">Admin</div><div class="rl" onclick="sessionStorage.removeItem('mg_admin');location.href='index.html'">Sign out</div></div></div>
+  </aside>
+
+  <main class="main">
+    <!-- DASHBOARD -->
+    <div id="v-dash" class="view on">
+      <div class="head"><div><div class="crumb">Overview</div><h2>Dashboard</h2></div><button class="btn primary" onclick="location.href='rent-add-booking.html'">+ New Booking</button></div>
+      <div class="tiles">
+        <div class="tile"><div class="l">Upcoming</div><div class="v" id="d-up">—</div><div class="s">confirmed, not yet in</div></div>
+        <div class="tile"><div class="l">Checked-in now</div><div class="v" id="d-in">—</div><div class="s">staying</div></div>
+        <div class="tile"><div class="l">Revenue this year</div><div class="v" id="d-rev">—</div><div class="s" id="d-revyr">—</div></div>
+        <div class="tile"><div class="l">To collect</div><div class="v" id="d-col" style="color:var(--red)">—</div><div class="s">outstanding balance</div></div>
+      </div>
+      <div class="card"><div class="ch">Revenue by year</div><div class="tablecard" style="border:none"><table><thead><tr><th>Year</th><th class="num">Bookings</th><th class="money">Revenue</th></tr></thead><tbody id="d-years"></tbody></table></div></div>
+      <div class="card"><div class="ch">Payment terms — to collect</div><div class="tablecard" style="border:none"><table><thead><tr><th>Ref</th><th>Villa</th><th>Guest</th><th class="money">Total</th><th class="money">Paid</th><th class="money">Balance</th></tr></thead><tbody id="d-collect"></tbody></table></div></div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div id="v-bookings" class="view">
+      <div class="head"><div><div class="crumb">Rentals</div><h2>All Bookings</h2></div><button class="btn primary" onclick="location.href='rent-add-booking.html'">+ New Booking</button></div>
+      <div class="tablecard"><table><thead><tr><th>Status</th><th>Stay</th><th>Ref</th><th>Villa</th><th>Guest</th><th class="num">Nights</th><th class="money">Total</th><th></th></tr></thead><tbody id="bkRows"><tr><td colspan="8" class="state">Loading…</td></tr></tbody></table></div>
+    </div>
+
+    <!-- FINANCE -->
+    <div id="v-finance" class="view">
+      <div class="head"><div><div class="crumb">Money</div><h2>Finance</h2></div></div>
+      <div class="tiles">
+        <div class="tile"><div class="l">Total booked</div><div class="v" id="f-total">—</div></div>
+        <div class="tile"><div class="l">Collected</div><div class="v" id="f-paid" style="color:var(--ok)">—</div></div>
+        <div class="tile"><div class="l">Outstanding</div><div class="v" id="f-bal" style="color:var(--red)">—</div></div>
+        <div class="tile"><div class="l">MGROUP commission</div><div class="v" id="f-comm">—</div></div>
+      </div>
+      <div class="tablecard"><table><thead><tr><th>Ref</th><th>Villa</th><th class="money">Total</th><th class="money">Paid</th><th class="money">Balance</th><th class="money">Deposit</th><th class="money">MGROUP</th><th class="money">Owner net</th></tr></thead><tbody id="finRows"><tr><td colspan="8" class="state">Loading…</td></tr></tbody></table></div>
+    </div>
+
+    <!-- OWNERS -->
+    <div id="v-owners" class="view">
+      <div class="head"><div><div class="crumb">Partners</div><h2>Owners</h2></div></div>
+      <div class="tablecard"><table><thead><tr><th>Owner</th><th>Villa(s)</th><th class="num">Bookings</th><th class="money">Owner net (total)</th><th>Portal</th><th></th></tr></thead><tbody id="ownRows"><tr><td colspan="6" class="state">Loading…</td></tr></tbody></table></div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div id="v-clients" class="view">
+      <div class="head"><div><div class="crumb">Guests</div><h2>Clients</h2></div></div>
+      <div class="tablecard"><table><thead><tr><th>Name</th><th>Nationality</th><th>Email</th><th>Phone</th><th class="num">Bookings</th></tr></thead><tbody id="cliRows"><tr><td colspan="5" class="state">Loading…</td></tr></tbody></table></div>
+    </div>
+
+    <!-- AGENTS -->
+    <div id="v-agents" class="view">
+      <div class="head"><div><div class="crumb">Referrals</div><h2>Agents</h2></div></div>
+      <div class="tablecard"><table><thead><tr><th>Agent</th><th class="num">Deals</th><th class="money">Total value</th><th class="money">Co-agent commission</th></tr></thead><tbody id="agRows"><tr><td colspan="4" class="state">Loading…</td></tr></tbody></table></div>
+    </div>
+
+    <!-- DOCUMENTS -->
+    <div id="v-docs" class="view">
+      <div class="head"><div><div class="crumb">By booking</div><h2>Documents</h2></div></div>
+      <p style="font-size:12px;color:var(--faint);margin:-6px 0 14px">เลือกเลข booking แล้วสร้างเอกสารได้ทันที — สัญญาเช่า · Invoice · Receipt (พิมพ์เป็น PDF)</p>
+      <div class="tablecard"><table><thead><tr><th>Ref</th><th>Villa</th><th>Guest</th><th>Stay</th><th>Generate document</th></tr></thead><tbody id="docRows"><tr><td colspan="5" class="state">Loading…</td></tr></tbody></table></div>
+    </div>
+  </main>
+</div>
+
+<!-- OWNER SUMMARY MODAL -->
+<div class="ov" id="ownOv" onclick="if(event.target===this)closeOwn()">
+  <div class="modal">
+    <div class="mh"><h3 id="ownName">Owner</h3><div><button class="btn" onclick="window.print()">🖨 PDF</button> <button class="cls" onclick="closeOwn()">✕ Close</button></div></div>
+    <div class="mb" id="ownBody"></div>
+  </div>
+</div>
+
+<!-- DOCUMENT (contract/invoice/receipt) MODAL -->
+<div class="ov" id="docOv" onclick="if(event.target===this)closeDoc()">
+  <div class="modal">
+    <div class="mh"><h3 id="docTitle">Document</h3><div><button class="btn" onclick="window.print()">🖨 Print / PDF</button> <button class="cls" onclick="closeDoc()">✕ Close</button></div></div>
+    <div class="mb"><div class="paper" id="docPaper"></div></div>
+  </div>
+</div>
+
+<script>
+  const SB_URL='https://iwipvfkjfsveycppqhxc.supabase.co';
+  const SB_KEY=atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW1sM2FYQjJabXRxWm5OMlpYbGpjSEJ4YUhoaklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTnpRM056STVOellzSW1WNGNDSTZNakE1TURNME9EazNObjAuVF9Yd3BCcE5kZXFRTGpYdXVsRVB3bFV2Q045dVhITlRqM0I3dE14YnRGbw==');
+  const H={apikey:SB_KEY,Authorization:'Bearer '+SB_KEY};
+  const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function esc(x){return (x==null?'':String(x)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+  function money(x){return (x==null||x==='')?'฿0':'฿'+Number(x).toLocaleString('en-US');}
+  function fmtD(d){if(!d)return '—';var p=d.split('-');if(p.length<3)return d;return (+p[2])+' '+MON[+p[1]-1]+" '"+p[0].slice(2);}
+  function stCls(v){return (v||'').replace(/_/g,'');}
+  var DATA={bk:[],vmap:{},gmap:{},omap:{}};
+
+  function go(v,el){document.querySelectorAll('.nav button').forEach(function(b){b.classList.remove('active');});el.classList.add('active');
+    document.querySelectorAll('.view').forEach(function(x){x.classList.remove('on');});document.getElementById('v-'+v).classList.add('on');window.scrollTo(0,0);}
+
+  async function loadAll(){
+    try{
+      var q=function(t,sel){return fetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel),{headers:H}).then(function(r){return r.json();});};
+      var res=await Promise.all([
+        fetch(SB_URL+'/rest/v1/bookings?select=id,booking_ref,villa_id,guest_id,owner_id,check_in,check_out,nights,total,client_pay,security_deposit,mgroup_commission,owner_net,co_agent_net,agent_name,status,currency&order=check_in.desc&limit=300',{headers:H}).then(function(r){return r.json();}),
+        q('rental_villas','id,name,area,owner_id'), q('owners','id,name,email,phone'), q('guests','id,name,email,phone,nationality')
+      ]);
+      DATA.bk=res[0]||[];
+      (res[1]||[]).forEach(function(v){DATA.vmap[v.id]=v;});
+      (res[2]||[]).forEach(function(o){DATA.omap[o.id]=o;});
+      (res[3]||[]).forEach(function(g){DATA.gmap[g.id]=g;});
+      renderAll();
+    }catch(e){document.getElementById('bkRows').innerHTML='<tr><td colspan="8" class="state" style="color:var(--red)">Load failed: '+esc(e.message)+'</td></tr>';}
+  }
+  var N=function(x){return Number(x||0);};
+  var vname=function(id){return (DATA.vmap[id]||{}).name||'—';};
+  var varea=function(id){return (DATA.vmap[id]||{}).area||'';};
+  var gname=function(id){return (DATA.gmap[id]||{}).name||'—';};
+
+  function renderAll(){renderBookings();renderDash();renderFinance();renderOwners();renderClients();renderAgents();renderDocs();}
+
+  function renderBookings(){
+    var ST=[['inquiry','Inquiry'],['confirmed','Confirmed'],['deposit','Deposit paid'],['fully_paid','Fully paid'],['checked_in','Checked-in'],['checked_out','Checked-out'],['cancelled','Cancelled'],['no_show','No show']];
+    document.getElementById('bkRows').innerHTML=DATA.bk.map(function(b){
+      var opts=ST.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===b.status?' selected':'')+'>'+o[1]+'</option>';}).join('');
+      return '<tr><td><select class="st-select '+stCls(b.status)+'" data-id="'+b.id+'" onchange="chSt(this)">'+opts+'</select></td>'+
+        '<td><b>'+fmtD(b.check_in)+'</b> → <b>'+fmtD(b.check_out)+'</b></td><td class="ref">'+esc(b.booking_ref||'—')+'</td>'+
+        '<td><div class="vn">'+esc(vname(b.villa_id))+'</div><div class="sub">'+esc(varea(b.villa_id))+'</div></td>'+
+        '<td>'+esc(gname(b.guest_id))+'</td><td class="num">'+(b.nights||'–')+'</td><td class="money">'+money(b.total)+'</td>'+
+        '<td><button class="rowbtn">Manage</button></td></tr>';
+    }).join('')||'<tr><td colspan="8" class="state">No bookings</td></tr>';
+  }
+  async function chSt(sel){try{await fetch(SB_URL+'/rest/v1/bookings?id=eq.'+sel.getAttribute('data-id'),{method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify({status:sel.value})});sel.className='st-select '+stCls(sel.value);}catch(e){alert('Save failed');}}
+
+  function outstanding(b){var t=N(b.total),p=N(b.client_pay);var o=t-p;return (['cancelled','checked_out','no_show'].indexOf(b.status)>-1)?0:(o>0?o:0);}
+
+  function renderDash(){
+    var today=DATA.bk.length?maxToday():'';
+    var up=0,inn=0,revYr=0,col=0,yr={};var THISYR=(new Date().getFullYear())+'';
+    DATA.bk.forEach(function(b){
+      if(b.status==='confirmed'||b.status==='deposit'||b.status==='fully_paid')up++;
+      if(b.status==='checked_in')inn++;
+      col+=outstanding(b);
+      var y=(b.check_in||'----').slice(0,4);
+      if(!yr[y])yr[y]={n:0,rev:0};yr[y].n++;yr[y].rev+=N(b.total);
+      if(y===THISYR)revYr+=N(b.total);
+    });
+    document.getElementById('d-up').textContent=up;
+    document.getElementById('d-in').textContent=inn;
+    document.getElementById('d-rev').textContent='฿'+(revYr/1e6).toFixed(2)+'M';
+    document.getElementById('d-revyr').textContent=THISYR;
+    document.getElementById('d-col').textContent='฿'+(col/1e6).toFixed(2)+'M';
+    var yrs=Object.keys(yr).sort().reverse();
+    document.getElementById('d-years').innerHTML=yrs.map(function(y){return '<tr><td><b>'+y+'</b></td><td class="num">'+yr[y].n+'</td><td class="money">'+money(yr[y].rev)+'</td></tr>';}).join('');
+    var coll=DATA.bk.filter(function(b){return outstanding(b)>0;});
+    document.getElementById('d-collect').innerHTML=coll.length?coll.map(function(b){return '<tr><td class="ref">'+esc(b.booking_ref||'—')+'</td><td>'+esc(vname(b.villa_id))+'</td><td>'+esc(gname(b.guest_id))+'</td><td class="money">'+money(b.total)+'</td><td class="money paid">'+money(b.client_pay)+'</td><td class="money bal">'+money(outstanding(b))+'</td></tr>';}).join(''):'<tr><td colspan="6" class="state">Nothing outstanding 🎉</td></tr>';
+  }
+  function maxToday(){return '';}
+
+  function renderFinance(){
+    var t=0,p=0,c=0;
+    document.getElementById('finRows').innerHTML=DATA.bk.map(function(b){
+      t+=N(b.total);p+=N(b.client_pay);c+=N(b.mgroup_commission);
+      var bal=outstanding(b);
+      return '<tr><td class="ref">'+esc(b.booking_ref||'—')+'</td><td>'+esc(vname(b.villa_id))+'</td><td class="money">'+money(b.total)+'</td>'+
+        '<td class="money paid">'+money(b.client_pay)+'</td><td class="money '+(bal>0?'bal':'')+'">'+money(bal)+'</td>'+
+        '<td class="money">'+money(b.security_deposit)+'</td><td class="money">'+money(b.mgroup_commission)+'</td><td class="money">'+money(b.owner_net)+'</td></tr>';
+    }).join('');
+    document.getElementById('f-total').textContent='฿'+(t/1e6).toFixed(2)+'M';
+    document.getElementById('f-paid').textContent='฿'+(p/1e6).toFixed(2)+'M';
+    document.getElementById('f-bal').textContent='฿'+((t-p)/1e6).toFixed(2)+'M';
+    document.getElementById('f-comm').textContent='฿'+(c/1e6).toFixed(2)+'M';
+  }
+
+  function ownerAgg(){
+    var agg={};
+    Object.values(DATA.omap).forEach(function(o){agg[o.id]={o:o,villas:{},n:0,net:0};});
+    DATA.bk.forEach(function(b){if(b.owner_id&&agg[b.owner_id]){agg[b.owner_id].n++;agg[b.owner_id].net+=N(b.owner_net);if(b.villa_id)agg[b.owner_id].villas[vname(b.villa_id)]=1;}});
+    return agg;
+  }
+  function renderOwners(){
+    var agg=ownerAgg();
+    var rows=Object.keys(agg).map(function(id){var a=agg[id];var vlist=Object.keys(a.villas);
+      return '<tr><td><b>'+esc(a.o.name)+'</b><div class="sub">'+esc(a.o.email||a.o.phone||'')+'</div></td>'+
+        '<td>'+(vlist.length?esc(vlist.join(', ')):'<span class="sub">—</span>')+'</td>'+
+        '<td class="num">'+a.n+'</td><td class="money">'+money(a.net)+'</td>'+
+        '<td><span class="pill">portal</span></td>'+
+        '<td><button class="rowbtn" onclick="openOwn(\''+id+'\')">Summary → PDF</button></td></tr>';
+    }).join('');
+    document.getElementById('ownRows').innerHTML=rows||'<tr><td colspan="6" class="state">No owners</td></tr>';
+  }
+  function openOwn(id){
+    var a=ownerAgg()[id];if(!a)return;
+    var bks=DATA.bk.filter(function(b){return b.owner_id===id;});
+    document.getElementById('ownName').textContent=a.o.name;
+    var body='<div style="margin-bottom:14px">'+
+      '<div class="kv"><span>Villas</span><b>'+esc(Object.keys(a.villas).join(', ')||'—')+'</b></div>'+
+      '<div class="kv"><span>Total bookings</span><b>'+a.n+'</b></div>'+
+      '<div class="kv"><span>Owner net (total)</span><b>'+money(a.net)+'</b></div>'+
+      '<div class="kv"><span>Contact</span><b>'+esc(a.o.email||a.o.phone||'—')+'</b></div></div>';
+    body+='<div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--faint);margin:12px 0 6px">Bookings</div>';
+    body+='<table><thead><tr><th>Ref</th><th>Stay</th><th class="money">Total</th><th class="money">Owner net</th></tr></thead><tbody>'+
+      bks.map(function(b){return '<tr><td class="ref">'+esc(b.booking_ref||'—')+'</td><td>'+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'</td><td class="money">'+money(b.total)+'</td><td class="money">'+money(b.owner_net)+'</td></tr>';}).join('')+'</tbody></table>';
+    body+='<div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--faint);margin:16px 0 6px">Show to this owner (in portal)</div>'+
+      '<label class="chk"><input type="checkbox" checked> Booking dates &amp; guest</label>'+
+      '<label class="chk"><input type="checkbox" checked> Owner net earnings</label>'+
+      '<label class="chk"><input type="checkbox"> MGROUP commission</label>'+
+      '<label class="chk"><input type="checkbox"> Check-in task progress</label>'+
+      '<div style="margin-top:14px;display:flex;gap:9px;align-items:center"><button class="btn" onclick="setOwnerPw(\''+id+'\',\''+esc(a.o.name)+'\')">🔑 Set portal password</button><span class="sub">owner logs in with email + this password</span></div>';
+    document.getElementById('ownBody').innerHTML=body;
+    document.body.classList.add('pmode-own');
+    document.getElementById('ownOv').classList.add('open');
+  }
+  function closeOwn(){document.getElementById('ownOv').classList.remove('open');document.body.classList.remove('pmode-own');}
+  function setOwnerPw(id,name){var pw=prompt('Set portal password for '+name+':');if(!pw)return;alert('Portal password set for '+name+' (demo — wiring portal_users next).');}
+
+  function renderClients(){
+    var cnt={};DATA.bk.forEach(function(b){if(b.guest_id)cnt[b.guest_id]=(cnt[b.guest_id]||0)+1;});
+    var gs=Object.values(DATA.gmap);
+    document.getElementById('cliRows').innerHTML=gs.map(function(g){return '<tr><td><b>'+esc(g.name)+'</b></td><td>'+esc(g.nationality||'—')+'</td><td>'+esc(g.email||'—')+'</td><td>'+esc(g.phone||'—')+'</td><td class="num">'+(cnt[g.id]||0)+'</td></tr>';}).join('')||'<tr><td colspan="5" class="state">No clients</td></tr>';
+  }
+
+  function renderAgents(){
+    var ag={};DATA.bk.forEach(function(b){var a=(b.agent_name||'').trim();if(!a)return;if(!ag[a])ag[a]={n:0,val:0,comm:0};ag[a].n++;ag[a].val+=N(b.total);ag[a].comm+=N(b.co_agent_net);});
+    var keys=Object.keys(ag).sort(function(x,y){return ag[y].n-ag[x].n;});
+    document.getElementById('agRows').innerHTML=keys.length?keys.map(function(a){return '<tr><td><b>'+esc(a)+'</b></td><td class="num">'+ag[a].n+'</td><td class="money">'+money(ag[a].val)+'</td><td class="money">'+money(ag[a].comm)+'</td></tr>';}).join(''):'<tr><td colspan="4" class="state">No agent-referred bookings</td></tr>';
+  }
+
+  function renderDocs(){
+    document.getElementById('docRows').innerHTML=DATA.bk.map(function(b){
+      return '<tr><td class="ref">'+esc(b.booking_ref||'—')+'</td><td>'+esc(vname(b.villa_id))+'</td><td>'+esc(gname(b.guest_id))+'</td>'+
+        '<td class="sub">'+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'</td>'+
+        '<td><button class="rowbtn" onclick="docGen(\''+b.id+'\',\'contract\')">Contract</button> '+
+        '<button class="rowbtn" onclick="docGen(\''+b.id+'\',\'invoice\')">Invoice</button> '+
+        '<button class="rowbtn" onclick="docGen(\''+b.id+'\',\'receipt\')">Receipt</button></td></tr>';
+    }).join('')||'<tr><td colspan="5" class="state">No bookings</td></tr>';
+  }
+
+  // ===== DOCUMENT GENERATION (from booking number) =====
+  function nights(b){if(b.nights)return b.nights;var a=Date.parse(b.check_in),c=Date.parse(b.check_out);var n=Math.round((c-a)/86400000);return n>0?n:0;}
+  function today(){var d=new Date();return (d.getDate())+' '+MON[d.getMonth()]+' '+d.getFullYear();}
+  function dmy(d){if(!d)return '';var p=d.split('-');if(p.length<3)return d;return p[2]+'/'+p[1]+'/'+p[0];}
+  function mn2(x){return Number(x||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+  var CO='<div class="co"><b>M GROUP BUSINESS CO.,LTD (Head Office)</b><br>63/202, Thepkasattri Road, Kohkaew Sub-district,<br>Muang District, Phuket 83000<br>Tax ID 0835563002961</div>';
+  function docGen(id,type){
+    var b=DATA.bk.find(function(x){return x.id===id;}); if(!b)return;
+    var v=DATA.vmap[b.villa_id]||{}, g=DATA.gmap[b.guest_id]||{}, o=DATA.omap[b.owner_id]||{};
+    var CUR=(b.currency==='USD')?'USD':'THB';
+    var total=N(b.total), dep=N(b.security_deposit), n=nights(b);
+    var p=document.getElementById('docPaper');
+
+    if(type==='contract'){
+      p.className='paper';
+      var cur=CUR==='USD'?'$':'฿';var mny=function(x){return cur+Number(x||0).toLocaleString('en-US');};
+      p.innerHTML='<div class="top"><div class="co"><h4>MGROUP ESTATES</h4><p>M Group Business Co., Ltd.<br>63/202 Thepkasattri Rd, Kohkaew, Muang, Phuket 83000<br>Tax ID 0835563002961</p></div><div class="dt"><div class="t">Rental Agreement</div><div class="m">'+esc(b.booking_ref||'')+'<br>'+today()+'</div></div></div>'+
+        '<div class="parties"><div><div class="pt">Landlord / Manager</div><div class="pv"><b>MGROUP Estates</b>'+(o.name?'<br>Owner: '+esc(o.name):'')+'</div></div><div><div class="pt">Tenant</div><div class="pv"><b>'+esc(g.name||'—')+'</b>'+(g.nationality?'<br>'+esc(g.nationality):'')+'</div></div></div>'+
+        '<div class="parties"><div><div class="pt">Villa</div><div class="pv"><b>'+esc(v.name||'—')+'</b> '+esc(v.area||'')+'</div></div><div><div class="pt">Stay</div><div class="pv"><b>'+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'</b><br>'+n+' nights</div></div></div>'+
+        '<div class="tot"><span>Total rent</span><span>'+mny(total)+'</span></div>'+
+        '<div class="terms"><b>Terms &amp; conditions</b><br>1. The tenant rents the property for the period above.<br>2. Refundable security deposit '+mny(dep)+' payable at check-in, returned after inspection.<br>3. Damages are deducted from the deposit.<br>4. Check-in 15:00, check-out 11:00 unless agreed.<br>5. Managed by MGROUP Estates on behalf of the owner.</div>'+
+        '<div class="sign"><div class="ln">Tenant — '+esc(g.name||'')+'</div><div class="ln">MGROUP Estates (Manager)</div></div>';
+      openDoc(type,b); return;
+    }
+
+    // INVOICE / RECEIPT — real MGROUP format
+    var isR=(type==='receipt'), word=isR?'Receipt':'Invoice';
+    p.className='inv';
+    var due=b.check_in;
+    var desc=['<b>Full Payment for villa rental fee</b>','Villa : '+esc(v.name||'')+(v.area?' '+esc(v.area):''),'Owner : '+esc(o.name||'')+', [nationality], passport No. ____','Period to stay : '+dmy(b.check_in)+'-'+dmy(b.check_out),'Number of guest : '+(b.guests_count||'-')+' guests','<b>Payment term</b>','- 100% payment rental '+CUR+' '+mn2(total),'  (equivalent to ____)','  payable will be paid '+dmy(due),'- Refundable security deposit '+CUR+' '+mn2(dep),'  will be paid '+dmy(b.check_in)].join(String.fromCharCode(10));
+    var html=''+
+      '<div class="h"><div>'+CO+'</div><div><div class="title">'+word+'</div><div class="orig">Original</div></div></div>'+
+      '<div class="cols"><div class="client"><div class="lbl">Client</div><div contenteditable="true">'+esc(g.name||'—')+'<br>INN (Tax ID): ____<br>Address: ____</div></div>'+
+      '<div class="meta"><div><b>Document No.</b><span>'+esc(b.booking_ref||'')+'</span></div><div><b>Date</b><span>'+dmy(new Date().toISOString().slice(0,10))+'</span></div><div><b>Due Date</b><span contenteditable="true">'+dmy(due)+'</span></div></div></div>'+
+      '<table class="inv-t"><thead><tr><th style="width:32px">No</th><th>Description</th><th style="width:60px">Quantity</th><th style="width:82px">Unit Price/'+CUR+'</th><th style="width:90px">Total/'+CUR+'</th></tr></thead>'+
+      '<tbody><tr><td style="text-align:center">1</td><td class="desc" contenteditable="true">'+desc+'</td><td style="text-align:center">1</td><td style="text-align:right">'+mn2(total)+'</td><td style="text-align:right">'+mn2(total)+'</td></tr></tbody></table>'+
+      '<div class="inv-tot"><table><tr><td class="l">Total</td><td class="v">'+mn2(total)+'</td></tr><tr><td class="l">Grand Total</td><td class="v"><b>'+mn2(total)+'</b></td></tr></table></div>'+
+      '<div class="inv-rem"><div class="rt">Remarks</div><div contenteditable="true">Bank name : ____<br>Bank address : ____<br>SWIFT Code : ____<br>A/C Name : ____<br>A/C number : ____<br><br>Wallet : ____ &nbsp; Currency : USDT &nbsp; Network : ____ &nbsp; Address : ____</div></div>';
+    if(isR){
+      html+='<div class="inv-pay"><div class="row">Payment Received by : &nbsp; ☐ Cash &nbsp; ☐ Cheque &nbsp; ☐ Transfer &nbsp; ☐ Credit Card &nbsp; ☐ Others………</div><div class="row">Bank Number ……… Date ……… Amount ………</div></div>'+
+        '<div class="inv-sign"><div class="col"><div class="line"></div>( '+esc(g.name||'')+' )<br>'+esc(g.name||'Client')+'<br>Date………</div><div class="col"><div class="line"></div>(Methinee Jetanasen)<br>M GROUP BUSINESS CO.,LTD<br>Date………</div></div>';
+    }else{
+      html+='<div class="inv-sign"><div class="col"><div style="font-size:11px;color:#666">Received by</div><div class="line"></div>( '+esc(g.name||'')+' )<br>'+esc(g.name||'Client')+'<br>Date………</div><div class="col"><div style="font-size:11px;color:#666">Delivered by</div><div class="line"></div>(Methinee Jetanasen)<br>M GROUP BUSINESS CO.,LTD<br>Date………</div></div>';
+    }
+    p.innerHTML=html;
+    openDoc(type,b);
+  }
+  function openDoc(type,b){
+    document.getElementById('docTitle').textContent=({contract:'Rental Agreement',invoice:'Invoice',receipt:'Receipt'}[type])+' · '+(b.booking_ref||'');
+    document.body.classList.add('pmode-doc');
+    document.getElementById('docOv').classList.add('open');
+  }
+  function closeDoc(){document.getElementById('docOv').classList.remove('open');document.body.classList.remove('pmode-doc');}
+
+  loadAll();
+</script>
+</body></html>

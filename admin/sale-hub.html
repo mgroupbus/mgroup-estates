@@ -1,0 +1,139 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MGROUP · Sale Listings</title>
+<script>if(sessionStorage.getItem('mg_admin')!=='ok'){location.replace('index.html');}</script>
+<meta name="theme-color" content="#2f5069">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MGROUP Sale">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' rx='40' fill='%232f5069'/%3E%3Ctext x='90' y='122' font-size='96' font-family='Georgia' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap');
+  :root{--s9:#22384a;--s8:#2a465b;--s7:#2f5069;--s6:#38617f;--s5:#4a7595;--s-t:#e9f0f5;
+    --cream:#eef0f2;--card:#fff;--line:#dfe3e7;--ink:#1a2129;--muted:#63707b;--faint:#93a0ab;--gold:#a97e42;--red:#b5533a;--ok:#2c8a5f;
+    --font:'Figtree',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:ui-monospace,'SF Mono',Menlo,monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--cream);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;font-size:14px;padding:24px 22px 48px;display:flex;justify-content:center}
+  .wrap{width:100%;max-width:1040px}
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .back{font-size:12px;color:var(--faint);text-decoration:none}.back:hover{color:var(--s7)}
+  .head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:18px}
+  .head .crumb{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--s6);font-weight:700}
+  .head h2{font-size:27px;font-weight:800;letter-spacing:-.02em;margin-top:3px}
+  .btn{font-family:var(--font);font-weight:700;font-size:13px;border-radius:9px;padding:10px 18px;cursor:pointer;border:1px solid var(--s6);background:var(--s6);color:#fff;text-decoration:none;display:inline-block}
+  .btn:hover{background:var(--s7)}
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
+  .tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .tile .l{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .tile .v{font-size:24px;font-weight:800;margin-top:7px;font-variant-numeric:tabular-nums}
+  .tile .s{font-size:11px;color:var(--faint);margin-top:2px}
+  .tablecard{background:var(--card);border:1px solid var(--line);border-radius:13px;overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:820px}
+  thead th{text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:700;padding:12px 15px;background:#f6f8fa;border-bottom:1px solid var(--line)}
+  tbody td{padding:12px 15px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tbody tr:last-child td{border-bottom:none}tbody tr:hover{background:#f6f8fa}
+  .rownum{text-align:center;color:var(--faint);font-size:12px;font-variant-numeric:tabular-nums}
+  .pn{font-weight:600}.sub{font-size:11px;color:var(--faint)}
+  .price{font-weight:700;color:var(--s7);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .num{color:var(--muted);text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .coll{font-size:11px;font-weight:600;color:var(--s6);background:var(--s-t);padding:3px 9px;border-radius:6px;white-space:nowrap}
+  .st{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;white-space:nowrap}
+  .st .d{width:8px;height:8px;border-radius:50%}
+  .st.feat{color:var(--s6)}.st.feat .d{background:var(--s5)}
+  .st.active{color:var(--faint)}.st.active .d{background:var(--faint)}
+  .st.sold{color:var(--red)}.st.sold .d{background:var(--red)}
+  .dc{display:flex;align-items:center;gap:8px;min-width:104px}
+  .dc .bar{flex:1;height:6px;background:#eef1f4;border-radius:4px;overflow:hidden}.dc .bar i{display:block;height:100%;border-radius:4px}
+  .dc span{font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums;min-width:32px;text-align:right}
+  tr.inc{background:#fdfaf6}
+  .rowact a{font-size:11px;font-weight:600;border:1px solid var(--line);background:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;color:var(--s6);text-decoration:none}
+  .state{padding:40px;text-align:center;color:var(--faint);font-size:13px}
+  @media(max-width:900px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:680px){
+    body{padding:16px 12px 40px}
+    .head h2{font-size:23px}
+    .tablecard{border:none;background:none;overflow:visible}
+    table{min-width:0}thead{display:none}
+    tbody tr{display:block;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;background:var(--card);padding:4px 0}
+    tbody tr.inc{background:#fdfaf6}
+    tbody td{display:flex;justify-content:space-between;align-items:center;gap:14px;border:none;padding:8px 15px;text-align:right}
+    tbody td::before{content:attr(data-l);font-size:10.5px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.04em;text-align:left;white-space:nowrap}
+    tbody td.rownum{display:none}
+    tbody td.prop-cell{text-align:left;padding-top:12px;border-bottom:1px solid #eef1f4}
+    tbody td.prop-cell::before{display:none}
+    .pn{font-size:15px}
+    tbody td .dc{min-width:0;width:62%}
+    tbody td.num,tbody td.price{font-size:14px}
+  }
+</style></head><body>
+
+<div class="wrap">
+  <div class="top"><a class="back" href="index.html">← Systems</a><a class="back" href="build-status.html">Build status</a></div>
+  <div class="head">
+    <div><div class="crumb">For Sale</div><h2>Listings</h2></div>
+    <a class="btn" href="add-listing-live.html">+ Add Listing</a>
+  </div>
+  <div class="tiles" id="tiles">
+    <div class="tile"><div class="l">Total</div><div class="v" id="t-total">—</div><div class="s">active listings</div></div>
+    <div class="tile"><div class="l">Featured</div><div class="v" id="t-feat">—</div><div class="s">on homepage</div></div>
+    <div class="tile"><div class="l">Need photos</div><div class="v" id="t-nophoto" style="color:var(--red)">—</div><div class="s">0 images</div></div>
+    <div class="tile"><div class="l">Avg data</div><div class="v" id="t-avg">—</div><div class="s">completeness</div></div>
+  </div>
+  <div class="tablecard">
+    <table>
+      <thead><tr><th style="width:34px;text-align:center">#</th><th style="width:100px">Status</th><th>Property</th><th>Collection</th><th>Price</th><th style="text-align:center">Bed · Bath</th><th style="text-align:center">Sqm</th><th style="width:120px">Data complete</th><th></th></tr></thead>
+      <tbody id="rows"><tr><td colspan="9" class="state" id="loading">Loading listings from Supabase…</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const SB_URL='https://iwipvfkjfsveycppqhxc.supabase.co';
+  const SB_KEY=atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW1sM2FYQjJabXRxWm5OMlpYbGpjSEJ4YUhoaklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTnpRM056STVOellzSW1WNGNDSTZNakE1TURNME9EazNObjAuVF9Yd3BCcE5kZXFRTGpYdXVsRVB3bFV2Q045dVhITlRqM0I3dE14YnRGbw==');
+  const H={apikey:SB_KEY,Authorization:'Bearer '+SB_KEY};
+  function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  function cnt(x){return Array.isArray(x)&&x.length?(x[0].count||0):0;}
+
+  async function load(){
+    var sel='id,name,location,collections,price_display,beds,baths,sqm,developer,is_active,is_featured,is_sold,property_images(count),property_features(count)';
+    try{
+      var r=await fetch(SB_URL+'/rest/v1/properties?select='+encodeURIComponent(sel)+'&is_active=eq.true&order=id',{headers:H});
+      if(!r.ok)throw new Error(r.status+' '+await r.text());
+      var rows=await r.json();
+      render(rows);
+    }catch(e){document.getElementById('loading').innerHTML='Could not load — '+esc(e.message);}
+  }
+
+  function pct(p){var img=cnt(p.property_images),feat=cnt(p.property_features);
+    var checks=[!!p.developer,!!p.sqm,!!p.beds,!!p.baths,!!p.price_display,img>0,feat>0];
+    return Math.round(checks.filter(Boolean).length/checks.length*100);}
+
+  function render(rows){
+    var tb=document.getElementById('rows');tb.innerHTML='';
+    var nophoto=0,feat=0,sum=0;
+    rows.forEach(function(p,i){
+      var img=cnt(p.property_images);if(img===0)nophoto++;if(p.is_featured)feat++;
+      var pc=pct(p);sum+=pc;
+      var col=pc>=90?'var(--ok)':(pc>=60?'var(--gold)':'var(--red)');
+      var stCls=p.is_sold?'sold':(p.is_featured?'feat':'active');
+      var stTxt=p.is_sold?'Sold':(p.is_featured?'Featured':'Active');
+      var tr=document.createElement('tr');if(pc<90)tr.className='inc';
+      tr.innerHTML='<td class="rownum">'+(i+1)+'</td>'+
+        '<td data-l="Status"><span class="st '+stCls+'"><span class="d"></span>'+stTxt+'</span>'+(img===0?' <span style="font-size:10px;color:var(--red);font-weight:700">no photo</span>':'')+'</td>'+
+        '<td class="prop-cell"><div class="pn">'+esc(p.name)+'</div><div class="sub">'+esc(p.location||'')+'</div></td>'+
+        '<td data-l="Collection">'+(function(){var c=(p.collections||"").split(",").map(function(x){return x.trim();}).filter(Boolean);return c.length?'<span class="coll">'+esc(c[0])+'</span>'+(c.length>1?' <span class="sub">+'+(c.length-1)+'</span>':''):"—";})()+'</td>'+
+        '<td class="price" data-l="Price">'+esc(p.price_display||'—')+'</td>'+
+        '<td class="num" data-l="Bed · Bath">'+(p.beds||'–')+' · '+(p.baths||'–')+'</td>'+
+        '<td class="num" data-l="Sqm">'+(p.sqm||'–')+'</td>'+
+        '<td data-l="Data"><div class="dc"><div class="bar"><i style="width:'+pc+'%;background:'+col+'"></i></div><span style="color:'+col+'">'+pc+'%</span></div></td>'+
+        '<td class="rowact" data-l=""><a href="https://mgroupestates.com/property?id='+p.id+'" target="_blank">View</a></td>';
+      tb.appendChild(tr);
+    });
+    document.getElementById('t-total').textContent=rows.length;
+    document.getElementById('t-feat').textContent=feat;
+    document.getElementById('t-nophoto').textContent=nophoto;
+    document.getElementById('t-avg').textContent=rows.length?Math.round(sum/rows.length)+'%':'—';
+  }
+  load();
+</script>
+</body></html>
