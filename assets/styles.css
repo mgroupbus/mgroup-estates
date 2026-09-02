@@ -35,7 +35,7 @@ html {
   overscroll-behavior:none;
 }
 body {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   background:var(--white);
   color:var(--black);
   /* overflow-x:hidden moved to html — on body it forces overflow-y:auto,
@@ -101,7 +101,7 @@ nav.scrolled .nav-center a:hover { color:var(--black); }
   background:none; border:1px solid rgba(255,255,255,0.3);
   color:rgba(255,255,255,0.7); padding:5px 12px; cursor:pointer;
   font-size:9px; letter-spacing:0.15em; text-transform:uppercase;
-  font-family:'Figtree', sans-serif; transition:all 0.25s;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; transition:all 0.25s;
 }
 .nav-lang:hover, .nav-lang.active {
   background:var(--white); border-color:var(--white); color:var(--black);
@@ -113,7 +113,7 @@ nav.scrolled .nav-lang:hover, nav.scrolled .nav-lang.active {
 .nav-cta {
   background:var(--white); color:var(--black); border:none;
   padding:9px 22px; cursor:pointer; font-size:9px; letter-spacing:0.18em;
-  text-transform:uppercase; font-family:'Figtree', sans-serif; font-weight:600;
+  text-transform:uppercase; font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:600;
   transition:all 0.25s; text-decoration:none; display:inline-block;
 }
 .nav-cta:hover { background:var(--ivory); }
@@ -139,10 +139,10 @@ nav.scrolled .ham-line { background: rgba(255,255,255,0.9); }
   position:absolute; top:20px; right:24px;
   background:none; border:none; cursor:pointer;
   font-size:22px; color:var(--black); line-height:1; padding:8px;
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
 }
 #mobileNav a {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:16px; font-weight:500; font-style:normal;
   letter-spacing:0.08em; text-transform:uppercase;
   color:var(--black); text-decoration:none; padding:16px 0;
@@ -157,7 +157,7 @@ nav.scrolled .ham-line { background: rgba(255,255,255,0.9); }
 .mob-cta-link {
   font-size:9px; letter-spacing:0.2em; text-transform:uppercase;
   font-weight:600; color:var(--stone); border:1px solid var(--line);
-  padding:12px 20px; font-family:'Figtree', sans-serif;
+  padding:12px 20px; font-family:'Figtree','Noto Sans Thai',sans-serif;
   text-decoration:none; transition:all 0.2s;
 }
 .mob-cta-link:hover { background:var(--black); color:var(--white); border-color:var(--black); }
@@ -233,7 +233,7 @@ nav.scrolled .ham-line { background: rgba(255,255,255,0.9); }
   background:var(--white); color:var(--black);
   padding:14px 36px; text-decoration:none;
   font-size:9px; letter-spacing:0.25em; text-transform:uppercase;
-  font-family:'Figtree', sans-serif; font-weight:600;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:600;
   transition:all 0.3s; border:none; cursor:pointer; display:inline-block;
 }
 .btn-hero-primary:hover { background:var(--ivory); transform:translateY(-1px); }
@@ -242,7 +242,7 @@ nav.scrolled .ham-line { background: rgba(255,255,255,0.9); }
   border:1px solid rgba(255,255,255,0.2);
   padding:14px 36px; text-decoration:none;
   font-size:9px; letter-spacing:0.25em; text-transform:uppercase;
-  font-family:'Figtree', sans-serif; font-weight:400;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:400;
   transition:all 0.3s; cursor:pointer; display:inline-block;
 }
 .btn-hero-ghost:hover { border-color:rgba(255,255,255,0.6); color:rgba(255,255,255,0.9); }
@@ -256,7 +256,7 @@ nav.scrolled .ham-line { background: rgba(255,255,255,0.9); }
 }
 .hero-stat:first-child { border-left:none; padding-left:0; }
 .hero-stat-num {
-  font-family:'Figtree', sans-serif; font-size:28px; font-weight:300;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:28px; font-weight:300;
   color:var(--white); line-height:1; display:block;
   font-variant-numeric: lining-nums tabular-nums;
 }
@@ -289,7 +289,7 @@ nav.scrolled .ham-line { background: rgba(255,255,255,0.9); }
   content:''; display:block; width:24px; height:1px; background:var(--line);
 }
 h2.section-title {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:clamp(32px,3.5vw,52px); font-weight:300;
   color:var(--black); line-height:1.1; letter-spacing:-0.01em;
 }
@@ -308,7 +308,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 }
 .intro-item { }
 .intro-num {
-  font-family:'Figtree', sans-serif; font-size:48px; font-weight:300;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:48px; font-weight:300;
   color:var(--black); line-height:1; margin-bottom:8px;
   font-variant-numeric: lining-nums tabular-nums;
 }
@@ -347,7 +347,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
   background:var(--white);
   border:1px solid var(--line);
   cursor:pointer;
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:10px; letter-spacing:0.22em; text-transform:uppercase;
   font-weight:700; color:var(--black); min-width:320px;
   transition:all 0.2s; justify-content:space-between;
@@ -388,7 +388,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 .coll-dd-option {
   padding:13px 22px; font-size:10px; letter-spacing:0.14em; text-transform:uppercase;
   color:var(--mid); cursor:pointer; transition:background 0.15s, color 0.15s;
-  border-bottom:1px solid var(--line2); font-family:'Figtree', sans-serif;
+  border-bottom:1px solid var(--line2); font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-weight:500; display:flex; align-items:center; justify-content:space-between;
 }
 .coll-dd-option:last-child { border-bottom:none; }
@@ -406,7 +406,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 .coll-sort-btn {
   padding:10px 16px; background:none; border:1px solid var(--line);
   font-size:9px; letter-spacing:0.12em; text-transform:uppercase;
-  font-family:'Figtree', sans-serif; color:var(--stone); cursor:pointer;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; color:var(--stone); cursor:pointer;
   transition:all 0.2s; font-weight:500;
 }
 .coll-sort-btn:hover, .coll-sort-btn.active { border-color:var(--black); color:var(--black); background:var(--white); }
@@ -456,7 +456,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 .prop-badge {
   font-size:8px; letter-spacing:0.16em; text-transform:uppercase;
   color:var(--white); padding:4px 9px; font-weight:600;
-  font-family:'Figtree', sans-serif; background:rgba(51,41,31,0.82);
+  font-family:'Figtree','Noto Sans Thai',sans-serif; background:rgba(51,41,31,0.82);
   backdrop-filter:blur(4px);
 }
 .prop-badge.coll { background:rgba(0,0,0,0.55); }
@@ -480,7 +480,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
   color:rgba(255,255,255,0.5); margin-bottom:4px; display:block;
 }
 .prop-card-name {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:clamp(17px,2vw,22px); font-weight:400; color:var(--white);
   line-height:1.2;
 }
@@ -490,7 +490,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
   background:var(--white); border:1px solid var(--line2); border-top:none;
 }
 .prop-card-loc {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:8px; letter-spacing:0.18em; text-transform:uppercase;
   color:var(--silver); margin-bottom:8px;
 }
@@ -501,7 +501,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
   margin-top:auto; padding-top:0; border-top:none;
 }
 .prop-card-price {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:20px; color:var(--black); font-weight:400; letter-spacing:-0.01em;
 }
 .prop-card-view {
@@ -527,7 +527,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 }
 .why-pillar:first-child { border-top:1px solid var(--line2); }
 .why-pillar-num {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:13px; color:var(--line); font-weight:300; flex-shrink:0; padding-top:2px;
 }
 .why-pillar-title {
@@ -554,7 +554,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
   padding:24px; box-shadow:0 12px 40px rgba(0,0,0,0.08);
 }
 .why-quote-text {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:16px; font-style:italic; color:var(--black); line-height:1.6;
   margin-bottom:10px;
 }
@@ -570,7 +570,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 }
 .why-founder-photo:hover { filter:grayscale(0%); transform:scale(1.02); }
 .why-founder-name {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:22px; font-weight:500; color:var(--black); letter-spacing:0.02em;
   margin-bottom:4px;
 }
@@ -582,7 +582,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
   display:inline-flex; align-items:center; gap:8px;
   border:1px solid var(--line); padding:9px 16px;
   font-size:9px; letter-spacing:0.15em; text-transform:uppercase;
-  font-family:'Figtree', sans-serif; font-weight:600;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:600;
   color:var(--black); text-decoration:none; margin-bottom:24px;
   transition:all 0.2s;
 }
@@ -630,7 +630,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 .svc-img-overlay { display:none; }
 .svc-card-num { display:none; }
 .svc-card-icon {
-  font-family:'Figtree', sans-serif; font-size:36px; font-weight:300;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:36px; font-weight:300;
   color:#E0DED9; margin-bottom:14px; display:block; line-height:1;
   letter-spacing:-0.02em;
 }
@@ -638,7 +638,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
   padding:0; background:transparent;
 }
 .svc-card-title {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:17px; font-weight:400; color:var(--black);
   letter-spacing:0.01em; margin-bottom:8px; line-height:1.35;
 }
@@ -699,7 +699,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 
 /* ─── PROCESS PAGE ─── */
 #processPage {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   position:fixed; inset:0; z-index:500;
   background:var(--page);
   overflow-y:auto; -webkit-overflow-scrolling:touch;
@@ -718,7 +718,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
   border-bottom:1px solid #E0DED9;
 }
 .proc-hero-lbl {
-  font-family:'Figtree', sans-serif; font-size:9px; letter-spacing:0.3em; text-transform:uppercase;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:9px; letter-spacing:0.3em; text-transform:uppercase;
   color:#33291F; margin-bottom:18px;
   display:flex; align-items:center; gap:12px;
 }
@@ -727,18 +727,18 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
   background:#33291F;
 }
 .proc-hero-h {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:clamp(32px,5vw,58px); font-weight:300; color:#33291F;
   line-height:1.15; margin-bottom:20px;
 }
 .proc-hero-h em { font-style:normal; color:#33291F; }
 .proc-hero-sub {
-  font-family:'Figtree', sans-serif; font-size:13px; color:#33291F; font-weight:300;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:13px; color:#33291F; font-weight:300;
   line-height:1.8; max-width:560px;
 }
 .proc-content { max-width:960px; margin:0 auto; padding:72px 80px; }
 .proc-section-lbl {
-  font-family:'Figtree', sans-serif; font-size:9px; letter-spacing:0.3em; text-transform:uppercase;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:9px; letter-spacing:0.3em; text-transform:uppercase;
   color:#33291F; margin-bottom:16px;
   display:flex; align-items:center; gap:12px;
 }
@@ -746,13 +746,13 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
   content:''; display:inline-block; width:32px; height:1px; background:#33291F;
 }
 .proc-h {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:clamp(24px,3.5vw,36px); font-weight:300; color:#33291F;
   margin-bottom:20px; line-height:1.25;
 }
 .proc-h em { font-style:italic; color:#33291F; }
 .proc-body {
-  font-family:'Figtree', sans-serif; font-size:13px; color:#33291F; line-height:1.9; font-weight:300;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:13px; color:#33291F; line-height:1.9; font-weight:300;
   max-width:720px; margin-bottom:28px;
 }
 .proc-divider { border:none; border-top:1px solid #E0DED9; margin:56px 0; }
@@ -764,25 +764,25 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
   background:#fff; padding:36px 28px; border:1px solid #E0DED9;
 }
 .proc-step-num {
-  font-family:'Figtree', sans-serif; font-size:52px; font-weight:300;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:52px; font-weight:300;
   color:#E0DED9; line-height:1; margin-bottom:14px;
 }
 .proc-step-title {
-  font-family:'Figtree', sans-serif; font-size:10px; letter-spacing:0.18em; text-transform:uppercase;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:10px; letter-spacing:0.18em; text-transform:uppercase;
   font-weight:600; color:#33291F; margin-bottom:10px;
 }
-.proc-step-text { font-family:'Figtree', sans-serif; font-size:12px; color:#33291F; line-height:1.8; font-weight:300; }
+.proc-step-text { font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:12px; color:#33291F; line-height:1.8; font-weight:300; }
 /* Ownership */
 .proc-own-grid {
   display:grid; grid-template-columns:repeat(3,1fr); gap:2px; margin-bottom:56px;
 }
 .proc-own-card { background:#F5F0EB; padding:32px 24px; border:1px solid #E0DED9; }
 .proc-own-badge {
-  font-family:'Figtree', sans-serif; font-size:8px; letter-spacing:0.15em; text-transform:uppercase;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:8px; letter-spacing:0.15em; text-transform:uppercase;
   font-weight:600; color:#33291F; margin-bottom:8px;
 }
 .proc-own-name {
-  font-family:'Figtree', sans-serif; font-size:20px; font-weight:300;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:20px; font-weight:300;
   color:#33291F; margin-bottom:10px; line-height:1.3;
 }
 .proc-own-desc { font-size:11px; color:#33291F; line-height:1.7; font-weight:300; }
@@ -792,11 +792,11 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 }
 .proc-deed-card { background:#fff; padding:28px 24px; border:1px solid #E0DED9; }
 .proc-deed-badge {
-  font-family:'Figtree', sans-serif; font-size:8px; letter-spacing:0.15em; text-transform:uppercase;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:8px; letter-spacing:0.15em; text-transform:uppercase;
   font-weight:600; color:#33291F; margin-bottom:8px;
 }
 .proc-deed-name {
-  font-family:'Figtree', sans-serif; font-size:19px; font-weight:400;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:19px; font-weight:400;
   color:#33291F; margin-bottom:8px;
 }
 .proc-deed-desc { font-size:11px; color:#33291F; line-height:1.7; font-weight:300; }
@@ -808,11 +808,11 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 }
 .proc-transfer-list li::before {
   content:counter(proc-li); counter-increment:proc-li;
-  font-family:'Figtree', sans-serif; font-size:18px; color:#33291F;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:18px; color:#33291F;
   flex-shrink:0; min-width:24px;
 }
 .proc-note {
-  font-family:'Figtree', sans-serif; background:#F5F4F2; border-left:3px solid #33291F;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; background:#F5F4F2; border-left:3px solid #33291F;
   padding:20px 24px; margin-bottom:72px;
   font-size:12px; color:#33291F; line-height:1.8; font-weight:300;
 }
@@ -823,14 +823,14 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
   border-top:1px solid #E0DED9;
 }
 .proc-cta-h {
-  font-family:'Figtree', sans-serif; font-size:32px;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:32px;
   font-weight:300; color:#33291F; margin-bottom:24px;
 }
 .proc-cta-btn {
   display:inline-block; border:1px solid #33291F;
   background:transparent; padding:14px 32px;
   font-size:9px; letter-spacing:0.22em; text-transform:uppercase;
-  font-family:'Figtree', sans-serif; font-weight:600; color:#33291F;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:600; color:#33291F;
   cursor:pointer; margin:4px 6px; transition:all 0.2s;
 }
 .proc-cta-btn:hover { background:#33291F; color:#fff; border-color:#33291F; }
@@ -855,7 +855,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 }
 .process-step:last-child { border-right:none; }
 .process-num {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:52px; font-weight:300;
   color:rgba(255,255,255,0.07); line-height:1; margin-bottom:20px;
 }
@@ -884,7 +884,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 }
 .contact-val { font-size:13px; color:var(--black); font-weight:300; }
 .form-title {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:28px; font-weight:300; color:var(--black); margin-bottom:28px;
 }
 .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
@@ -896,7 +896,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 .form-group input, .form-group select, .form-group textarea {
   width:100%; padding:11px 14px;
   background:var(--page); border:1px solid var(--line);
-  font-family:'Figtree', sans-serif; font-size:12px; color:var(--black);
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:12px; color:var(--black);
   outline:none; transition:border-color 0.25s; -webkit-appearance:none;
 }
 .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
@@ -906,7 +906,7 @@ h2.section-title em { font-style:normal; color:var(--gold); color:var(--stone); 
 .btn-submit {
   width:100%; background:#2C2C2C; color:var(--white); border:none;
   padding:14px; font-size:9px; letter-spacing:0.25em; text-transform:uppercase;
-  font-family:'Figtree', sans-serif; font-weight:600; cursor:pointer;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:600; cursor:pointer;
   transition:background 0.25s;
 }
 .btn-submit:hover { background:#1f1f1f; }
@@ -920,7 +920,7 @@ footer {
   padding-bottom:48px; border-bottom:1px solid rgba(255,255,255,0.1);
 }
 .footer-logo {
-  font-family:'Figtree', sans-serif; font-size:20px; font-weight:400;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:20px; font-weight:400;
   letter-spacing:0.1em; color:var(--white); margin-bottom:14px;
 }
 .footer-logo em { font-style:italic; font-weight:300; }
@@ -966,7 +966,7 @@ footer {
   width:52px; height:52px; background:var(--white); border-radius:50%;
   border:1px solid var(--line); cursor:pointer; display:flex; align-items:center; justify-content:center;
   font-size:14px; box-shadow:0 4px 20px rgba(0,0,0,0.08); transition:all 0.3s;
-  color:var(--black); font-family:'Figtree', sans-serif; font-weight:600; letter-spacing:0.05em;
+  color:var(--black); font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:600; letter-spacing:0.05em;
 }
 .chat-launcher:hover { transform:scale(1.08); box-shadow:0 12px 40px rgba(0,0,0,0.35); }
 .chat-pulse {
@@ -1019,7 +1019,7 @@ footer {
 }
 .chat-inp {
   flex:1; border:1px solid var(--line); padding:9px 12px;
-  font-family:'Figtree', sans-serif; font-size:11px; outline:none;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:11px; outline:none;
   background:var(--page); color:var(--black); transition:border-color 0.2s;
 }
 .chat-inp:focus { border-color:var(--black); }
@@ -1124,7 +1124,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
   padding:0 80px 48px; max-width:700px;
 }
 .rent-hero-title {
-  font-family:'Figtree', sans-serif; font-size:clamp(40px,7vw,68px);
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:clamp(40px,7vw,68px);
   font-weight:300; color:var(--white); line-height:1; margin:12px 0 16px;
 }
 .rent-hero-title em { font-style:normal; color:rgba(255,255,255,0.55); }
@@ -1159,10 +1159,10 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 }
 .rent-filter-label {
   font-size:8px; letter-spacing:0.16em; text-transform:uppercase;
-  font-family:'Figtree', sans-serif; font-weight:700; color:var(--stone);
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:700; color:var(--stone);
 }
 .rent-filter-select {
-  padding:8px 28px 8px 12px; font-size:12px; font-family:'Figtree', sans-serif; font-weight:500;
+  padding:8px 28px 8px 12px; font-size:12px; font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:500;
   color:var(--black); background:var(--white); border:1px solid var(--line);
   border-radius:0; cursor:pointer; outline:none; width:100%;
   appearance:none; -webkit-appearance:none;
@@ -1216,7 +1216,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .rent-badge {
   font-size:8px; letter-spacing:0.16em; text-transform:uppercase;
   color:var(--white); padding:4px 9px; font-weight:600;
-  font-family:'Figtree', sans-serif; background:rgba(51,41,31,0.75);
+  font-family:'Figtree','Noto Sans Thai',sans-serif; background:rgba(51,41,31,0.75);
   backdrop-filter:blur(4px);
 }
 .rent-badge.featured { background:rgba(180,140,60,0.85); }
@@ -1229,7 +1229,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
   color:rgba(255,255,255,0.5); margin-bottom:3px; display:block;
 }
 .rent-card-name {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:clamp(16px,1.8vw,20px); font-weight:400; color:var(--white);
   line-height:1.2;
 }
@@ -1255,7 +1255,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 }
 .rent-card-prices { display:flex; flex-direction:column; gap:2px; }
 .rent-price-main {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:18px; color:var(--black); font-weight:400; letter-spacing:-0.01em;
 }
 .rent-price-sub {
@@ -1291,7 +1291,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
   display:inline-flex; align-items:center; gap:10px;
   border:1px solid var(--line); padding:13px 28px;
   font-size:9px; letter-spacing:0.2em; text-transform:uppercase;
-  font-family:'Figtree', sans-serif; font-weight:600;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:600;
   color:var(--black); background:none; cursor:pointer;
   transition:all 0.2s;
 }
@@ -1312,13 +1312,13 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 }
 .rent-det-back {
   display:flex; align-items:center; gap:8px; background:none; border:none;
-  cursor:pointer; font-family:'Figtree', sans-serif; font-size:10px;
+  cursor:pointer; font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:10px;
   letter-spacing:0.14em; text-transform:uppercase; color:var(--stone);
   font-weight:600; transition:color 0.2s;
 }
 .rent-det-back:hover { color:var(--black); }
 .rent-det-topbar-name {
-  font-family:'Figtree', sans-serif; font-size:14px; color:var(--black);
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:14px; color:var(--black);
   letter-spacing:0.04em; position:absolute; left:50%; transform:translateX(-50%);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:40%;
 }
@@ -1331,13 +1331,13 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .rent-det-gallery-counter {
   position:absolute; bottom:16px; right:16px; background:rgba(0,0,0,0.6);
   color:#fff; padding:5px 14px; font-size:10px; letter-spacing:0.1em;
-  font-family:'Figtree', sans-serif; font-weight:600;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:600;
 }
 .rent-det-gallery-type {
   position:absolute; top:16px; left:16px; z-index:3;
   background:rgba(26,35,50,0.85); backdrop-filter:blur(8px);
   color:#E8D5B0; padding:8px 18px;
-  font-family:'Figtree', sans-serif; font-size:10px; font-weight:600;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:10px; font-weight:600;
   letter-spacing:0.2em; text-transform:uppercase;
   border:1px solid rgba(232,213,176,0.4);
 }
@@ -1375,14 +1375,14 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .rent-det-lb-counter {
   position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
   color:rgba(255,255,255,0.7); font-size:12px; letter-spacing:0.12em;
-  font-family:'Figtree', sans-serif; font-weight:500;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:500;
 }
 /* Content */
 .rent-det-content {
   max-width:960px; margin:0 auto; padding:40px 48px 60px;
 }
 .rent-det-name {
-  font-family:'Figtree', sans-serif; font-size:32px;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:32px;
   font-weight:400; color:var(--black); margin-bottom:6px;
 }
 .rent-det-loc {
@@ -1410,7 +1410,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 }
 /* Section title — Gold #C9A96E, Thin */
 .rent-det-section {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:12px; letter-spacing:0.2em; text-transform:uppercase;
   color:#C9A96E; font-weight:300;
   margin-top:32px; margin-bottom:14px; padding-bottom:8px;
@@ -1431,7 +1431,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
   color:var(--black); font-weight:600;
 }
 .rent-det-price-val {
-  font-family:'Figtree', sans-serif; font-size:16px;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:16px;
   color:var(--black); font-weight:400;
 }
 /* Include / Exclude */
@@ -1529,7 +1529,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .rent-det-pay-drop > summary,
 .rent-det-pay-drop .pay-sub > summary {
   list-style:none; cursor:pointer;
-  font-family:'Figtree', sans-serif; font-weight:700;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:700;
   color:var(--black); transition:background 0.2s;
   user-select:none;
 }
@@ -1587,7 +1587,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
   display:flex; align-items:center; justify-content:center; gap:10px;
   width:100%; text-align:center; padding:18px;
   font-size:10px; letter-spacing:0.2em; text-transform:uppercase;
-  font-family:'Figtree', sans-serif; font-weight:600;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:600;
   color:#fff; border:none; cursor:pointer;
   transition:background 0.2s, transform 0.1s; text-decoration:none;
 }
@@ -1619,7 +1619,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 }
 .rent-det-agent-info-sm { flex:1; min-width:0; }
 .rent-det-agent-name-sm {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:14px; font-weight:700; color:var(--black);
   line-height:1.2;
 }
@@ -1640,7 +1640,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .rent-det-contact-btn {
   flex:1; display:inline-flex; align-items:center; justify-content:center; gap:8px;
   padding:10px 12px;
-  font-family:'Figtree', sans-serif; font-size:11px; font-weight:700;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:11px; font-weight:700;
   letter-spacing:0.12em; text-transform:uppercase;
   text-decoration:none; color:#fff;
   transition:background 0.2s, transform 0.1s;
@@ -1671,7 +1671,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .cp-lang {
   background:none; border:1px solid var(--line); color:var(--stone);
   padding:5px 11px; cursor:pointer; font-size:9px; letter-spacing:0.12em;
-  text-transform:uppercase; font-family:'Figtree', sans-serif;
+  text-transform:uppercase; font-family:'Figtree','Noto Sans Thai',sans-serif;
   transition:all 0.2s;
 }
 .cp-lang.active, .cp-lang:hover { background:var(--black); border-color:var(--black); color:var(--white); }
@@ -1682,7 +1682,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
   display:flex; justify-content:space-between; align-items:flex-end;
 }
 .cp-title {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:clamp(36px,4vw,56px); font-weight:300;
   color:var(--black); line-height:1.1; letter-spacing:-0.01em;
 }
@@ -1700,7 +1700,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .sid-acc-trigger {
   width:100%; display:flex; align-items:center; gap:10px;
   padding:12px 16px; background:none; border:none; cursor:pointer;
-  font-family:'Figtree', sans-serif; transition:background 0.2s;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; transition:background 0.2s;
 }
 .sid-acc-trigger:hover { background:var(--page); }
 .sid-acc-item.open .sid-acc-trigger { background:var(--page); }
@@ -1708,14 +1708,14 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .sid-acc-item.open .sid-acc-trigger .sid-acc-arrow { color:var(--black); }
 .sid-acc-icon { font-size:14px; flex-shrink:0; }
 .sid-acc-label {
-  font-family:'Figtree', sans-serif;  flex:1; text-align:left; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; font-weight:600; color:var(--black); }
+  font-family:'Figtree','Noto Sans Thai',sans-serif;  flex:1; text-align:left; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; font-weight:600; color:var(--black); }
 .sid-acc-arrow { font-size:11px; color:var(--stone); transition:transform 0.25s; flex-shrink:0; }
 .sid-acc-item.open .sid-acc-arrow { transform:rotate(180deg); }
 .sid-acc-body { max-height:0; overflow: auto; transition:max-height 0.42s cubic-bezier(0.4,0,0.2,1); }
 .sid-acc-item.open .sid-acc-body { max-height:700px; }
 .sid-acc-inner { padding:16px; }
 .sid-cal-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-.sid-cal-month { font-family:'Figtree', sans-serif; font-size:15px; color:var(--black); }
+.sid-cal-month { font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:15px; color:var(--black); }
 .sid-cal-arr { background:none; border:1px solid var(--line); width:26px; height:26px; cursor:pointer; font-size:12px; color:var(--stone); display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
 .sid-cal-arr:hover { border-color:var(--black); color:var(--black); }
 .sid-cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:1px; }
@@ -1739,12 +1739,12 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .sid-summary { background:var(--page); border:1px solid var(--line2); padding:10px 12px; margin:12px 0 8px; font-size:11px; color:var(--mid); line-height:1.7; }
 .sid-lbl { display:block; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:var(--stone); margin-bottom:4px; margin-top:10px; font-weight:500; }
 .sid-lbl:first-child { margin-top:0; }
-.sid-inp { width:100%; padding:9px 11px; border:1px solid var(--line); font-family:'Figtree', sans-serif; font-size:11px; color:var(--black); background:var(--page); outline:none; transition:border-color 0.2s; }
+.sid-inp { width:100%; padding:9px 11px; border:1px solid var(--line); font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:11px; color:var(--black); background:var(--page); outline:none; transition:border-color 0.2s; }
 .sid-inp:focus { border-color:var(--black); }
-.sid-ta { width:100%; padding:9px 11px; border:1px solid var(--line); font-family:'Figtree', sans-serif; font-size:11px; color:var(--black); background:var(--page); outline:none; min-height:72px; resize:none; transition:border-color 0.2s; margin-bottom:2px; }
+.sid-ta { width:100%; padding:9px 11px; border:1px solid var(--line); font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:11px; color:var(--black); background:var(--page); outline:none; min-height:72px; resize:none; transition:border-color 0.2s; margin-bottom:2px; }
 .sid-ta:focus { border-color:var(--black); }
 .sid-note { font-size:11px; color:var(--stone); line-height:1.7; font-weight:300; margin-bottom:12px; }
-.sid-submit-btn { width:100%; background:var(--black); color:var(--white); border:none; padding:12px; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; font-family:'Figtree', sans-serif; font-weight:600; cursor:pointer; transition:background 0.2s; margin-top:12px; }
+.sid-submit-btn { width:100%; background:var(--black); color:var(--white); border:none; padding:12px; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:600; cursor:pointer; transition:background 0.2s; margin-top:12px; }
 .sid-submit-btn:hover { background:var(--charcoal); }
 .sid-submit-btn:disabled { background:var(--line2); cursor:default; }
 .sid-sent { font-size:10px; color:var(--mid); margin-top:10px; text-align:center; padding:8px; background:var(--page); border:1px solid var(--line2); letter-spacing:0.04em; }
@@ -1836,7 +1836,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
   background:rgba(51,41,31,0.85); color:var(--white);
   font-size:8px; font-weight:700; letter-spacing:0.18em;
   text-transform:uppercase; padding:5px 11px;
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   backdrop-filter:blur(4px);
 }
 .inv-yield-badge.light { background:rgba(255,255,255,0.92); color:var(--black); }
@@ -1860,7 +1860,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
   color:rgba(255,255,255,0.6); margin-bottom:8px; font-weight:600;
 }
 .inv-card-name {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:clamp(26px,6vw,42px);
   font-weight:400; color:var(--white); line-height:1.15;
 }
@@ -1873,7 +1873,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
   color:var(--silver); margin-bottom:8px; font-weight:500;
 }
 .inv-card-price {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:22px; color:var(--black); font-weight:300; margin-bottom:8px; line-height:1;
 }
 .inv-card-yield-row { display:flex; align-items:center; gap:6px; }
@@ -1911,13 +1911,13 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
   padding:0 48px;height:56px;background:var(--white);
   border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;
 }
-.det-topbar-logo{font-family:'Figtree', sans-serif;font-size:15px;color:var(--black);letter-spacing:0.08em;}
+.det-topbar-logo{font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:15px;color:var(--black);letter-spacing:0.08em;}
 .det-topbar-logo em{font-style:italic;font-weight:300;}
 .det-topbar-right{display:flex;align-items:center;gap:12px;}
 .det-action-btn{
   background:none;border:1px solid var(--line);padding:6px 15px;
   font-size:9px;letter-spacing:0.15em;text-transform:uppercase;
-  font-family:'Figtree', sans-serif;color:var(--stone);cursor:pointer;transition:all 0.2s;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;color:var(--stone);cursor:pointer;transition:all 0.2s;
 }
 .det-action-btn:hover{border-color:var(--black);color:var(--black);}
 .det-close-btn{background:none;border:none;cursor:pointer;font-size:18px;color:var(--stone);padding:4px;transition:color 0.2s;}
@@ -1941,7 +1941,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 /* Gallery */
 .det-gallery{height:520px;overflow:hidden;position:relative;background:#0a0a0a;width:100%;box-sizing:border-box;}
 .det-gallery-main{width:100%;height:100%;background-size:cover;background-position:center;background-repeat:no-repeat;transition:background-image 0.3s;cursor:pointer;}
-.det-gallery-count{position:absolute;bottom:14px;right:16px;background:rgba(0,0,0,0.55);color:#fff;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:5px 12px;font-family:'Figtree', sans-serif;}
+.det-gallery-count{position:absolute;bottom:14px;right:16px;background:rgba(0,0,0,0.55);color:#fff;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:5px 12px;font-family:'Figtree','Noto Sans Thai',sans-serif;}
 .det-gal-arr{
   position:absolute;top:50%;transform:translateY(-50%);
   width:40px;height:40px;border-radius:50%;
@@ -1970,25 +1970,25 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .det-header{padding:28px 32px 20px;border-bottom:1px solid var(--line2);}
 .det-breadcrumb{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--black);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .det-badge{display:inline-block;font-size:8px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--white);padding:4px 10px;margin-bottom:10px;background:var(--black);}
-.det-title{font-family:'Figtree', sans-serif;font-size:28px;font-weight:400;color:var(--black);line-height:1.2;margin-bottom:8px;}
+.det-title{font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:28px;font-weight:400;color:var(--black);line-height:1.2;margin-bottom:8px;}
 .det-location{font-size:11px;color:var(--black);font-weight:300;margin-bottom:0;display:flex;align-items:center;gap:6px;}
 .det-specs-row{display:flex;margin-top:20px;}
 .det-spec{flex:1;text-align:center;padding:14px 6px;border-right:none;}
 .det-spec:last-child{}
 .det-spec-ico{display:flex;align-items:center;justify-content:center;margin-bottom:5px;color:var(--black);}
-.det-spec-val{font-family:'Figtree', sans-serif;font-size:18px;color:var(--black);display:block;line-height:1;margin-bottom:2px;}
+.det-spec-val{font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:18px;color:var(--black);display:block;line-height:1;margin-bottom:2px;}
 .det-spec-lbl{font-size:7px;letter-spacing:0.16em;text-transform:uppercase;color:var(--black);display:block;}
 /* Inline price block under title */
 .det-inline-price{padding:20px 0 20px;border-bottom:1px solid var(--line2);margin-bottom:20px;}
 .det-inline-price-lbl{font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:var(--silver);margin-bottom:8px;font-weight:500;}
-.det-inline-price-main{font-family:'Figtree', sans-serif;font-size:clamp(24px,3vw,36px);font-weight:300;color:var(--black);line-height:1;letter-spacing:-0.02em;font-variant-numeric:lining-nums tabular-nums;}
-.det-inline-price-usd{font-size:14px;color:var(--stone);margin-top:8px;font-weight:300;font-family:'Figtree', sans-serif;letter-spacing:0.04em;}
+.det-inline-price-main{font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:clamp(24px,3vw,36px);font-weight:300;color:var(--black);line-height:1;letter-spacing:-0.02em;font-variant-numeric:lining-nums tabular-nums;}
+.det-inline-price-usd{font-size:14px;color:var(--stone);margin-top:8px;font-weight:300;font-family:'Figtree','Noto Sans Thai',sans-serif;letter-spacing:0.04em;}
 .det-inline-yield{display:none;}
 .det-inline-yield-txt{display:none;}
 /* Sidebar price — keep but make secondary */
 .det-price-block{padding-bottom:18px;border-bottom:1px solid var(--line2);margin-bottom:18px;}
 .det-price-lbl{display:none;}
-.det-price-main{font-family:'Figtree', sans-serif;font-size:22px;font-weight:300;color:var(--black);font-variant-numeric:lining-nums tabular-nums;}
+.det-price-main{font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:22px;font-weight:300;color:var(--black);font-variant-numeric:lining-nums tabular-nums;}
 .det-price-usd{font-size:11px;color:var(--stone);margin-top:3px;font-weight:300;}
 .det-yield-pill{display:inline-flex;align-items:center;gap:6px;background:var(--page);border:1px solid var(--line);padding:6px 12px;margin-top:10px;}
 .det-yield-dot{width:5px;height:5px;border-radius:50%;background:var(--black);flex-shrink:0;}
@@ -2017,7 +2017,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
   .det-unit-tab{padding:10px 14px;font-size:13px;}
 }
 .acc-item{border-bottom:1px solid var(--line2);}
-.acc-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:18px 0;background:none;border:none;cursor:pointer;font-family:'Figtree', sans-serif;}
+.acc-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:18px 0;background:none;border:none;cursor:pointer;font-family:'Figtree','Noto Sans Thai',sans-serif;}
 .acc-trigger:hover .acc-lbl{color:var(--black);}
 .acc-lbl{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;font-weight:600;color:var(--mid);transition:color 0.2s;}
 .acc-icon{width:22px;height:22px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--stone);transition:all 0.3s;flex-shrink:0;}
@@ -2052,8 +2052,8 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .det-sim-card:hover .det-sim-img{transform:scale(1.04);}
 .det-sim-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.90) 0%,rgba(0,0,0,0.60) 30%,rgba(0,0,0,0.20) 60%,transparent 100%);}
 .det-sim-over{position:absolute;bottom:0;left:0;right:0;padding:14px 16px 18px;z-index:2;}
-.det-sim-name{font-family:'Figtree', sans-serif;font-size:16px;color:var(--white);line-height:1.25;margin-bottom:4px;}
-.det-sim-price{font-family:'Figtree', sans-serif;font-size:14px;color:rgba(255,255,255,0.9);font-weight:400;}
+.det-sim-name{font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:16px;color:var(--white);line-height:1.25;margin-bottom:4px;}
+.det-sim-price{font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:14px;color:rgba(255,255,255,0.9);font-weight:400;}
 .det-sim-body{display:none;}
 /* Similar arrows */
 .det-sim-arrow{width:38px;height:38px;border:1px solid var(--line);background:var(--white);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--black);transition:all 0.2s;flex-shrink:0;}
@@ -2064,15 +2064,15 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .det-right::-webkit-scrollbar-thumb{background:var(--line);}
 .det-sidebar{padding:16px 20px 32px;}
 .det-price-lbl{font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:var(--silver);margin-bottom:10px;font-weight:500;}
-.det-price-main{font-family:'Figtree', sans-serif;font-size:32px;font-weight:300;color:var(--black);line-height:1;letter-spacing:-0.02em;font-variant-numeric:lining-nums tabular-nums;}
+.det-price-main{font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:32px;font-weight:300;color:var(--black);line-height:1;letter-spacing:-0.02em;font-variant-numeric:lining-nums tabular-nums;}
 .det-price-usd{font-size:12px;color:var(--stone);margin-top:6px;font-weight:300;letter-spacing:0.02em;}
 .det-price-block{padding-bottom:22px;border-bottom:1px solid var(--line2);margin-bottom:22px;}
 .det-yield-pill{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--line);padding:8px 14px;margin-top:14px;}
 .det-yield-dot{width:6px;height:6px;border-radius:50%;background:var(--black);flex-shrink:0;}
 .det-yield-txt{font-size:9px;color:var(--black);font-weight:700;letter-spacing:0.18em;text-transform:uppercase;}
-.det-cta-primary{width:100%;background:var(--black);color:var(--white);border:none;padding:14px;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;font-family:'Figtree', sans-serif;font-weight:600;cursor:pointer;transition:background 0.2s;margin-bottom:10px;}
+.det-cta-primary{width:100%;background:var(--black);color:var(--white);border:none;padding:14px;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;font-family:'Figtree','Noto Sans Thai',sans-serif;font-weight:600;cursor:pointer;transition:background 0.2s;margin-bottom:10px;}
 .det-cta-primary:hover{background:var(--charcoal);}
-.det-cta-outline{width:100%;background:none;color:var(--black);border:1px solid var(--line);padding:12px;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;font-family:'Figtree', sans-serif;font-weight:500;cursor:pointer;transition:all 0.2s;margin-top:0;}
+.det-cta-outline{width:100%;background:none;color:var(--black);border:1px solid var(--line);padding:12px;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;font-family:'Figtree','Noto Sans Thai',sans-serif;font-weight:500;cursor:pointer;transition:all 0.2s;margin-top:0;}
 .det-cta-outline:hover{border-color:var(--black);}
 .det-divider{display:none;}
 .det-agent{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
@@ -2081,9 +2081,9 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .det-agent-display{font-size:11px;color:var(--stone);font-weight:400;margin-top:1px;}
 .det-agent-title{font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--silver);margin-top:3px;}
 .det-form-lbl{font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);margin-bottom:5px;display:block;}
-.det-form-inp{width:100%;padding:10px 12px;border:1px solid var(--line);font-family:'Figtree', sans-serif;font-size:11px;color:var(--black);background:var(--page);outline:none;transition:border-color 0.2s;margin-bottom:10px;}
+.det-form-inp{width:100%;padding:10px 12px;border:1px solid var(--line);font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:11px;color:var(--black);background:var(--page);outline:none;transition:border-color 0.2s;margin-bottom:10px;}
 .det-form-inp:focus{border-color:var(--black);}
-.det-form-ta{width:100%;padding:10px 12px;border:1px solid var(--line);font-family:'Figtree', sans-serif;font-size:11px;color:var(--black);background:var(--page);outline:none;min-height:72px;resize:none;transition:border-color 0.2s;margin-bottom:12px;}
+.det-form-ta{width:100%;padding:10px 12px;border:1px solid var(--line);font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:11px;color:var(--black);background:var(--page);outline:none;min-height:72px;resize:none;transition:border-color 0.2s;margin-bottom:12px;}
 .det-form-ta:focus{border-color:var(--black);}
 .det-footer-note{padding:14px;background:var(--page);border:1px solid var(--line2);margin-top:20px;}
 .det-footer-note p{font-size:9px;color:var(--stone);line-height:1.7;font-weight:300;}
@@ -2102,7 +2102,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 
 /* Floor plan */
 .det-fp-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:0;}
-.det-fp-select{padding:6px 30px 6px 12px;border:1px solid var(--line);background:var(--page);font-family:'Figtree', sans-serif;font-size:10px;letter-spacing:0.08em;color:var(--black);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;min-width:140px;}
+.det-fp-select{padding:6px 30px 6px 12px;border:1px solid var(--line);background:var(--page);font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:10px;letter-spacing:0.08em;color:var(--black);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;min-width:140px;}
 .det-fp-select:focus{border-color:var(--black);}
 .det-floorplan-view img{width:100%;border:1px solid var(--line2);}
 .det-floorplan-view .det-fp-placeholder{height:220px;background:var(--page);display:flex;align-items:center;justify-content:center;border:1px solid var(--line2);flex-direction:column;gap:10px;}
@@ -2118,7 +2118,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 
 /* Location category buttons */
 .det-nearby-cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
-.det-ncat{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--line);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;background:none;font-family:'Figtree', sans-serif;color:var(--stone);transition:all 0.2s;}
+.det-ncat{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--line);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;background:none;font-family:'Figtree','Noto Sans Thai',sans-serif;color:var(--stone);transition:all 0.2s;}
 .det-ncat.active,.det-ncat:hover{border-color:var(--black);color:var(--black);background:var(--page);}
 
 /* ─── BOOKING MODAL ─── */
@@ -2127,25 +2127,25 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .book-modal{background:var(--white);width:100%;max-width:520px;transform:translateY(14px);transition:transform 0.3s;overflow:hidden;}
 .book-overlay.open .book-modal{transform:translateY(0);}
 .book-hd{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--line);}
-.book-hd-title{font-family:'Figtree', sans-serif;font-size:20px;font-weight:400;color:var(--black);}
+.book-hd-title{font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:20px;font-weight:400;color:var(--black);}
 .book-hd-sub{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);margin-top:2px;}
 .book-close{background:none;border:none;cursor:pointer;font-size:17px;color:var(--stone);transition:color 0.2s;}
 .book-close:hover{color:var(--black);}
 .book-bd{padding:24px;}
 .book-steps{display:flex;border-bottom:1px solid var(--line2);margin-bottom:24px;}
-.book-step-tab{flex:1;text-align:center;padding:9px 0 11px;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;font-family:'Figtree', sans-serif;font-weight:500;}
+.book-step-tab{flex:1;text-align:center;padding:9px 0 11px;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;font-family:'Figtree','Noto Sans Thai',sans-serif;font-weight:500;}
 .book-step-tab.active{color:var(--black);border-bottom-color:var(--black);}
 .book-step-tab.done{color:var(--mid);border-bottom-color:var(--mid);}
 .book-panel{display:none;}
 .book-panel.active{display:block;}
 /* Calendar */
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.cal-month-lbl{font-family:'Figtree', sans-serif;font-size:17px;font-weight:400;color:var(--black);}
+.cal-month-lbl{font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:17px;font-weight:400;color:var(--black);}
 .cal-arr{background:none;border:1px solid var(--line);width:30px;height:30px;cursor:pointer;font-size:13px;color:var(--stone);display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
 .cal-arr:hover{border-color:var(--black);color:var(--black);}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;}
 .cal-dow{text-align:center;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);padding:7px 0;}
-.cal-day{text-align:center;padding:8px 4px;font-size:11px;cursor:pointer;color:var(--black);transition:all 0.16s;font-family:'Figtree', sans-serif;}
+.cal-day{text-align:center;padding:8px 4px;font-size:11px;cursor:pointer;color:var(--black);transition:all 0.16s;font-family:'Figtree','Noto Sans Thai',sans-serif;}
 .cal-day:hover:not(.dis):not(.emp){background:var(--page);}
 .cal-day.sel{background:var(--black)!important;color:var(--white)!important;}
 .cal-day.today{color:var(--black);font-weight:700;}
@@ -2153,7 +2153,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .cal-day.emp{cursor:default;}
 .time-sect-lbl{font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);margin:14px 0 10px;}
 .time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:18px;}
-.time-slot{padding:9px 4px;text-align:center;border:1px solid var(--line);font-size:10px;cursor:pointer;color:var(--black);transition:all 0.16s;font-family:'Figtree', sans-serif;}
+.time-slot{padding:9px 4px;text-align:center;border:1px solid var(--line);font-size:10px;cursor:pointer;color:var(--black);transition:all 0.16s;font-family:'Figtree','Noto Sans Thai',sans-serif;}
 .time-slot:hover:not(.unavail){border-color:var(--black);background:var(--page);}
 .time-slot.sel{background:var(--black);color:var(--white);border-color:var(--black);}
 .time-slot.unavail{color:var(--line);cursor:default;background:var(--page);font-size:9px;}
@@ -2169,27 +2169,27 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 /* Summary */
 .book-summary{background:var(--page);border:1px solid var(--line2);padding:14px 16px;margin-bottom:18px;}
 .book-sum-prop{font-size:10px;color:var(--stone);font-weight:300;margin-bottom:5px;}
-.book-sum-dt{font-family:'Figtree', sans-serif;font-size:16px;color:var(--black);line-height:1.3;}
+.book-sum-dt{font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:16px;color:var(--black);line-height:1.3;}
 .book-sum-type{font-size:9px;color:var(--mid);letter-spacing:0.12em;text-transform:uppercase;margin-top:3px;}
 /* Form inputs in booking */
 .book-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
 .book-form-row.full{grid-template-columns:1fr;}
 .bf-lbl{font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--stone);margin-bottom:4px;display:block;}
-.bf-inp{width:100%;padding:9px 11px;border:1px solid var(--line);font-family:'Figtree', sans-serif;font-size:11px;color:var(--black);background:var(--white);outline:none;transition:border-color 0.2s;}
+.bf-inp{width:100%;padding:9px 11px;border:1px solid var(--line);font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:11px;color:var(--black);background:var(--white);outline:none;transition:border-color 0.2s;}
 .bf-inp:focus{border-color:var(--black);}
-.bf-ta{width:100%;padding:9px 11px;border:1px solid var(--line);font-family:'Figtree', sans-serif;font-size:11px;color:var(--black);background:var(--white);outline:none;min-height:68px;resize:none;transition:border-color 0.2s;}
+.bf-ta{width:100%;padding:9px 11px;border:1px solid var(--line);font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:11px;color:var(--black);background:var(--white);outline:none;min-height:68px;resize:none;transition:border-color 0.2s;}
 .bf-ta:focus{border-color:var(--black);}
 /* Footer nav */
 .book-footer{display:flex;gap:8px;padding-top:4px;}
-.book-btn-back{flex:0 0 auto;background:none;border:1px solid var(--line);padding:11px 18px;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;color:var(--stone);font-family:'Figtree', sans-serif;transition:all 0.2s;}
+.book-btn-back{flex:0 0 auto;background:none;border:1px solid var(--line);padding:11px 18px;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;color:var(--stone);font-family:'Figtree','Noto Sans Thai',sans-serif;transition:all 0.2s;}
 .book-btn-back:hover{border-color:var(--black);color:var(--black);}
-.book-btn-next{flex:1;background:var(--black);color:var(--white);border:none;padding:12px;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;font-family:'Figtree', sans-serif;font-weight:600;cursor:pointer;transition:background 0.2s;}
+.book-btn-next{flex:1;background:var(--black);color:var(--white);border:none;padding:12px;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;font-family:'Figtree','Noto Sans Thai',sans-serif;font-weight:600;cursor:pointer;transition:background 0.2s;}
 .book-btn-next:hover{background:var(--charcoal);}
 .book-btn-next:disabled{background:var(--line2);cursor:default;}
 /* Success */
 .book-success{text-align:center;padding:36px 20px;}
 .book-success-ico{font-size:44px;margin-bottom:14px;}
-.book-success-title{font-family:'Figtree', sans-serif;font-size:24px;font-weight:400;color:var(--black);margin-bottom:8px;}
+.book-success-title{font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:24px;font-weight:400;color:var(--black);margin-bottom:8px;}
 .book-success-msg{font-size:11px;color:var(--stone);line-height:1.8;font-weight:300;max-width:320px;margin:0 auto 20px;}
 .book-success-ref{font-size:9px;color:var(--black);letter-spacing:0.15em;text-transform:uppercase;font-weight:600;}
 /* Responsive */
@@ -2203,7 +2203,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 #gridView.visible { display:block !important; }
 
 .hub-hero-inner { padding:48px 80px 36px; border-bottom:1px solid var(--line); }
-.hub-hero-inner h2 { font-family:'Figtree', sans-serif; font-size:clamp(26px,3.5vw,44px); font-weight:300; color:var(--text); line-height:1.15; margin-bottom:8px; }
+.hub-hero-inner h2 { font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:clamp(26px,3.5vw,44px); font-weight:300; color:var(--text); line-height:1.15; margin-bottom:8px; }
 .hub-hero-inner h2 em { font-style:italic; color:var(--stone); }
 .hub-hero-inner p { font-size:11px; color:var(--stone); font-weight:300; max-width:480px; margin-bottom:20px; }
 
@@ -2214,12 +2214,12 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .hcc-new { font-size:7px; letter-spacing:0.15em; text-transform:uppercase; font-weight:700; background:var(--text); color:#fff; padding:2px 6px; }
 .hcc-count { font-size:9px; letter-spacing:0.1em; color:var(--stone); text-transform:uppercase; }
 .hcc-emoji { font-size:24px; display:block; margin-bottom:8px; line-height:1; }
-.hcc-name { font-family:'Figtree', sans-serif; font-size:17px; font-weight:400; color:var(--text); line-height:1.25; margin-bottom:4px; }
+.hcc-name { font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:17px; font-weight:400; color:var(--text); line-height:1.25; margin-bottom:4px; }
 .hcc-desc { font-size:10px; color:var(--stone); font-weight:300; line-height:1.6; }
 .hub-coll-card-bottom { display:flex; align-items:center; justify-content:flex-end; margin-top:16px; }
 .hcc-arrow { font-size:13px; color:var(--stone); }
 .hub-view-all-row { padding:16px 80px; border-top:1px solid var(--line); }
-.hub-view-all-btn { background:none; border:1px solid var(--stone); font-family:'Figtree', sans-serif; font-size:9px; letter-spacing:0.15em; text-transform:uppercase; font-weight:600; color:var(--stone); padding:8px 16px; cursor:pointer; transition:all 0.2s; }
+.hub-view-all-btn { background:none; border:1px solid var(--stone); font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:9px; letter-spacing:0.15em; text-transform:uppercase; font-weight:600; color:var(--stone); padding:8px 16px; cursor:pointer; transition:all 0.2s; }
 .hub-view-all-btn:hover { border-color:var(--text); color:var(--text); }
 
 
@@ -2237,7 +2237,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
   font-size: 9px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  font-family: 'Figtree', sans-serif;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif;
   display: flex; align-items: center; gap: 4px;
   transition: all 0.2s;
   border-radius: 2px;
@@ -2282,7 +2282,7 @@ nav.scrolled .lang-btn:hover {
   color: rgba(255,255,255,0.6);
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
-  font-family: 'Figtree', sans-serif;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif;
 }
 .lang-option:hover { background: rgba(255,255,255,0.08); color: #fff; }
 .lang-option.active { color: #fff; background: rgba(255,255,255,0.05); }
@@ -2298,7 +2298,7 @@ nav.scrolled .lang-btn:hover {
 /* ═══ NEW COLLECTION HUB CARDS ════════════════════════════════ */
 #hubView { display:block; }
 .hub-hero-inner { padding:80px 80px 48px; }
-.hub-hero-inner h2 { font-family:'Figtree', sans-serif; font-size:clamp(32px,4vw,52px); font-weight:300; color:var(--black); }
+.hub-hero-inner h2 { font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:clamp(32px,4vw,52px); font-weight:300; color:var(--black); }
 .hub-hero-inner h2 em { font-style:italic; color:var(--stone); }
 .hub-hero-inner p { font-size:13px; color:var(--stone); margin-top:12px; }
 
@@ -2344,7 +2344,7 @@ nav.scrolled .lang-btn:hover {
 }
 .hcc-tag::before { content:''; display:block; width:20px; height:1px; background:rgba(255,255,255,0.4); }
 .hcc-name {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:clamp(20px,2vw,28px); font-weight:300;
   color:#fff; line-height:1.2; margin-bottom:12px;
 }
@@ -2357,7 +2357,7 @@ nav.scrolled .lang-btn:hover {
   color:rgba(255,255,255,0.5);
 }
 .hcc-price {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:15px; color:rgba(255,255,255,0.9);
 }
 .hcc-price-label {
@@ -2407,7 +2407,7 @@ nav.scrolled .lang-btn:hover {
   border:1px solid var(--line);
   background:none;
   font-size:9px; letter-spacing:0.12em; text-transform:uppercase;
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   color:var(--stone); cursor:pointer;
   transition:all 0.2s; border-radius:2px;
   white-space:nowrap;
@@ -2433,7 +2433,7 @@ nav.scrolled .lang-btn:hover {
 .view-toggle-btn {
   padding:9px 16px;
   font-size:9px; letter-spacing:0.14em; text-transform:uppercase;
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   background:none; border:none; cursor:pointer;
   color:var(--stone); transition:all 0.2s;
 }
@@ -2463,7 +2463,7 @@ nav.scrolled .lang-btn:hover {
 .ins-art-back {
   background:none; border:none; cursor:pointer;
   font-size:11px; letter-spacing:0.15em; text-transform:uppercase;
-  font-family:'Figtree', sans-serif; color:#555;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; color:#555;
   display:flex; align-items:center; gap:8px; transition:color 0.2s;
 }
 .ins-art-back:hover { color:#000; }
@@ -2489,7 +2489,7 @@ nav.scrolled .lang-btn:hover {
   color:#b4a88e; display:block; margin-bottom:20px;
 }
 .ins-art-title {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:clamp(30px,4vw,52px); font-weight:400;
   color:#1a1a1a; line-height:1.15; margin-bottom:24px;
 }
@@ -2505,7 +2505,7 @@ nav.scrolled .lang-btn:hover {
 }
 .ins-art-content { font-size:15px; line-height:2; color:#333; }
 .ins-art-content h3 {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:22px; font-weight:400; color:#1a1a1a;
   margin:40px 0 16px;
 }
@@ -2546,7 +2546,7 @@ nav.scrolled .lang-btn:hover {
   color:#aaa; margin-bottom:10px;
 }
 .art-source-name {
-  font-family:'Figtree', sans-serif; font-size:22px;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-size:22px;
   color:#1a1a1a; margin-bottom:20px;
 }
 .art-source-link {
@@ -2586,7 +2586,7 @@ nav.scrolled .lang-btn:hover {
   color:#999; margin-bottom:16px;
 }
 .ins-hero-title {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:clamp(36px,5vw,60px); font-weight:300;
   color:#1a1a1a; line-height:1.1; margin-bottom:16px;
 }
@@ -2616,7 +2616,7 @@ nav.scrolled .lang-btn:hover {
   color:#b4a88e; margin-bottom:14px; display:block;
 }
 .ins-article-title {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:24px; font-weight:400;
   color:#1a1a1a; line-height:1.3; margin-bottom:14px;
 }
@@ -2677,8 +2677,8 @@ nav.scrolled .lang-option.active { color: #000; }
 
 /* ═══ FONT: Tenor Sans + Raleway ══════════ */
 :root {
-  --font-display: 'Figtree', sans-serif;
-  --font-body:    'Figtree', sans-serif;
+  --font-display: 'Figtree','Noto Sans Thai',sans-serif;
+  --font-body:    'Figtree','Noto Sans Thai',sans-serif;
 }
 body {
   font-family: var(--font-body);
@@ -2945,46 +2945,46 @@ footer, .footer-col, .footer-link {
 
 /* ── PROP CARD (Collections grid) ──────────────────────────── */
 .prop-card-name {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: clamp(16px, 1.8vw, 20px) !important;
   font-weight: 500 !important;
   letter-spacing: -0.01em !important;
   line-height: 1.25 !important;
 }
 .prop-card-loc {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 9px !important;
   font-weight: 600 !important;
   letter-spacing: 0.18em !important;
   text-transform: uppercase !important;
 }
 .prop-card-price {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 20px !important;
   font-weight: 400 !important;
   letter-spacing: -0.01em !important;
 }
 .prop-spec-val {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 16px !important;
   font-weight: 400 !important;
   letter-spacing: 0 !important;
 }
 .prop-spec-lbl {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 8px !important;
   font-weight: 600 !important;
   letter-spacing: 0.15em !important;
   text-transform: uppercase !important;
 }
 .prop-badge {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 8px !important;
   font-weight: 700 !important;
   letter-spacing: 0.18em !important;
 }
 .prop-card-view {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 9px !important;
   font-weight: 600 !important;
   letter-spacing: 0.15em !important;
@@ -2992,51 +2992,51 @@ footer, .footer-col, .footer-link {
 
 /* ── INVESTMENT SLIDER CARDS ────────────────────────────────── */
 .inv-card-name {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: clamp(20px, 2.4vw, 30px) !important;
   font-weight: 500 !important;
   letter-spacing: -0.01em !important;
   line-height: 1.15 !important;
 }
 .inv-card-loc {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 9px !important;
   font-weight: 600 !important;
   letter-spacing: 0.2em !important;
   text-transform: uppercase !important;
 }
 .inv-card-price {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: clamp(18px, 2.2vw, 26px) !important;
   font-weight: 400 !important;
   letter-spacing: -0.01em !important;
 }
 .inv-card-yield {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 9px !important;
   font-weight: 600 !important;
   letter-spacing: 0.15em !important;
 }
 .inv-card-coll {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 8px !important;
   font-weight: 600 !important;
   letter-spacing: 0.22em !important;
   text-transform: uppercase !important;
 }
 .inv-yield-badge {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 9px !important;
   font-weight: 700 !important;
   letter-spacing: 0.15em !important;
 }
 .inv-h {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-weight: 400 !important;
   letter-spacing: -0.02em !important;
 }
 .inv-coll-lbl {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 9px !important;
   font-weight: 600 !important;
   letter-spacing: 0.2em !important;
@@ -3044,61 +3044,61 @@ footer, .footer-col, .footer-link {
 
 /* ── PROPERTY DETAIL PANEL ──────────────────────────────────── */
 .det-title {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: clamp(22px, 2.8vw, 34px) !important;
   font-weight: 500 !important;
   letter-spacing: -0.02em !important;
   line-height: 1.2 !important;
 }
 .det-price-main {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: clamp(20px, 2.5vw, 28px) !important;
   font-weight: 400 !important;
   letter-spacing: -0.02em !important;
 }
 .det-price-usd, .det-price-yield {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 10px !important;
   font-weight: 500 !important;
   letter-spacing: 0.08em !important;
 }
 .det-spec-val {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 22px !important;
   font-weight: 400 !important;
   letter-spacing: -0.01em !important;
 }
 .det-spec-label {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 8px !important;
   font-weight: 700 !important;
   letter-spacing: 0.2em !important;
   text-transform: uppercase !important;
 }
 .det-section-hd {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 8px !important;
   font-weight: 700 !important;
   letter-spacing: 0.25em !important;
   text-transform: uppercase !important;
 }
 .det-desc, .det-desc p {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 13px !important;
   line-height: 1.9 !important;
   font-weight: 400 !important;
   letter-spacing: 0.01em !important;
 }
 .det-feat-item {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 11px !important;
   font-weight: 500 !important;
 }
 .det-topbar-logo {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
 }
 .det-action-btn {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 9px !important;
   font-weight: 600 !important;
   letter-spacing: 0.15em !important;
@@ -3106,15 +3106,15 @@ footer, .footer-col, .footer-link {
 
 /* ── SIMILAR PROPERTIES (det-panel bottom) ──────────────────── */
 .sim-prop-name {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-weight: 400 !important;
 }
 .sim-prop-price {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-weight: 400 !important;
 }
 .sim-prop-loc {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 9px !important;
   font-weight: 600 !important;
   letter-spacing: 0.15em !important;
@@ -3122,19 +3122,19 @@ footer, .footer-col, .footer-link {
 
 /* ── COLLECTION HUB CARDS ───────────────────────────────────── */
 .hcc-name {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: clamp(18px, 2vw, 26px) !important;
   font-weight: 400 !important;
   letter-spacing: -0.01em !important;
 }
 .hcc-price {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 16px !important;
   font-weight: 400 !important;
   letter-spacing: -0.01em !important;
 }
 .hcc-tag, .hcc-count, .hcc-price-label, .hcc-cta {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 8px !important;
   font-weight: 600 !important;
   letter-spacing: 0.18em !important;
@@ -3142,15 +3142,15 @@ footer, .footer-col, .footer-link {
 
 /* ── FILTER / SORT CONTROLS ─────────────────────────────────── */
 .filter-chip, .coll-sort-btn, .filter-label {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
 }
 .coll-dropdown-btn, .coll-dd-option {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 10px !important;
   letter-spacing: 0.12em !important;
 }
 #ddLabel {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 10px !important;
   letter-spacing: 0.15em !important;
   font-weight: 600 !important;
@@ -3158,24 +3158,24 @@ footer, .footer-col, .footer-link {
 
 /* ── CP HEADER (collections page title) ─────────────────────── */
 .cp-title {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   letter-spacing: -0.02em !important;
   font-weight: 400 !important;
 }
 .cp-subtitle, .cp-count, .collCountLabel {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 10px !important;
   letter-spacing: 0.12em !important;
 }
 
 /* ── SECTION TITLES (home page) ─────────────────────────────── */
 .section-title {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-weight: 400 !important;
   letter-spacing: -0.02em !important;
 }
 .section-label {
-  font-family: 'Figtree', sans-serif !important;
+  font-family: 'Figtree','Noto Sans Thai',sans-serif !important;
   font-size: 9px !important;
   font-weight: 700 !important;
   letter-spacing: 0.25em !important;
@@ -3675,7 +3675,7 @@ a, button { touch-action: manipulation; }
 .prop-card:hover .prop-card-hover-cta { background:rgba(10,8,6,0.45); }
 .prop-card-view-btn {
   padding:10px 28px; border:1.5px solid #fff;
-  color:#fff; font-family:'Figtree', sans-serif;
+  color:#fff; font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:10px; font-weight:600;
   letter-spacing:0.2em; text-transform:uppercase;
   opacity:0; transform:translateY(8px);
@@ -3688,7 +3688,7 @@ a, button { touch-action: manipulation; }
 .prop-card { cursor:pointer; position:relative; }
 .prop-card-cta {
   padding:10px 20px;
-  font-size:9px; font-family:'Figtree', sans-serif;
+  font-size:9px; font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-weight:700; letter-spacing:0.2em;
   text-transform:uppercase; color:#9A8467;
   border-top:1px solid var(--line2);
@@ -3723,11 +3723,11 @@ a, button { touch-action: manipulation; }
   position:absolute; top:10px; right:14px;
   background:none; border:0; font-size:26px; line-height:1;
   color:#999; cursor:pointer; padding:6px 10px;
-  font-family:'Figtree', sans-serif; font-weight:300;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:300;
 }
 .cs-modal-close:hover { color:#000; }
 .cs-modal-label {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:10px; letter-spacing:0.24em; text-transform:uppercase;
   font-weight:700; color:#b8a382; margin-bottom:16px;
 }
@@ -3737,17 +3737,17 @@ a, button { touch-action: manipulation; }
   line-height:1.1; margin:0 0 16px;
 }
 .cs-modal-title em {
-  font-style:italic; color:#b8a382; font-family:'Figtree', sans-serif; font-weight:300;
+  font-style:italic; color:#b8a382; font-family:'Figtree','Noto Sans Thai',sans-serif; font-weight:300;
 }
 .cs-modal-desc {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:13.5px; color:#555; line-height:1.7; margin:0 0 26px;
 }
 .cs-modal-actions {
   display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
 }
 .cs-modal-btn {
-  font-family:'Figtree', sans-serif; text-decoration:none;
+  font-family:'Figtree','Noto Sans Thai',sans-serif; text-decoration:none;
   font-size:11px; letter-spacing:0.22em; text-transform:uppercase;
   font-weight:700; color:#fff; background:#111;
   padding:14px 26px; border:1px solid #111; cursor:pointer;
@@ -3755,7 +3755,7 @@ a, button { touch-action: manipulation; }
 }
 .cs-modal-btn:hover { background:#b8a382; border-color:#b8a382; }
 .cs-modal-btn-ghost {
-  font-family:'Figtree', sans-serif;
+  font-family:'Figtree','Noto Sans Thai',sans-serif;
   font-size:11px; letter-spacing:0.22em; text-transform:uppercase;
   font-weight:700; color:#111; background:#fff;
   padding:14px 26px; border:1px solid rgba(0,0,0,0.2); cursor:pointer;
@@ -5977,3 +5977,8 @@ p + p{margin-top:14px}
 .calc-disclaimer{line-height:1.7}
 .det-desc,.det-desc p{line-height:1.8!important}
 .sid-brochure-sub{margin-bottom:14px}
+
+/* The consultant's name is Thai now. Thai stacks vowels above and tone
+   marks above those, so `normal` line-height clips the top; and the
+   Latin letter-spacing does nothing useful for it. */
+.det-agent-name,.enq-agent-name{line-height:1.5;letter-spacing:0}
