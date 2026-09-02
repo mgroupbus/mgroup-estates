@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MGROUP Admin — New Booking</title>
-<script>if(sessionStorage.getItem("mg_admin")!=="ok"){location.replace("index.html");}</script>
-<meta name="theme-color" content="#1d3a30"><link rel="manifest" href="manifest.json">
+<script>if(sessionStorage.getItem("mg_admin")!=="ok"){location.replace("/admin/index.html");}</script>
+<meta name="theme-color" content="#1d3a30"><link rel="manifest" href="/admin/manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap');
@@ -368,7 +368,7 @@
       };
       var ins=await sbPost('bookings',[payload],true);
       alert('✓ Saved '+payload.booking_ref+' ('+payload.status+')');
-      location.href='rent-admin-new.html';
+      location.href='/admin/rent-admin-new.html';
     }catch(e){ alert('Could not save: '+e.message); bs.forEach(function(b){b.disabled=false;}); btn.textContent=t0; }
   }
   loadRefs();
