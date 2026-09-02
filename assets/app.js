@@ -1371,7 +1371,7 @@ function sidSelVisit(el,type){
 }
 /* ── Property sidebar: viewing requests and enquiries ────────────
    Both of these used to be theatre. sidConfirmSchedule() printed
-   "Viewing Confirmed, Khun May will contact you within 2 hours" and a
+   "Viewing Confirmed, we will contact you within 2 hours" and a
    made-up reference number without sending anything anywhere, and it
    had no name or phone field to send in the first place — every viewing
    ever booked from a property page was discarded. sidSendEnquiry()
@@ -1423,7 +1423,7 @@ function sidConfirmSchedule(){
     box.classList.toggle('sid-summary--err', !ok);
   };
 
-  if (!name)  { show('Please enter your name so คุณเมย์ knows who to call.', false);
+  if (!name)  { show('Please enter your name so we know who to call.', false);
                 (document.getElementById('schName')  || {}).focus && document.getElementById('schName').focus(); return; }
   if (!phone && !email) { show('Please leave a phone number or an email so we can confirm.', false);
                 (document.getElementById('schPhone') || {}).focus && document.getElementById('schPhone').focus(); return; }
@@ -1450,7 +1450,7 @@ function sidConfirmSchedule(){
     var ref = 'MGE-' + (rows && rows[0] && rows[0].id ? String(rows[0].id).padStart(5,'0') : '');
     show('<strong>Viewing requested</strong><br>' +
          (ref !== 'MGE-' ? 'Reference ' + ref + '<br>' : '') +
-         label + '<br>คุณเมย์ will confirm with you shortly.', true);
+         label + '<br>Our advisory team will confirm with you shortly.', true);
     btn.style.display = 'none';
     mgEmailCopy('Viewing request: ' + (window._currentPropertyName || 'Property') + ' — ' + name,
       {Name:name, Phone:phone, Email:email, Property:window._currentPropertyName, Request:label});
@@ -1489,7 +1489,7 @@ function sidSendEnquiry(){
   }).then(function(){
     sent.style.display = 'block';
     sent.className = 'sid-sent';
-    sent.textContent = '✓ Sent. คุณเมย์ will be in touch shortly.';
+    sent.textContent = '✓ Sent. Our advisory team will be in touch shortly.';
     btn.style.display = 'none';
     mgEmailCopy('Property enquiry: ' + (window._currentPropertyName || 'Property') + ' — ' + name,
       {Name:name, Phone:phone, Email:email, Role:role, Property:window._currentPropertyName, Message:msg});

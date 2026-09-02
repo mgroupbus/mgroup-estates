@@ -1750,7 +1750,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .sid-sent { font-size:10px; color:var(--mid); margin-top:10px; text-align:center; padding:8px; background:var(--page); border:1px solid var(--line2); letter-spacing:0.04em; }
 /* Enquiry agent card */
 .enq-agent-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--line); }
-.enq-agent-av { width:42px; height:42px; border-radius:50%; background:url('img-cb93871e44.jpg?v=123') center 15% / cover; flex-shrink:0; border:2px solid var(--line2); }
+.enq-agent-av { width:42px; height:42px; border-radius:50%; background:var(--ivory,#F7F3ED); flex-shrink:0; border:1px solid var(--line,#E6DED3); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',Georgia,serif; font-size:19px; color:var(--stone,#9A8467); }
 .enq-agent-info { flex:1; min-width:0; }
 .enq-agent-name { font-size:12px; font-weight:600; color:var(--white); letter-spacing:0.02em; }
 .enq-agent-link { font-size:9px; color:var(--stone); letter-spacing:0.1em; text-transform:uppercase; margin-top:2px; cursor:pointer; }
@@ -2076,7 +2076,7 @@ body.overlay-open .nav-cta { background:var(--black) !important; color:var(--whi
 .det-cta-outline:hover{border-color:var(--black);}
 .det-divider{display:none;}
 .det-agent{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
-.det-agent-av{width:56px;height:56px;border-radius:50%;background:url('img-cb93871e44.jpg?v=123') center 15% / cover;flex-shrink:0;border:2px solid var(--line2);}
+.det-agent-av{width:56px;height:56px;border-radius:50%;background:var(--ivory,#F7F3ED);flex-shrink:0;border:1px solid var(--line,#E6DED3);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',Georgia,serif;font-size:25px;color:var(--stone,#9A8467);}
 .det-agent-name{font-size:13px;font-weight:600;color:var(--black);letter-spacing:0.02em;}
 .det-agent-display{font-size:11px;color:var(--stone);font-weight:400;margin-top:1px;}
 .det-agent-title{font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--silver);margin-top:3px;}
@@ -5183,7 +5183,7 @@ footer{background:var(--black)}
 .det-ncat.active::after{display:none}
 
 /* ═══ Sidebar brochure card ═════════════════════════════════════
-   Sits with Khun May's contact accordions, in the same brown family
+   Sits with the advisory contact accordions, in the same brown family
    so it reads as part of that panel rather than a separate banner. */
 .sid-brochure{margin-top:18px;padding:22px 20px 20px;
   background:var(--ivory);border:1px solid var(--line);border-radius:2px}
@@ -5977,8 +5977,3 @@ p + p{margin-top:14px}
 .calc-disclaimer{line-height:1.7}
 .det-desc,.det-desc p{line-height:1.8!important}
 .sid-brochure-sub{margin-bottom:14px}
-
-/* The consultant's name is Thai now. Thai stacks vowels above and tone
-   marks above those, so `normal` line-height clips the top; and the
-   Latin letter-spacing does nothing useful for it. */
-.det-agent-name,.enq-agent-name{line-height:1.5;letter-spacing:0}
