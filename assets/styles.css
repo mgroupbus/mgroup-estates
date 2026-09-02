@@ -5977,3 +5977,12 @@ p + p{margin-top:14px}
 .calc-disclaimer{line-height:1.7}
 .det-desc,.det-desc p{line-height:1.8!important}
 .sid-brochure-sub{margin-bottom:14px}
+
+/* The firm's name is set in caps here; give it the letter-spacing that
+   all-caps needs so it does not read as a solid block. The text column
+   next to the monogram was being squeezed to the width of the longest
+   word, breaking the name across two lines — let it take the room it
+   needs. */
+.det-agent-name,.enq-agent-name{letter-spacing:.08em;white-space:nowrap}
+.det-agent > div:last-child,.enq-agent-info{flex:1 1 auto;min-width:0}
+.det-agent,.enq-agent-row{align-items:center}
