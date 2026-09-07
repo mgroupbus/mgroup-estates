@@ -108,6 +108,11 @@
   .tgh.ty-maintenance h4{color:#b5720f}
   .tgh.ty-linen{border-left-color:#c29a45;background:#f6efe1}
   .tgh.ty-linen h4{color:#a97e42}
+  .tgh{cursor:pointer;user-select:none}
+  .tgh .chev{display:inline-block;font-size:9px;margin-right:7px;transition:transform .15s;vertical-align:1px}
+  .tgrp.collapsed .tgh{margin-bottom:0}
+  .tgrp.collapsed .tgh .chev{transform:rotate(-90deg)}
+  .tgrp.collapsed .tgbody{display:none}
   .task{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#fff}
   .task.done{background:#f8f5ee;border-color:#e5dcc7}
   .tr1{display:flex;gap:10px;align-items:flex-start}
@@ -788,7 +793,7 @@
     return '<span class="progcell" onclick="openMng(\''+id+'\')"><span class="mngchip'+(c.d===c.n?' full':'')+'">'+c.d+'/'+c.n+'</span> <span class="proggo">Track &#8250;</span></span>';}
 
   async function openMng(id){
-    MNG.id=id;MNG.tasks=[];MNG.files={};MNG.bp={};MNG.tab='checklist';MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;MNG.tdirty={};
+    MNG.id=id;MNG.tasks=[];MNG.files={};MNG.bp={};MNG.tab='checklist';MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;MNG.tdirty={};MNG.closed={};
     var b=DATA.bk.find(function(x){return x.id===id;})||{};
     document.getElementById('mngTitle').textContent=(b.booking_ref||'Booking');
     document.getElementById('mngSub').textContent=vname(b.villa_id)+' · '+gname(b.guest_id)+' · '+fmtD(b.check_in)+' → '+fmtD(b.check_out);
@@ -841,6 +846,7 @@
   function markDirty(){var was=MNG.dirty;MNG.dirty=true;if(!was)renderMng();}
   function bkDirty(){MNG.dirty=true;} // booking form: flag only, no re-render (keeps input focus)
   function bkGuests(){var a=+((document.getElementById('bk_adults')||{}).value)||0,c=+((document.getElementById('bk_children')||{}).value)||0;var g=document.getElementById('bk_guests_count');if(g)g.value=a+c;bkDirty();}
+  function toggleGrp(k,h){MNG.closed=MNG.closed||{};MNG.closed[k]=!MNG.closed[k];h.parentElement.classList.toggle('collapsed',!!MNG.closed[k]);}
   function saveBar(){
     return MNG.dirty
       ? '<div class="savebar"><span class="w">&#9679; Unsaved changes — nothing is written until you save</span>'+
@@ -867,8 +873,8 @@
     var done=MNG.tasks.filter(function(t){return t.is_done;}).length;
     var defs=[
       ['booking','Booking',''],
-      ['checklist','Checklist',MNG.tasks.length?done+'/'+MNG.tasks.length:''],
       ['payments','Payments',pays?String(pays):''],
+      ['checklist','Checklist',MNG.tasks.length?done+'/'+MNG.tasks.length:''],
       ['house','Housekeeper',houseCount()?String(houseCount()):''],
       ['util','Utilities',utilCount()?String(utilCount()):'']
     ];
@@ -912,9 +918,10 @@
     html+=types.map(function(k){
       var ts=by[k].slice().sort(function(a,b){return (a.sort_order||0)-(b.sort_order||0);});
       var d=ts.filter(function(t){return t.is_done;}).length;
-      return '<div class="tgrp"><div class="tgh ty-'+esc(k)+'"><h4>'+esc(TY[k]||nice(k))+' &nbsp;<span>'+d+'/'+ts.length+'</span></h4>'+
-        '<button class="mini" onclick="addTask(\''+k+'\')">+ Add task</button></div>'+
-        ts.map(taskHtml).join('')+'</div>';
+      var closed=MNG.closed&&MNG.closed[k];
+      return '<div class="tgrp'+(closed?' collapsed':'')+'"><div class="tgh ty-'+esc(k)+'" onclick="toggleGrp(\''+esc(k)+'\',this)"><h4><span class="chev">&#9662;</span>'+esc(TY[k]||nice(k))+' &nbsp;<span>'+d+'/'+ts.length+'</span></h4>'+
+        '<button class="mini" onclick="event.stopPropagation();addTask(\''+k+'\')">+ Add task</button></div>'+
+        '<div class="tgbody">'+ts.map(taskHtml).join('')+'</div></div>';
     }).join('');
     html+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">'+
       TYORD.filter(function(k){return !by[k];}).map(function(k){return '<button class="mini" onclick="addTask(\''+k+'\')">+ '+esc(TY[k])+'</button>';}).join('')+'</div>';
