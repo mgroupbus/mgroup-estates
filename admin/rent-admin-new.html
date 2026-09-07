@@ -60,6 +60,10 @@
   a.reflink:hover{text-decoration:underline}
   .rowgo{color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
   .rowgo:hover{color:var(--g600)}
+  .progcell{display:inline-flex;align-items:center;gap:7px;cursor:pointer;white-space:nowrap;color:var(--muted);font-size:12px;font-weight:600}
+  .progcell:hover .proggo{color:var(--g600)}
+  .progcell:hover{color:var(--g600)}
+  .proggo{color:var(--blue);font-weight:700}
   .bal{color:var(--red);font-weight:700}.paid{color:var(--ok);font-weight:700}
   .pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--tint);color:var(--g700)}
   .doc{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-right:5px}
@@ -766,8 +770,9 @@
   function nice(x){x=String(x||'').replace(/[_-]+/g,' ').trim();return x?x.charAt(0).toUpperCase()+x.slice(1):'Task';}
   function fmtDT(t){if(!t)return '';var d=new Date(t);if(isNaN(d))return '';return d.getDate()+' '+MON[d.getMonth()]+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
   function kb(n){n=Number(n||0);return n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';}
-  function progChip(id){var c=DATA.tk[id];if(!c||!c.n)return '<span class="mngchip">no list</span>';
-    return '<span class="mngchip'+(c.d===c.n?' full':'')+'">'+c.d+'/'+c.n+'</span>';}
+  function progChip(id){var c=DATA.tk[id];
+    if(!c||!c.n)return '<span class="progcell" onclick="openMng(\''+id+'\')">+ Add checklist</span>';
+    return '<span class="progcell" onclick="openMng(\''+id+'\')"><span class="mngchip'+(c.d===c.n?' full':'')+'">'+c.d+'/'+c.n+'</span> <span class="proggo">Track &#8250;</span></span>';}
 
   async function openMng(id){
     MNG.id=id;MNG.tasks=[];MNG.files={};MNG.bp={};MNG.tab='checklist';MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;MNG.tdirty={};
