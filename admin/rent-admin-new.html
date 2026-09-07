@@ -19,7 +19,7 @@
   .nl{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:#8a847a;padding:10px 10px 4px}
   .nav{display:flex;flex-direction:column;gap:1px}
   .nav button{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:8px;color:#cfcabf;font-size:13px;background:none;border:none;cursor:pointer;font-family:var(--font);text-align:left;width:100%;font-weight:500}
-  .nav button .em{width:18px;text-align:center;opacity:.9}
+  .nav button .ic{width:17px;height:17px;flex:none;opacity:.85}
   .nav button:hover{background:var(--g800);color:#fff}.nav button.active{background:var(--g600);color:#fff;font-weight:600}
   .side .user{margin-top:auto;background:var(--g800);border-radius:10px;padding:9px 10px;display:flex;gap:9px;align-items:center}
   .avatar{width:30px;height:30px;border-radius:8px;background:var(--gold);color:#3a2a08;font-weight:700;display:flex;align-items:center;justify-content:center}
@@ -122,13 +122,13 @@
     <div class="brand"><div class="mark">M</div><div><h1>MGROUP Rentals</h1><p>Back Office</p></div></div>
     <div class="nl">Menu</div>
     <div class="nav" id="nav">
-      <button class="active" data-v="dash" onclick="go('dash',this)"><span class="em">▦</span>Dashboard</button>
-      <button data-v="bookings" onclick="go('bookings',this)"><span class="em">📅</span>All Bookings</button>
-      <button data-v="finance" onclick="go('finance',this)"><span class="em">฿</span>Finance</button>
-      <button data-v="owners" onclick="go('owners',this)"><span class="em">🏠</span>Owners</button>
-      <button data-v="clients" onclick="go('clients',this)"><span class="em">👥</span>Clients</button>
-      <button data-v="agents" onclick="go('agents',this)"><span class="em">🤝</span>Agents</button>
-      <button data-v="docs" onclick="go('docs',this)"><span class="em">📄</span>Documents</button>
+      <button class="active" data-v="dash" onclick="go('dash',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</button>
+      <button data-v="bookings" onclick="go('bookings',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>All Bookings</button>
+      <button data-v="finance" onclick="go('finance',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>Finance</button>
+      <button data-v="owners" onclick="go('owners',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 4l9 6.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/></svg>Owners</button>
+      <button data-v="clients" onclick="go('clients',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.3 2.9-5.3 6.5-5.3s6.5 2 6.5 5.3"/><path d="M17 5.5a3 3 0 010 5.6"/><path d="M21.5 20c0-2.4-1.3-4-3.3-4.7"/></svg>Clients</button>
+      <button data-v="agents" onclick="go('agents',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="3.5"/><path d="m15 11 2 2 4.5-4.5"/></svg>Agents</button>
+      <button data-v="docs" onclick="go('docs',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5"/><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M8 13h8M8 17h5"/></svg>Documents</button>
     </div>
     <div class="user"><div class="avatar">A</div><div><div class="nm">Admin</div><div class="rl" onclick="sessionStorage.removeItem('mg_admin');location.href='/admin/index.html'">Sign out</div></div></div>
   </aside>

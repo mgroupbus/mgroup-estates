@@ -8,7 +8,7 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' rx='40' fill='%232f5069'/%3E%3Ctext x='90' y='122' font-size='96' font-family='Georgia' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Figtree:wght@400;500;600;700;800&display=swap');
-  :root{--ink:#1a2129;--muted:#6b7680;--faint:#9aa4ad;--line:#e4e7ea;--rent:#2f6b4f;--sale:#2f5069;--gold:#a97e42;--gold-t:#f6efe1;
+  :root{--ink:#1a2129;--muted:#6b7680;--faint:#9aa4ad;--line:#e4e7ea;--rent:#a97e42;--sale:#2f5069;--gold:#a97e42;--gold-t:#f6efe1;
     --serif:'Cormorant Garamond',Georgia,serif;--font:'Figtree',-apple-system,BlinkMacSystemFont,sans-serif;}
   *{box-sizing:border-box;margin:0;padding:0}
   body{min-height:100vh;background:#ffffff;color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;padding:24px}
@@ -30,7 +30,7 @@
   .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .gcard{aspect-ratio:1;border:1px solid var(--line);border-radius:18px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-decoration:none;color:var(--ink);transition:.16s;position:relative;overflow:hidden;box-shadow:0 1px 3px rgba(20,30,40,.04)}
   .gcard:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 10px 26px rgba(20,30,40,.09)}
-  .gcard .em{font-size:34px}
+  .gcard .em{font-size:34px;color:var(--sale)}.gcard.rent .em{color:var(--rent)}.gcard .em svg{display:block}
   .gcard .t{font-family:var(--serif);font-size:24px;font-weight:600}
   .gcard .s{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
   .gcard .top{position:absolute;top:0;left:0;right:0;height:3px}
@@ -59,8 +59,8 @@
   <div id="gate">
     <div class="lead">Choose a system</div>
     <div class="cards">
-      <a class="gcard rent" href="/admin/rent-admin-new.html"><div class="top"></div><div class="em">🌿</div><div class="t">Rent</div><div class="s">Rental Management</div></a>
-      <a class="gcard sale" href="/admin/sale-hub.html"><div class="top"></div><div class="em">🏛️</div><div class="t">Sale</div><div class="s">Property Listings</div></a>
+      <a class="gcard rent" href="/admin/rent-admin-new.html"><div class="top"></div><div class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="38" height="38"><path d="M3 10.5 12 4l9 6.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-6h4v6"/></svg></div><div class="t">Rent</div><div class="s">Rental Management</div></a>
+      <a class="gcard sale" href="/admin/sale-hub.html"><div class="top"></div><div class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="38" height="38"><path d="M4 21h16"/><path d="M6 21V6a1 1 0 011-1h6a1 1 0 011 1v15"/><path d="M14 10h3a1 1 0 011 1v10"/><path d="M9 9h2M9 13h2M9 17h2"/></svg></div><div class="t">Sale</div><div class="s">Property Listings</div></a>
     </div>
     <div class="foot">MGROUP ESTATES · Phuket since 2022 · <a href="/admin/build-status.html">Build status</a> · <a onclick="logout()">Sign out</a></div>
   </div>
