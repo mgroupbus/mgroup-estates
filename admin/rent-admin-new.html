@@ -160,10 +160,14 @@
   .pill2.pending,.pill2.recorded{background:#f6efe1;color:var(--amber)}
   .pill2.overdue{background:#f9edea;color:var(--red)}
   .pill2.included{background:#eef4f9;color:var(--blue)}
-  .sumbar{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}
+  .sumbar{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:10px}
+  .sumbar.sb3{grid-template-columns:repeat(3,1fr)}
   .sumbar>div{border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:#faf9f5}
+  .sumbar.owner>div{background:#f8f4ea;border-color:#e6d8b8}
   .sumbar .l{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
   .sumbar .v{font-size:15px;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums}
+  .paysum-h{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:16px 0 2px}
+  .paysum-h.owner{color:var(--g600)}
   table.g7{width:100%;border-collapse:collapse;font-size:12.5px}
   table.g7 th{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:700;padding:8px 6px;background:#faf9f5;border-bottom:1px solid var(--line);text-align:center}
   table.g7 td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:center}
@@ -1246,14 +1250,21 @@
       if(p.owner_net==null){noOwn++;return;}
       own+=N(p.owner_net); if(p.status==='paid')ownPaid+=N(p.owner_net);
     });
-    var base=(b.total!=null&&b.total!=='')?N(b.total):cli;
-    var outstanding=Math.max(0,base-cliPaid);
-    html+='<div class="sumbar"><div><div class="l">Booking total</div><div class="v">'+money(base)+'</div></div>'+
-      '<div><div class="l">Paid</div><div class="v paid">'+money(cliPaid)+'</div></div>'+
-      '<div><div class="l">Outstanding</div><div class="v bal">'+money(outstanding)+'</div></div>'+
-      '<div><div class="l">Owner net — paid</div><div class="v own">'+money(ownPaid)+'</div></div></div>'+
-      '<div class="sub" style="margin-top:9px">Recorded to client '+money(cli)+' · owner net recorded '+money(own)+' of '+money(b.owner_net)+'.'+
-      (noOwn?' <span style="color:var(--red)">'+noOwn+' installment'+(noOwn>1?'s have':' has')+' no owner net yet — the owner portal cannot show '+(noOwn>1?'them':'it')+'.</span>':'')+'</div>';
+    var cliTotal=(b.total!=null&&b.total!=='')?N(b.total):cli;
+    var cliBal=Math.max(0,cliTotal-cliPaid);
+    var ownTotal=(b.owner_net!=null&&b.owner_net!=='')?N(b.owner_net):own;
+    var ownBal=Math.max(0,ownTotal-ownPaid);
+    html+='<div class="paysum-h">Client — to guest</div>'+
+      '<div class="sumbar sb3">'+
+        '<div><div class="l">Total</div><div class="v">'+money(cliTotal)+'</div></div>'+
+        '<div><div class="l">Paid</div><div class="v paid">'+money(cliPaid)+'</div></div>'+
+        '<div><div class="l">Balance</div><div class="v bal">'+money(cliBal)+'</div></div></div>'+
+      '<div class="paysum-h owner">Owner net — shown in Owner Portal</div>'+
+      '<div class="sumbar sb3 owner">'+
+        '<div><div class="l">Total net owner</div><div class="v own">'+money(ownTotal)+'</div></div>'+
+        '<div><div class="l">Paid</div><div class="v paid">'+money(ownPaid)+'</div></div>'+
+        '<div><div class="l">Balance</div><div class="v bal">'+money(ownBal)+'</div></div></div>'+
+      (noOwn?'<div class="sub" style="margin-top:9px;color:var(--red)">'+noOwn+' installment'+(noOwn>1?'s have':' has')+' no owner net set — the owner portal cannot show '+(noOwn>1?'them':'it')+'.</div>':'');
     document.getElementById('mngBody').innerHTML=html;
     if(MNG.payForm)paySplit();
   }
