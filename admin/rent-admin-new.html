@@ -113,6 +113,7 @@
   .tgrp.collapsed .tgh{margin-bottom:0}
   .tgrp.collapsed .tgh .chev{transform:rotate(-90deg)}
   .tgrp.collapsed .tgbody{display:none}
+  .hic{width:18px;height:18px;flex:none;color:var(--g600)}
   .task{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#fff}
   .task.done{background:#f8f5ee;border-color:#e5dcc7}
   .tr1{display:flex;gap:10px;align-items:flex-start}
@@ -169,7 +170,11 @@
   .ucard{border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:10px;padding:14px;margin-bottom:14px;background:#fff}
   .ucard.w{border-left-color:var(--blue)}
   .ucard .uh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px}
-  .ucard .uh b{font-size:14px}
+  .ucard .uh b{font-size:14px;display:inline-flex;align-items:center}
+  .uic{width:17px;height:17px;flex:none}
+  .ubadge{display:inline-flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:8px;margin-right:10px}
+  .ubadge.electricity{background:#fbf1e0;color:var(--amber)}
+  .ubadge.water{background:#eef4f9;color:var(--blue)}
   .ucard .uh select{font-family:var(--font);font-size:11.5px;font-weight:600;padding:5px 9px;border:1px solid var(--line);border-radius:7px;background:#fff;cursor:pointer}
   .mtr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
   .mtr .box{border:1px solid var(--line);border-radius:9px;padding:11px;background:#faf9f5}
@@ -676,20 +681,24 @@
   async function loadOwnerPrefs(id){
     var def={net:true,dates:true,guest:false,total:false};
     try{
-      var r=await fetch(SB_URL+'/rest/v1/portal_users?select=prefs&role=eq.owner&owner_id=eq.'+id,{headers:H});
-      var rows=await r.json(); var p=(rows&&rows[0]&&rows[0].prefs)||{};
+      var res=await portalUser({action:'get_prefs',owner_id:id});
+      var p=(res&&res.ok&&res.data.prefs)||{};
       ['net','dates','guest','total'].forEach(function(k){var e=document.getElementById('pf_'+k);if(e)e.checked=(k in p)?!!p[k]:def[k];});
     }catch(e){}
   }
   async function saveOwnerPrefs(id){
     var prefs={net:pfget('net'),dates:pfget('dates'),guest:pfget('guest'),total:pfget('total')};
+    var m=document.getElementById('pf_msg');
     try{
-      var r=await fetch(SB_URL+'/rest/v1/portal_users?select=id&role=eq.owner&owner_id=eq.'+id,{headers:H});
-      var rows=await r.json();
-      if(!rows||!rows.length){document.getElementById('pf_msg').textContent='⚠ Set the portal password first, then save visibility.';return;}
-      await fetch(SB_URL+'/rest/v1/portal_users?id=eq.'+rows[0].id,{method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify({prefs:prefs})});
-      document.getElementById('pf_msg').textContent='✓ Saved — owner now sees only the ticked items.';
-    }catch(e){document.getElementById('pf_msg').textContent='Could not save: '+e.message;}
+      var res=await portalUser({action:'set_prefs',owner_id:id,prefs:prefs});
+      if(!res){m.textContent='Cancelled';return;}
+      if(!res.ok){
+        m.textContent=res.data.error==='no_login'?'⚠ Set the portal login first, then save visibility.'
+          :(res.data.error==='unauthorized'?'Wrong admin passcode':'Could not save');
+        return;
+      }
+      m.textContent='✓ Saved — owner now sees only the ticked items.';
+    }catch(e){m.textContent='Could not save: '+e.message;}
   }
   function pfget(k){var e=document.getElementById('pf_'+k);return e?e.checked:false;}
 
@@ -1285,7 +1294,16 @@
   }
 
   // ---------- HOUSEKEEPER (weekly service schedule) ----------
-  var HSVC=[['cleaning','Cleaning','&#129529;'],['linen','Linen change','&#128716;'],['pool','Pool','&#127946;'],['gardener','Gardener','&#127795;']];
+  var HSVC=[['cleaning','Cleaning'],['linen','Linen change'],['pool','Pool'],['gardener','Gardener']];
+  function hicon(k){
+    var p={
+      cleaning:'<path d="M19 3l-8 8"/><path d="M15 7l2 2"/><path d="M12 10l-7 7a2.8 2.8 0 0 0 4 4l7-7z"/><path d="M5 21c-1.5 0-3-1-3-3"/>',
+      linen:'<path d="M2 5v14"/><path d="M2 9h16a3 3 0 0 1 3 3v7"/><path d="M2 18h20"/><path d="M6 9V7.5A2.5 2.5 0 0 1 8.5 5h3A2.5 2.5 0 0 1 14 7.5V9"/>',
+      pool:'<path d="M2 7c.7.6 1.4 1 2.7 1 2.6 0 2.4-2 5-2s2.4 2 5 2c1.3 0 2-.4 2.7-1"/><path d="M2 12.5c.7.6 1.4 1 2.7 1 2.6 0 2.4-2 5-2s2.4 2 5 2c1.3 0 2-.4 2.7-1"/><path d="M2 18c.7.6 1.4 1 2.7 1 2.6 0 2.4-2 5-2s2.4 2 5 2c1.3 0 2-.4 2.7-1"/>',
+      gardener:'<path d="M12 21v-8"/><path d="M12 13c0-5 3-8 8-8-1 5-4 8-8 8z"/><path d="M12 15c0-3.5-2.2-6-6-6 .8 3.6 3.2 6 6 6z"/>'
+    };
+    return '<svg class="hic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(p[k]||'')+'</svg>';
+  }
   var HDAY=['mon','tue','wed','thu','fri','sat','sun'];
   var HDAYL={mon:'Mon',tue:'Tue',wed:'Wed',thu:'Thu',fri:'Fri',sat:'Sat',sun:'Sun'};
   function hourOpts(sel){var o='<option value="">HH</option>';for(var h=0;h<24;h++){var v=(h<10?'0':'')+h;o+='<option value="'+v+'"'+(sel===v?' selected':'')+'>'+v+'</option>';}return o;}
@@ -1298,7 +1316,7 @@
       HDAY.map(function(d){return '<th>'+HDAYL[d]+'</th>';}).join('')+'<th style="width:120px">Time</th></tr></thead><tbody>'+
       HSVC.map(function(sv){
         var d=sc[sv[0]]||{}, t=(d.time||''), th=t.split(':')[0]||'', tm=t.split(':')[1]||'';
-        return '<tr><td>'+sv[2]+' '+sv[1]+'</td>'+
+        return '<tr><td><span style="display:inline-flex;align-items:center;gap:9px">'+hicon(sv[0])+'<b>'+esc(sv[1])+'</b></span></td>'+
           HDAY.map(function(k){return '<td><input type="checkbox" id="hk_'+sv[0]+'_'+k+'"'+(d[k]?' checked':'')+' onchange="markDirty()"></td>';}).join('')+
           '<td><div style="display:flex;gap:3px;align-items:center;justify-content:center">'+
           '<select id="hk_'+sv[0]+'_h">'+hourOpts(th)+'</select><b>:</b><select id="hk_'+sv[0]+'_m">'+minOpts(tm)+'</select></div></td></tr>';
@@ -1322,7 +1340,14 @@
   }
 
   // ---------- UTILITIES (electricity + water) ----------
-  var UDEF={electricity:{label:'Electricity',icon:'&#9889;',cls:''},water:{label:'Water',icon:'&#128167;',cls:' w'}};
+  var UDEF={electricity:{label:'Electricity',cls:''},water:{label:'Water',cls:' w'}};
+  function uicon(k){
+    var p=k==='electricity'
+      ? '<path d="M13 2 4 14h7l-1 8 9-12h-7l0-8z"/>'
+      : '<path d="M12 3s6 6.5 6 10.5a6 6 0 0 1-12 0C6 9.5 12 3 12 3z"/>';
+    return '<svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';
+  }
+  function camIcon(){return '<svg class="uic" style="width:15px;height:15px;vertical-align:-3px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 0 1 2-2h1.5l1-1.5h5l1 1.5H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3"/></svg>';}
   function renderUtil(){
     document.getElementById('mngBody').innerHTML=['electricity','water'].map(utilCard).join('')+
       '<div class="sub">Readings are stored on the booking, so the check-out settlement and the owner statement use the same numbers.</div>';
@@ -1331,11 +1356,11 @@
   function utilCard(k){
     var u=MNG.bp[k]||{}, d=UDEF[k], inc=!!u.is_included_free;
     var mIn=(u.meter_in==null?'':u.meter_in), mOut=(u.meter_out==null?'':u.meter_out);
-    var h='<div class="ucard'+d.cls+'"><div class="uh"><b>'+d.icon+' '+d.label+'</b>'+
+    var h='<div class="ucard'+d.cls+'"><div class="uh"><b><span class="ubadge '+k+'">'+uicon(k)+'</span>'+d.label+'</b>'+
       '<select id="ut_'+k+'_mode" onchange="renderUtilMode(\''+k+'\')">'+
       '<option value="exclude"'+(inc?'':' selected')+'>Exclude — guest pays</option>'+
       '<option value="include"'+(inc?' selected':'')+'>Include in rent</option></select></div>';
-    h+='<div id="ut_'+k+'_incl" class="incl"'+(inc?'':' style="display:none"')+'>'+d.icon+' '+d.label+' is included in the rental price</div>';
+    h+='<div id="ut_'+k+'_incl" class="incl"'+(inc?'':' style="display:none"')+'>'+uicon(k)+' '+d.label+' is included in the rental price</div>';
     h+='<div id="ut_'+k+'_fields"'+(inc?' style="display:none"':'')+'>'+
       '<div class="mtr">'+
         utilBox(k,'in','Check-in reading',u.recorded_in_date,mIn,u.meter_in_photo)+
@@ -1355,7 +1380,7 @@
     return '<div class="box"><div class="t">'+title+'</div>'+
       '<input id="ut_'+k+'_'+slot+'_date" type="date" value="'+esc(date||'')+'" onchange="markDirty()">'+
       '<input id="ut_'+k+'_'+slot+'" class="big" type="number" step="0.01" placeholder="—" value="'+val+'" oninput="utilCalc(\''+k+'\');markDirty()">'+
-      '<button class="mini" style="width:100%;text-align:center" onclick="pickMeter(\''+k+'\',\''+slot+'\')">&#128247; '+(photo?'Replace photo':'Attach meter photo')+'</button>'+
+      '<button class="mini" style="width:100%;text-align:center" onclick="pickMeter(\''+k+'\',\''+slot+'\')">'+camIcon()+' '+(photo?'Replace photo':'Attach meter photo')+'</button>'+
       (photo?'<img class="mphoto" src="'+esc(photo)+'" alt="" onclick="lbOpen(\''+esc(photo)+'\')">':'')+'</div>';
   }
   function renderUtilMode(k){
@@ -1517,8 +1542,12 @@
     var o=DATA.omap[id]||{};
     var t=btn.textContent; btn.disabled=true; btn.textContent='Checking…';
     try{
-      var tabs=[['rental_villas','owner_id','villa'],['bookings','owner_id','booking'],['contracts','owner_id','contract'],['owner_reports','owner_id','owner report'],['portal_users','owner_id','portal login']];
+      var tabs=[['rental_villas','owner_id','villa'],['bookings','owner_id','booking'],['contracts','owner_id','contract'],['owner_reports','owner_id','owner report']];
       var blk=[];
+      try{
+        var pu=await portalUser({action:'count',owner_id:id});
+        if(pu&&pu.ok&&pu.data.count)blk.push(pu.data.count+' portal login'+(pu.data.count>1?'s':''));
+      }catch(e){}
       await Promise.all(tabs.map(async function(x){
         try{
           var r=await fetch(SB_URL+'/rest/v1/'+x[0]+'?select=id&'+x[1]+'=eq.'+id+'&limit=200',{headers:H});
