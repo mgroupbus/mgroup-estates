@@ -1254,13 +1254,7 @@
         }
         else if(fr.status===401){document.getElementById('oErr').textContent='Incorrect email or password';b.disabled=false;b.textContent='Sign in';return;}
       }catch(e){}
-      if(!id){ /* fall back to the direct lookup so sign-in still works if the function is down */
-        var url=SB_URL+"/rest/v1/portal_users?select=owner_id,display_name,password_hash,is_active,prefs&role=eq.owner&or=(email.eq."+encodeURIComponent(em)+",username.eq."+encodeURIComponent(em)+")";
-        var r=await fetch(url,{headers:H}); var rows=await r.json();
-        var u=(rows||[]).find(function(x){return x.is_active!==false && x.password_hash===pw && x.owner_id;});
-        if(!u){document.getElementById('oErr').textContent='Incorrect email or password';b.disabled=false;b.textContent='Sign in';return;}
-        id=u.owner_id;name=u.display_name||em;pf=u.prefs||{};
-      }
+      if(!id){document.getElementById('oErr').textContent='Sign-in is unavailable right now';b.disabled=false;b.textContent='Sign in';return;}
       DATA.token=tok;
       sessionStorage.setItem('mg_owner',JSON.stringify({id:id,name:name,prefs:pf,token:tok}));
       showApp(id,name,pf);

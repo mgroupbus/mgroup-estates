@@ -287,12 +287,12 @@
     if(!u||!pw){err.textContent='Enter your username and password';return;}
     err.textContent='';btn.disabled=true;btn.textContent='Signing in…';
     try{
-      var url=SB_URL+'/rest/v1/portal_users?select=id,username,email,display_name,password_hash,is_active'+
-        '&role=eq.agent&or=(username.eq.'+encodeURIComponent(u)+',email.eq.'+encodeURIComponent(u)+')';
-      var rows=await fetch(url,{headers:H}).then(function(r){return r.json();});
-      var me=(rows||[]).find(function(x){return x.is_active!==false && x.password_hash===pw;});
-      if(!me){err.textContent='Incorrect username or password';btn.disabled=false;btn.textContent='Sign in';return;}
-      var name=me.display_name||me.username||u;
+      var r=await fetch(SB_URL+'/functions/v1/portal-login',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({email:u,password:pw})});
+      var d=await r.json();
+      if(!r.ok||d.role!=='agent'){err.textContent='Incorrect username or password';btn.disabled=false;btn.textContent='Sign in';return;}
+      var name=d.display_name||u;
       sessionStorage.setItem('mg_agent',JSON.stringify({name:name,at:Date.now()}));
       showApp(name);
     }catch(e){err.textContent='Sign-in failed — please try again';btn.disabled=false;btn.textContent='Sign in';}
