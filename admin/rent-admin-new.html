@@ -827,6 +827,7 @@
   }
   function markDirty(){var was=MNG.dirty;MNG.dirty=true;if(!was)renderMng();}
   function bkDirty(){MNG.dirty=true;} // booking form: flag only, no re-render (keeps input focus)
+  function bkGuests(){var a=+((document.getElementById('bk_adults')||{}).value)||0,c=+((document.getElementById('bk_children')||{}).value)||0;var g=document.getElementById('bk_guests_count');if(g)g.value=a+c;bkDirty();}
   function saveBar(){
     return MNG.dirty
       ? '<div class="savebar"><span class="w">&#9679; Unsaved changes — nothing is written until you save</span>'+
@@ -1060,6 +1061,7 @@
         kv('Check-out',fmtD(b.check_out))+
         kv('Nights',(b.nights||'—'))+
         kv('Guests',(b.guests_count||'—')+(b.adults||b.children?' <span class="sub">('+N(b.adults)+' ad · '+N(b.children)+' ch)</span>':''))+
+        kv('Pets',(b.pets?b.pets:'—'))+
         kv('Rate / night',money(b.rate_per_night))+
         kv('Currency',cur)+
       '</div></div>'+
@@ -1103,11 +1105,14 @@
         fld('check_in','Check-in',b.check_in,'date')+
         fld('check_out','Check-out',b.check_out,'date')+
         fld('nights','Nights',b.nights,'number',' step="1" min="0"')+
-      '</div><div class="r c3">'+
-        fld('guests_count','Guests total',b.guests_count,'number',' step="1" min="0"')+
-        fld('adults','Adults',b.adults,'number',' step="1" min="0"')+
-        fld('children','Children',b.children,'number',' step="1" min="0"')+
-      '</div><div class="r c3">'+
+      '</div><div class="r" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">'+
+        '<div><label>Guests total <span class="sub">(auto)</span></label><input id="bk_guests_count" type="number" readonly value="'+esc(b.guests_count==null?'':b.guests_count)+'" style="background:#f4f2ec;color:var(--muted)"></div>'+
+        '<div><label>Adults</label><input id="bk_adults" type="number" step="1" min="0" value="'+esc(b.adults==null?'':b.adults)+'" oninput="bkGuests()"></div>'+
+        '<div><label>Children</label><input id="bk_children" type="number" step="1" min="0" value="'+esc(b.children==null?'':b.children)+'" oninput="bkGuests()"></div>'+
+        '<div><label>Pets</label><input id="bk_pets" type="number" step="1" min="0" value="'+esc(b.pets==null?'':b.pets)+'" oninput="bkDirty()"></div>'+
+      '</div>'+
+      '<div style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:4px 0 10px;padding-top:6px;border-top:1px solid var(--line)">Payment terms</div>'+
+      '<div class="r c3">'+
         fld('rate_per_night','Rate / night',b.rate_per_night,'number',' step="0.01"')+
         fld('total','Total (to client)',b.total,'number',' step="0.01"')+
         fld('client_pay','Client paid',b.client_pay,'number',' step="0.01"')+
@@ -1138,7 +1143,7 @@
     var body={booking_ref:bkStr('booking_ref'),status:bkStr('status'),currency:bkStr('currency'),
       villa_id:bkStr('villa_id'),guest_id:bkStr('guest_id'),owner_id:bkStr('owner_id'),
       check_in:ci,check_out:co,nights:bkNum('nights'),
-      guests_count:bkNum('guests_count'),adults:bkNum('adults'),children:bkNum('children'),
+      guests_count:bkNum('guests_count'),adults:bkNum('adults'),children:bkNum('children'),pets:bkNum('pets'),
       rate_per_night:bkNum('rate_per_night'),total:bkNum('total'),client_pay:bkNum('client_pay'),
       security_deposit:bkNum('security_deposit'),mgroup_commission:bkNum('mgroup_commission'),
       owner_net:bkNum('owner_net'),agent_name:bkStr('agent_name'),co_agent_net:bkNum('co_agent_net'),
