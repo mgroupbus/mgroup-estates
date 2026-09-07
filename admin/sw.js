@@ -1,10 +1,12 @@
-const C='mgroup-addlisting-v1';
-const ASSETS=['add-listing-live.html','manifest.json'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()));});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
-self.addEventListener('fetch',e=>{
-  const req=e.request;
-  // only handle same-origin GET; let Supabase POST/cross-origin pass straight through
-  if(req.method!=='GET'||new URL(req.url).origin!==location.origin) return;
-  e.respondWith(fetch(req).then(res=>{const cc=res.clone();caches.open(C).then(c=>c.put(req,cc));return res;}).catch(()=>caches.match(req).then(m=>m||caches.match('add-listing-live.html'))));
+// Kill-switch service worker: stop stale-cache issues during active development.
+// Clears all caches, unregisters itself, and reloads open pages fresh from network.
+self.addEventListener('install', function(e){ self.skipWaiting(); });
+self.addEventListener('activate', function(e){
+  e.waitUntil((async function(){
+    try{ var keys = await caches.keys(); await Promise.all(keys.map(function(k){ return caches.delete(k); })); }catch(_){}
+    try{ await self.registration.unregister(); }catch(_){}
+    try{ var cs = await self.clients.matchAll({type:'window'}); cs.forEach(function(c){ c.navigate(c.url); }); }catch(_){}
+  })());
 });
+// Never serve from cache — always go to network.
+self.addEventListener('fetch', function(e){ return; });
