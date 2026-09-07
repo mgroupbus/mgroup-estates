@@ -7,7 +7,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap');
   :root{--g900:#23262b;--g800:#2d3138;--g700:#3b4048;--g600:#a97e42;--g500:#c29a45;--tint:#f3ecdf;
     --cream:#f0eee7;--cream2:#e7e4da;--card:#fff;--line:#e6e2d7;--ink:#1a201d;--muted:#6f776f;--faint:#9aa199;
-    --gold:#c29a45;--blue:#2f6f9e;--amber:#b7842a;--red:#b5533a;--ok:#2c8a5f;
+    --gold:#c29a45;--blue:#2f6f9e;--amber:#b7842a;--red:#b5533a;--ok:#9a7b3a;
     --font:'Figtree',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:ui-monospace,'SF Mono',Menlo,monospace;}
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--cream);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;font-size:14px}
@@ -336,7 +336,23 @@
     document.getElementById('ownOv').classList.add('open');
   }
   function closeOwn(){document.getElementById('ownOv').classList.remove('open');document.body.classList.remove('pmode-own');}
-  function setOwnerPw(id,name){var pw=prompt('Set portal password for '+name+':');if(!pw)return;alert('Portal password set for '+name+' (demo — wiring portal_users next).');}
+  async function setOwnerPw(id,name){
+    var o=DATA.omap[id]||{};
+    var uname=(o.email||'').trim()||prompt('Login email for '+name+':');
+    if(!uname)return;
+    var pw=prompt('Set portal password for '+name+'\nLogin email: '+uname);
+    if(!pw)return;
+    try{
+      var r=await fetch(SB_URL+'/rest/v1/portal_users?select=id&role=eq.owner&owner_id=eq.'+id,{headers:H});
+      var rows=await r.json();
+      if(rows&&rows.length){
+        await fetch(SB_URL+'/rest/v1/portal_users?id=eq.'+rows[0].id,{method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify({username:uname,email:uname,password_hash:pw,display_name:name,is_active:true})});
+      }else{
+        await fetch(SB_URL+'/rest/v1/portal_users',{method:'POST',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify({username:uname,email:uname,password_hash:pw,role:'owner',display_name:name,owner_id:id,is_active:true})});
+      }
+      alert('✓ Portal ready for '+name+'\nLogin: '+uname+'\nURL: mgroupestates.com/admin/owner-portal');
+    }catch(e){alert('Could not set portal: '+e.message);}
+  }
 
   function renderClients(){
     var cnt={};DATA.bk.forEach(function(b){if(b.guest_id)cnt[b.guest_id]=(cnt[b.guest_id]||0)+1;});
