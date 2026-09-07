@@ -114,6 +114,10 @@
   .tgrp.collapsed .tgh .chev{transform:rotate(-90deg)}
   .tgrp.collapsed .tgbody{display:none}
   .hic{width:18px;height:18px;flex:none;color:var(--g600)}
+  .cfm-ov{position:fixed;inset:0;background:rgba(20,28,24,.5);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+  .cfm{background:#fff;border-radius:14px;padding:20px 22px;max-width:390px;width:100%;box-shadow:0 12px 44px rgba(0,0,0,.22)}
+  .cfm-msg{font-size:14px;line-height:1.55;color:var(--ink);white-space:pre-line;margin-bottom:18px}
+  .cfm-btns{display:flex;gap:8px;justify-content:flex-end}
   .task{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#fff}
   .task.done{background:#f8f5ee;border-color:#e5dcc7}
   .tr1{display:flex;gap:10px;align-items:flex-start}
@@ -964,7 +968,7 @@
 
   async function delFile(fid,path){
     var f=null; Object.keys(MNG.files).forEach(function(k){MNG.files[k].forEach(function(x){if(x.id===fid)f=x;});});
-    if(!confirm('Remove '+((f&&f.file_name)||'this file')+' from this task?'))return;
+    if(!(await mgConfirm('Remove '+((f&&f.file_name)||'this file')+' from this task?','Remove')))return;
     try{
       if(path)await fetch(SB_URL+'/storage/v1/object/media/'+path,{method:'DELETE',headers:H});
       var r=await fetch(SB_URL+'/rest/v1/checkin_task_files?id=eq.'+fid,{method:'DELETE',headers:H});
@@ -1040,9 +1044,9 @@
   }
 
   async function delTask(id){
-    if(MNG.dirty&&!confirm('You have unsaved checklist changes. Removing a task reloads the list and discards them. Continue?'))return;
+    if(MNG.dirty&&!(await mgConfirm('You have unsaved checklist changes. Removing a task reloads the list and discards them. Continue?','Continue')))return;
     var t=MNG.tasks.find(function(x){return x.id===id;}); if(!t)return;
-    if(!confirm('Remove "'+nice(t.task_name)+'" from this checklist?'))return;
+    if(!(await mgConfirm('Remove "'+nice(t.task_name)+'" from this checklist?','Remove')))return;
     try{
       await fetch(SB_URL+'/rest/v1/checkin_task_files?task_id=eq.'+id,{method:'DELETE',headers:H});
       await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'DELETE',headers:H});
@@ -1288,9 +1292,23 @@
     try{await bpSave();MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;renderMng();}
     catch(err){MNG.bp.payments=snapshot;alert('Could not save payment: '+err.message);}
   }
+  function mgConfirm(msg,okLabel){
+    return new Promise(function(resolve){
+      var ov=document.createElement('div');
+      ov.className='cfm-ov';
+      ov.innerHTML='<div class="cfm"><div class="cfm-msg"></div><div class="cfm-btns"><button class="btn" data-x>Cancel</button><button class="btn primary" data-ok></button></div></div>';
+      ov.querySelector('.cfm-msg').textContent=msg;
+      ov.querySelector('[data-ok]').textContent=okLabel||'Confirm';
+      function done(v){ov.remove();resolve(v);}
+      ov.querySelector('[data-x]').onclick=function(){done(false);};
+      ov.querySelector('[data-ok]').onclick=function(){done(true);};
+      ov.addEventListener('click',function(e){if(e.target===ov)done(false);});
+      document.body.appendChild(ov);
+    });
+  }
   async function payDel(i){
     var p=(MNG.bp.payments||[])[i]; if(!p)return;
-    if(!confirm('Remove "'+(p.label||'this payment')+'" ('+money(p.amount)+')?\n\nThis is saved immediately.'))return;
+    if(!(await mgConfirm('Remove "'+(p.label||'this payment')+'" ('+money(p.amount)+')?\nThis is saved immediately.','Remove')))return;
     var snapshot=JSON.parse(JSON.stringify(MNG.bp.payments));
     MNG.bp.payments.splice(i,1);
     try{await bpSave();renderMng();}catch(e){MNG.bp.payments=snapshot;alert('Could not remove: '+e.message);}
