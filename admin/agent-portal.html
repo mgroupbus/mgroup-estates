@@ -265,7 +265,7 @@
   function esc(x){return (x==null?'':String(x)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
   function N(x){return Number(x||0);}
   function money(x){return '฿'+Number(x||0).toLocaleString('en-US');}
-  function fmtD(d){if(!d)return '—';var p=String(d).split('-');if(p.length<3)return d;return (+p[2])+' '+MON[+p[1]-1]+" '"+p[0].slice(2);}
+  function fmtD(d){if(!d)return '—';var p=String(d).split('-');if(p.length<3)return d;return p[2].padStart(2,'0')+'.'+p[1].padStart(2,'0')+'.'+p[0];}
   function nice(x){x=String(x||'').replace(/[_-]+/g,' ').trim();return x?x.charAt(0).toUpperCase()+x.slice(1):'—';}
   function q(t,sel,extra){return fetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel)+(extra||''),{headers:H}).then(function(r){return r.json();});}
 
