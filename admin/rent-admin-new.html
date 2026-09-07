@@ -1067,7 +1067,6 @@
       '<div style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:20px 0 6px">Money</div>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 26px"><div>'+
         kv('Total (to client)',money(b.total))+
-        kv('Client paid',money(b.client_pay))+
         kv('Security deposit',money(b.security_deposit))+
       '</div><div>'+
         kv('MGROUP commission',money(b.mgroup_commission))+
@@ -1113,8 +1112,8 @@
       '<div style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:4px 0 10px;padding-top:6px;border-top:1px solid var(--line)">Payment terms</div>'+
       '<div class="r c2">'+
         fld('total','Total (to client)',b.total,'number',' step="0.01"')+
-      '</div><div class="r c3">'+
         fld('security_deposit','Security deposit',b.security_deposit,'number',' step="0.01"')+
+      '</div><div class="r c2">'+
         fld('mgroup_commission','MGROUP commission',b.mgroup_commission,'number',' step="0.01"')+
         fld('co_agent_net','Co-agent net',b.co_agent_net,'number',' step="0.01"')+
       '</div><div class="r c2">'+
@@ -1145,7 +1144,7 @@
       villa_id:bkStr('villa_id'),guest_id:bkStr('guest_id'),owner_id:bkStr('owner_id'),
       check_in:ci,check_out:co,nights:bkNum('nights'),
       guests_count:bkNum('guests_count'),adults:bkNum('adults'),children:bkNum('children'),pets:bkNum('pets'),
-      total:bkNum('total'),client_pay:bkNum('client_pay'),
+      total:bkNum('total'),
       security_deposit:bkNum('security_deposit'),mgroup_commission:bkNum('mgroup_commission'),
       owner_net:bkNum('owner_net'),agent_name:bkStr('agent_name'),co_agent_net:bkNum('co_agent_net'),
       source:bkStr('source'),special_requests:bkStr('special_requests')};
