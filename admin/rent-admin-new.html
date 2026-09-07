@@ -826,6 +826,7 @@
     return confirm('You have unsaved changes on this tab. Leave without saving?');
   }
   function markDirty(){var was=MNG.dirty;MNG.dirty=true;if(!was)renderMng();}
+  function bkDirty(){MNG.dirty=true;} // booking form: flag only, no re-render (keeps input focus)
   function saveBar(){
     return MNG.dirty
       ? '<div class="savebar"><span class="w">&#9679; Unsaved changes — nothing is written until you save</span>'+
@@ -836,7 +837,8 @@
   async function mngRevert(){
     if(!confirm('Discard the unsaved changes on this tab?'))return;
     MNG.dirty=false;MNG.tdirty={};
-    await loadTasks();
+    if(MNG.tab==='checklist'){await loadTasks();}
+    else{renderMng();}
   }
   async function mngSaveNow(){
     if(MNG.tab==='booking')return bkSave();
@@ -1075,7 +1077,7 @@
   }
   function fld(id,label,val,type,extra){
     return '<div><label>'+label+'</label><input id="bk_'+id+'" type="'+(type||'text')+'"'+(extra||'')+
-      ' value="'+esc(val==null?'':val)+'" oninput="markDirty()"></div>';
+      ' value="'+esc(val==null?'':val)+'" oninput="bkDirty()"></div>';
   }
   function bkForm(b){
     var g=DATA.gmap[b.guest_id]||{}, o=DATA.omap[b.owner_id]||{};
@@ -1083,7 +1085,7 @@
     var glist=Object.values(DATA.gmap).sort(function(a,c){return (a.name||'').localeCompare(c.name||'');});
     var olist=Object.values(DATA.omap).sort(function(a,c){return (a.name||'').localeCompare(c.name||'');});
     var sel=function(id,label,list,cur,blank){
-      return '<div><label>'+label+'</label><select id="bk_'+id+'" onchange="markDirty()">'+
+      return '<div><label>'+label+'</label><select id="bk_'+id+'" onchange="bkDirty()">'+
         (blank?'<option value="">— '+blank+' —</option>':'')+
         list.map(function(x){var v=(x instanceof Array)?x[0]:x.id,l=(x instanceof Array)?x[1]:x.name;
           return '<option value="'+esc(v)+'"'+(v===cur?' selected':'')+'>'+esc(l)+'</option>';}).join('')+'</select></div>';
@@ -1118,10 +1120,10 @@
         fld('co_agent_net','Co-agent net',b.co_agent_net,'number',' step="0.01"')+
         fld('source','Source',b.source)+
       '</div><div class="r">'+
-        '<div><label>Special requests</label><input id="bk_special_requests" value="'+esc(b.special_requests||'')+'" oninput="markDirty()"></div>'+
+        '<div><label>Special requests</label><input id="bk_special_requests" value="'+esc(b.special_requests||'')+'" oninput="bkDirty()"></div>'+
       '</div>'+
       '<div style="display:flex;gap:8px"><button class="btn primary" onclick="bkSave()">Save booking</button>'+
-      '<button class="btn" onclick="bkEditOff()">Cancel</button></div></div>'+saveBar();
+      '<button class="btn" onclick="bkEditOff()">Cancel</button></div></div>';
   }
   function bkEditOn(){MNG.bkEdit=true;MNG.dirty=false;renderMng();}
   function bkEditOff(){
