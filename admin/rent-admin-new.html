@@ -409,8 +409,7 @@
         '<td><b>'+fmtD(b.check_in)+'</b> → <b>'+fmtD(b.check_out)+'</b></td><td class="ref">'+esc(b.booking_ref||'—')+'</td>'+
         '<td><div class="vn">'+esc(vname(b.villa_id))+'</div><div class="sub">'+esc(varea(b.villa_id))+'</div></td>'+
         '<td>'+esc(gname(b.guest_id))+'</td><td class="num">'+(b.nights||'–')+'</td><td class="money">'+money(b.total)+'</td>'+
-        '<td style="white-space:nowrap">'+progChip(b.id)+'<button class="rowbtn" onclick="openMng(\'' + b.id + '\')">Manage</button>'+
-        '<button class="rowbtn" onclick="shareOwner(\'' + b.id + '\',this)">Share to owner</button></td></tr>';
+        '<td style="white-space:nowrap">'+progChip(b.id)+'<button class="rowbtn" onclick="openMng(\'' + b.id + '\')">Manage</button></td></tr>';
     }).join('')||'<tr><td colspan="8" class="state">No bookings</td></tr>';
   }
   // Create a read-only link to this booking and hand it to the admin to send to the owner.
