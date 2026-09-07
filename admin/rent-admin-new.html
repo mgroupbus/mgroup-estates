@@ -47,11 +47,19 @@
   .num{text-align:center;font-variant-numeric:tabular-nums;color:var(--muted)}
   .ref{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
   .vn{font-weight:600}.sub{font-size:11px;color:var(--faint)}
-  .st-select{font-family:var(--font);font-size:11.5px;font-weight:600;border-radius:7px;padding:5px 8px;border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--muted)}
-  .st-select.confirmed{color:var(--g600);border-color:#e0cfa8;background:#f6efe1}
-  .st-select.checkedin{color:var(--blue);border-color:#bcd6e6;background:#eef4f9}
-  .st-select.checkedout{color:var(--faint)}
-  .st-select.cancelled,.st-select.no_show{color:var(--red);border-color:#e6c3b8;background:#f9edea}
+  .st-select{font-family:var(--font);font-size:11.5px;font-weight:700;border-radius:20px;padding:5px 10px;border:none;background:#8b98a8;cursor:pointer;color:#fff;-webkit-appearance:none;appearance:none}
+  .st-select.inquiry{background:#8b98a8}
+  .st-select.confirmed{background:#12a150}
+  .st-select.deposit{background:#e0921a}
+  .st-select.fullypaid{background:#0a7d40}
+  .st-select.checkedin{background:#1a7fe0}
+  .st-select.checkedout{background:#7c8a83}
+  .st-select.cancelled,.st-select.noshow{background:#e03b2f}
+  .st-select option{background:#fff;color:#23262b}
+  a.reflink{color:var(--blue);font-weight:700;cursor:pointer;text-decoration:none}
+  a.reflink:hover{text-decoration:underline}
+  .rowgo{color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .rowgo:hover{color:var(--g600)}
   .bal{color:var(--red);font-weight:700}.paid{color:var(--ok);font-weight:700}
   .pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--tint);color:var(--g700)}
   .doc{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-right:5px}
@@ -63,6 +71,12 @@
   .ov{position:fixed;inset:0;background:rgba(20,28,24,.55);display:none;align-items:flex-start;justify-content:center;padding:34px 16px;overflow:auto;z-index:60}
   .ov.open{display:flex}
   .modal{width:100%;max-width:660px;background:#fff;border-radius:14px;overflow:hidden}
+  /* Booking detail rendered as a full page, not a floating popup */
+  #mngOv{background:var(--cream);padding:24px 16px;z-index:70;align-items:flex-start}
+  #mngOv .modal{max-width:940px;border-radius:14px;overflow:visible;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  #mngOv .mh{position:sticky;top:0;background:#fff;border-radius:14px 14px 0 0;z-index:3}
+  .backbtn{background:none;border:none;font-size:14px;font-weight:700;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:7px;padding:6px 2px}
+  .backbtn:hover{color:var(--g600)}
   .modal .mh{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
   .modal .mh h3{font-size:18px}.modal .mb{padding:18px 20px}
   .cls{background:none;border:none;font-size:13px;font-weight:700;color:var(--g600);cursor:pointer}
@@ -257,7 +271,16 @@
     <!-- BOOKINGS -->
     <div id="v-bookings" class="view">
       <div class="head"><div><div class="crumb">Rentals</div><h2>All Bookings</h2></div><button class="btn primary" onclick="location.href='/admin/rent-add-booking.html'">+ New Booking</button></div>
-      <div class="tablecard"><table><thead><tr><th>Status</th><th>Stay</th><th>Ref</th><th>Villa</th><th>Guest</th><th class="num">Nights</th><th class="money">Total</th><th></th></tr></thead><tbody id="bkRows"><tr><td colspan="8" class="state">Loading…</td></tr></tbody></table></div>
+      <div class="tiles" style="margin-bottom:16px;grid-template-columns:repeat(3,1fr)">
+        <div class="tile"><div class="l">Checking-in soon</div><div class="v" id="bk-checkin">—</div><div class="s">next 14 days</div></div>
+        <div class="tile"><div class="l">Upcoming</div><div class="v" id="bk-upcoming">—</div><div class="s">confirmed, future</div></div>
+        <div class="tile"><div class="l">Total bookings</div><div class="v" id="bk-total">—</div><div class="s">all time</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <label style="font-size:12px;font-weight:600;color:var(--muted)">Year</label>
+        <select id="bkYear" onchange="renderBookings()" class="st-select" style="background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:8px;font-weight:600"></select>
+      </div>
+      <div class="tablecard"><table><thead><tr><th>Ref</th><th>Status</th><th>Progress</th><th>Guest</th><th>Villa</th><th class="num">Nights</th><th class="money">Total</th><th></th></tr></thead><tbody id="bkRows"><tr><td colspan="8" class="state">Loading…</td></tr></tbody></table></div>
     </div>
 
     <!-- FINANCE -->
@@ -342,10 +365,10 @@
 </div>
 
 <!-- MANAGE / CHECK-IN CHECKLIST MODAL -->
-<div class="ov" id="mngOv" onclick="if(event.target===this)closeMng()">
+<div class="ov" id="mngOv">
   <div class="modal mng">
-    <div class="mh"><div><h3 id="mngTitle">Manage booking</h3><div class="sub" id="mngSub"></div></div>
-      <div><button class="btn" onclick="printMng()">Print</button> <button class="cls" onclick="closeMng()">&#10005; Close</button></div></div>
+    <div class="mh"><div style="display:flex;align-items:center;gap:14px"><button class="backbtn" onclick="closeMng()">&#8592; All Bookings</button><div><h3 id="mngTitle">Booking</h3><div class="sub" id="mngSub"></div></div></div>
+      <div><button class="btn" onclick="printMng()">Print</button></div></div>
     <div class="mtabs" id="mngTabs"></div>
     <div class="mb" id="mngBody"><div class="state">Loading&hellip;</div></div>
   </div>
@@ -373,7 +396,7 @@
   function stCls(v){return (v||'').replace(/_/g,'');}
   var DATA={bk:[],villas:[],vmap:{},gmap:{},omap:{},tk:{}};
   var OFIELDS='id,name,email,phone,line_id,notes';
-  var VFIELDS='id,name,slug,area,location,villa_type,bedrooms,bathrooms,max_guests,price_per_night,price_per_month,min_nights,cleaning_fee,security_deposit,owner_id,description,is_active';
+  var VFIELDS='id,name,slug,area,location,villa_type,bedrooms,bathrooms,max_guests,price_per_night,price_per_month,min_nights,cleaning_fee,security_deposit,owner_id,description,is_active,landing_url,features_included,features_excluded';
 
   function go(v,el){document.querySelectorAll('.nav button').forEach(function(b){b.classList.remove('active');});el.classList.add('active');
     document.querySelectorAll('.view').forEach(function(x){x.classList.remove('on');});document.getElementById('v-'+v).classList.add('on');window.scrollTo(0,0);}
@@ -403,14 +426,40 @@
 
   function renderBookings(){
     var ST=[['inquiry','Inquiry'],['confirmed','Confirmed'],['deposit','Deposit paid'],['fully_paid','Fully paid'],['checked_in','Checked-in'],['checked_out','Checked-out'],['cancelled','Cancelled'],['no_show','No show']];
-    document.getElementById('bkRows').innerHTML=DATA.bk.map(function(b){
+    // year dropdown (built from check_in years)
+    var ysel=document.getElementById('bkYear');
+    var allYears=Array.from(new Set((DATA.bk||[]).map(function(b){return b.check_in?String(b.check_in).slice(0,4):null;}).filter(Boolean))).sort().reverse();
+    var cur=ysel?ysel.value:'';
+    if(ysel){
+      if(!cur||(cur!=='all'&&allYears.indexOf(cur)<0))cur=allYears[0]||'all';
+      ysel.innerHTML='<option value="all">All years</option>'+allYears.map(function(y){return '<option value="'+y+'"'+(y===cur?' selected':'')+'>'+y+'</option>';}).join('');
+      if(cur==='all')ysel.value='all';
+    }
+    var rows=(DATA.bk||[]).filter(function(b){return !cur||cur==='all'||(b.check_in&&String(b.check_in).slice(0,4)===cur);});
+    document.getElementById('bkRows').innerHTML=rows.map(function(b){
       var opts=ST.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===b.status?' selected':'')+'>'+o[1]+'</option>';}).join('');
-      return '<tr><td><select class="st-select '+stCls(b.status)+'" data-id="'+b.id+'" onchange="chSt(this)">'+opts+'</select></td>'+
-        '<td><b>'+fmtD(b.check_in)+'</b> → <b>'+fmtD(b.check_out)+'</b></td><td class="ref">'+esc(b.booking_ref||'—')+'</td>'+
+      return '<tr>'+
+        '<td class="ref"><a class="reflink" onclick="openMng(\'' + b.id + '\')">'+esc(b.booking_ref||'—')+'</a></td>'+
+        '<td><select class="st-select '+stCls(b.status)+'" data-id="'+b.id+'" onchange="chSt(this)">'+opts+'</select></td>'+
+        '<td>'+progChip(b.id)+'</td>'+
+        '<td>'+esc(gname(b.guest_id))+'</td>'+
         '<td><div class="vn">'+esc(vname(b.villa_id))+'</div><div class="sub">'+esc(varea(b.villa_id))+'</div></td>'+
-        '<td>'+esc(gname(b.guest_id))+'</td><td class="num">'+(b.nights||'–')+'</td><td class="money">'+money(b.total)+'</td>'+
-        '<td style="white-space:nowrap">'+progChip(b.id)+'<button class="rowbtn" onclick="openMng(\'' + b.id + '\')">Manage</button></td></tr>';
+        '<td class="num">'+(b.nights||'–')+'</td><td class="money">'+money(b.total)+'</td>'+
+        '<td style="white-space:nowrap;text-align:right"><span class="rowgo" onclick="openMng(\'' + b.id + '\')">Open &#8594;</span></td></tr>';
     }).join('')||'<tr><td colspan="8" class="state">No bookings</td></tr>';
+    renderBkSummary();
+  }
+  function renderBkSummary(){
+    var bk=DATA.bk||[];
+    var todayStr=new Date().toISOString().slice(0,10);
+    var soon=new Date();soon.setDate(soon.getDate()+14);var soonStr=soon.toISOString().slice(0,10);
+    var live=function(s){return s!=='cancelled'&&s!=='no_show';};
+    var checkin=bk.filter(function(b){return live(b.status)&&b.check_in&&b.check_in>=todayStr&&b.check_in<=soonStr;}).length;
+    var upcoming=bk.filter(function(b){return b.status==='confirmed'&&b.check_in&&b.check_in>=todayStr;}).length;
+    var el;
+    if(el=document.getElementById('bk-checkin'))el.textContent=checkin;
+    if(el=document.getElementById('bk-upcoming'))el.textContent=upcoming;
+    if(el=document.getElementById('bk-total'))el.textContent=bk.length;
   }
   // Create a read-only link to this booking and hand it to the admin to send to the owner.
   async function shareOwner(bid,btn){
@@ -723,7 +772,7 @@
   async function openMng(id){
     MNG.id=id;MNG.tasks=[];MNG.files={};MNG.bp={};MNG.tab='checklist';MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;MNG.tdirty={};
     var b=DATA.bk.find(function(x){return x.id===id;})||{};
-    document.getElementById('mngTitle').textContent='Manage · '+(b.booking_ref||'Booking');
+    document.getElementById('mngTitle').textContent=(b.booking_ref||'Booking');
     document.getElementById('mngSub').textContent=vname(b.villa_id)+' · '+gname(b.guest_id)+' · '+fmtD(b.check_in)+' → '+fmtD(b.check_out);
     document.getElementById('mngBody').innerHTML='<div class="state">Loading…</div>';
     document.getElementById('mngOv').classList.add('open');
@@ -1095,7 +1144,7 @@
       MNG.dirty=false;MNG.bkEdit=false;
       var sub=document.getElementById('mngSub');
       if(b&&sub)sub.textContent=vname(b.villa_id)+' · '+gname(b.guest_id)+' · '+fmtD(b.check_in)+' → '+fmtD(b.check_out);
-      document.getElementById('mngTitle').textContent='Manage · '+((b&&b.booking_ref)||'Booking');
+      document.getElementById('mngTitle').textContent=((b&&b.booking_ref)||'Booking');
       renderMng();renderAll();
     }catch(e){alert('Could not save booking: '+e.message);}
   }
@@ -1594,6 +1643,14 @@
         '<div class="r"><div><label>Notes / description</label><textarea id="vf_desc" placeholder="Short internal description">'+esc(v.description||'')+'</textarea></div></div>'+
       '</div>'+
       '<div class="frm">'+
+        '<div class="sechd"><h4>Shown in the Owner Portal</h4></div>'+
+        '<div class="r"><div><label>Sale / listing page URL</label><input id="vf_land" type="url" value="'+esc(v.landing_url||'')+'" placeholder="https://angsanabeachfrontb2.netlify.app"></div></div>'+
+        '<div class="r c2">'+
+          '<div><label>Included in the rate (one per line)</label><textarea id="vf_inc" rows="6" placeholder="WiFi&#10;Pool&#10;Daily cleaning">'+esc(jsonLines(v.features_included))+'</textarea></div>'+
+          '<div><label>Not included (one per line)</label><textarea id="vf_exc" rows="6" placeholder="Electricity&#10;Water">'+esc(jsonLines(v.features_excluded))+'</textarea></div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="frm">'+
         '<div class="sechd"><h4>Owner</h4><button class="mini" onclick="toggleNewOwner()">+ New owner</button></div>'+
         '<div class="r"><div><label>Linked owner</label><select id="vf_owner">'+ownerOpts(v.owner_id)+'</select></div></div>'+
         '<div id="vf_newown" style="display:none">'+
@@ -1676,6 +1733,10 @@
     finally{ btn.disabled=false; btn.textContent=t; }
   }
 
+  function jsonLines(x){return Array.isArray(x)?x.join('\n'):'';}
+  function linesJson(id){
+    return vv(id).split('\n').map(function(t){return t.trim();}).filter(Boolean);
+  }
   async function saveVilla(btn){
     var name=vv('vf_name').trim();
     if(!name){return vmsg('Villa name is required',true);}
@@ -1690,6 +1751,9 @@
       min_nights:vnum('vf_min')||1,
       cleaning_fee:vnum('vf_clean'), security_deposit:vnum('vf_dep'),
       description:vv('vf_desc').trim()||null,
+      landing_url:vv('vf_land').trim()||null,
+      features_included:linesJson('vf_inc'),
+      features_excluded:linesJson('vf_exc'),
       owner_id:vv('vf_owner')||null,
       is_active:document.getElementById('vf_active').checked,
       updated_at:new Date().toISOString()
