@@ -73,7 +73,10 @@
   .hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
   .hd h2{font-size:24px;font-weight:800;letter-spacing:-.02em}.hd .crumb{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:700}
   .btn{font-family:var(--font);font-weight:600;font-size:13px;border-radius:9px;padding:9px 16px;cursor:pointer;border:1px solid var(--gold);background:var(--gold);color:#fff}
-  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px;margin-bottom:16px}
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:16px}
+  .tile .v{font-size:22px}
+  body.previewing .tiles{grid-template-columns:repeat(3,1fr)}
+  body.previewing .tile{padding:12px 13px}body.previewing .tile .v{font-size:17px}
   .tile{background:transparent;border:1px solid var(--line);border-radius:12px;padding:15px 17px}
   .tile .l{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
   .tile .v{font-size:24px;font-weight:800;margin-top:6px;font-variant-numeric:tabular-nums}
@@ -112,8 +115,10 @@
   .dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:14px 26px}
   .dg .k{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:3px}
   .dg .v2{font-size:13px;font-weight:600;line-height:1.4}
-  .dgh{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:800;margin:16px 0 10px}
-  .dgh:first-child{margin-top:0}
+  .dgh{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:800;
+    margin:26px 0 13px;padding-top:20px;border-top:1px solid var(--line)}
+  .dgh:first-child{margin-top:0;padding-top:0;border-top:none}
+  .stagesec .dgh{border-top:none;padding-top:0;margin:18px 0 9px}
   .state{padding:34px;text-align:center;color:var(--faint)}
   /* NAV + VILLA PAGES */
   .nav{display:flex;gap:26px;border-bottom:1px solid var(--line);margin:0 -20px 22px;padding:0 24px}
@@ -169,6 +174,13 @@
   .docbtn.off{background:#f5f3ed;border-color:var(--line);color:#b6bab2;cursor:default}
   .docbtn.off:hover{background:#f5f3ed;color:#b6bab2;border-color:var(--line)}
   .doclist{display:flex;flex-wrap:wrap;gap:2px}
+  .upbtn{display:inline-block;margin-top:11px;font-size:12px;font-weight:700;color:var(--gold);cursor:pointer;
+    border:1px dashed #ddc9a0;border-radius:9px;padding:8px 14px}
+  .upbtn:hover{background:var(--goldt);border-style:solid}
+  .upnote{font-size:11.5px;color:var(--faint);margin-left:10px}
+  .docbtn .dx{margin-left:8px;font-weight:800;opacity:.55}
+  .docbtn .dx:hover{opacity:1;color:var(--red)}
+  @media print{.upbtn,.upnote,.docbtn .dx{display:none}}
   .docnote{font-size:11.5px;color:var(--faint);margin-top:9px;line-height:1.5}
   .stg{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px}
   .stgc{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}
@@ -186,6 +198,40 @@
   .pvsub{font-size:12.5px;color:var(--muted);margin-top:4px}
   .paybar{height:8px;border-radius:5px;background:#efece4;overflow:hidden}
   .paybar i{display:block;height:100%;background:#5c9c63}
+  .stmthead{display:none;padding:0 0 18px;margin-bottom:20px;border-bottom:2px solid var(--ink)}
+  .stmthead .sname2{font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:.06em}
+  .stmthead .stitle{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-top:5px}
+  .stmthead .smeta{font-size:12px;color:var(--muted);margin-top:7px}
+  body.previewing{background:#eceae4}
+  body.previewing #app{background:#fff;max-width:820px;margin:26px auto 120px;padding:44px 46px 54px;
+    box-shadow:0 18px 50px -22px rgba(26,32,29,.4);border-radius:4px;min-height:auto}
+  body.previewing .stmthead{display:block}
+  body.previewing .top,body.previewing .nav,body.previewing .acts,body.previewing .back,
+  body.previewing .appfoot,body.previewing .go,body.previewing .saleln,body.previewing #homeFilter,
+  body.previewing .hd .btn,body.previewing .signcta,
+  body.previewing .ysel{display:none!important}
+  body.previewing .stage{break-inside:avoid}
+  body.previewing .stage .plist{display:block!important}
+  body.previewing details:not([open])>*:not(summary){display:block}
+  .pvbar{position:fixed;left:0;right:0;bottom:0;z-index:80;display:none;justify-content:space-between;align-items:center;
+    gap:14px;padding:14px 22px;background:var(--char);color:#e8e4db;font-size:12.5px}
+  .pvbar.on{display:flex}
+  .pvbar .abtn{background:#3a3f45;border-color:#4a5058;color:#e8e4db}
+  .pvbar .abtn:hover{border-color:var(--gold);color:#fff}
+  .pvbar .abtn.wa{background:var(--gold);border-color:var(--gold);color:#fff}
+  .pvbar .pvbtns{display:flex;gap:9px}
+  @media print{.pvbar{display:none!important}body.previewing #app{box-shadow:none;margin:0;padding:0;max-width:none}
+    body.previewing{background:#fff}.stmthead{display:block!important}}
+  .sharenote{font-size:12px;color:var(--gold);font-weight:600;margin-top:4px}
+  .dgrid.three{grid-template-columns:repeat(3,1fr);gap:10px 14px}
+  .dgrid.two{grid-template-columns:repeat(2,1fr);gap:10px 18px}
+  @media(max-width:380px){.dgrid.three .v2{font-size:12.5px}.dgrid.three{gap:8px 10px}}
+  .signcta{margin:22px 0 8px;padding:24px 22px;text-align:center;border:1px solid var(--line);border-radius:14px;
+    background:linear-gradient(180deg,#faf8f2,#f4f1e8)}
+  .signcta .t{font-family:var(--serif);font-size:22px;font-weight:600;color:var(--ink)}
+  .signcta .d{font-size:12.5px;color:var(--muted);line-height:1.6;margin:6px auto 16px;max-width:420px}
+  .signcta .btn{display:inline-block}
+  @media print{.signcta{display:none}}
   .sharebar{background:var(--goldt);border:1px solid #e6d6ad;color:var(--gold);border-radius:10px;
     padding:10px 15px;margin:0 0 18px;font-size:12.5px;font-weight:600}
   .sharebar b{font-weight:800}
@@ -228,11 +274,11 @@
   .appfoot{margin:34px -20px 0;padding:22px 24px 26px;border-top:1px solid var(--line);
     display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--faint)}
   .appfoot .wrap{margin-top:auto}
-  .appfoot .brand{letter-spacing:.22em;text-transform:uppercase;font-size:9.5px;font-weight:700}
+  .appfoot .brand{letter-spacing:.1em;text-transform:uppercase;font-size:9.5px;font-weight:600;color:#c2c6bf}
   .appfoot a{color:var(--gold);text-decoration:none;font-weight:600}
   .appfoot a:hover{text-decoration:underline;text-underline-offset:3px}
   @media(max-width:560px){.appfoot{justify-content:center;text-align:center}}
-  @media(max-width:980px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:720px){.tiles{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:560px){.tiles{grid-template-columns:1fr}.top{margin:0 -20px 18px}}
   @media print{.top .out,.hd .btn,.appfoot,.nav,.back{display:none}.top{position:static;background:none;backdrop-filter:none}}
 </style></head><body>
@@ -263,6 +309,7 @@
     <div class="b"><span id="oGreet">Hello,</span><span class="e" id="oName"> —</span></div>
     <div class="who"><span class="out" onclick="ownerLogout()">Sign out</span></div>
   </div>
+  <div class="stmthead" id="stmtHead"></div>
   <div class="nav">
     <div class="navlink on" id="navHome" onclick="go('home')">Home</div>
     <div class="navlink" id="navRevenue" onclick="go('revenue')">Revenue</div>
@@ -273,12 +320,13 @@
 
   <div id="view-home">
   <div class="hd"><div><div class="crumb">My Statement</div><h2 id="oTitle">Dashboard</h2></div>
-  <div style="display:flex;gap:9px;align-items:center"><span id="homeFilter"></span><button class="btn" onclick="window.print()">Download statement (PDF)</button></div></div>
+  <div style="display:flex;gap:9px;align-items:center"><span id="homeFilter"></span><button class="btn" onclick="openPreview('statement')">Download statement (PDF)</button></div></div>
   <div class="tiles">
     <div class="tile"><div class="l">My earnings (owner net)</div><div class="v" id="oNet">—</div><div class="s">all bookings</div></div>
     <div class="tile"><div class="l">Balance coming</div><div class="v" id="oComing">—</div><div class="s" id="oComingS">not yet checked out</div></div>
     <div class="tile"><div class="l">Still to receive</div><div class="v" id="oDue">—</div><div class="s" id="oDueS">outstanding</div></div>
     <div class="tile"><div class="l">Bookings</div><div class="v" id="oCount">—</div><div class="s">total</div></div>
+    <div class="tile"><div class="l">Checked in</div><div class="v" id="oIn">—</div><div class="s">staying now</div></div>
     <div class="tile"><div class="l">Upcoming</div><div class="v" id="oUp">—</div><div class="s">confirmed</div></div>
   </div>
   <div class="villas" id="oVillas"></div>
@@ -319,6 +367,13 @@
   </div>
 
   <div class="appfoot" style="margin-top:auto"><span class="brand">MGROUP Estates &nbsp;·&nbsp; Phuket</span><span>Need help? <a href="https://wa.me/66899723321?text=Hello%20MGROUP%2C%20I%20have%20a%20question%20about%20my%20Owner%20Dashboard." target="_blank" rel="noopener">Contact admin</a></span></div>
+</div>
+
+<div class="pvbar" id="pvbar">
+  <span class="pvinfo">Preview — this is exactly what will be saved</span>
+  <span class="pvbtns"><span class="abtn" onclick="closePreview()">Close</span>
+  <span class="abtn" onclick="window.print()">Print</span>
+  <span class="abtn wa" id="pvSave" onclick="savePdf(this)">Download PDF</span></span>
 </div>
 
 <div class="dv" id="dv">
@@ -426,6 +481,62 @@
       return '<span class="docbtn" onclick="event.stopPropagation();openDoc(\''+a.id+'\',\''+esc(label).replace(/'/g,"&#39;")+'\')">&#128196; '+esc(label)+'</span>';
     }).join('')+'</div>';
   }
+  function fileList(list,vid){
+    return '<div class="doclist">'+list.map(function(a){
+      var label=a.title||CAT[a.category]||'Document';
+      var own=/^owner:/.test(a.uploaded_by||'');
+      return '<span class="docbtn" onclick="openDoc(\''+a.id+'\',\''+esc(label)+'\')">&#128196; '+esc(label)
+        +(own?'<span class="dx" title="Remove this file" onclick="event.stopPropagation();delFile(\''+a.id+'\',\''+vid+'\')">&times;</span>':'')
+        +'</span>';
+    }).join('')+'</div>'
+    +'<div class="docnote">Opens a watermarked copy — the villa name is printed across every page.</div>';
+  }
+  function addFile(vid,cat){
+    return '<label class="upbtn">+ Add file<input type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" '
+      +'onchange="ownerUpload(this,\''+vid+'\',\''+cat+'\')" hidden></label>'
+      +'<span class="upnote" id="up-'+cat+'">PDF, JPG or PNG · up to 15 MB</span>';
+  }
+  async function refreshVillaFiles(vid){
+    try{
+      var rows=await qq('attachments','id,entity_type,entity_id,category,title,person_name,uploaded_by,mime,created_at',
+        '&visible_to_owner=eq.true&entity_type=eq.villa&entity_id=eq.'+vid+'&order=created_at.desc');
+      DATA.att.villa[vid]=rows||[];
+    }catch(e){}
+    renderVilla(vid);
+  }
+  async function ownerUpload(input,vid,cat){
+    var file=input.files&&input.files[0]; input.value='';
+    var note=document.getElementById('up-'+cat);
+    var say=function(t,bad){if(note){note.textContent=t;note.style.color=bad?'var(--red)':'var(--faint)';}};
+    if(!file)return;
+    if(file.size>15*1024*1024){say('That file is larger than 15 MB',1);return;}
+    say('Uploading '+file.name+'…');
+    var data=await new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result);};r.onerror=rej;r.readAsDataURL(file);});
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/owner-upload',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({token:DATA.token||'',villa_id:vid,category:cat,
+          mime:file.type||'application/pdf',title:file.name.replace(/\.[^.]+$/,''),data_base64:data})});
+      var d=await r.json();
+      if(!r.ok){
+        var m={unauthorized:'Your session expired — please sign in again.',forbidden:'This villa is not linked to your account.',
+               bad_mime:'Only PDF, JPG and PNG files can be uploaded.',too_large:'That file is larger than 15 MB.',
+               too_many:'You have reached the file limit for this villa.'};
+        say(m[d.error]||'Upload failed.',1); return;
+      }
+      await refreshVillaFiles(vid);
+    }catch(e){ say('Upload failed.',1); }
+  }
+  async function delFile(id,vid){
+    if(!confirm('Remove this file?'))return;
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/owner-upload',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({token:DATA.token||'',action:'delete',id:id})});
+      if(!r.ok){var d=await r.json();alert(d.error==='forbidden'?'Only MGROUP can remove this file.':'Could not remove the file.');return;}
+      await refreshVillaFiles(vid);
+    }catch(e){alert('Could not remove the file.');}
+  }
   function closeDoc(){
     var b=document.getElementById('dvBody');
     var fr=b.querySelector('iframe'); if(fr&&fr.src.indexOf('blob:')===0)URL.revokeObjectURL(fr.src);
@@ -509,7 +620,7 @@
         +taskList(st)+'</details>';
     }).join('');
     return '<div class="dgh">Progress</div>'
-      +'<div class="prow" style="margin:0 0 12px"><span>'+where+' &nbsp;·&nbsp; '+p.done+' of '+p.total+' steps done</span></div>'
+      +'<div class="prow" style="margin:-2px 0 14px"><span>'+where+' &nbsp;·&nbsp; '+p.done+' of '+p.total+' steps done</span></div>'
       +'<div class="stages">'+acc+'</div>';
   }
   function openProcess(bid){ location.hash='booking/'+bid; }
@@ -533,6 +644,7 @@
         det.innerHTML='<div class="sec"><div class="state">'+esc(msg[d.error]||'This link could not be opened.')+'</div></div>';
         return;
       }
+      if(d.summary){ renderSummary(d); return; }
       DATA.shareToken=tok;
       DATA.bk=[d.booking];
       DATA.vmap={}; if(d.villa)DATA.vmap[d.villa.id]=d.villa;
@@ -551,6 +663,128 @@
     }
   }
 
+  // Owner creates a no-login, summary-only link for this booking.
+  async function shareLink(bid,el){
+    var t=el?el.textContent:''; if(el){el.textContent='Creating…';}
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/booking-share',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({action:'create_owner',owner_token:DATA.token||'',booking_id:bid,days:30})});
+      var d=await r.json();
+      if(!r.ok||!d.token){
+        showShare(null,d.error==='unauthorized'?'Your session expired — please sign in again.':'Could not create the link.');
+        if(el)el.textContent=t; return;
+      }
+      var url=location.origin+location.pathname+'#s/'+d.token;
+      showShare(url,null,d.expires_at);
+      try{ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).catch(function(){}); }catch(e){}
+    }catch(e){ showShare(null,'Could not create the link.'); }
+    if(el)el.textContent=t;
+  }
+  function showShare(url,err,exp){
+    var dv=document.getElementById('dv'), body=document.getElementById('dvBody');
+    document.getElementById('dvTitle').textContent='Share link';
+    body.className='dvbody scrollable';
+    body.innerHTML='<div class="pvwrap" style="max-width:560px;padding:8px 0">'
+      +(err?'<div class="dvmsg">'+esc(err)+'</div>'
+           :'<div class="sec"><h4>Read-only summary link</h4>'
+             +'<div style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:12px">'
+             +'Anyone with this link can see a summary of this booking — villa, dates, status and progress. '
+             +'No sign-in needed. No documents, no guest details and no amounts are shown.</div>'
+             +'<div style="font-family:var(--mono);font-size:12px;word-break:break-all;background:#faf8f4;'
+             +'border:1px solid var(--line);border-radius:9px;padding:12px">'+esc(url)+'</div>'
+             +'<div style="font-size:12px;color:var(--faint);margin-top:10px">Copied to your clipboard'
+             +(exp?' · valid until '+fmtD(String(exp).slice(0,10)):'')+'</div></div>')
+      +'</div>';
+    dv.classList.add('on');
+  }
+  async function savePdf(el){
+    var t=el.textContent; el.textContent='Building…';
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/owner-statement',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({token:DATA.token||'',year:HOMEYEAR,
+          owner_name:(document.getElementById('oName').textContent||'').trim()})});
+      if(!r.ok){el.textContent=t;alert(r.status===401?'Your session expired — please sign in again.':'Could not build the PDF.');return;}
+      var blob=await r.blob(), url=URL.createObjectURL(blob), a=document.createElement('a');
+      a.href=url; a.download='MGROUP-statement-'+(HOMEYEAR==='all'?'all-years':HOMEYEAR)+'.pdf';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){URL.revokeObjectURL(url);},5000);
+    }catch(e){alert('Could not build the PDF.');}
+    el.textContent=t;
+  }
+  function openPreview(kind){
+    document.body.classList.add('previewing');
+    document.getElementById('pvbar').classList.add('on');
+    document.getElementById('pvSave').style.display=(kind==='statement'?'':'none');
+    var h=document.getElementById('stmtHead');
+    var o=document.getElementById('oName').textContent.trim();
+    h.innerHTML='<div class="sname2">MGROUP ESTATES</div>'
+      +'<div class="stitle">'+(kind==='statement'?'Owner statement':'Booking summary')+'</div>'
+      +'<div class="smeta">'+esc(o)+' &nbsp;·&nbsp; '+fmtD(new Date().toISOString().slice(0,10))+'</div>';
+    window.scrollTo(0,0);
+  }
+  function closePreview(){
+    document.body.classList.remove('previewing');
+    document.getElementById('pvbar').classList.remove('on');
+  }
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closePreview();});
+
+  function goSignIn(){ location.href=location.origin+location.pathname; }
+  function renderSummary(d){
+    var b=d.booking||{}, v=d.villa||{};
+    var st=(b.status||'').toLowerCase().replace(/[^a-z_]/g,'');
+    var parts=[]; if(N(b.adults))parts.push(plural(N(b.adults),'adult'));
+    if(N(b.children))parts.push(plural(N(b.children),'child').replace('childs','children'));
+    if(N(b.pets))parts.push(plural(N(b.pets),'pet'));
+    var party2=parts.length?parts.join(' · '):(N(b.guests_count)?plural(N(b.guests_count),'guest'):'—');
+    var n=N(b.nights)||nights(b.check_in,b.check_out);
+    var html='<div class="hd"><div><div class="crumb">'+esc(v.name||'Booking')+'</div>'
+      +'<h2>'+esc(b.booking_ref||'—')+' <span class="st st-'+esc(st)+'" style="vertical-align:6px;font-size:11px">'
+      +esc((b.status||'—').replace(/_/g,' '))+'</span></h2></div></div>'
+      +'<div class="sharenote">Shared by MGROUP'
+      +(d.expires_at?' &nbsp;·&nbsp; summary link, valid until '+fmtD(String(d.expires_at).slice(0,10)):'')+'</div>'
+      +'<div class="sec" style="margin-top:14px"><div class="detbox">'
+      +'<div class="dgh">Stay</div>'
+      +'<div class="dgrid three">'
+        +dg('Check-in',fmtD(b.check_in))+dg('Check-out',fmtD(b.check_out))+dg('Nights',n||'—')
+      +'</div>'
+      +'<div class="dgrid three" style="margin-top:14px">'
+        +dg('Guests',party2)+dg('Villa',esc(v.name||'—'))+(v.area?dg('Area',esc(v.area)):'')
+      +'</div>'
+      +'<div class="dgh">Payment</div>'
+      +'<div class="prow" style="margin:0 0 10px"><span>'+N(d.payment_pct)+'% received</span></div>'
+      +'<div class="paybar"><i style="width:'+N(d.payment_pct)+'%"></i></div>';
+    if((d.stages||[]).length){
+      var cur=-1; d.stages.forEach(function(x,i){if(cur<0&&x.done<x.total)cur=i;});
+      html+='<div class="dgh">Progress</div><div class="stages">'
+        +d.stages.map(function(s2,i){
+          var pct=s2.total?Math.round(s2.done/s2.total*100):0;
+          var items=(s2.tasks||[]).map(function(t){
+            return '<li><div><div>'+esc(nice(t.task_name))+'</div>'
+              +(t.is_done&&t.done_at?'<div class="nt">'+fmtD(String(t.done_at).slice(0,10))+'</div>':'')+'</div>'
+              +'<span class="st '+(t.is_done?'st-confirmed':'st-pending')+'">'+(t.is_done?'Done':'Pending')+'</span></li>';
+          }).join('');
+          return '<details class="stage"'+(i===cur?' open':'')+'>'
+            +'<summary><span class="sname">'+esc(s2.label)+'</span>'
+            +'<span class="scount'+(s2.done===s2.total?' ok':'')+'">'+s2.done+' / '+s2.total+'</span>'
+            +'<span class="sbar"><i style="width:'+pct+'%"'+(s2.done===s2.total?' class="ok"':'')+'></i></span>'
+            +'<span class="schev">&#9662;</span></summary>'
+            +(items?'<ul class="plist">'+items+'</ul>':'')+'</details>';
+        }).join('')+'</div>';
+    }
+    html+='</div></div>'
+      +'<div class="signcta">'
+      +'<div class="t">Are you the villa owner?</div>'
+      +'<div class="d">Sign in to your Owner Dashboard to see documents, guest details, payments and every booking.</div>'
+      +'<span class="btn" onclick="goSignIn()">See all details &mdash; Sign in</span>'
+      +'</div>';
+    document.getElementById('bookingDetail').innerHTML=html;
+    document.getElementById('shareBar').style.display='none';
+    var back=document.querySelector('#view-booking .back'); if(back)back.style.display='none';
+    window.scrollTo(0,0);
+  }
+
   function renderBooking(bid){
     var b=DATA.bk.filter(function(x){return x.id===bid;})[0];
     if(!b){go('home');return;}
@@ -561,7 +795,8 @@
       +'<h2>'+esc(b.booking_ref||'—')+' <span class="st st-'+esc(st)+'" style="vertical-align:6px;font-size:11px">'
       +esc((b.status||'—').replace(/_/g,' '))+'</span></h2></div>'
       +'<div class="acts">'
-      +'<span class="abtn" onclick="window.print()">Print</span></div></div>'
+      +'<span class="abtn" onclick="shareLink(\''+b.id+'\',this)">Share link</span>'
+      +'<span class="abtn" onclick="openPreview(\'booking\')">Print</span></div></div>'
       +'<div class="pvsub">'+fmtD(b.check_in)+' &rarr; '+fmtD(b.check_out)+'</div>'
       +'<div class="sec" style="margin-top:16px"><div class="detbox">'+bkDetail(b,P,true)+'</div></div>';
     document.getElementById('bookingDetail').innerHTML=html;
@@ -587,35 +822,64 @@
     return {net:net,paid:paid,balance:Math.max(0,net-paid),pct:net>0?Math.round(paid/net*100):(paid>0?100:0),known:t>0||p>0||net>0};
   }
   // The installment schedule the admin keys in, showing ONLY this owner's net.
+  // An installment with no amount still counts when its label carries a percentage
+  // ("1st 50% Payment"), so the bar tracks the real share of the booking that is in.
+  function schedAmount(r,net){
+    var lab=String(r.label||'');
+    if(/deposit/i.test(lab))return{amount:0,deposit:true};
+    if(r.owner_net!=null)return{amount:N(r.owner_net),deposit:false};
+    var m=lab.match(/(\d{1,3})\s*%/);
+    if(m&&net>0)return{amount:Math.round(net*Math.min(100,+m[1])/100),deposit:false,inferred:true};
+    return{amount:null,deposit:false};
+  }
   function schedBlock(b){
     var rows=DATA.sched[b.id]||[];
     if(!rows.length)return '';
-    var known=rows.filter(function(r){return r.owner_net!=null;});
-    var paid=0,coming=0;
-    known.forEach(function(r){var v=N(r.owner_net);if(r.status==='paid')paid+=v;else coming+=v;});
-    var tot=paid+coming, pct=tot>0?Math.round(paid/tot*100):0;
-    var pend=rows.length-known.length;
-    var body=rows.map(function(r){
+    var net=N(b.owner_net);
+    var paid=0,unknown=0,scheduled=0;
+    var items=rows.map(function(r){
+      var a=schedAmount(r,net);
+      if(!a.deposit){
+        if(a.amount==null)unknown++;
+        else{ scheduled+=a.amount; if(r.status==='paid')paid+=a.amount; }
+      }
+      return {r:r,a:a};
+    });
+    // Nothing measurable? fall back to the booking-level view.
+    if(!net&&!scheduled)return '';
+    var base=net>0?net:scheduled;
+    var coming=Math.max(0,base-paid);
+    var pct=base>0?Math.min(100,Math.round(paid/base*100)):0;
+    var gap=net>0?net-scheduled:0;
+
+    var body=items.map(function(x){
+      var r=x.r,a=x.a;
       var st=r.status==='paid'?'st-confirmed':(r.status==='overdue'?'st-cancelled':'st-pending');
-      var amt=r.owner_net==null
-        ? '<span style="color:var(--faint)">being finalised</span>'
-        : '<b>'+money(r.owner_net)+'</b>';
+      var amt=a.deposit
+        ? '<span style="color:var(--faint)">refundable</span>'
+        : (a.amount==null?'<span style="color:var(--faint)">being finalised</span>':'<b>'+money(a.amount)+'</b>');
       var when=r.status==='paid'?(r.paid_date||''):(r.due_date||'');
       return '<div class="prow"><span>'+esc(r.label||'Installment')+
-        (when?' <span style="color:var(--faint)">· '+esc(when)+'</span>':'')+'</span>'+
+        (when?' <span style="color:var(--faint)">· '+fmtD(when)+'</span>':'')+'</span>'+
         '<span style="display:inline-flex;gap:10px;align-items:center">'+amt+
         '<span class="st '+st+'">'+esc(r.status||'pending')+'</span></span></div>';
     }).join('');
+
+    var label=coming>0?(paid>0?'Partly received':'Not received yet'):'Received in full';
+    var cls=coming>0?(paid>0?'st-pending':'st-cancelled'):'st-confirmed';
     return '<div class="dgh">Payment schedule</div>'+
       '<div style="font-size:12px;color:var(--faint);margin:-4px 0 10px">Your net for each installment, as agreed with MGROUP.</div>'+
       body+
-      (pend?'<div style="font-size:11.5px;color:var(--faint);margin-top:8px">'+pend+' installment'+(pend>1?'s are':' is')+' still being finalised by MGROUP.</div>':'')+
-      '<div class="paybar" style="margin-top:12px"><i style="width:'+pct+'%"></i></div>'+
+      '<div class="prow" style="margin:14px 0 8px"><span>'+pct+'% of your net received</span>'+
+        '<span class="st '+cls+'">'+label+'</span></div>'+
+      '<div class="paybar"><i style="width:'+pct+'%"></i></div>'+
       '<div class="dgrid" style="margin-top:14px">'+
         dg('Received',money(paid))+
         dg('Still to come',coming?'<span style="color:var(--red)">'+money(coming)+'</span>':'—')+
-        dg('My net (scheduled)',money(tot))+
-      '</div>';
+        dg('My net',money(base))+
+      '</div>'+
+      (unknown?'<div style="font-size:11.5px;color:var(--faint);margin-top:9px">'+unknown+' installment'+(unknown>1?'s are':' is')+' still being finalised by MGROUP.</div>':'')+
+      (gap>0&&!unknown?'<div style="font-size:11.5px;color:var(--faint);margin-top:10px">'+money(gap)+' of your net is not on the schedule yet.</div>':'');
   }
   function payBlock(b){
     var sb=schedBlock(b);
@@ -631,7 +895,7 @@
       +'<div class="dgrid" style="margin-top:14px">'
       +dg('Received',money(c.paid))
       +dg('Still to come',c.balance?'<span style="color:var(--red)">'+money(c.balance)+'</span>':'—')
-      +dg('My net (total)',money(c.net))
+      +dg('My net',money(c.net))
       +'</div>';
   }
   function plural(n,word){return n+' '+word+(n===1?'':'s');}
@@ -650,15 +914,16 @@
   function bkDetail(b,P,full){
     var out='', c=(DATA.contracts||{})[b.id];
     var n=N(b.nights)||nights(b.check_in,b.check_out);
-    var stay=dg('Check-in',fmtD(b.check_in))+dg('Check-out',fmtD(b.check_out))
-      +(n?dg('Nights',n):'')+dg('Guests',party(b))
-      +dg('Villa',esc((DATA.vmap[b.villa_id]||{}).name||'—'))
-      +(P.guest&&b.guest_id?dg('Guest',esc(DATA.gmap[b.guest_id]||'—')):'')
+    var who=(P.guest&&b.guest_id?dg('Guest',esc(DATA.gmap[b.guest_id]||'—')):'')+dg('Guests',party(b));
+    var when=dg('Check-in',fmtD(b.check_in))+dg('Check-out',fmtD(b.check_out))+(n?dg('Nights',n):'');
+    var rest=dg('Villa',esc((DATA.vmap[b.villa_id]||{}).name||'—'))
       +(b.created_at?dg('Booked on',fmtD(String(b.created_at).slice(0,10))):'');
-    out+='<div class="dgh">Stay</div><div class="dgrid">'+stay+'</div>';
+    out+='<div class="dgh">Stay</div>'
+      +'<div class="dgrid three">'+who+'</div>'
+      +'<div class="dgrid three" style="margin-top:14px">'+when+'</div>'
+      +'<div class="dgrid three" style="margin-top:14px">'+rest+'</div>';
 
     out+=payBlock(b);
-    if(P.net) out+='<div class="dgh">Settlement</div><div class="dgrid">'+dg('My net',money(b.owner_net))+'</div>';
     var c2=(DATA.contracts||{})[b.id];
     var extra=(c2?dg('Agreement no.',esc(c2.contract_no||'—')+(c2.status?' · '+esc(c2.status):'')):'')
       +(b.special_requests?dg('Special requests',esc(b.special_requests)):'');
@@ -687,12 +952,13 @@
     var P=DATA.prefs||{}, all=DATA.bk||[], bk=byYear(all,HOMEYEAR);
     var f=document.getElementById('homeFilter');
     if(f)f.innerHTML=yearSelect('setHomeYear',HOMEYEAR,all);
-    var net=0,up=0,coming=0,comingN=0,due=0,dueN=0;
+    var net=0,up=0,inn=0,coming=0,comingN=0,due=0,dueN=0;
     bk.forEach(function(b){
       var st=(b.status||'').toLowerCase();
       net+=N(b.owner_net);
       if(st!=='checked_out'&&st!=='cancelled'&&st!=='canceled'){coming+=N(b.owner_net);comingN++;}
       if(st==='confirmed'||st==='deposit')up++;
+      if(st==='checked_in')inn++;
       var c=collected(b); if(c.balance>0){due+=c.balance;dueN++;}
     });
     var span=HOMEYEAR==='all'?'all bookings':HOMEYEAR;
@@ -703,6 +969,7 @@
     document.getElementById('oDue').textContent=money(due);
     document.getElementById('oDueS').textContent=dueN?('across '+dueN+' booking'+(dueN>1?'s':'')):'nothing outstanding';
     document.getElementById('oCount').textContent=bk.length;
+    document.getElementById('oIn').textContent=inn;
     document.getElementById('oUp').textContent=up;
 
     var cols=[{h:'#',cls:'num'},{h:'Ref'},{h:'Status'},{h:'Villa'}];
@@ -918,12 +1185,12 @@
         +'<div><h4>Not included</h4>'+li(exc,'exc','&times;','Not set yet')+'</div>'
       +'</div></div>'
       +'<div class="sec"><h4>Inventory listing</h4>'
-        +(invF.length?docBtns(invF)+'<div class="docnote">Opens a watermarked copy — the villa name is printed across every page.</div>'
-                     :'<div style="font-size:12.5px;color:var(--faint)">No inventory file attached yet — ask MGROUP to upload it</div>')
+        +(invF.length?fileList(invF,v.id):'<div style="font-size:12.5px;color:var(--faint)">No inventory file yet</div>')
+        +addFile(v.id,'inventory')
         +(inv.length?'<div style="margin-top:14px">'+li(inv,'inc','&#8226;','')+'</div>':'')+'</div>'
       +'<div class="sec"><h4>Villa documents</h4>'
-        +(docF.length?docBtns(docF)+'<div class="docnote">Shared by MGROUP. Every copy is watermarked with the villa name and today&#39;s date, and is for your records only.</div>'
-                     :'<div style="font-size:12.5px;color:var(--faint)">No documents shared yet</div>')+'</div>'
+        +(docF.length?fileList(docF,v.id):'<div style="font-size:12.5px;color:var(--faint)">No documents yet</div>')
+        +addFile(v.id,'document')+'</div>'
       +(imgs.length?'<div class="sec"><h4>Photos ('+imgs.length+')</h4><div class="gal">'
          +imgs.map(function(u){return '<img src="'+esc(u)+'" alt="" onclick="zoom(this.src)">';}).join('')+'</div></div>':'')
       ;
@@ -988,7 +1255,7 @@
           var trows=await qq('checkin_tasks','booking_id,task_type,task_name,is_done,done_at,done_by,notes,sort_order',
             '&booking_id=in.('+bk.map(function(x){return x.id;}).filter(Boolean).join(',')+')&order=sort_order.asc');
           DATA.tasks={}; (trows||[]).forEach(function(t){(DATA.tasks[t.booking_id]=DATA.tasks[t.booking_id]||[]).push(t);});
-          var arows=await qq('attachments','id,entity_type,entity_id,category,title,person_name,mime,issued_at,expires_at,notes,created_at',
+          var arows=await qq('attachments','id,entity_type,entity_id,category,title,person_name,uploaded_by,mime,issued_at,expires_at,notes,created_at',
             '&visible_to_owner=eq.true&entity_id=in.('+ids.join(',')+')&order=created_at.desc');
           (arows||[]).forEach(function(a){var g=DATA.att[a.entity_type];if(!g)return;(g[a.entity_id]=g[a.entity_id]||[]).push(a);});
         }
@@ -1005,6 +1272,11 @@
     }catch(e){var tb=document.getElementById('oRows');if(tb)tb.innerHTML='<tr><td colspan="7" class="state" style="color:var(--red)">Could not load</td></tr>';}
   }
 
-  (function(){var s=sessionStorage.getItem('mg_owner');if(s){try{var o=JSON.parse(s);DATA.token=o.token||'';showApp(o.id,o.name,o.prefs||{});}catch(e){}}})();
+  (function(){
+    // a share link opens straight into the shared view, with no sign-in
+    if(/^#s\//.test(location.hash||'')){route();return;}
+    var s=sessionStorage.getItem('mg_owner');
+    if(s){try{var o=JSON.parse(s);DATA.token=o.token||'';showApp(o.id,o.name,o.prefs||{});}catch(e){}}
+  })();
 </script>
 </body></html>
