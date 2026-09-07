@@ -32,6 +32,7 @@
   .btn{font-family:var(--font);font-weight:600;font-size:13px;border-radius:9px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
   .btn.primary{background:var(--g600);color:#fff;border-color:var(--g600)}.btn.primary:hover{background:var(--g700)}
   .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .tiles.tiles3{grid-template-columns:repeat(3,1fr)}
   .tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
   .tile .l{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
   .tile .v{font-size:23px;font-weight:800;margin-top:6px;font-variant-numeric:tabular-nums}
@@ -208,8 +209,23 @@
     .mtabs{padding:0 8px}.mtab{padding:10px 9px;font-size:10px}
     .frm .r.c2,.frm .r.c3,.sumbar,.mtr{grid-template-columns:1fr}
   }
-  @media(max-width:1000px){.tiles{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:760px){.shell{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px}.side .user,.nl{display:none}.nav{flex-direction:row;flex-wrap:wrap}.main{padding:16px}}
+  @media(max-width:1000px){.tiles,.tiles.tiles3{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:760px){
+    html,body{overflow-x:hidden}
+    .shell{grid-template-columns:1fr;min-width:0}
+    .side{position:sticky;top:0;z-index:20;height:auto;flex-direction:column;padding:9px 10px;border-right:none;border-bottom:1px solid var(--line)}
+    .brand{padding:2px 4px 8px}
+    .side .user,.nl{display:none}
+    .nav{flex-direction:row;flex-wrap:nowrap;overflow-x:auto;gap:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+    .nav::-webkit-scrollbar{display:none}
+    .nav button{width:auto;flex:0 0 auto;white-space:nowrap;padding:8px 12px}
+    .main{padding:14px;max-width:100%;min-width:0}
+    .view,.head,.card,.tablecard{min-width:0;max-width:100%}
+    .head{flex-wrap:wrap;gap:10px;align-items:center}
+    .head h2{font-size:21px}
+    .head .btn{white-space:nowrap}
+  }
+  @media(max-width:480px){.tiles,.tiles.tiles3{grid-template-columns:1fr}}
   /* villas */
   .vfilter{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
   .vfilter input,.vfilter select{font-family:var(--font);font-size:12.5px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
@@ -270,6 +286,25 @@
     #docOv .mh,#ownOv .mh{display:none}
     .modal{max-width:100%!important;box-shadow:none;border-radius:0}
   }
+
+  /* guest portal · concierge requests */
+  .crcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+  .crcard .top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .crcard .ttl{font-size:15px;font-weight:700}
+  .crcard .meta{font-size:12px;color:var(--muted);margin-top:5px;display:flex;gap:14px;flex-wrap:wrap}
+  .crcard .meta b{color:var(--ink);font-weight:600}
+  .crcard .gnote{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:9px;padding-top:9px;
+    border-top:1px solid var(--line);white-space:pre-wrap}
+  .crcard .reply{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+  .crcard .reply input{flex:1;min-width:200px;padding:9px 12px;border:1px solid var(--line);
+    border-radius:9px;font-size:13px;background:#fff}
+  .crcard .reply select{padding:9px 10px;border:1px solid var(--line);border-radius:9px;font-size:13px;
+    font-weight:600;background:#fff}
+  .crempty{padding:44px;text-align:center;color:var(--muted);font-size:13px}
+  .crst{display:inline-block;font-size:11px;font-weight:800;padding:4px 11px;border-radius:20px;
+    white-space:nowrap;background:#8b98a8;color:#fff}
+  .crst.new{background:#e0921a}.crst.confirmed{background:#1a7fe0}.crst.done{background:#12a150}
+  .crst.declined{background:#e03b2f}.crst.cancelled{background:#7c8a83}
 </style></head><body>
 
 <div class="shell">
@@ -279,6 +314,7 @@
     <div class="nav" id="nav">
       <button class="active" data-v="dash" onclick="go('dash',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</button>
       <button data-v="bookings" onclick="go('bookings',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>All Bookings</button>
+      <button data-v="concierge" onclick="go('concierge',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16.2v-5.1a6 6 0 1 0-12 0v5.1L4 19.2h16z"/><path d="M9.8 22h4.4"/></svg>Concierge</button>
       <button data-v="finance" onclick="go('finance',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>Finance</button>
       <button data-v="villas" onclick="go('villas',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-7a2 2 0 012-2h16a2 2 0 012 2v7"/><path d="M4 11V7a2 2 0 012-2h12a2 2 0 012 2v4"/><path d="M2 17h20"/><path d="M12 5v6"/></svg>Villas</button>
       <button data-v="owners" onclick="go('owners',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 4l9 6.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/></svg>Owners</button>
@@ -306,7 +342,7 @@
     <!-- BOOKINGS -->
     <div id="v-bookings" class="view">
       <div class="head"><div><div class="crumb">Rentals</div><h2>All Bookings</h2></div><button class="btn primary" onclick="location.href='/admin/rent-add-booking.html'">+ New Booking</button></div>
-      <div class="tiles" style="margin-bottom:16px;grid-template-columns:repeat(3,1fr)">
+      <div class="tiles tiles3" style="margin-bottom:16px">
         <div class="tile"><div class="l">Checking-in soon</div><div class="v" id="bk-checkin">—</div><div class="s">next 14 days</div></div>
         <div class="tile"><div class="l">Upcoming</div><div class="v" id="bk-upcoming">—</div><div class="s">confirmed, future</div></div>
         <div class="tile"><div class="l">Total bookings</div><div class="v" id="bk-total">—</div><div class="s">all time</div></div>
@@ -316,6 +352,25 @@
         <select id="bkYear" onchange="renderBookings()" class="st-select" style="background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:8px;font-weight:600"></select>
       </div>
       <div class="tablecard"><table><thead><tr><th>Ref</th><th>Status</th><th>Progress</th><th>Guest</th><th>Villa</th><th class="num">Nights</th><th class="money">Total</th><th></th></tr></thead><tbody id="bkRows"><tr><td colspan="8" class="state">Loading…</td></tr></tbody></table></div>
+    </div>
+
+    <!-- CONCIERGE -->
+    <div id="v-concierge" class="view">
+      <div class="head"><div><div class="crumb">Guest portal</div><h2>Concierge requests</h2></div>
+        <button class="btn" onclick="loadConcierge(true)">Refresh</button></div>
+      <div class="tiles tiles3" style="margin-bottom:16px">
+        <div class="tile"><div class="l">Open</div><div class="v" id="cr-open">—</div><div class="s">waiting on us</div></div>
+        <div class="tile"><div class="l">Arranged</div><div class="v" id="cr-done">—</div><div class="s">all time</div></div>
+        <div class="tile"><div class="l">Total</div><div class="v" id="cr-total">—</div><div class="s">all requests</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <label style="font-size:12px;font-weight:600;color:var(--muted)">Show</label>
+        <select id="crFilter" onchange="renderConcierge()" class="st-select"
+          style="background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:8px;font-weight:600">
+          <option value="open">Open only</option><option value="all">Everything</option>
+        </select>
+      </div>
+      <div id="crList"><div class="state">Loading…</div></div>
     </div>
 
     <!-- FINANCE -->
@@ -357,7 +412,7 @@
     <!-- CLIENTS -->
     <div id="v-clients" class="view">
       <div class="head"><div><div class="crumb">Guests</div><h2>Clients</h2></div></div>
-      <div class="tablecard"><table><thead><tr><th>Name</th><th>Nationality</th><th>Email</th><th>Phone</th><th class="num">Bookings</th></tr></thead><tbody id="cliRows"><tr><td colspan="5" class="state">Loading…</td></tr></tbody></table></div>
+      <div class="tablecard"><table><thead><tr><th>Name</th><th>Nationality</th><th>Email</th><th>Phone</th><th class="num">Bookings</th><th>Guest portal</th></tr></thead><tbody id="cliRows"><tr><td colspan="6" class="state">Loading…</td></tr></tbody></table></div>
     </div>
 
     <!-- AGENTS -->
@@ -388,6 +443,14 @@
   <div class="modal">
     <div class="mh"><div><h3 id="vilTitle">Add villa</h3><div class="sub" id="vilSub"></div></div><button class="cls" onclick="closeVilla()">&#10005; Close</button></div>
     <div class="mb" id="vilBody"></div>
+  </div>
+</div>
+
+<!-- VILLA GUIDE (GUEST PORTAL) MODAL -->
+<div class="ov" id="gdOv" onclick="if(event.target===this)closeGuide()">
+  <div class="modal">
+    <div class="mh"><div><h3 id="gdTitle">Villa guide</h3><div class="sub" id="gdSub"></div></div><button class="cls" onclick="closeGuide()">&#10005; Close</button></div>
+    <div class="mb" id="gdBody"></div>
   </div>
 </div>
 
@@ -485,6 +548,7 @@
       DATA.omap={}; (res[2]||[]).forEach(function(o){DATA.omap[o.id]=o;});
       (res[3]||[]).forEach(function(g){DATA.gmap[g.id]=g;});
       renderAll();
+      loadConcierge();
     }catch(e){document.getElementById('bkRows').innerHTML='<tr><td colspan="8" class="state" style="color:var(--red)">Load failed: '+esc(e.message)+'</td></tr>';}
   }
   var N=function(x){return Number(x||0);};
@@ -515,7 +579,9 @@
         '<td>'+esc(gname(b.guest_id))+'</td>'+
         '<td><div class="vn">'+esc(vname(b.villa_id))+'</div><div class="sub">'+esc(varea(b.villa_id))+'</div></td>'+
         '<td class="num">'+(b.nights||'–')+'</td><td class="money">'+money(b.total)+'</td>'+
-        '<td style="white-space:nowrap;text-align:right"><span class="rowgo" onclick="openMng(\'' + b.id + '\')">Open &#8594;</span></td></tr>';
+        '<td style="white-space:nowrap;text-align:right">'+
+        '<button class="rowbtn" title="Copy a no-login guest link" onclick="shareGuest(\''+b.id+'\',this)">Guest link</button> '+
+        '<span class="rowgo" onclick="openMng(\''+b.id+'\')">Open &#8594;</span></td></tr>';
     }).join('')||'<tr><td colspan="8" class="state">No bookings</td></tr>';
     renderBkSummary();
   }
@@ -748,7 +814,8 @@
   function renderClients(){
     var cnt={};DATA.bk.forEach(function(b){if(b.guest_id)cnt[b.guest_id]=(cnt[b.guest_id]||0)+1;});
     var gs=Object.values(DATA.gmap);
-    document.getElementById('cliRows').innerHTML=gs.map(function(g){return '<tr><td><b>'+esc(g.name)+'</b></td><td>'+esc(g.nationality||'—')+'</td><td>'+esc(g.email||'—')+'</td><td>'+esc(g.phone||'—')+'</td><td class="num">'+(cnt[g.id]||0)+'</td></tr>';}).join('')||'<tr><td colspan="5" class="state">No clients</td></tr>';
+    document.getElementById('cliRows').innerHTML=gs.map(function(g){return '<tr><td><b>'+esc(g.name)+'</b></td><td>'+esc(g.nationality||'—')+'</td><td>'+esc(g.email||'—')+'</td><td>'+esc(g.phone||'—')+'</td><td class="num">'+(cnt[g.id]||0)+'</td>'+
+      '<td><button class="rowbtn" onclick="guestLogin(\''+g.id+'\',this)">Login…</button></td></tr>';}).join('')||'<tr><td colspan="6" class="state">No clients</td></tr>';
   }
 
   function renderAgents(){
@@ -1371,6 +1438,252 @@
     try{await bpSave();MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;renderMng();}
     catch(err){MNG.bp.payments=snapshot;alert('Could not save payment: '+err.message);}
   }
+
+  // ---------- GUEST PORTAL ----------
+  // A guest link opens /guest with no sign-in and shows that one booking only.
+  async function shareGuest(bid,btn){
+    var b=(DATA.bk||[]).filter(function(x){return x.id===bid;})[0];
+    if(b&&!b.guest_id){alert('Add a guest to this booking first.');return;}
+    var code=adminCode(); if(!code)return;
+    var t=btn.textContent; btn.textContent='Creating…'; btn.disabled=true;
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/booking-share',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({action:'create',passcode:code,booking_id:bid,days:120,audience:'guest'})});
+      var d=await r.json();
+      if(!r.ok){
+        if(d.error==='unauthorized')sessionStorage.removeItem('mg_admin_code');
+        alert(d.error==='unauthorized'?'Wrong admin passcode':
+              d.error==='booking_has_no_guest'?'Add a guest to this booking first.':
+              'Could not create the link'); return;
+      }
+      var url=location.origin+'/guest#s/'+d.token;
+      var msg='MGROUP Estates'+(b&&b.booking_ref?' — booking '+b.booking_ref:'')+'\n'
+        +(b?vname(b.villa_id)+', '+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'\n':'')
+        +'Your stay, villa details and our concierge (no login needed, link valid 120 days):\n'+url;
+      try{ await navigator.clipboard.writeText(msg); btn.textContent='Copied'; }
+      catch(e){ prompt('Copy this and send it to the guest:',url); btn.textContent=t; }
+      setTimeout(function(){btn.textContent=t;},2200);
+    }catch(e){ alert('Could not create the link'); btn.textContent=t; }
+    finally{ btn.disabled=false; }
+  }
+
+  // Optional email/password so a guest can come back to their whole history.
+  async function guestLogin(gid,btn){
+    var g=DATA.gmap[gid]||{};
+    var code=adminCode(); if(!code)return;
+    var t=btn.textContent; btn.textContent='…'; btn.disabled=true;
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/admin-guest-user',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({action:'get',passcode:code,guest_id:gid})});
+      var d=await r.json();
+      if(!r.ok){ if(d.error==='unauthorized')sessionStorage.removeItem('mg_admin_code');
+        alert('Could not load the guest login'); return; }
+      var has=(d.rows||[])[0];
+      var email=prompt(has?('Sign-in email for '+(g.name||'this guest')+
+                            '\nLast sign-in: '+(has.last_login?fmtD(String(has.last_login).slice(0,10)):'never')):
+                            ('Create a guest portal login for '+(g.name||'this guest')+'\n\nSign-in email:'),
+                       has?has.username:(g.email||''));
+      if(!email)return;
+      var pw=prompt(has?'New password (leave empty to keep the current one):':'Password (at least 6 characters):','');
+      if(pw===null)return;
+      var r2=await fetch(SB_URL+'/functions/v1/admin-guest-user',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({action:'set',passcode:code,guest_id:gid,username:email.trim(),
+                             password:pw,display_name:g.name||''})});
+      var d2=await r2.json();
+      if(!r2.ok){
+        alert({username_taken:'That email is already used by another portal login.',
+               weak_password:'The password needs at least 6 characters.',
+               password_required:'A password is needed to create the login.',
+               bad_username:'That email looks too short.'}[d2.error]||'Could not save the login');
+        return;
+      }
+      alert('Guest login '+(d2.mode==='created'?'created':'updated')+'.\n\n'
+        +location.origin+'/guest\nEmail: '+d2.username+(pw?'\nPassword: '+pw:''));
+    }catch(e){ alert('Could not save the login'); }
+    finally{ btn.textContent=t; btn.disabled=false; }
+  }
+
+  // ---------- concierge inbox ----------
+  var CRST=[['new','Received'],['confirmed','Confirmed'],['done','Arranged'],
+            ['declined','Not available'],['cancelled','Withdrawn']];
+  async function loadConcierge(force){
+    if(DATA.cr&&!force)return renderConcierge();
+    try{
+      var r=await sbFetch(SB_URL+'/rest/v1/concierge_requests?select=*&order=created_at.desc&limit=400',{headers:H});
+      DATA.cr=await r.json();
+      if(!Array.isArray(DATA.cr))DATA.cr=[];
+    }catch(e){ DATA.cr=[]; }
+    renderConcierge();
+  }
+  function renderConcierge(){
+    var all=DATA.cr||[];
+    var open=all.filter(function(r){return r.status==='new'||r.status==='confirmed';});
+    var el;
+    if(el=document.getElementById('cr-open'))el.textContent=open.length;
+    if(el=document.getElementById('cr-done'))el.textContent=all.filter(function(r){return r.status==='done';}).length;
+    if(el=document.getElementById('cr-total'))el.textContent=all.length;
+    var f=(document.getElementById('crFilter')||{}).value||'open';
+    var rows=f==='open'?open:all;
+    var box=document.getElementById('crList'); if(!box)return;
+    if(!rows.length){
+      box.innerHTML='<div class="crempty">'+(f==='open'?'Nothing waiting on us.':'No requests yet.')+'</div>';
+      return;
+    }
+    box.innerHTML=rows.map(function(r){
+      var b=(DATA.bk||[]).filter(function(x){return x.id===r.booking_id;})[0];
+      return '<div class="crcard"><div class="top"><div>'
+        +'<div class="ttl">'+esc(r.service_title)+'</div>'
+        +'<div class="meta">'
+          +'<span><b>'+esc(gname(r.guest_id))+'</b></span>'
+          +(b?'<span>'+esc(b.booking_ref||'')+' · '+esc(vname(b.villa_id))+'</span>':'')
+          +(r.requested_for?'<span>for '+fmtD(r.requested_for)+(r.requested_time?' '+esc(r.requested_time):'')+'</span>':'')
+          +(r.people?'<span>'+r.people+' people</span>':'')
+          +'<span>asked '+fmtD(String(r.created_at||'').slice(0,10))+'</span>'
+        +'</div></div>'
+        +'<span class="crst '+esc(r.status)+'">'+esc((CRST.filter(function(x){return x[0]===r.status;})[0]||[0,r.status])[1])+'</span>'
+        +'</div>'
+        +(r.notes?'<div class="gnote">'+esc(r.notes)+'</div>':'')
+        +'<div class="reply">'
+          +'<input id="crn-'+r.id+'" placeholder="What we told the guest…" value="'+esc(r.admin_note||'')+'">'
+          +'<select id="crs-'+r.id+'">'+CRST.map(function(x){
+              return '<option value="'+x[0]+'"'+(x[0]===r.status?' selected':'')+'>'+x[1]+'</option>';}).join('')+'</select>'
+          +'<button class="btn primary" onclick="crSave(\''+r.id+'\',this)">Save</button>'
+        +'</div></div>';
+    }).join('');
+  }
+  async function crSave(id,btn){
+    var note=(document.getElementById('crn-'+id)||{}).value||'';
+    var st=(document.getElementById('crs-'+id)||{}).value||'new';
+    var t=btn.textContent; btn.textContent='Saving…'; btn.disabled=true;
+    try{
+      var r=await sbFetch(SB_URL+'/rest/v1/concierge_requests?id=eq.'+id,
+        {method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),
+         body:JSON.stringify({status:st,admin_note:note||null,updated_at:new Date().toISOString()})});
+      if(!r.ok)throw new Error('save failed');
+      (DATA.cr||[]).forEach(function(x){if(x.id===id){x.status=st;x.admin_note=note||null;}});
+      btn.textContent='Saved'; renderConcierge();
+    }catch(e){ alert('Could not save'); btn.textContent=t; }
+    finally{ btn.disabled=false; }
+  }
+
+
+  // ---------- VILLA GUIDE (what the guest portal shows) ----------
+  var GD={villa_id:'',row:null};
+  function gdLines(j){
+    var a=j; if(typeof a==='string'){try{a=JSON.parse(a);}catch(e){a=null;}}
+    if(!Array.isArray(a))return '';
+    return a.map(function(x){
+      if(typeof x==='string')return x;
+      var n=x.name||x.title||'', t=x.note||x.type||x.distance||'';
+      return t?(n+' | '+t):n;
+    }).filter(Boolean).join('\n');
+  }
+  function gdParse(txt){
+    var rows=String(txt||'').split('\n').map(function(l){return l.trim();}).filter(Boolean)
+      .map(function(l){var p=l.split('|');return {name:p[0].trim(),note:(p[1]||'').trim()};})
+      .filter(function(x){return x.name;});
+    return rows.length?rows:null;
+  }
+  async function openGuide(vid){
+    var v=vById(vid)||{};
+    GD.villa_id=vid; GD.row=null;
+    document.getElementById('gdTitle').textContent='Villa guide';
+    document.getElementById('gdSub').textContent=(v.name||'')+' · shown to guests in the guest portal';
+    document.getElementById('gdBody').innerHTML='<div class="state">Loading…</div>';
+    document.getElementById('gdOv').classList.add('open');
+    try{
+      var r=await sbFetch(SB_URL+'/rest/v1/villa_guides?villa_id=eq.'+vid+'&select=*&limit=1',{headers:H});
+      var rows=await r.json();
+      GD.row=(Array.isArray(rows)&&rows[0])||{};
+    }catch(e){ GD.row={}; }
+    var g=GD.row, val=function(k){return esc(g[k]==null?'':g[k]);};
+    document.getElementById('gdBody').innerHTML=
+      '<div class="frm">'+
+        '<div class="sechd"><h4>Arrival &amp; departure</h4></div>'+
+        '<div class="r c2">'+
+          '<div><label>Check-in time</label><input id="gf_cit" value="'+val('checkin_time')+'" placeholder="from 15:00"></div>'+
+          '<div><label>Check-out time</label><input id="gf_cot" value="'+val('checkout_time')+'" placeholder="by 11:00"></div>'+
+        '</div>'+
+        '<div class="r c2">'+
+          '<div><label>How to arrive</label><textarea id="gf_cii" rows="3" placeholder="Who meets the guest, where to park…">'+val('checkin_instructions')+'</textarea></div>'+
+          '<div><label>How to leave</label><textarea id="gf_coi" rows="3" placeholder="Keys, final meter reading…">'+val('checkout_instructions')+'</textarea></div>'+
+        '</div>'+
+        '<div class="sechd" style="margin-top:14px"><h4>Access codes</h4><span class="sub">shown to the guest only from the day before check-in until the day after check-out</span></div>'+
+        '<div class="r c2">'+
+          '<div><label>Wi-Fi network</label><input id="gf_wn" value="'+val('wifi_name')+'"></div>'+
+          '<div><label>Wi-Fi password</label><input id="gf_wp" value="'+val('wifi_password')+'"></div>'+
+        '</div>'+
+        '<div class="r c2">'+
+          '<div><label>Door code</label><input id="gf_dc" value="'+val('door_code')+'"></div>'+
+          '<div><label>Gate code</label><input id="gf_gc" value="'+val('gate_code')+'"></div>'+
+        '</div>'+
+        '<div class="sechd" style="margin-top:14px"><h4>The house</h4></div>'+
+        '<div class="r c2">'+
+          '<div><label>House rules</label><textarea id="gf_hr" rows="3">'+val('house_rules')+'</textarea></div>'+
+          '<div><label>Quiet hours</label><input id="gf_qh" value="'+val('quiet_hours')+'" placeholder="22:00 – 08:00"></div>'+
+        '</div>'+
+        '<div class="r c2">'+
+          '<div><label>Pool</label><textarea id="gf_pool" rows="2">'+val('pool_instructions')+'</textarea></div>'+
+          '<div><label>Kitchen</label><textarea id="gf_kit" rows="2">'+val('kitchen_guide')+'</textarea></div>'+
+        '</div>'+
+        '<div class="r c2">'+
+          '<div><label>Laundry</label><textarea id="gf_lau" rows="2">'+val('laundry_guide')+'</textarea></div>'+
+          '<div><label>Air conditioning</label><textarea id="gf_ac" rows="2">'+val('ac_guide')+'</textarea></div>'+
+        '</div>'+
+        '<div class="r c2">'+
+          '<div><label>Television</label><textarea id="gf_tv" rows="2">'+val('tv_guide')+'</textarea></div>'+
+          '<div><label>Getting around</label><textarea id="gf_tr" rows="2">'+val('transport_info')+'</textarea></div>'+
+        '</div>'+
+        '<div class="sechd" style="margin-top:14px"><h4>Around the villa</h4><span class="sub">one line each, as: Name | short note</span></div>'+
+        '<div class="r c2">'+
+          '<div><label>Where to eat</label><textarea id="gf_eat" rows="4" placeholder="Siam Supper Club | 8 min by car">'+esc(gdLines(g.restaurants_nearby))+'</textarea></div>'+
+          '<div><label>What to see</label><textarea id="gf_see" rows="4" placeholder="Bang Tao beach | 5 min walk">'+esc(gdLines(g.attractions_nearby))+'</textarea></div>'+
+        '</div>'+
+        '<div class="sechd" style="margin-top:14px"><h4>In an emergency</h4></div>'+
+        '<div class="r c3">'+
+          '<div><label>MGROUP 24h contact</label><input id="gf_em" value="'+val('emergency_contact')+'"></div>'+
+          '<div><label>Nearest hospital</label><input id="gf_hos" value="'+val('hospital_nearby')+'"></div>'+
+          '<div><label>Police</label><input id="gf_pol" value="'+val('police_nearby')+'"></div>'+
+        '</div>'+
+        '<div class="r" style="justify-content:flex-end;gap:8px;margin-top:14px">'+
+          '<button class="btn" onclick="closeGuide()">Cancel</button>'+
+          '<button class="btn primary" onclick="saveGuide(this)">Save guide</button>'+
+        '</div>'+
+      '</div>';
+  }
+  function closeGuide(){document.getElementById('gdOv').classList.remove('open');GD.villa_id='';}
+  async function saveGuide(btn){
+    var g=function(id){var el=document.getElementById(id);return el&&el.value.trim()?el.value.trim():null;};
+    var body={
+      villa_id:GD.villa_id,
+      checkin_time:g('gf_cit'),checkout_time:g('gf_cot'),
+      checkin_instructions:g('gf_cii'),checkout_instructions:g('gf_coi'),
+      wifi_name:g('gf_wn'),wifi_password:g('gf_wp'),door_code:g('gf_dc'),gate_code:g('gf_gc'),
+      house_rules:g('gf_hr'),quiet_hours:g('gf_qh'),
+      pool_instructions:g('gf_pool'),kitchen_guide:g('gf_kit'),laundry_guide:g('gf_lau'),
+      ac_guide:g('gf_ac'),tv_guide:g('gf_tv'),transport_info:g('gf_tr'),
+      restaurants_nearby:gdParse(g('gf_eat')),attractions_nearby:gdParse(g('gf_see')),
+      emergency_contact:g('gf_em'),hospital_nearby:g('gf_hos'),police_nearby:g('gf_pol'),
+      updated_at:new Date().toISOString()
+    };
+    var t=btn.textContent; btn.textContent='Saving…'; btn.disabled=true;
+    try{
+      var has=GD.row&&GD.row.id;
+      var r=has
+        ? await sbFetch(SB_URL+'/rest/v1/villa_guides?id=eq.'+GD.row.id,
+            {method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify(body)})
+        : await sbFetch(SB_URL+'/rest/v1/villa_guides',
+            {method:'POST',headers:Object.assign({},H,{'Content-Type':'application/json',Prefer:'return=representation'}),body:JSON.stringify(body)});
+      if(!r.ok)throw new Error(await r.text());
+      if(!has){var out=await r.json();if(Array.isArray(out)&&out[0])GD.row=out[0];}
+      btn.textContent='Saved'; setTimeout(closeGuide,600);
+    }catch(e){ alert('Could not save the guide'); btn.textContent=t; }
+    finally{ btn.disabled=false; }
+  }
+
   function mgConfirm(msg,okLabel){
     return new Promise(function(resolve){
       var ov=document.createElement('div');
@@ -1728,7 +2041,9 @@
         '<td><select class="st-select '+(v.is_active?'confirmed':'checkedout')+'" data-id="'+v.id+'" onchange="chVillaActive(this)">'+
           '<option value="1"'+(v.is_active?' selected':'')+'>Active</option>'+
           '<option value="0"'+(v.is_active?'':' selected')+'>Inactive</option></select></td>'+
-        '<td style="white-space:nowrap"><button class="rowbtn" onclick="openVilla(\''+v.id+'\')">Edit</button></td></tr>';
+        '<td style="white-space:nowrap">'+
+          '<button class="rowbtn" title="What the guest sees in the guest portal" onclick="openGuide(\''+v.id+'\')">Guide</button> '+
+          '<button class="rowbtn" onclick="openVilla(\''+v.id+'\')">Edit</button></td></tr>';
     }).join('')||'<tr><td colspan="8" class="state">No villas match</td></tr>';
   }
 
