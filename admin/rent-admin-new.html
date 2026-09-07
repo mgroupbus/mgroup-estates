@@ -1062,7 +1062,6 @@
         kv('Nights',(b.nights||'—'))+
         kv('Guests',(b.guests_count||'—')+(b.adults||b.children?' <span class="sub">('+N(b.adults)+' ad · '+N(b.children)+' ch)</span>':''))+
         kv('Pets',(b.pets?b.pets:'—'))+
-        kv('Rate / night',money(b.rate_per_night))+
         kv('Currency',cur)+
       '</div></div>'+
       '<div style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:20px 0 6px">Money</div>'+
@@ -1112,8 +1111,7 @@
         '<div><label>Pets</label><input id="bk_pets" type="number" step="1" min="0" value="'+esc(b.pets==null?'':b.pets)+'" oninput="bkDirty()"></div>'+
       '</div>'+
       '<div style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:4px 0 10px;padding-top:6px;border-top:1px solid var(--line)">Payment terms</div>'+
-      '<div class="r c3">'+
-        fld('rate_per_night','Rate / night',b.rate_per_night,'number',' step="0.01"')+
+      '<div class="r c2">'+
         fld('total','Total (to client)',b.total,'number',' step="0.01"')+
         fld('client_pay','Client paid',b.client_pay,'number',' step="0.01"')+
       '</div><div class="r c3">'+
@@ -1148,7 +1146,7 @@
       villa_id:bkStr('villa_id'),guest_id:bkStr('guest_id'),owner_id:bkStr('owner_id'),
       check_in:ci,check_out:co,nights:bkNum('nights'),
       guests_count:bkNum('guests_count'),adults:bkNum('adults'),children:bkNum('children'),pets:bkNum('pets'),
-      rate_per_night:bkNum('rate_per_night'),total:bkNum('total'),client_pay:bkNum('client_pay'),
+      total:bkNum('total'),client_pay:bkNum('client_pay'),
       security_deposit:bkNum('security_deposit'),mgroup_commission:bkNum('mgroup_commission'),
       owner_net:bkNum('owner_net'),agent_name:bkStr('agent_name'),co_agent_net:bkNum('co_agent_net'),
       source:bkStr('source'),special_requests:bkStr('special_requests')};
