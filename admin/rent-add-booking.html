@@ -315,11 +315,35 @@
   window.gMode='existing';
   function esc(x){return (x==null?'':String(x)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
   function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
-  async function sbPost(t,row,rep){var r=await fetch(SB_URL+'/rest/v1/'+t,{method:'POST',headers:Object.assign({},H,{'Content-Type':'application/json',Prefer:rep?'return=representation':'return=minimal'}),body:JSON.stringify(row)});if(!r.ok)throw new Error(t+': '+r.status+' '+(await r.text()));return rep?r.json():null;}
+  // Table access goes through the admin-api function, which holds the service key.
+  function adminCode(){
+    var c=sessionStorage.getItem('mg_admin_code');
+    if(!c){c=prompt('Admin passcode'); if(c)sessionStorage.setItem('mg_admin_code',c);}
+    return c;
+  }
+  async function sbFetch(url,opts){
+    opts=opts||{};
+    var path=String(url).split('/rest/v1/')[1]||'';
+    var code=adminCode();
+    if(!code)return {ok:false,status:401,text:function(){return Promise.resolve('');},json:function(){return Promise.resolve([]);}};
+    var body=null; if(opts.body){try{body=JSON.parse(opts.body);}catch(e){body=null;}}
+    var pref=''; var oh=opts.headers||{};
+    Object.keys(oh).forEach(function(k){if(k.toLowerCase()==='prefer')pref=oh[k];});
+    var r=await fetch(SB_URL+'/functions/v1/admin-api',{method:'POST',
+      headers:Object.assign({'Content-Type':'application/json'},H),
+      body:JSON.stringify({passcode:code,path:path,method:(opts.method||'GET'),body:body,prefer:pref})});
+    var text=await r.text();
+    if(r.status===401)sessionStorage.removeItem('mg_admin_code');
+    return {ok:r.ok,status:r.status,
+      text:function(){return Promise.resolve(text);},
+      json:function(){try{return Promise.resolve(JSON.parse(text));}catch(e){return Promise.resolve([]);}}};
+  }
+
+  async function sbPost(t,row,rep){var r=await sbFetch(SB_URL+'/rest/v1/'+t,{method:'POST',headers:Object.assign({},H,{'Content-Type':'application/json',Prefer:rep?'return=representation':'return=minimal'}),body:JSON.stringify(row)});if(!r.ok)throw new Error(t+': '+r.status+' '+(await r.text()));return rep?r.json():null;}
 
   async function loadRefs(){
     try{
-      var q=function(t,sel){return fetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel),{headers:H}).then(function(r){return r.json();});};
+      var q=function(t,sel){return sbFetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel),{headers:H}).then(function(r){return r.json();});};
       var res=await Promise.all([q('rental_villas','id,name,area,owner_id,price_per_night,security_deposit'),q('owners','id,name'),q('guests','id,name,email,phone,nationality')]);
       var villas=res[0]||[], owners=res[1]||[], guests=res[2]||[], om={};
       owners.forEach(function(o){om[o.id]=o.name;});

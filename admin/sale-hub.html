@@ -90,6 +90,29 @@
 <script>
   const SB_URL='https://iwipvfkjfsveycppqhxc.supabase.co';
   const SB_KEY=atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW1sM2FYQjJabXRxWm5OMlpYbGpjSEJ4YUhoaklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTnpRM056STVOellzSW1WNGNDSTZNakE1TURNME9EazNObjAuVF9Yd3BCcE5kZXFRTGpYdXVsRVB3bFV2Q045dVhITlRqM0I3dE14YnRGbw==');
+  // Table access goes through the admin-api function, which holds the service key.
+  function adminCode(){
+    var c=sessionStorage.getItem('mg_admin_code');
+    if(!c){c=prompt('Admin passcode'); if(c)sessionStorage.setItem('mg_admin_code',c);}
+    return c;
+  }
+  async function sbFetch(url,opts){
+    opts=opts||{};
+    var path=String(url).split('/rest/v1/')[1]||'';
+    var code=adminCode();
+    if(!code)return {ok:false,status:401,text:function(){return Promise.resolve('');},json:function(){return Promise.resolve([]);}};
+    var body=null; if(opts.body){try{body=JSON.parse(opts.body);}catch(e){body=null;}}
+    var pref=''; var oh=opts.headers||{};
+    Object.keys(oh).forEach(function(k){if(k.toLowerCase()==='prefer')pref=oh[k];});
+    var r=await fetch(SB_URL+'/functions/v1/admin-api',{method:'POST',
+      headers:Object.assign({'Content-Type':'application/json'},H),
+      body:JSON.stringify({passcode:code,path:path,method:(opts.method||'GET'),body:body,prefer:pref})});
+    var text=await r.text();
+    if(r.status===401)sessionStorage.removeItem('mg_admin_code');
+    return {ok:r.ok,status:r.status,
+      text:function(){return Promise.resolve(text);},
+      json:function(){try{return Promise.resolve(JSON.parse(text));}catch(e){return Promise.resolve([]);}}};
+  }
   const H={apikey:SB_KEY,Authorization:'Bearer '+SB_KEY};
   function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
   function cnt(x){return Array.isArray(x)&&x.length?(x[0].count||0):0;}
@@ -97,7 +120,7 @@
   async function load(){
     var sel='id,name,location,collections,price_display,beds,baths,sqm,developer,is_active,is_featured,is_sold,property_images(count),property_features(count)';
     try{
-      var r=await fetch(SB_URL+'/rest/v1/properties?select='+encodeURIComponent(sel)+'&is_active=eq.true&order=id',{headers:H});
+      var r=await sbFetch(SB_URL+'/rest/v1/properties?select='+encodeURIComponent(sel)+'&is_active=eq.true&order=id',{headers:H});
       if(!r.ok)throw new Error(r.status+' '+await r.text());
       var rows=await r.json();
       render(rows);

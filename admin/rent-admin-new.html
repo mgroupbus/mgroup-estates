@@ -394,7 +394,7 @@
 <!-- OWNER SUMMARY MODAL -->
 <div class="ov" id="ownOv" onclick="if(event.target===this)closeOwn()">
   <div class="modal">
-    <div class="mh"><h3 id="ownName">Owner</h3><div><button class="btn" onclick="window.print()">🖨 PDF</button> <button class="cls" onclick="closeOwn()">✕ Close</button></div></div>
+    <div class="mh"><h3 id="ownName">Owner</h3><div><button class="btn" onclick="window.print()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:5px"><path d="M12 3v12"/><path d="m7 12 5 5 5-5"/><path d="M5 21h14"/></svg>Save PDF</button> <button class="cls" onclick="closeOwn()">✕ Close</button></div></div>
     <div class="mb" id="ownBody"></div>
   </div>
 </div>
@@ -403,7 +403,7 @@
 <div class="ov" id="mngOv">
   <div class="modal mng">
     <div class="mh"><div style="display:flex;align-items:center;gap:14px"><button class="backbtn" onclick="closeMng()">&#8592; All Bookings</button><div><h3 id="mngTitle">Booking</h3><div class="sub" id="mngSub"></div></div></div>
-      <div><button class="btn" onclick="printMng()">Print</button></div></div>
+      <div><button class="btn" onclick="printMng()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:5px"><path d="M12 3v12"/><path d="m7 12 5 5 5-5"/><path d="M5 21h14"/></svg>Save PDF</button></div></div>
     <div class="mtabs" id="mngTabs"></div>
     <div class="mb" id="mngBody"><div class="state">Loading&hellip;</div></div>
   </div>
@@ -415,7 +415,7 @@
 <!-- DOCUMENT (contract/invoice/receipt) MODAL -->
 <div class="ov" id="docOv" onclick="if(event.target===this)closeDoc()">
   <div class="modal">
-    <div class="mh"><h3 id="docTitle">Document</h3><div><button class="btn" onclick="window.print()">🖨 Print / PDF</button> <button class="cls" onclick="closeDoc()">✕ Close</button></div></div>
+    <div class="mh"><h3 id="docTitle">Document</h3><div><button class="btn" onclick="window.print()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:5px"><path d="M12 3v12"/><path d="m7 12 5 5 5-5"/><path d="M5 21h14"/></svg>Save PDF</button> <button class="cls" onclick="closeDoc()">✕ Close</button></div></div>
     <div class="mb"><div class="paper" id="docPaper"></div></div>
   </div>
 </div>
@@ -429,6 +429,27 @@
   function money(x){return (x==null||x==='')?'฿0':'฿'+Number(x).toLocaleString('en-US');}
   function fmtD(d){if(!d)return '—';var p=String(d).split('-');if(p.length<3)return d;return p[2].padStart(2,'0')+'.'+p[1].padStart(2,'0')+'.'+p[0];}
   function stCls(v){return (v||'').replace(/_/g,'');}
+  // Every table read/write goes through the admin-api function, which holds the
+  // service key. The browser no longer talks to the database directly.
+  async function sbFetch(url,opts){
+    opts=opts||{};
+    var path=String(url).split('/rest/v1/')[1]||'';
+    var code=adminCode();
+    if(!code)return {ok:false,status:401,text:function(){return Promise.resolve('');},json:function(){return Promise.resolve({error:'no_passcode'});}};
+    var body=null;
+    if(opts.body){try{body=JSON.parse(opts.body);}catch(e){body=null;}}
+    var pref=''; var oh=opts.headers||{};
+    Object.keys(oh).forEach(function(k){if(k.toLowerCase()==='prefer')pref=oh[k];});
+    var r=await fetch(SB_URL+'/functions/v1/admin-api',{method:'POST',
+      headers:Object.assign({'Content-Type':'application/json'},H),
+      body:JSON.stringify({passcode:code,path:path,method:(opts.method||'GET'),body:body,prefer:pref})});
+    var text=await r.text();
+    if(r.status===401)sessionStorage.removeItem('mg_admin_code');
+    return {ok:r.ok,status:r.status,
+      text:function(){return Promise.resolve(text);},
+      json:function(){try{return Promise.resolve(JSON.parse(text));}catch(e){return Promise.resolve([]);}}};
+  }
+
   var DATA={bk:[],villas:[],vmap:{},gmap:{},omap:{},tk:{}};
   var OFIELDS='id,name,email,phone,line_id,notes';
   var VFIELDS='id,name,slug,area,location,villa_type,bedrooms,bathrooms,max_guests,price_per_night,price_per_month,min_nights,cleaning_fee,security_deposit,owner_id,description,is_active,landing_url,features_included,features_excluded';
@@ -438,11 +459,11 @@
 
   async function loadAll(){
     try{
-      var q=function(t,sel){return fetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel),{headers:H}).then(function(r){return r.json();});};
+      var q=function(t,sel){return sbFetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel),{headers:H}).then(function(r){return r.json();});};
       var res=await Promise.all([
-        fetch(SB_URL+'/rest/v1/bookings?select=id,booking_ref,villa_id,guest_id,owner_id,check_in,check_out,nights,guests_count,adults,children,rate_per_night,total,client_pay,security_deposit,mgroup_commission,owner_net,co_agent_net,agent_name,agent_commission,status,currency,source,special_requests&order=check_in.desc&limit=300',{headers:H}).then(function(r){return r.json();}),
+        sbFetch(SB_URL+'/rest/v1/bookings?select=id,booking_ref,villa_id,guest_id,owner_id,check_in,check_out,nights,guests_count,adults,children,rate_per_night,total,client_pay,security_deposit,mgroup_commission,owner_net,co_agent_net,agent_name,agent_commission,status,currency,source,special_requests&order=check_in.desc&limit=300',{headers:H}).then(function(r){return r.json();}),
         q('rental_villas',VFIELDS), q('owners',OFIELDS), q('guests','id,name,email,phone,nationality'),
-        fetch(SB_URL+'/rest/v1/checkin_tasks?select=booking_id,is_done&limit=5000',{headers:H}).then(function(r){return r.json();})
+        sbFetch(SB_URL+'/rest/v1/checkin_tasks?select=booking_id,is_done&limit=5000',{headers:H}).then(function(r){return r.json();})
       ]);
       DATA.bk=res[0]||[];
       DATA.tk={}; (res[4]||[]).forEach(function(t){var c=DATA.tk[t.booking_id]||(DATA.tk[t.booking_id]={n:0,d:0});c.n++;if(t.is_done)c.d++;});
@@ -520,7 +541,7 @@
     finally{ btn.disabled=false; }
   }
 
-  async function chSt(sel){try{await fetch(SB_URL+'/rest/v1/bookings?id=eq.'+sel.getAttribute('data-id'),{method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify({status:sel.value})});sel.className='st-select '+stCls(sel.value);}catch(e){alert('Save failed');}}
+  async function chSt(sel){try{await sbFetch(SB_URL+'/rest/v1/bookings?id=eq.'+sel.getAttribute('data-id'),{method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify({status:sel.value})});sel.className='st-select '+stCls(sel.value);}catch(e){alert('Save failed');}}
 
   function outstanding(b){var t=N(b.total),p=N(b.client_pay);var o=t-p;return (['cancelled','checked_out','no_show'].indexOf(b.status)>-1)?0:(o>0?o:0);}
 
@@ -828,9 +849,9 @@
   async function loadTasks(){
     try{
       var res=await Promise.all([
-        fetch(SB_URL+'/rest/v1/checkin_tasks?select=*&booking_id=eq.'+MNG.id+'&order=sort_order.asc',{headers:H}).then(function(r){return r.json();}),
-        fetch(SB_URL+'/rest/v1/checkin_task_files?select=*&booking_id=eq.'+MNG.id+'&order=created_at.asc',{headers:H}).then(function(r){return r.json();}),
-        fetch(SB_URL+'/rest/v1/bookings?select=internal_notes&id=eq.'+MNG.id,{headers:H}).then(function(r){return r.json();})
+        sbFetch(SB_URL+'/rest/v1/checkin_tasks?select=*&booking_id=eq.'+MNG.id+'&order=sort_order.asc',{headers:H}).then(function(r){return r.json();}),
+        sbFetch(SB_URL+'/rest/v1/checkin_task_files?select=*&booking_id=eq.'+MNG.id+'&order=created_at.asc',{headers:H}).then(function(r){return r.json();}),
+        sbFetch(SB_URL+'/rest/v1/bookings?select=internal_notes&id=eq.'+MNG.id,{headers:H}).then(function(r){return r.json();})
       ]);
       MNG.bp=parseNotes(((res[2]||[])[0]||{}).internal_notes);
       MNG.tasks=res[0]||[]; MNG.files={};
@@ -846,7 +867,7 @@
     try{var d=JSON.parse(raw);return (d&&typeof d==='object')?d:{_text:String(raw)};}catch(e){return {_text:String(raw)};}
   }
   async function bpSave(){
-    var r=await fetch(SB_URL+'/rest/v1/bookings?id=eq.'+MNG.id,{method:'PATCH',headers:JH,
+    var r=await sbFetch(SB_URL+'/rest/v1/bookings?id=eq.'+MNG.id,{method:'PATCH',headers:JH,
       body:JSON.stringify({internal_notes:JSON.stringify(MNG.bp)})});
     if(!r.ok)throw new Error('HTTP '+r.status);
   }
@@ -973,11 +994,11 @@
     if(!(await mgConfirm('Remove '+((f&&f.file_name)||'this file')+' from this task?','Remove')))return;
     try{
       if(path)await fetch(SB_URL+'/storage/v1/object/media/'+path,{method:'DELETE',headers:H});
-      var r=await fetch(SB_URL+'/rest/v1/checkin_task_files?id=eq.'+fid,{method:'DELETE',headers:H});
+      var r=await sbFetch(SB_URL+'/rest/v1/checkin_task_files?id=eq.'+fid,{method:'DELETE',headers:H});
       if(!r.ok)throw new Error('HTTP '+r.status);
       if(f&&f.url){
         var t=MNG.tasks.find(function(x){return x.id===f.task_id;});
-        if(t&&t.photo_url===f.url)await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+t.id,{method:'PATCH',headers:JH,body:JSON.stringify({photo_url:null})});
+        if(t&&t.photo_url===f.url)await sbFetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+t.id,{method:'PATCH',headers:JH,body:JSON.stringify({photo_url:null})});
       }
       await loadTasks();
     }catch(e){alert('Could not remove file: '+e.message);}
@@ -1012,7 +1033,7 @@
     try{
       for(var i=0;i<ids.length;i++){
         var t=MNG.tasks.find(function(x){return x.id===ids[i];}); if(!t)continue;
-        var r=await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+t.id,{method:'PATCH',headers:JH,
+        var r=await sbFetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+t.id,{method:'PATCH',headers:JH,
           body:JSON.stringify({is_done:!!t.is_done,done_at:t.done_at||null,done_by:t.done_by||null,notes:t.notes||null})});
         if(!r.ok)throw new Error('HTTP '+r.status);
       }
@@ -1027,7 +1048,7 @@
     var t=MNG.tasks.find(function(x){return x.id===id;}); if(!t)return;
     var v=prompt('Task name',nice(t.task_name)); if(v===null)return; v=v.trim(); if(!v)return;
     try{
-      await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'PATCH',headers:JH,body:JSON.stringify({task_name:v})});
+      await sbFetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'PATCH',headers:JH,body:JSON.stringify({task_name:v})});
       t.task_name=v;renderMng();
     }catch(e){alert('Could not rename: '+e.message);}
   }
@@ -1038,7 +1059,7 @@
     var same=MNG.tasks.filter(function(t){return t.task_type===type;});
     var so=same.reduce(function(m,t){return Math.max(m,Number(t.sort_order||0));},0)+1;
     try{
-      var r=await fetch(SB_URL+'/rest/v1/checkin_tasks',{method:'POST',headers:JH,
+      var r=await sbFetch(SB_URL+'/rest/v1/checkin_tasks',{method:'POST',headers:JH,
         body:JSON.stringify({booking_id:MNG.id,task_type:type,task_name:v,sort_order:so,is_done:false})});
       if(!r.ok)throw new Error('HTTP '+r.status);
       await loadTasks();
@@ -1050,8 +1071,8 @@
     var t=MNG.tasks.find(function(x){return x.id===id;}); if(!t)return;
     if(!(await mgConfirm('Remove "'+nice(t.task_name)+'" from this checklist?','Remove')))return;
     try{
-      await fetch(SB_URL+'/rest/v1/checkin_task_files?task_id=eq.'+id,{method:'DELETE',headers:H});
-      await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'DELETE',headers:H});
+      await sbFetch(SB_URL+'/rest/v1/checkin_task_files?task_id=eq.'+id,{method:'DELETE',headers:H});
+      await sbFetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'DELETE',headers:H});
       await loadTasks();
     }catch(e){alert('Could not remove: '+e.message);}
   }
@@ -1065,7 +1086,7 @@
       return {booking_id:MNG.id,task_type:r[0],task_name:r[1],sort_order:byType[r[0]],is_done:false};
     });
     try{
-      var r=await fetch(SB_URL+'/rest/v1/checkin_tasks',{method:'POST',headers:JH,body:JSON.stringify(rows)});
+      var r=await sbFetch(SB_URL+'/rest/v1/checkin_tasks',{method:'POST',headers:JH,body:JSON.stringify(rows)});
       if(!r.ok)throw new Error('HTTP '+r.status);
       await loadTasks();
     }catch(e){box.innerHTML='<div class="state" style="color:var(--red)">Could not create checklist: '+esc(e.message)+'</div>';}
@@ -1185,7 +1206,7 @@
       owner_net:bkNum('owner_net'),agent_name:bkStr('agent_name'),co_agent_net:bkNum('co_agent_net'),
       source:bkStr('source'),special_requests:bkStr('special_requests')};
     try{
-      var r=await fetch(SB_URL+'/rest/v1/bookings?id=eq.'+MNG.id,{method:'PATCH',headers:JH,body:JSON.stringify(body)});
+      var r=await sbFetch(SB_URL+'/rest/v1/bookings?id=eq.'+MNG.id,{method:'PATCH',headers:JH,body:JSON.stringify(body)});
       if(!r.ok)throw new Error('HTTP '+r.status+' '+(await r.text()).slice(0,120));
       var b=DATA.bk.find(function(x){return x.id===MNG.id;});
       if(b)Object.keys(body).forEach(function(k){b[k]=body[k];});
@@ -1493,12 +1514,12 @@
         if(!up.ok)throw new Error('storage HTTP '+up.status);
         var url=SB_URL+'/storage/v1/object/public/media/'+path;
         var kind=mime.indexOf('image/')===0?'image':'file';
-        var ins=await fetch(SB_URL+'/rest/v1/checkin_task_files',{method:'POST',headers:JH,
+        var ins=await sbFetch(SB_URL+'/rest/v1/checkin_task_files',{method:'POST',headers:JH,
           body:JSON.stringify({task_id:tid,booking_id:MNG.id,url:url,path:path,file_name:f.name,mime:mime||null,size_bytes:f.size,kind:kind})});
         if(!ins.ok)throw new Error('save HTTP '+ins.status);
         var t=MNG.tasks.find(function(x){return x.id===tid;});
         if(kind==='image'&&t&&!t.photo_url){
-          await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+tid,{method:'PATCH',headers:JH,body:JSON.stringify({photo_url:url})});
+          await sbFetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+tid,{method:'PATCH',headers:JH,body:JSON.stringify({photo_url:url})});
           t.photo_url=url;
         }
         okN++;
@@ -1513,7 +1534,7 @@
   var OWE={id:''};
   function omsg(t,bad){var e=document.getElementById('of_msg');if(e){e.textContent=t;e.className=bad?'sub warn':'sub';}}
   async function reloadOwners(){
-    var r=await fetch(SB_URL+'/rest/v1/owners?select='+encodeURIComponent(OFIELDS),{headers:H});
+    var r=await sbFetch(SB_URL+'/rest/v1/owners?select='+encodeURIComponent(OFIELDS),{headers:H});
     var rows=await r.json();
     DATA.omap={}; (rows||[]).forEach(function(o){DATA.omap[o.id]=o;});
     renderVillas(); renderOwners();
@@ -1556,7 +1577,7 @@
     var t=btn.textContent; btn.disabled=true; btn.textContent='Saving…';
     try{
       var url=SB_URL+'/rest/v1/owners'+(OWE.id?'?id=eq.'+OWE.id:'');
-      var r=await fetch(url,{method:OWE.id?'PATCH':'POST',
+      var r=await sbFetch(url,{method:OWE.id?'PATCH':'POST',
         headers:Object.assign({},H,{'Content-Type':'application/json',Prefer:'return=representation'}),
         body:JSON.stringify(row)});
       var txt=await r.text(); if(!r.ok)throw new Error('HTTP '+r.status+' '+txt);
@@ -1580,7 +1601,7 @@
       }catch(e){}
       await Promise.all(tabs.map(async function(x){
         try{
-          var r=await fetch(SB_URL+'/rest/v1/'+x[0]+'?select=id&'+x[1]+'=eq.'+id+'&limit=200',{headers:H});
+          var r=await sbFetch(SB_URL+'/rest/v1/'+x[0]+'?select=id&'+x[1]+'=eq.'+id+'&limit=200',{headers:H});
           if(!r.ok)return; var rows=await r.json();
           if(rows&&rows.length)blk.push(rows.length+' '+x[2]+(rows.length>1?'s':''));
         }catch(e){}
@@ -1588,7 +1609,7 @@
       if(blk.length){ omsg('ลบไม่ได้ — เจ้าของรายนี้ยังมี '+blk.join(', ')+' ผูกอยู่ ต้องถอดออกก่อน',true); return; }
       if(!window.confirm('ลบเจ้าของ “'+(o.name||'')+'” ออกจากระบบถาวร?')) return;
       btn.textContent='Deleting…';
-      var r2=await fetch(SB_URL+'/rest/v1/owners?id=eq.'+id,{method:'DELETE',headers:H});
+      var r2=await sbFetch(SB_URL+'/rest/v1/owners?id=eq.'+id,{method:'DELETE',headers:H});
       if(!r2.ok)throw new Error('HTTP '+r2.status+' '+(await r2.text()));
       await reloadOwners();
       closeOwnerEdit();
@@ -1663,13 +1684,13 @@
   }
 
   async function sbVilla(id,body){
-    var r=await fetch(SB_URL+'/rest/v1/rental_villas?id=eq.'+id,{method:'PATCH',
+    var r=await sbFetch(SB_URL+'/rest/v1/rental_villas?id=eq.'+id,{method:'PATCH',
       headers:Object.assign({},H,{'Content-Type':'application/json',Prefer:'return=representation'}),body:JSON.stringify(body)});
     var t=await r.text(); if(!r.ok)throw new Error('HTTP '+r.status+' '+t);
     try{return JSON.parse(t)[0];}catch(e){return null;}
   }
   async function reloadVillas(){
-    var r=await fetch(SB_URL+'/rest/v1/rental_villas?select='+encodeURIComponent(VFIELDS),{headers:H});
+    var r=await sbFetch(SB_URL+'/rest/v1/rental_villas?select='+encodeURIComponent(VFIELDS),{headers:H});
     setVillas(await r.json());
     renderAll();
   }
@@ -1776,7 +1797,7 @@
     var n=vv('vo_name').trim(); if(!n){return vmsg('Owner name is required',true);}
     var t=btn.textContent; btn.disabled=true; btn.textContent='Creating…';
     try{
-      var r=await fetch(SB_URL+'/rest/v1/owners',{method:'POST',
+      var r=await sbFetch(SB_URL+'/rest/v1/owners',{method:'POST',
         headers:Object.assign({},H,{'Content-Type':'application/json',Prefer:'return=representation'}),
         body:JSON.stringify({name:n,email:vv('vo_email').trim()||null,phone:vv('vo_phone').trim()||null})});
       var txt=await r.text(); if(!r.ok)throw new Error('HTTP '+r.status+' '+txt);
@@ -1797,7 +1818,7 @@
     var out=[];
     await Promise.all(t.map(async function(x){
       try{
-        var r=await fetch(SB_URL+'/rest/v1/'+x[0]+'?select=id&'+x[1]+'=eq.'+id+'&limit=200',{headers:H});
+        var r=await sbFetch(SB_URL+'/rest/v1/'+x[0]+'?select=id&'+x[1]+'=eq.'+id+'&limit=200',{headers:H});
         if(!r.ok)return; var rows=await r.json();
         if(rows&&rows.length)out.push(rows.length+' '+x[2]+(rows.length>1?'s':''));
       }catch(e){}
@@ -1816,7 +1837,7 @@
       }
       if(!window.confirm('ลบ “'+(v.name||'')+'” ออกจากระบบถาวร?\nข้อมูล villa guide ของวิลล่านี้จะถูกลบไปด้วย')) return;
       btn.textContent='Deleting…';
-      var r=await fetch(SB_URL+'/rest/v1/rental_villas?id=eq.'+id,{method:'DELETE',headers:H});
+      var r=await sbFetch(SB_URL+'/rest/v1/rental_villas?id=eq.'+id,{method:'DELETE',headers:H});
       if(!r.ok)throw new Error('HTTP '+r.status+' '+(await r.text()));
       await reloadVillas();
       closeVilla();
@@ -1853,7 +1874,7 @@
     try{
       if(VIL.id){ await sbVilla(VIL.id,row); }
       else{
-        var r=await fetch(SB_URL+'/rest/v1/rental_villas',{method:'POST',
+        var r=await sbFetch(SB_URL+'/rest/v1/rental_villas',{method:'POST',
           headers:Object.assign({},H,{'Content-Type':'application/json',Prefer:'return=representation'}),
           body:JSON.stringify(row)});
         var txt=await r.text(); if(!r.ok)throw new Error('HTTP '+r.status+' '+txt);

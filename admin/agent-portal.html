@@ -268,7 +268,7 @@
   function money(x){return '฿'+Number(x||0).toLocaleString('en-US');}
   function fmtD(d){if(!d)return '—';var p=String(d).split('-');if(p.length<3)return d;return p[2].padStart(2,'0')+'.'+p[1].padStart(2,'0')+'.'+p[0];}
   function nice(x){x=String(x||'').replace(/[_-]+/g,' ').trim();return x?x.charAt(0).toUpperCase()+x.slice(1):'—';}
-  function q(t,sel,extra){return fetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel)+(extra||''),{headers:H}).then(function(r){return r.json();});}
+  var AGENT_TOKEN='';
 
   var DATA={bk:[],vmap:{},gmap:{},sched:{},agent:'',filter:'all',year:null};
 
@@ -293,7 +293,8 @@
       var d=await r.json();
       if(!r.ok||d.role!=='agent'){err.textContent='Incorrect username or password';btn.disabled=false;btn.textContent='Sign in';return;}
       var name=d.display_name||u;
-      sessionStorage.setItem('mg_agent',JSON.stringify({name:name,at:Date.now()}));
+      sessionStorage.setItem('mg_agent',JSON.stringify({name:name,at:Date.now(),token:d.token||''}));
+      AGENT_TOKEN=d.token||'';
       showApp(name);
     }catch(e){err.textContent='Sign-in failed — please try again';btn.disabled=false;btn.textContent='Sign in';}
   }
@@ -302,6 +303,7 @@
   function boot(){
     var raw=sessionStorage.getItem('mg_agent');
     if(!raw)return;
+    try{AGENT_TOKEN=(JSON.parse(raw)||{}).token||'';}catch(e){}
     try{
       var s=JSON.parse(raw);
       if(!s.name||(Date.now()-N(s.at))>SESSION_MS){sessionStorage.removeItem('mg_agent');return;}
@@ -323,18 +325,15 @@
   // ---------- data ----------
   async function loadAll(name){
     try{
-      var res=await Promise.all([
-        q('bookings','id,booking_ref,villa_id,guest_id,check_in,check_out,nights,total,client_pay,co_agent_net,agent_commission,status,currency,agent_name',
-          '&agent_name=ilike.*'+encodeURIComponent(name)+'*&order=check_in.desc'),
-        q('rental_villas','id,name,area'),
-        q('guests','id,name,nationality'),
-        q('agent_payment_schedule','booking_id,seq,label,amount,due_date,paid_date,status',
-          '&agent_name=ilike.*'+encodeURIComponent(name)+'*&order=seq.asc')
-      ]);
-      DATA.bk=res[0]||[];
-      (res[1]||[]).forEach(function(v){DATA.vmap[v.id]=v;});
-      (res[2]||[]).forEach(function(g){DATA.gmap[g.id]=g;});
-      DATA.sched={}; (res[3]||[]).forEach(function(r){(DATA.sched[r.booking_id]=DATA.sched[r.booking_id]||[]).push(r);});
+      var r=await fetch(SB_URL+'/functions/v1/agent-data',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({token:AGENT_TOKEN})});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      var D=await r.json();
+      DATA.bk=D.bookings||[];
+      (D.villas||[]).forEach(function(v){DATA.vmap[v.id]=v;});
+      (D.guests||[]).forEach(function(g){DATA.gmap[g.id]=g;});
+      DATA.sched={}; (D.schedule||[]).forEach(function(x){(DATA.sched[x.booking_id]=DATA.sched[x.booking_id]||[]).push(x);});
       renderBk();
     }catch(e){
       document.getElementById('bkRows').innerHTML='<tr><td colspan="8" class="state" style="color:var(--red)">Could not load your bookings</td></tr>';

@@ -75,9 +75,12 @@
     return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0');}).join('');}
   function showGate(){document.getElementById('login').style.display='none';document.getElementById('gate').style.display='block';}
   async function login(){var pw=document.getElementById('pw').value;if(!pw)return;var h=await sha256(pw);
-    if(h===HASH){sessionStorage.setItem('mg_admin','ok');showGate();}
+    if(h===HASH){sessionStorage.setItem('mg_admin','ok');
+      // the admin pages send this to the edge functions instead of a database key
+      sessionStorage.setItem('mg_admin_code',pw);
+      showGate();}
     else{document.getElementById('err').textContent='Incorrect password';document.getElementById('pw').value='';}}
-  function logout(){sessionStorage.removeItem('mg_admin');location.reload();}
+  function logout(){sessionStorage.removeItem('mg_admin');sessionStorage.removeItem('mg_admin_code');location.reload();}
   function goRent(){alert('Rent admin — coming soon (Add Booking is next).');return false;}
   if(sessionStorage.getItem('mg_admin')==='ok')showGate();
 </script>
