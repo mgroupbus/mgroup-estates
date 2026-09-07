@@ -67,7 +67,12 @@
   .top .b.in .e{display:inline-block;animation:hi-word .55s .12s cubic-bezier(.2,.7,.3,1) both}
   @keyframes hi-word{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
   @media(prefers-reduced-motion:reduce){.top .b.in #oGreet,.top .b.in .e{animation:none}}
-  .top .who{font-size:12px;color:var(--muted)}
+  .top .who{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:12px}
+  .oswitch{display:flex;align-items:center;gap:8px}
+  .oswitch .ysel{padding:7px 10px;font-size:12px}
+  .cotag{font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#fff;
+    background:var(--gold);border-radius:5px;padding:4px 8px}
+  @media print{.oswitch{display:none!important}}
   .top .who b{color:var(--ink)}.top .out{font-size:12px;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
   .top .out:hover{color:var(--gold)}
   .hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
@@ -307,7 +312,7 @@
 <div id="app">
   <div class="top">
     <div class="b"><span id="oGreet">Hello,</span><span class="e" id="oName"> —</span></div>
-    <div class="who"><span class="out" onclick="ownerLogout()">Sign out</span></div>
+    <div class="who"><span id="ownerSwitch" class="oswitch" style="display:none"></span><span class="out" onclick="ownerLogout()">Sign out</span></div>
   </div>
   <div class="stmthead" id="stmtHead"></div>
   <div class="nav">
@@ -1196,6 +1201,42 @@
       ;
   }
 
+  async function pl(payload){
+    var r=await fetch(SB_URL+'/functions/v1/portal-login',{method:'POST',
+      headers:Object.assign({'Content-Type':'application/json'},H),body:JSON.stringify(payload)});
+    return {ok:r.ok,status:r.status,data:await r.json()};
+  }
+  // Company sign-in: pick any owner and see the portal exactly as they do.
+  async function startCompany(cToken){
+    DATA.company=cToken;
+    sessionStorage.setItem('mg_company',cToken);
+    var res=await pl({action:'owners',token:cToken});
+    var list=(res.data&&res.data.owners)||[];
+    DATA.owners=list;
+    if(!list.length){document.getElementById('oErr').textContent='No owners found';return;}
+    var sel=sessionStorage.getItem('mg_company_owner');
+    await viewAsOwner(list.some(function(o){return o.owner_id===sel;})?sel:list[0].owner_id);
+  }
+  async function viewAsOwner(oid){
+    var res=await pl({action:'switch',token:DATA.company,owner_id:oid});
+    if(!res.ok){document.getElementById('oErr').textContent='Could not open that owner';return;}
+    var d=res.data;
+    sessionStorage.setItem('mg_company_owner',oid);
+    DATA.token=d.token;
+    sessionStorage.setItem('mg_owner',JSON.stringify({id:d.owner_id,name:d.display_name,prefs:d.prefs,token:d.token}));
+    showApp(d.owner_id,d.display_name,d.prefs);
+    renderOwnerSwitch(oid);
+  }
+  function renderOwnerSwitch(oid){
+    var host=document.getElementById('ownerSwitch'); if(!host||!DATA.company)return;
+    host.style.display='';
+    host.innerHTML='<span class="cotag">Company view</span>'
+      +'<select class="ysel" onchange="viewAsOwner(this.value)">'
+      +DATA.owners.map(function(o){
+        return '<option value="'+o.owner_id+'"'+(o.owner_id===oid?' selected':'')+'>'+esc(o.name)+'</option>';
+      }).join('')+'</select>';
+  }
+
   async function ownerLogin(){
     var em=document.getElementById('oEmail').value.trim(), pw=document.getElementById('oPw').value;
     if(!em||!pw){document.getElementById('oErr').textContent='Enter email and password';return;}
@@ -1206,7 +1247,11 @@
         var fr=await fetch(SB_URL+'/functions/v1/portal-login',{method:'POST',
           headers:Object.assign({'Content-Type':'application/json'},H),
           body:JSON.stringify({email:em,password:pw})});
-        if(fr.ok){var d=await fr.json();id=d.owner_id;name=d.display_name||em;pf=d.prefs||{};tok=d.token||'';}
+        if(fr.ok){
+          var d=await fr.json();
+          if(d.company){ await startCompany(d.token); return; }
+          id=d.owner_id;name=d.display_name||em;pf=d.prefs||{};tok=d.token||'';
+        }
         else if(fr.status===401){document.getElementById('oErr').textContent='Incorrect email or password';b.disabled=false;b.textContent='Sign in';return;}
       }catch(e){}
       if(!id){ /* fall back to the direct lookup so sign-in still works if the function is down */
@@ -1221,7 +1266,7 @@
       showApp(id,name,pf);
     }catch(e){document.getElementById('oErr').textContent='Sign-in failed';b.disabled=false;b.textContent='Sign in';}
   }
-  function ownerLogout(){sessionStorage.removeItem('mg_owner');location.reload();}
+  function ownerLogout(){sessionStorage.removeItem('mg_owner');sessionStorage.removeItem('mg_company');sessionStorage.removeItem('mg_company_owner');location.reload();}
 
   async function showApp(ownerId,name,pf){
     pf=pf||{}; var P={net:pf.net!==false, dates:pf.dates!==false, guest:pf.guest===true, total:pf.total===true};
@@ -1275,6 +1320,8 @@
   (function(){
     // a share link opens straight into the shared view, with no sign-in
     if(/^#s\//.test(location.hash||'')){route();return;}
+    var c=sessionStorage.getItem('mg_company');
+    if(c){DATA.company=c;startCompany(c);return;}
     var s=sessionStorage.getItem('mg_owner');
     if(s){try{var o=JSON.parse(s);DATA.token=o.token||'';showApp(o.id,o.name,o.prefs||{});}catch(e){}}
   })();
