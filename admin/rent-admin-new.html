@@ -394,7 +394,7 @@
 <!-- OWNER SUMMARY MODAL -->
 <div class="ov" id="ownOv" onclick="if(event.target===this)closeOwn()">
   <div class="modal">
-    <div class="mh"><h3 id="ownName">Owner</h3><div><button class="btn" onclick="window.print()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:5px"><path d="M12 3v12"/><path d="m7 12 5 5 5-5"/><path d="M5 21h14"/></svg>Save PDF</button> <button class="cls" onclick="closeOwn()">✕ Close</button></div></div>
+    <div class="mh"><h3 id="ownName">Owner</h3><div><button class="btn" onclick="savePdf('ownBody',document.getElementById('ownName').textContent)"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:5px"><path d="M12 3v12"/><path d="m7 12 5 5 5-5"/><path d="M5 21h14"/></svg>Save PDF</button> <button class="cls" onclick="closeOwn()">✕ Close</button></div></div>
     <div class="mb" id="ownBody"></div>
   </div>
 </div>
@@ -415,13 +415,26 @@
 <!-- DOCUMENT (contract/invoice/receipt) MODAL -->
 <div class="ov" id="docOv" onclick="if(event.target===this)closeDoc()">
   <div class="modal">
-    <div class="mh"><h3 id="docTitle">Document</h3><div><button class="btn" onclick="window.print()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:5px"><path d="M12 3v12"/><path d="m7 12 5 5 5-5"/><path d="M5 21h14"/></svg>Save PDF</button> <button class="cls" onclick="closeDoc()">✕ Close</button></div></div>
+    <div class="mh"><h3 id="docTitle">Document</h3><div><button class="btn" onclick="savePdf('docPaper',document.getElementById('docTitle').textContent)"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:5px"><path d="M12 3v12"/><path d="m7 12 5 5 5-5"/><path d="M5 21h14"/></svg>Save PDF</button> <button class="cls" onclick="closeDoc()">✕ Close</button></div></div>
     <div class="mb"><div class="paper" id="docPaper"></div></div>
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
   const SB_URL='https://iwipvfkjfsveycppqhxc.supabase.co';
+  function sanFile(s){return String(s||'document').replace(/[^\w฀-๿.\- ]+/g,'').replace(/\s+/g,'_').slice(0,80)||'document';}
+  function savePdf(elId,filename){
+    var el=document.getElementById(elId);
+    if(!el)return Promise.resolve();
+    if(typeof html2pdf==='undefined'){window.print();return Promise.resolve();}
+    var opt={margin:[10,10,10,10],filename:sanFile(filename)+'.pdf',
+      image:{type:'jpeg',quality:0.98},
+      html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},
+      jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+      pagebreak:{mode:['css','legacy']}};
+    return html2pdf().set(opt).from(el).save();
+  }
   const SB_KEY=atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW1sM2FYQjJabXRxWm5OMlpYbGpjSEJ4YUhoaklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTnpRM056STVOellzSW1WNGNDSTZNakE1TURNME9EazNObjAuVF9Yd3BCcE5kZXFRTGpYdXVsRVB3bFV2Q045dVhITlRqM0I3dE14YnRGbw==');
   const H={apikey:SB_KEY,Authorization:'Bearer '+SB_KEY};
   const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -844,7 +857,13 @@
     MNG.dirty=false;MNG.tdirty={};
     document.getElementById('mngOv').classList.remove('open');document.body.classList.remove('pmode-mng');
   }
-  function printMng(){document.body.classList.add('pmode-mng');window.print();setTimeout(function(){document.body.classList.remove('pmode-mng');},400);}
+  async function printMng(){
+    // expand any collapsed checklist groups so they appear in the PDF, then restore
+    var collapsed=[].slice.call(document.querySelectorAll('#mngBody .tgrp.collapsed'));
+    collapsed.forEach(function(g){g.classList.remove('collapsed');});
+    try{ await savePdf('mngBody',(document.getElementById('mngTitle').textContent||'booking')); }
+    finally{ collapsed.forEach(function(g){g.classList.add('collapsed');}); }
+  }
 
   async function loadTasks(){
     try{
