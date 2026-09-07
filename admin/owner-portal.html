@@ -98,20 +98,23 @@
     if(!em||!pw){document.getElementById('oErr').textContent='Enter email and password';return;}
     var b=document.getElementById('oBtn');b.disabled=true;b.textContent='Signing in…';
     try{
-      var url=SB_URL+"/rest/v1/portal_users?select=owner_id,display_name,password_hash,is_active&role=eq.owner&or=(email.eq."+encodeURIComponent(em)+",username.eq."+encodeURIComponent(em)+")";
+      var url=SB_URL+"/rest/v1/portal_users?select=owner_id,display_name,password_hash,is_active,prefs&role=eq.owner&or=(email.eq."+encodeURIComponent(em)+",username.eq."+encodeURIComponent(em)+")";
       var r=await fetch(url,{headers:H}); var rows=await r.json();
       var u=(rows||[]).find(function(x){return x.is_active!==false && x.password_hash===pw && x.owner_id;});
       if(!u){document.getElementById('oErr').textContent='Incorrect email or password';b.disabled=false;b.textContent='Sign in';return;}
-      sessionStorage.setItem('mg_owner',JSON.stringify({id:u.owner_id,name:u.display_name||em}));
-      showApp(u.owner_id,u.display_name||em);
+      var pf=u.prefs||{};
+      sessionStorage.setItem('mg_owner',JSON.stringify({id:u.owner_id,name:u.display_name||em,prefs:pf}));
+      showApp(u.owner_id,u.display_name||em,pf);
     }catch(e){document.getElementById('oErr').textContent='Sign-in failed';b.disabled=false;b.textContent='Sign in';}
   }
   function ownerLogout(){sessionStorage.removeItem('mg_owner');location.reload();}
 
-  async function showApp(ownerId,name){
+  async function showApp(ownerId,name,pf){
+    pf=pf||{}; var P={net:pf.net!==false, dates:pf.dates!==false, guest:pf.guest===true, total:pf.total===true};
     document.getElementById('login').style.display='none';
     document.getElementById('app').style.display='block';
     document.getElementById('oName').textContent=name;
+    var netTile=document.getElementById('oNet').closest('.tile'); if(netTile)netTile.style.display=P.net?'':'none';
     try{
       var q=function(t,sel,extra){return fetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel)+(extra||''),{headers:H}).then(function(r){return r.json();});};
       var res=await Promise.all([
@@ -122,20 +125,30 @@
       var bk=res[0]||[], villas=res[1]||[], gmap={}; (res[2]||[]).forEach(function(g){gmap[g.id]=g.name;});
       var vmap={}; villas.forEach(function(v){vmap[v.id]=v;});
       document.getElementById('oVillas').innerHTML=villas.map(function(v){return '<span>'+esc(v.name)+(v.area?' · '+esc(v.area):'')+'</span>';}).join('')||'<span style="background:none;border:none;color:var(--faint)">No villa linked yet</span>';
-      var net=0,up=0;
-      document.getElementById('oRows').innerHTML=bk.length?bk.map(function(b){
-        net+=N(b.owner_net); if(b.status==='confirmed'||b.status==='deposit')up++;
-        return '<tr><td class="ref">'+esc(b.booking_ref||'—')+'</td><td>'+esc((vmap[b.villa_id]||{}).name||'—')+'</td>'+
-          '<td>'+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'</td><td>'+esc(gmap[b.guest_id]||'—')+'</td>'+
-          '<td class="money">'+money(b.total)+'</td><td class="money net">'+money(b.owner_net)+'</td>'+
-          '<td><span class="st">'+esc((b.status||'').replace(/_/g,' '))+'</span></td></tr>';
-      }).join(''):'<tr><td colspan="7" class="state">No bookings yet</td></tr>';
+      var net=0,up=0; bk.forEach(function(b){net+=N(b.owner_net);if(b.status==='confirmed'||b.status==='deposit')up++;});
       document.getElementById('oNet').textContent=money(net);
       document.getElementById('oCount').textContent=bk.length;
       document.getElementById('oUp').textContent=up;
-    }catch(e){document.getElementById('oRows').innerHTML='<tr><td colspan="7" class="state" style="color:var(--red)">Could not load</td></tr>';}
+      var cols=[{h:'Ref'},{h:'Villa'}];
+      if(P.dates)cols.push({h:'Stay'});
+      if(P.guest)cols.push({h:'Guest'});
+      if(P.total)cols.push({h:'Total',cls:'money'});
+      if(P.net)cols.push({h:'My net',cls:'money'});
+      cols.push({h:'Status'});
+      var thead='<thead><tr>'+cols.map(function(c){return '<th'+(c.cls?' class="'+c.cls+'"':'')+'>'+c.h+'</th>';}).join('')+'</tr></thead>';
+      var body=bk.length?bk.map(function(b){
+        var td=['<td class="ref">'+esc(b.booking_ref||'—')+'</td>','<td>'+esc((vmap[b.villa_id]||{}).name||'—')+'</td>'];
+        if(P.dates)td.push('<td>'+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'</td>');
+        if(P.guest)td.push('<td>'+esc(gmap[b.guest_id]||'—')+'</td>');
+        if(P.total)td.push('<td class="money">'+money(b.total)+'</td>');
+        if(P.net)td.push('<td class="money net">'+money(b.owner_net)+'</td>');
+        td.push('<td><span class="st">'+esc((b.status||'').replace(/_/g,' '))+'</span></td>');
+        return '<tr>'+td.join('')+'</tr>';
+      }).join(''):'<tr><td colspan="'+cols.length+'" class="state">No bookings yet</td></tr>';
+      var tbl=document.querySelector('#app .tablecard table'); if(tbl)tbl.innerHTML=thead+'<tbody>'+body+'</tbody>';
+    }catch(e){var tb=document.getElementById('oRows');if(tb)tb.innerHTML='<tr><td colspan="7" class="state" style="color:var(--red)">Could not load</td></tr>';}
   }
 
-  (function(){var s=sessionStorage.getItem('mg_owner');if(s){try{var o=JSON.parse(s);showApp(o.id,o.name);}catch(e){}}})();
+  (function(){var s=sessionStorage.getItem('mg_owner');if(s){try{var o=JSON.parse(s);showApp(o.id,o.name,o.prefs||{});}catch(e){}}})();
 </script>
 </body></html>

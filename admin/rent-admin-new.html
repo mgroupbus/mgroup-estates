@@ -325,12 +325,14 @@
     body+='<div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--faint);margin:12px 0 6px">Bookings</div>';
     body+='<table><thead><tr><th>Ref</th><th>Stay</th><th class="money">Total</th><th class="money">Owner net</th></tr></thead><tbody>'+
       bks.map(function(b){return '<tr><td class="ref">'+esc(b.booking_ref||'—')+'</td><td>'+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'</td><td class="money">'+money(b.total)+'</td><td class="money">'+money(b.owner_net)+'</td></tr>';}).join('')+'</tbody></table>';
-    body+='<div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--faint);margin:16px 0 6px">Show to this owner (in portal)</div>'+
-      '<label class="chk"><input type="checkbox" checked> Booking dates &amp; guest</label>'+
-      '<label class="chk"><input type="checkbox" checked> Owner net earnings</label>'+
-      '<label class="chk"><input type="checkbox"> MGROUP commission</label>'+
-      '<label class="chk"><input type="checkbox"> Check-in task progress</label>'+
-      '<div style="margin-top:14px;display:flex;gap:9px;align-items:center"><button class="btn" onclick="setOwnerPw(\''+id+'\',\''+esc(a.o.name)+'\')">🔑 Set portal password</button><span class="sub">owner logs in with email + this password</span></div>';
+    body+='<div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--faint);margin:16px 0 6px">Show to this owner (in portal) — tick only what they may see</div>'+
+      '<label class="chk"><input type="checkbox" id="pf_net"> Owner net earnings</label>'+
+      '<label class="chk"><input type="checkbox" id="pf_dates"> Booking dates</label>'+
+      '<label class="chk"><input type="checkbox" id="pf_guest"> Guest names</label>'+
+      '<label class="chk"><input type="checkbox" id="pf_total"> Booking total (client paid)</label>'+
+      '<div style="margin-top:14px;display:flex;gap:9px;align-items:center;flex-wrap:wrap"><button class="btn" onclick="saveOwnerPrefs(\''+id+'\')">Save what this owner sees</button><button class="btn" style="background:#fff;color:var(--ink)" onclick="setOwnerPw(\''+id+'\',\''+esc(a.o.name)+'\')">🔑 Set portal password</button></div>'+
+      '<div class="sub" style="margin-top:8px" id="pf_msg">owner logs in at mgroupestates.com/admin/owner-portal with email + password</div>';
+    loadOwnerPrefs(id);
     document.getElementById('ownBody').innerHTML=body;
     document.body.classList.add('pmode-own');
     document.getElementById('ownOv').classList.add('open');
@@ -353,6 +355,25 @@
       alert('✓ Portal ready for '+name+'\nLogin: '+uname+'\nURL: mgroupestates.com/admin/owner-portal');
     }catch(e){alert('Could not set portal: '+e.message);}
   }
+  async function loadOwnerPrefs(id){
+    var def={net:true,dates:true,guest:false,total:false};
+    try{
+      var r=await fetch(SB_URL+'/rest/v1/portal_users?select=prefs&role=eq.owner&owner_id=eq.'+id,{headers:H});
+      var rows=await r.json(); var p=(rows&&rows[0]&&rows[0].prefs)||{};
+      ['net','dates','guest','total'].forEach(function(k){var e=document.getElementById('pf_'+k);if(e)e.checked=(k in p)?!!p[k]:def[k];});
+    }catch(e){}
+  }
+  async function saveOwnerPrefs(id){
+    var prefs={net:pfget('net'),dates:pfget('dates'),guest:pfget('guest'),total:pfget('total')};
+    try{
+      var r=await fetch(SB_URL+'/rest/v1/portal_users?select=id&role=eq.owner&owner_id=eq.'+id,{headers:H});
+      var rows=await r.json();
+      if(!rows||!rows.length){document.getElementById('pf_msg').textContent='⚠ Set the portal password first, then save visibility.';return;}
+      await fetch(SB_URL+'/rest/v1/portal_users?id=eq.'+rows[0].id,{method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify({prefs:prefs})});
+      document.getElementById('pf_msg').textContent='✓ Saved — owner now sees only the ticked items.';
+    }catch(e){document.getElementById('pf_msg').textContent='Could not save: '+e.message;}
+  }
+  function pfget(k){var e=document.getElementById('pf_'+k);return e?e.checked:false;}
 
   function renderClients(){
     var cnt={};DATA.bk.forEach(function(b){if(b.guest_id)cnt[b.guest_id]=(cnt[b.guest_id]||0)+1;});
