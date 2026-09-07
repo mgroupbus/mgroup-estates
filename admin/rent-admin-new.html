@@ -94,8 +94,20 @@
   .mngprog .bar i{display:block;height:100%;background:var(--g600);border-radius:20px;transition:width .25s}
   .mngprog .pct{font-size:12px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--g600);white-space:nowrap}
   .tgrp{margin-bottom:16px}
-  .tgh{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
-  .tgh h4{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .tgh{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;padding:8px 12px;border-radius:8px;border-left:4px solid var(--muted);background:#f2efe7}
+  .tgh h4{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+  .tgh.ty-before_checkin{border-left-color:#2f6f9e;background:#eef4f9}
+  .tgh.ty-before_checkin h4{color:#2f6f9e}
+  .tgh.ty-checkin{border-left-color:#12a150;background:#eaf6ee}
+  .tgh.ty-checkin h4{color:#0a7d40}
+  .tgh.ty-checkout{border-left-color:#e03b2f;background:#fbeeec}
+  .tgh.ty-checkout h4{color:#c0392b}
+  .tgh.ty-housekeeping{border-left-color:#7c5cbf;background:#f1edf9}
+  .tgh.ty-housekeeping h4{color:#6a4bb0}
+  .tgh.ty-maintenance{border-left-color:#e0921a;background:#fbf1e0}
+  .tgh.ty-maintenance h4{color:#b5720f}
+  .tgh.ty-linen{border-left-color:#c29a45;background:#f6efe1}
+  .tgh.ty-linen h4{color:#a97e42}
   .task{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#fff}
   .task.done{background:#f8f5ee;border-color:#e5dcc7}
   .tr1{display:flex;gap:10px;align-items:flex-start}
@@ -119,11 +131,12 @@
   .mngchip{font-size:10px;font-family:var(--mono);color:var(--faint);margin-right:7px;white-space:nowrap}
   .mngchip.full{color:var(--ok);font-weight:700}
   /* manage sub-tabs + payments / housekeeper / utilities */
-  .mtabs{display:flex;gap:2px;padding:0 20px;border-bottom:1px solid var(--line);background:#faf9f5;flex-wrap:wrap}
-  .mtab{font-family:var(--font);font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);background:none;border:none;border-bottom:2px solid transparent;padding:11px 13px;cursor:pointer}
-  .mtab:hover{color:var(--ink)}
-  .mtab.on{color:var(--g600);border-bottom-color:var(--g600)}
-  .mtab .n{font-family:var(--mono);font-size:9.5px;opacity:.7;margin-left:5px}
+  .mtabs{display:flex;gap:5px;padding:9px 20px 0;border-bottom:1px solid var(--line);background:#faf9f5;flex-wrap:wrap}
+  .mtab{font-family:var(--font);font-size:12.5px;font-weight:700;letter-spacing:.02em;color:var(--muted);background:none;border:none;padding:10px 16px;cursor:pointer;border-radius:9px 9px 0 0;transition:background .12s,color .12s}
+  .mtab:hover{color:var(--ink);background:#efe9dc}
+  .mtab.on{color:#fff;background:var(--g600)}
+  .mtab .n{font-family:var(--mono);font-size:10px;font-weight:700;margin-left:7px;background:rgba(0,0,0,.10);color:inherit;padding:1px 7px;border-radius:9px}
+  .mtab.on .n{background:rgba(255,255,255,.28)}
   .sechd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap}
   .sechd h4{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
   .frm{border:1px solid var(--line);border-radius:10px;padding:13px;background:#faf9f5;margin-bottom:13px}
@@ -899,7 +912,7 @@
     html+=types.map(function(k){
       var ts=by[k].slice().sort(function(a,b){return (a.sort_order||0)-(b.sort_order||0);});
       var d=ts.filter(function(t){return t.is_done;}).length;
-      return '<div class="tgrp"><div class="tgh"><h4>'+esc(TY[k]||nice(k))+' &nbsp;<span style="color:var(--g600)">'+d+'/'+ts.length+'</span></h4>'+
+      return '<div class="tgrp"><div class="tgh ty-'+esc(k)+'"><h4>'+esc(TY[k]||nice(k))+' &nbsp;<span>'+d+'/'+ts.length+'</span></h4>'+
         '<button class="mini" onclick="addTask(\''+k+'\')">+ Add task</button></div>'+
         ts.map(taskHtml).join('')+'</div>';
     }).join('');
