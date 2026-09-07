@@ -69,6 +69,43 @@
   .kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13px}
   .kv b{font-weight:700}
   .chk{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);padding:4px 0;cursor:pointer}
+  /* manage checklist */
+  .modal.mng{max-width:840px}
+  .mngprog{display:flex;align-items:center;gap:10px;margin:2px 0 16px}
+  .mngprog .bar{flex:1;height:7px;background:#e9e4d6;border-radius:20px;overflow:hidden}
+  .mngprog .bar i{display:block;height:100%;background:var(--g600);border-radius:20px;transition:width .25s}
+  .mngprog .pct{font-size:12px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--g600);white-space:nowrap}
+  .tgrp{margin-bottom:16px}
+  .tgh{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+  .tgh h4{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .task{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#fff}
+  .task.done{background:#f8f5ee;border-color:#e5dcc7}
+  .tr1{display:flex;gap:10px;align-items:flex-start}
+  .task input[type=checkbox]{width:17px;height:17px;margin-top:2px;accent-color:var(--g600);cursor:pointer;flex:none}
+  .task .tn{flex:1;font-size:13.5px;font-weight:600;line-height:1.35}
+  .task.done .tn>span{color:var(--muted);text-decoration:line-through}
+  .task .meta{font-size:10px;color:var(--faint);font-family:var(--mono);text-align:right;white-space:nowrap;padding-top:3px}
+  .task textarea{width:100%;margin-top:7px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-family:var(--font);font-size:12.5px;color:var(--ink);resize:vertical;min-height:34px;background:#fbfaf6}
+  .task textarea:focus{outline:none;border-color:var(--g600);background:#fff}
+  .tact{display:flex;gap:7px;align-items:center;margin-top:8px;flex-wrap:wrap}
+  .mini{font-size:11px;font-weight:600;border:1px solid var(--line);background:#fff;border-radius:6px;padding:4px 9px;cursor:pointer;color:var(--g600);font-family:var(--font)}
+  .mini:hover{background:#faf7f0}
+  .files{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+  .files .f{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#faf9f5}
+  .files .f img{width:76px;height:76px;object-fit:cover;display:block;cursor:zoom-in}
+  .files .f .dc{width:76px;height:76px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:8.5px;color:var(--muted);padding:5px;text-align:center;text-decoration:none;line-height:1.25;overflow:hidden;word-break:break-all}
+  .files .f .dc b{font-size:17px;font-weight:400}
+  .files .f .x{position:absolute;top:3px;right:3px;background:rgba(20,24,20,.62);color:#fff;border:none;border-radius:50%;width:17px;height:17px;font-size:10px;line-height:1;cursor:pointer;padding:0}
+  .lbx{position:fixed;inset:0;background:rgba(12,16,12,.88);display:none;align-items:center;justify-content:center;z-index:90;padding:24px;cursor:zoom-out}
+  .lbx.on{display:flex}.lbx img{max-width:100%;max-height:100%;border-radius:8px}
+  .mngchip{font-size:10px;font-family:var(--mono);color:var(--faint);margin-right:7px;white-space:nowrap}
+  .mngchip.full{color:var(--ok);font-weight:700}
+  @media(max-width:620px){
+    .ov{padding:12px 8px}
+    .modal .mh{flex-wrap:wrap;gap:8px}
+    .task{padding:9px 10px}
+    .tact .mini{flex:1 1 auto;text-align:center}
+  }
   @media(max-width:1000px){.tiles{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:760px){.shell{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px}.side .user,.nl{display:none}.nav{flex-direction:row;flex-wrap:wrap}.main{padding:16px}}
   /* generated document paper */
@@ -111,6 +148,10 @@
     [contenteditable]{outline:none!important}
     body.pmode-doc .shell,body.pmode-own .shell{display:none!important}
     body.pmode-doc #ownOv{display:none!important}body.pmode-own #docOv{display:none!important}
+    body.pmode-mng .shell,body.pmode-mng #docOv,body.pmode-mng #ownOv{display:none!important}
+    body.pmode-mng #mngOv{position:static!important;display:block!important;background:#fff;padding:0;overflow:visible}
+    body.pmode-mng #mngOv .mh>div:last-child,body.pmode-mng .tact,body.pmode-mng .files .x{display:none!important}
+    body.pmode-mng .task{break-inside:avoid}
     body.pmode-doc #docOv,body.pmode-own #ownOv{position:static!important;display:block!important;background:#fff;padding:0;overflow:visible}
     #docOv .mh,#ownOv .mh{display:none}
     .modal{max-width:100%!important;box-shadow:none;border-radius:0}
@@ -119,7 +160,7 @@
 
 <div class="shell">
   <aside class="side">
-    <div class="brand"><div class="mark">M</div><div><h1>MGROUP Rentals</h1><p>Back Office</p></div></div>
+    <div class="brand"><div class="mark">M</div><div><h1>MGROUP ESTATES</h1><p>Rentals · Back Office</p></div></div>
     <div class="nl">Menu</div>
     <div class="nav" id="nav">
       <button class="active" data-v="dash" onclick="go('dash',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</button>
@@ -200,6 +241,17 @@
   </div>
 </div>
 
+<!-- MANAGE / CHECK-IN CHECKLIST MODAL -->
+<div class="ov" id="mngOv" onclick="if(event.target===this)closeMng()">
+  <div class="modal mng">
+    <div class="mh"><div><h3 id="mngTitle">Manage booking</h3><div class="sub" id="mngSub"></div></div>
+      <div><button class="btn" onclick="printMng()">&#128438; Print</button> <button class="cls" onclick="closeMng()">&#10005; Close</button></div></div>
+    <div class="mb" id="mngBody"><div class="state">Loading&hellip;</div></div>
+  </div>
+</div>
+<div class="lbx" id="lbx" onclick="this.classList.remove('on')"><img id="lbxImg" src="" alt=""></div>
+<input type="file" id="upIn" multiple accept="image/*,video/mp4,video/webm,application/pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="doUpload(this)">
+
 <!-- DOCUMENT (contract/invoice/receipt) MODAL -->
 <div class="ov" id="docOv" onclick="if(event.target===this)closeDoc()">
   <div class="modal">
@@ -217,7 +269,7 @@
   function money(x){return (x==null||x==='')?'฿0':'฿'+Number(x).toLocaleString('en-US');}
   function fmtD(d){if(!d)return '—';var p=d.split('-');if(p.length<3)return d;return (+p[2])+' '+MON[+p[1]-1]+" '"+p[0].slice(2);}
   function stCls(v){return (v||'').replace(/_/g,'');}
-  var DATA={bk:[],vmap:{},gmap:{},omap:{}};
+  var DATA={bk:[],vmap:{},gmap:{},omap:{},tk:{}};
 
   function go(v,el){document.querySelectorAll('.nav button').forEach(function(b){b.classList.remove('active');});el.classList.add('active');
     document.querySelectorAll('.view').forEach(function(x){x.classList.remove('on');});document.getElementById('v-'+v).classList.add('on');window.scrollTo(0,0);}
@@ -227,9 +279,11 @@
       var q=function(t,sel){return fetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel),{headers:H}).then(function(r){return r.json();});};
       var res=await Promise.all([
         fetch(SB_URL+'/rest/v1/bookings?select=id,booking_ref,villa_id,guest_id,owner_id,check_in,check_out,nights,total,client_pay,security_deposit,mgroup_commission,owner_net,co_agent_net,agent_name,status,currency&order=check_in.desc&limit=300',{headers:H}).then(function(r){return r.json();}),
-        q('rental_villas','id,name,area,owner_id'), q('owners','id,name,email,phone'), q('guests','id,name,email,phone,nationality')
+        q('rental_villas','id,name,area,owner_id'), q('owners','id,name,email,phone'), q('guests','id,name,email,phone,nationality'),
+        fetch(SB_URL+'/rest/v1/checkin_tasks?select=booking_id,is_done&limit=5000',{headers:H}).then(function(r){return r.json();})
       ]);
       DATA.bk=res[0]||[];
+      DATA.tk={}; (res[4]||[]).forEach(function(t){var c=DATA.tk[t.booking_id]||(DATA.tk[t.booking_id]={n:0,d:0});c.n++;if(t.is_done)c.d++;});
       (res[1]||[]).forEach(function(v){DATA.vmap[v.id]=v;});
       (res[2]||[]).forEach(function(o){DATA.omap[o.id]=o;});
       (res[3]||[]).forEach(function(g){DATA.gmap[g.id]=g;});
@@ -251,7 +305,7 @@
         '<td><b>'+fmtD(b.check_in)+'</b> → <b>'+fmtD(b.check_out)+'</b></td><td class="ref">'+esc(b.booking_ref||'—')+'</td>'+
         '<td><div class="vn">'+esc(vname(b.villa_id))+'</div><div class="sub">'+esc(varea(b.villa_id))+'</div></td>'+
         '<td>'+esc(gname(b.guest_id))+'</td><td class="num">'+(b.nights||'–')+'</td><td class="money">'+money(b.total)+'</td>'+
-        '<td><button class="rowbtn">Manage</button></td></tr>';
+        '<td style="white-space:nowrap">'+progChip(b.id)+'<button class="rowbtn" onclick="openMng(\'' + b.id + '\')">Manage</button></td></tr>';
     }).join('')||'<tr><td colspan="8" class="state">No bookings</td></tr>';
   }
   async function chSt(sel){try{await fetch(SB_URL+'/rest/v1/bookings?id=eq.'+sel.getAttribute('data-id'),{method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify({status:sel.value})});sel.className='st-select '+stCls(sel.value);}catch(e){alert('Save failed');}}
@@ -450,6 +504,225 @@
     document.getElementById('docOv').classList.add('open');
   }
   function closeDoc(){document.getElementById('docOv').classList.remove('open');document.body.classList.remove('pmode-doc');}
+
+
+  // ===================== MANAGE — CHECK-IN CHECKLIST =====================
+  var JH=Object.assign({},H,{'Content-Type':'application/json'});
+  var TY={before_checkin:'Before check-in',checkin:'Check-in',housekeeping:'Housekeeping',maintenance:'Maintenance',linen:'Linen',checkout:'Check-out'};
+  var TYORD=['before_checkin','checkin','housekeeping','maintenance','linen','checkout'];
+  var TPL=[
+    ['before_checkin','agreement'],['before_checkin','payment'],['before_checkin','inventory'],
+    ['before_checkin','test_house'],['before_checkin','housekeeper_ready'],
+    ['checkin','welcome_guest'],['checkin','security_deposit'],['checkin','meter_reading_in'],
+    ['checkin','amenities_overview'],['checkin','housekeeping_schedule'],['checkin','confirm_team'],
+    ['checkin','register_tm30'],['checkin','communication'],
+    ['checkout','farewell'],['checkout','meter_reading_out'],['checkout','damage_check'],
+    ['checkout','return_deposit'],['checkout','close_house']
+  ];
+  var MNG={id:null,tasks:[],files:{}};
+
+  function nice(x){x=String(x||'').replace(/[_-]+/g,' ').trim();return x?x.charAt(0).toUpperCase()+x.slice(1):'Task';}
+  function fmtDT(t){if(!t)return '';var d=new Date(t);if(isNaN(d))return '';return d.getDate()+' '+MON[d.getMonth()]+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+  function kb(n){n=Number(n||0);return n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';}
+  function progChip(id){var c=DATA.tk[id];if(!c||!c.n)return '<span class="mngchip">no list</span>';
+    return '<span class="mngchip'+(c.d===c.n?' full':'')+'">'+c.d+'/'+c.n+'</span>';}
+
+  async function openMng(id){
+    MNG.id=id;MNG.tasks=[];MNG.files={};
+    var b=DATA.bk.find(function(x){return x.id===id;})||{};
+    document.getElementById('mngTitle').textContent='Checklist · '+(b.booking_ref||'Booking');
+    document.getElementById('mngSub').textContent=vname(b.villa_id)+' · '+gname(b.guest_id)+' · '+fmtD(b.check_in)+' → '+fmtD(b.check_out);
+    document.getElementById('mngBody').innerHTML='<div class="state">Loading…</div>';
+    document.getElementById('mngOv').classList.add('open');
+    await loadTasks();
+  }
+  function closeMng(){document.getElementById('mngOv').classList.remove('open');document.body.classList.remove('pmode-mng');}
+  function printMng(){document.body.classList.add('pmode-mng');window.print();setTimeout(function(){document.body.classList.remove('pmode-mng');},400);}
+
+  async function loadTasks(){
+    try{
+      var res=await Promise.all([
+        fetch(SB_URL+'/rest/v1/checkin_tasks?select=*&booking_id=eq.'+MNG.id+'&order=sort_order.asc',{headers:H}).then(function(r){return r.json();}),
+        fetch(SB_URL+'/rest/v1/checkin_task_files?select=*&booking_id=eq.'+MNG.id+'&order=created_at.asc',{headers:H}).then(function(r){return r.json();})
+      ]);
+      MNG.tasks=res[0]||[]; MNG.files={};
+      (res[1]||[]).forEach(function(f){(MNG.files[f.task_id]=MNG.files[f.task_id]||[]).push(f);});
+      DATA.tk[MNG.id]={n:MNG.tasks.length,d:MNG.tasks.filter(function(t){return t.is_done;}).length};
+      renderMng(); renderBookings();
+    }catch(e){document.getElementById('mngBody').innerHTML='<div class="state" style="color:var(--red)">Could not load checklist: '+esc(e.message)+'</div>';}
+  }
+
+  function renderMng(){
+    var box=document.getElementById('mngBody'), ov=document.getElementById('mngOv'), sy=ov.scrollTop;
+    if(!MNG.tasks.length){
+      box.innerHTML='<div class="state">No checklist for this booking yet.<div style="margin-top:14px"><button class="btn primary" onclick="seedTasks()">Create standard checklist</button></div></div>';
+      return;
+    }
+    var by={};MNG.tasks.forEach(function(t){(by[t.task_type]=by[t.task_type]||[]).push(t);});
+    var types=TYORD.filter(function(k){return by[k];}).concat(Object.keys(by).filter(function(k){return TYORD.indexOf(k)<0;}));
+    var done=MNG.tasks.filter(function(t){return t.is_done;}).length,tot=MNG.tasks.length;
+    var pct=tot?Math.round(done*100/tot):0;
+    var html='<div class="mngprog"><div class="bar"><i style="width:'+pct+'%"></i></div><div class="pct">'+done+' / '+tot+' · '+pct+'%</div></div>';
+    html+=types.map(function(k){
+      var ts=by[k].slice().sort(function(a,b){return (a.sort_order||0)-(b.sort_order||0);});
+      var d=ts.filter(function(t){return t.is_done;}).length;
+      return '<div class="tgrp"><div class="tgh"><h4>'+esc(TY[k]||nice(k))+' &nbsp;<span style="color:var(--g600)">'+d+'/'+ts.length+'</span></h4>'+
+        '<button class="mini" onclick="addTask(\''+k+'\')">+ Add task</button></div>'+
+        ts.map(taskHtml).join('')+'</div>';
+    }).join('');
+    html+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">'+
+      TYORD.filter(function(k){return !by[k];}).map(function(k){return '<button class="mini" onclick="addTask(\''+k+'\')">+ '+esc(TY[k])+'</button>';}).join('')+'</div>';
+    box.innerHTML=html;
+    ov.scrollTop=sy;
+  }
+
+  function taskHtml(t){
+    var fs=MNG.files[t.id]||[];
+    return '<div class="task'+(t.is_done?' done':'')+'">'+
+      '<div class="tr1"><input type="checkbox"'+(t.is_done?' checked':'')+' onchange="tgl(this,\''+t.id+'\')">'+
+      '<div class="tn"><span>'+esc(nice(t.task_name))+'</span>'+
+        (t.description?'<div class="sub" style="font-weight:400;margin-top:2px">'+esc(t.description)+'</div>':'')+'</div>'+
+      '<div class="meta">'+(t.is_done?esc(fmtDT(t.done_at))+(t.done_by?'<br>'+esc(t.done_by):''):'')+'</div></div>'+
+      '<textarea placeholder="Notes — meter reading, damage found, remarks…" onchange="saveNote(this,\''+t.id+'\')">'+esc(t.notes||'')+'</textarea>'+
+      '<div class="tact">'+
+        '<button class="mini" onclick="pickFile(\''+t.id+'\')">📎 Attach photo / file</button>'+
+        '<button class="mini" onclick="renameTask(\''+t.id+'\')">✎ Rename</button>'+
+        '<button class="mini" style="color:var(--red)" onclick="delTask(\''+t.id+'\')">✕ Remove</button>'+
+        '<span class="sub" id="up-'+t.id+'"></span></div>'+
+      (fs.length?'<div class="files">'+fs.map(fileHtml).join('')+'</div>':'')+
+      '</div>';
+  }
+  function fileHtml(f){
+    var rm='<button class="x" title="Remove" onclick="delFile(\''+f.id+'\',\''+esc(f.path||'')+'\')">✕</button>';
+    if(f.kind==='image')return '<div class="f"><img src="'+esc(f.url)+'" alt="" onclick="lbOpen(\''+esc(f.url)+'\')">'+rm+'</div>';
+    return '<div class="f"><a class="dc" href="'+esc(f.url)+'" target="_blank" rel="noopener"><b>📄</b>'+esc((f.file_name||'file').slice(0,22))+'<span>'+kb(f.size_bytes)+'</span></a>'+rm+'</div>';
+  }
+  function lbOpen(u){document.getElementById('lbxImg').src=u;document.getElementById('lbx').classList.add('on');}
+
+  async function delFile(fid,path){
+    var f=null; Object.keys(MNG.files).forEach(function(k){MNG.files[k].forEach(function(x){if(x.id===fid)f=x;});});
+    if(!confirm('Remove '+((f&&f.file_name)||'this file')+' from this task?'))return;
+    try{
+      if(path)await fetch(SB_URL+'/storage/v1/object/media/'+path,{method:'DELETE',headers:H});
+      var r=await fetch(SB_URL+'/rest/v1/checkin_task_files?id=eq.'+fid,{method:'DELETE',headers:H});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      if(f&&f.url){
+        var t=MNG.tasks.find(function(x){return x.id===f.task_id;});
+        if(t&&t.photo_url===f.url)await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+t.id,{method:'PATCH',headers:JH,body:JSON.stringify({photo_url:null})});
+      }
+      await loadTasks();
+    }catch(e){alert('Could not remove file: '+e.message);}
+  }
+
+  async function tgl(cb,id){
+    var on=cb.checked;
+    var body={is_done:on,done_at:on?new Date().toISOString():null,done_by:on?'Admin':null};
+    try{
+      var r=await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'PATCH',headers:JH,body:JSON.stringify(body)});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      var t=MNG.tasks.find(function(x){return x.id===id;});
+      if(t){t.is_done=body.is_done;t.done_at=body.done_at;t.done_by=body.done_by;}
+      DATA.tk[MNG.id]={n:MNG.tasks.length,d:MNG.tasks.filter(function(x){return x.is_done;}).length};
+      renderMng();renderBookings();
+    }catch(e){cb.checked=!on;alert('Could not save: '+e.message);}
+  }
+
+  async function saveNote(el,id){
+    var v=el.value;
+    try{
+      var r=await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'PATCH',headers:JH,body:JSON.stringify({notes:v||null})});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      var t=MNG.tasks.find(function(x){return x.id===id;}); if(t)t.notes=v;
+      el.style.borderColor='var(--ok)';setTimeout(function(){el.style.borderColor='';},900);
+    }catch(e){alert('Could not save note: '+e.message);}
+  }
+
+  async function renameTask(id){
+    var t=MNG.tasks.find(function(x){return x.id===id;}); if(!t)return;
+    var v=prompt('Task name',nice(t.task_name)); if(v===null)return; v=v.trim(); if(!v)return;
+    try{
+      await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'PATCH',headers:JH,body:JSON.stringify({task_name:v})});
+      t.task_name=v;renderMng();
+    }catch(e){alert('Could not rename: '+e.message);}
+  }
+
+  async function addTask(type){
+    var v=prompt('New task in "'+(TY[type]||type)+'"'); if(!v)return; v=v.trim(); if(!v)return;
+    var same=MNG.tasks.filter(function(t){return t.task_type===type;});
+    var so=same.reduce(function(m,t){return Math.max(m,Number(t.sort_order||0));},0)+1;
+    try{
+      var r=await fetch(SB_URL+'/rest/v1/checkin_tasks',{method:'POST',headers:JH,
+        body:JSON.stringify({booking_id:MNG.id,task_type:type,task_name:v,sort_order:so,is_done:false})});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      await loadTasks();
+    }catch(e){alert('Could not add task: '+e.message);}
+  }
+
+  async function delTask(id){
+    var t=MNG.tasks.find(function(x){return x.id===id;}); if(!t)return;
+    if(!confirm('Remove "'+nice(t.task_name)+'" from this checklist?'))return;
+    try{
+      await fetch(SB_URL+'/rest/v1/checkin_task_files?task_id=eq.'+id,{method:'DELETE',headers:H});
+      await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'DELETE',headers:H});
+      await loadTasks();
+    }catch(e){alert('Could not remove: '+e.message);}
+  }
+
+  async function seedTasks(){
+    var box=document.getElementById('mngBody');
+    box.innerHTML='<div class="state">Creating checklist…</div>';
+    var byType={};
+    var rows=TPL.map(function(r){
+      byType[r[0]]=(byType[r[0]]||0)+1;
+      return {booking_id:MNG.id,task_type:r[0],task_name:r[1],sort_order:byType[r[0]],is_done:false};
+    });
+    try{
+      var r=await fetch(SB_URL+'/rest/v1/checkin_tasks',{method:'POST',headers:JH,body:JSON.stringify(rows)});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      await loadTasks();
+    }catch(e){box.innerHTML='<div class="state" style="color:var(--red)">Could not create checklist: '+esc(e.message)+'</div>';}
+  }
+
+  // ---------- attachments ----------
+  // must stay in sync with the "media" bucket's allowed_mime_types in Supabase
+  var OKMIME=['image/jpeg','image/png','image/webp','image/heic','image/gif','video/mp4','video/webm',
+    'application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+  function pickFile(tid){var i=document.getElementById('upIn');i.setAttribute('data-task',tid);i.value='';i.click();}
+
+  async function doUpload(inp){
+    var tid=inp.getAttribute('data-task'), files=Array.prototype.slice.call(inp.files||[]);
+    if(!tid||!files.length)return;
+    var st=document.getElementById('up-'+tid), okN=0;
+    for(var i=0;i<files.length;i++){
+      var f=files[i];
+      if(st)st.textContent='Uploading '+(i+1)+'/'+files.length+'…';
+      if(f.size>25*1024*1024){alert('"'+f.name+'" is over 25 MB — skipped');continue;}
+      var mime=(f.type||'').toLowerCase();
+      if(OKMIME.indexOf(mime)<0){alert('"'+f.name+'" is not an allowed file type.\n\nAllowed: JPG, PNG, WEBP, HEIC, GIF, MP4, WEBM, PDF, DOC(X), XLS(X)');continue;}
+      var safe=f.name.replace(/[^A-Za-z0-9._-]+/g,'-').slice(-60);
+      var path='checkin/'+MNG.id+'/'+tid+'/'+Date.now()+'-'+i+'-'+safe;
+      try{
+        var up=await fetch(SB_URL+'/storage/v1/object/media/'+path,{method:'POST',
+          headers:Object.assign({},H,{'Content-Type':mime||'application/octet-stream'}),body:f});
+        if(!up.ok)throw new Error('storage HTTP '+up.status);
+        var url=SB_URL+'/storage/v1/object/public/media/'+path;
+        var kind=mime.indexOf('image/')===0?'image':'file';
+        var ins=await fetch(SB_URL+'/rest/v1/checkin_task_files',{method:'POST',headers:JH,
+          body:JSON.stringify({task_id:tid,booking_id:MNG.id,url:url,path:path,file_name:f.name,mime:mime||null,size_bytes:f.size,kind:kind})});
+        if(!ins.ok)throw new Error('save HTTP '+ins.status);
+        var t=MNG.tasks.find(function(x){return x.id===tid;});
+        if(kind==='image'&&t&&!t.photo_url){
+          await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+tid,{method:'PATCH',headers:JH,body:JSON.stringify({photo_url:url})});
+          t.photo_url=url;
+        }
+        okN++;
+      }catch(e){alert('Upload failed for "'+f.name+'": '+e.message);}
+    }
+    if(st)st.textContent=okN?'✓ '+okN+' attached':'';
+    inp.value='';
+    if(okN)await loadTasks();
+  }
 
   loadAll();
 </script>

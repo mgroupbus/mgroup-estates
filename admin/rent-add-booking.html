@@ -106,7 +106,7 @@
 
 <div class="shell">
   <aside class="side">
-    <div class="brand"><div class="mark">M</div><div><h1>MGROUP Admin</h1><p>Back Office · v2</p></div></div>
+    <div class="brand"><div class="mark">M</div><div><h1>MGROUP ESTATES</h1><p>Rentals · Back Office</p></div></div>
     <div class="nav-label">Menu</div>
     <div class="nav">
       <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>Bookings</a>
@@ -338,7 +338,7 @@
     if(!vo||!vo.value){return alert('Select a villa');}
     var d=document.querySelectorAll('input[type=date]');
     if(!d[0].value||!d[1].value){return alert('Select check-in and check-out');}
-    var gname=val('gName'); if(!gname){return alert('Guest name required');}
+    var gname=val('gName'); if(!gname){return alert('Guest name required');} if(!vo.getAttribute('data-ownerid')){return alert('วิลล่านี้ยังไม่ได้ผูกเจ้าของ (owner) — ต้องเพิ่ม owner ให้วิลล่าก่อนจึงสร้าง booking ได้');}
     var bs=document.querySelectorAll('.actionbar .btn'); bs.forEach(function(b){b.disabled=true;}); var t0=btn.textContent; btn.textContent='Saving…';
     try{
       var guestId;
@@ -354,12 +354,17 @@
       if(period==='week')count=Math.max(1,Math.round(n/7)); else if(period==='month')count=Math.max(1,Math.round(n/30)); else if(period==='year')count=Math.max(1,Math.round(n/365));
       var rate=num('rateInput'), disc=num('discInput'), sub=rate*count, total=Math.max(0,sub-disc);
       var paid=num('clientPaid'), co=num('coAgent'), mg=num('mgroupComm'), ownerNet=Math.max(0,paid-co-mg);
-      var pets=document.getElementById('petSel').value!=='None';
-      var gc=(parseInt(document.getElementById('adultsSel').value)||0)+(parseInt(document.getElementById('childSel').value)||0);
+      var petSel=document.getElementById('petSel').value;
+      var pets=petSel!=='None';
+      var petCount=pets?(parseInt(petSel)||1):0;
+      var adults=parseInt(document.getElementById('adultsSel').value)||0;
+      var children=parseInt(document.getElementById('childSel').value)||0;
+      var gc=adults+children;
       var payload={
         booking_ref:'MG-'+new Date().getFullYear()+'-'+String(Date.now()).slice(-4),
         villa_id:vo.getAttribute('data-id'), guest_id:guestId, owner_id:vo.getAttribute('data-ownerid')||null,
         check_in:d[0].value, check_out:d[1].value, guests_count:gc, pets_allowed:pets,
+        adults:adults, children:children, pets:petCount,
         rate_per_night:rate, subtotal:sub, cleaning_fee:0, discount:disc, total:total, security_deposit:num('depInput'),
         currency:(document.getElementById('curSel').value==='$'?'USD':'THB'),
         client_pay:paid, agent_commission:co, co_agent_net:co, mgroup_commission:mg, owner_net:ownerNet,
