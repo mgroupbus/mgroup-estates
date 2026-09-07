@@ -398,7 +398,6 @@
   function fmtD(d){if(!d)return '—';var p=String(d).split('-');if(p.length<3)return d;return p[2].padStart(2,'0')+'.'+p[1].padStart(2,'0')+'.'+p[0];}
   function N(x){return Number(x||0);}
   var DATA={bk:[],villas:[],vmap:{},gmap:{},guests:{},prefs:{},tasks:{},sched:{}};
-  function qq(t,sel,extra){return fetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel)+(extra||''),{headers:H}).then(function(r){return r.json();});}
   function arr(x){return Array.isArray(x)?x:[];}
   function nice(x){x=String(x||'').replace(/[_-]+/g,' ').trim();return x?x.charAt(0).toUpperCase()+x.slice(1):'—';}
   function zoom(u){document.getElementById('lbImg').src=u;document.getElementById('lb').classList.add('on');}
@@ -503,9 +502,14 @@
   }
   async function refreshVillaFiles(vid){
     try{
-      var rows=await qq('attachments','id,entity_type,entity_id,category,title,person_name,uploaded_by,mime,created_at',
-        '&visible_to_owner=eq.true&entity_type=eq.villa&entity_id=eq.'+vid+'&order=created_at.desc');
-      DATA.att.villa[vid]=rows||[];
+      var r=await fetch(SB_URL+'/functions/v1/owner-data',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({token:DATA.token||''})});
+      if(r.ok){
+        var D=await r.json();
+        DATA.att={villa:{},guest:{},booking:{}};
+        (D.attachments||[]).forEach(function(a){var g=DATA.att[a.entity_type];if(g)(g[a.entity_id]=g[a.entity_id]||[]).push(a);});
+      }
     }catch(e){}
     renderVilla(vid);
   }
@@ -1273,35 +1277,29 @@
     var hi=document.querySelector('.top .b'); if(hi){hi.classList.remove('in');void hi.offsetWidth;hi.classList.add('in');}
     ['oNet','oComing','oDue'].forEach(function(id){var t=document.getElementById(id).closest('.tile');if(t)t.style.display=P.net?'':'none';});
     try{
-      var q=function(t,sel,extra){return fetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel)+(extra||''),{headers:H}).then(function(r){return r.json();});};
-      var res=await Promise.all([
-        q('bookings','id,booking_ref,villa_id,guest_id,check_in,check_out,owner_net,total,client_pay,security_deposit,status,nights,guests_count,adults,children,pets,pets_allowed,special_requests,rental_period,period_count,custom_period_label,currency,created_at','&owner_id=eq.'+ownerId+'&order=check_in.desc'),
-        q('rental_villas','id,name,area,location,bedrooms,bathrooms,max_guests,sqm,pool_type,view_type,cover_image,images,amenities,features_included,features_excluded,description,landing_url','&owner_id=eq.'+ownerId),
-        q('guests','id,name,nationality'),
-        q('contracts','booking_id,contract_no,type,status','&owner_id=eq.'+ownerId),
-        q('expenses','id,villa_id,booking_id,category,amount,currency,meter_start,meter_end,units,period_start,period_end,note,created_at','&order=period_start.desc'),
-        q('owner_payment_schedule','booking_id,seq,label,owner_net,due_date,paid_date,status','&owner_id=eq.'+ownerId+'&order=seq.asc')
-      ]);
-      DATA.sched={}; (Array.isArray(res[5])?res[5]:[]).forEach(function(r){(DATA.sched[r.booking_id]=DATA.sched[r.booking_id]||[]).push(r);});
-      var bk=res[0]||[], villas=res[1]||[], gmap={}; (res[2]||[]).forEach(function(g){gmap[g.id]=g.name;DATA.guests[g.id]=g;});
-      DATA.contracts={}; (res[3]||[]).forEach(function(c){if(c.booking_id)DATA.contracts[c.booking_id]=c;});
+      // One authenticated call. The server decides what belongs to this owner —
+      // the browser no longer asks the database for anything.
+      var r=await fetch(SB_URL+'/functions/v1/owner-data',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({token:DATA.token||''})});
+      if(!r.ok){
+        var tb=document.getElementById('oRows');
+        if(tb)tb.innerHTML='<tr><td colspan="8" class="state" style="color:var(--red)">'
+          +(r.status===401?'Your session expired — please sign in again':'Could not load')+'</td></tr>';
+        return;
+      }
+      var D=await r.json();
+      var bk=D.bookings||[], villas=D.villas||[], gmap={};
+      (D.guests||[]).forEach(function(g){gmap[g.id]=g.name;DATA.guests[g.id]=g;});
+      DATA.sched={}; (D.schedule||[]).forEach(function(x){(DATA.sched[x.booking_id]=DATA.sched[x.booking_id]||[]).push(x);});
+      DATA.contracts={}; (D.contracts||[]).forEach(function(c){if(c.booking_id)DATA.contracts[c.booking_id]=c;});
+      DATA.tasks={}; (D.tasks||[]).forEach(function(t){(DATA.tasks[t.booking_id]=DATA.tasks[t.booking_id]||[]).push(t);});
       DATA.att={villa:{},guest:{},booking:{}};
-      try{
-        var seen={},ids=[];
-        villas.forEach(function(v){if(v.id&&!seen[v.id]){seen[v.id]=1;ids.push(v.id);}});
-        bk.forEach(function(b){[b.id,b.guest_id].forEach(function(x){if(x&&!seen[x]){seen[x]=1;ids.push(x);}});});
-        if(ids.length){
-          var trows=await qq('checkin_tasks','booking_id,task_type,task_name,is_done,done_at,done_by,notes,sort_order',
-            '&booking_id=in.('+bk.map(function(x){return x.id;}).filter(Boolean).join(',')+')&order=sort_order.asc');
-          DATA.tasks={}; (trows||[]).forEach(function(t){(DATA.tasks[t.booking_id]=DATA.tasks[t.booking_id]||[]).push(t);});
-          var arows=await qq('attachments','id,entity_type,entity_id,category,title,person_name,uploaded_by,mime,issued_at,expires_at,notes,created_at',
-            '&visible_to_owner=eq.true&entity_id=in.('+ids.join(',')+')&order=created_at.desc');
-          (arows||[]).forEach(function(a){var g=DATA.att[a.entity_type];if(!g)return;(g[a.entity_id]=g[a.entity_id]||[]).push(a);});
-        }
-      }catch(e){}
+      (D.attachments||[]).forEach(function(a){var g=DATA.att[a.entity_type];if(g)(g[a.entity_id]=g[a.entity_id]||[]).push(a);});
+      DATA.expAll=D.expenses||[];
       var vmap={}; villas.forEach(function(v){vmap[v.id]=v;});
       DATA.bk=bk; DATA.villas=villas; DATA.vmap=vmap; DATA.gmap=gmap; DATA.prefs=P;
-      DATA.exp=(Array.isArray(res[4])?res[4]:[]).filter(function(x){return vmap[x.villa_id];});
+      DATA.exp=(DATA.expAll||[]).filter(function(x){return vmap[x.villa_id];});
       renderVillaList();
       document.getElementById('navGuests').style.display=P.guest?'':'none';
       if(P.guest)renderGuests();
