@@ -479,7 +479,7 @@
       if(!r.ok){ sessionStorage.removeItem('mg_admin_code');
         alert(d.error==='unauthorized'?'Wrong admin passcode':'Could not create the link'); return; }
       sessionStorage.setItem('mg_admin_code',code);
-      var url=location.origin+location.pathname.replace(/[^/]*$/,'')+'owner-portal.html#s/'+d.token;
+      var url=location.origin+'/owner#s/'+d.token;
       var msg='MGROUP Estates — booking '+((b&&b.booking_ref)||'')+'\n'
         +'Open your booking here (no login needed, link valid 60 days):\n'+url;
       try{ await navigator.clipboard.writeText(msg); btn.textContent='Copied'; }
@@ -580,7 +580,7 @@
       '</div>'+
       '<div style="margin-top:12px;display:flex;gap:9px;flex-wrap:wrap"><button class="btn" onclick="saveOwnerLogin(\''+id+'\',\''+esc(a.o.name)+'\')">Save login</button></div>'+
       '<div id="pu_list" style="margin-top:12px"></div>'+
-      '<div class="sub" style="margin-top:8px" id="pf_msg">owner logs in at mgroupestates.com/admin/owner-portal.html</div>';
+      '<div class="sub" style="margin-top:8px" id="pf_msg">owner logs in at mgroupestates.com/owner</div>';
     document.getElementById('ownBody').innerHTML=body;
     loadOwnerPrefs(id); loadOwnerLogin(id);
     document.body.classList.add('pmode-own');
@@ -1113,7 +1113,6 @@
       '<div style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:4px 0 10px;padding-top:6px;border-top:1px solid var(--line)">Payment terms</div>'+
       '<div class="r c2">'+
         fld('total','Total (to client)',b.total,'number',' step="0.01"')+
-        fld('client_pay','Client paid',b.client_pay,'number',' step="0.01"')+
       '</div><div class="r c3">'+
         fld('security_deposit','Security deposit',b.security_deposit,'number',' step="0.01"')+
         fld('mgroup_commission','MGROUP commission',b.mgroup_commission,'number',' step="0.01"')+
