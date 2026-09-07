@@ -802,7 +802,7 @@
     return '<span class="progcell" onclick="openMng(\''+id+'\')"><span class="mngchip'+(c.d===c.n?' full':'')+'">'+c.d+'/'+c.n+'</span> <span class="proggo">Track &#8250;</span></span>';}
 
   async function openMng(id){
-    MNG.id=id;MNG.tasks=[];MNG.files={};MNG.bp={};MNG.tab='checklist';MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;MNG.tdirty={};MNG.closed={};
+    MNG.id=id;MNG.tasks=[];MNG.files={};MNG.bp={};MNG.tab='checklist';MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;MNG.tdirty={};MNG.closed={};MNG.closedInit=false;
     var b=DATA.bk.find(function(x){return x.id===id;})||{};
     document.getElementById('mngTitle').textContent=(b.booking_ref||'Booking');
     document.getElementById('mngSub').textContent=vname(b.villa_id)+' · '+gname(b.guest_id)+' · '+fmtD(b.check_in)+' → '+fmtD(b.check_out);
@@ -921,6 +921,7 @@
     }
     var by={};MNG.tasks.forEach(function(t){(by[t.task_type]=by[t.task_type]||[]).push(t);});
     var types=TYORD.filter(function(k){return by[k];}).concat(Object.keys(by).filter(function(k){return TYORD.indexOf(k)<0;}));
+    if(!MNG.closedInit){MNG.closed={};types.forEach(function(k){MNG.closed[k]=true;});MNG.closedInit=true;}
     var done=MNG.tasks.filter(function(t){return t.is_done;}).length,tot=MNG.tasks.length;
     var pct=tot?Math.round(done*100/tot):0;
     var html='<div class="mngprog"><div class="bar"><i style="width:'+pct+'%"></i></div><div class="pct">'+done+' / '+tot+' · '+pct+'%</div></div>';
@@ -1243,11 +1244,13 @@
       if(p.owner_net==null){noOwn++;return;}
       own+=N(p.owner_net); if(p.status==='paid')ownPaid+=N(p.owner_net);
     });
-    html+='<div class="sumbar"><div><div class="l">Booking total</div><div class="v">'+money(b.total)+'</div></div>'+
-      '<div><div class="l">To client — recorded</div><div class="v">'+money(cli)+'</div></div>'+
-      '<div><div class="l">To client — paid</div><div class="v paid">'+money(cliPaid)+'</div></div>'+
+    var base=(b.total!=null&&b.total!=='')?N(b.total):cli;
+    var outstanding=Math.max(0,base-cliPaid);
+    html+='<div class="sumbar"><div><div class="l">Booking total</div><div class="v">'+money(base)+'</div></div>'+
+      '<div><div class="l">Paid</div><div class="v paid">'+money(cliPaid)+'</div></div>'+
+      '<div><div class="l">Outstanding</div><div class="v bal">'+money(outstanding)+'</div></div>'+
       '<div><div class="l">Owner net — paid</div><div class="v own">'+money(ownPaid)+'</div></div></div>'+
-      '<div class="sub" style="margin-top:9px">Owner net recorded '+money(own)+' of the booking&#39;s '+money(b.owner_net)+'.'+
+      '<div class="sub" style="margin-top:9px">Recorded to client '+money(cli)+' · owner net recorded '+money(own)+' of '+money(b.owner_net)+'.'+
       (noOwn?' <span style="color:var(--red)">'+noOwn+' installment'+(noOwn>1?'s have':' has')+' no owner net yet — the owner portal cannot show '+(noOwn>1?'them':'it')+'.</span>':'')+'</div>';
     document.getElementById('mngBody').innerHTML=html;
     if(MNG.payForm)paySplit();
