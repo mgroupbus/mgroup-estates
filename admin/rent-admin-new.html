@@ -1119,12 +1119,16 @@
       '</div><div class="r c3">'+
         fld('security_deposit','Security deposit',b.security_deposit,'number',' step="0.01"')+
         fld('mgroup_commission','MGROUP commission',b.mgroup_commission,'number',' step="0.01"')+
-        fld('owner_net','Owner net',b.owner_net,'number',' step="0.01"')+
-      '</div><div class="r c3">'+
-        fld('agent_name','Agent name',b.agent_name)+
         fld('co_agent_net','Co-agent net',b.co_agent_net,'number',' step="0.01"')+
+      '</div><div class="r c2">'+
+        fld('agent_name','Agent name',b.agent_name)+
         fld('source','Source',b.source)+
-      '</div><div class="r">'+
+      '</div>'+
+      '<div style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--g600);margin:4px 0 10px;padding-top:6px;border-top:1px solid var(--line)">Owner net <span class="sub" style="text-transform:none;letter-spacing:0;font-weight:600">— shown to the owner in Owner Portal</span></div>'+
+      '<div class="r"><div style="max-width:280px">'+
+        '<label>Owner net (THB)</label><input id="bk_owner_net" type="number" step="0.01" value="'+esc(b.owner_net==null?'':b.owner_net)+'" oninput="bkDirty()" style="font-weight:700;color:var(--g600)"></div>'+
+      '</div>'+
+      '<div class="r">'+
         '<div><label>Special requests</label><input id="bk_special_requests" value="'+esc(b.special_requests||'')+'" oninput="bkDirty()"></div>'+
       '</div>'+
       '<div style="display:flex;gap:8px"><button class="btn primary" onclick="bkSave()">Save booking</button>'+
