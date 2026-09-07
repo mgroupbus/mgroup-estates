@@ -19,5 +19,23 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/admin/owner-portal",
+      "destination": "/owner",
+      "permanent": true
+    },
+    {
+      "source": "/admin/owner-portal.html",
+      "destination": "/owner",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/owner",
+      "destination": "/admin/owner-portal.html"
+    }
   ]
 }
