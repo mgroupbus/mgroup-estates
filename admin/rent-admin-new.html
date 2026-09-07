@@ -7,23 +7,23 @@
   @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap');
   :root{--g900:#23262b;--g800:#2d3138;--g700:#3b4048;--g600:#a97e42;--g500:#c29a45;--tint:#f3ecdf;
     --cream:#f0eee7;--cream2:#e7e4da;--card:#fff;--line:#e6e2d7;--ink:#1a201d;--muted:#6f776f;--faint:#9aa199;
-    --gold:#c29a45;--blue:#2f6f9e;--amber:#b7842a;--red:#b5533a;--ok:#9a7b3a;
+    --gold:#c29a45;--blue:#2f6f9e;--amber:#b7842a;--red:#dc2626;--ok:#9a7b3a;
     --font:'Figtree',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:ui-monospace,'SF Mono',Menlo,monospace;}
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--cream);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;font-size:14px}
   .shell{display:grid;grid-template-columns:224px 1fr;min-height:100vh}
-  .side{background:var(--g900);color:#d9d5cc;display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100vh}
+  .side{background:#fbfaf6;color:var(--muted);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100vh}
   .brand{display:flex;gap:10px;align-items:center;padding:4px 8px 16px}
-  .brand .mark{width:30px;height:30px;border-radius:8px;background:var(--tint);color:var(--g800);display:flex;align-items:center;justify-content:center;font-weight:800}
-  .brand h1{font-size:13.5px;font-weight:700;color:#fff}.brand p{font-size:9.5px;color:#9a948a;font-family:var(--mono)}
-  .nl{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:#8a847a;padding:10px 10px 4px}
+  .brand .mark{width:30px;height:30px;border-radius:8px;background:var(--g600);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+  .brand h1{font-size:13.5px;font-weight:700;color:var(--ink)}.brand p{font-size:9.5px;color:var(--faint);font-family:var(--mono)}
+  .nl{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);padding:10px 10px 4px}
   .nav{display:flex;flex-direction:column;gap:1px}
-  .nav button{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:8px;color:#cfcabf;font-size:13px;background:none;border:none;cursor:pointer;font-family:var(--font);text-align:left;width:100%;font-weight:500}
+  .nav button{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:8px;color:var(--muted);font-size:13px;background:none;border:none;cursor:pointer;font-family:var(--font);text-align:left;width:100%;font-weight:500}
   .nav button .ic{width:17px;height:17px;flex:none;opacity:.85}
-  .nav button:hover{background:var(--g800);color:#fff}.nav button.active{background:var(--g600);color:#fff;font-weight:600}
-  .side .user{margin-top:auto;background:var(--g800);border-radius:10px;padding:9px 10px;display:flex;gap:9px;align-items:center}
+  .nav button:hover{background:var(--tint);color:var(--ink)}.nav button.active{background:var(--g600);color:#fff;font-weight:600}
+  .side .user{margin-top:auto;background:var(--tint);border-radius:10px;padding:9px 10px;display:flex;gap:9px;align-items:center}
   .avatar{width:30px;height:30px;border-radius:8px;background:var(--gold);color:#3a2a08;font-weight:700;display:flex;align-items:center;justify-content:center}
-  .user .nm{font-size:12px;color:#fff;font-weight:600}.user .rl{font-size:10.5px;color:#8fb0a0;cursor:pointer}
+  .user .nm{font-size:12px;color:var(--ink);font-weight:600}.user .rl{font-size:10.5px;color:var(--g600);cursor:pointer}
   .main{padding:22px 26px 44px;max-width:1160px}
   .view{display:none}.view.on{display:block}
   .head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
@@ -100,11 +100,64 @@
   .lbx.on{display:flex}.lbx img{max-width:100%;max-height:100%;border-radius:8px}
   .mngchip{font-size:10px;font-family:var(--mono);color:var(--faint);margin-right:7px;white-space:nowrap}
   .mngchip.full{color:var(--ok);font-weight:700}
+  /* manage sub-tabs + payments / housekeeper / utilities */
+  .mtabs{display:flex;gap:2px;padding:0 20px;border-bottom:1px solid var(--line);background:#faf9f5;flex-wrap:wrap}
+  .mtab{font-family:var(--font);font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);background:none;border:none;border-bottom:2px solid transparent;padding:11px 13px;cursor:pointer}
+  .mtab:hover{color:var(--ink)}
+  .mtab.on{color:var(--g600);border-bottom-color:var(--g600)}
+  .mtab .n{font-family:var(--mono);font-size:9.5px;opacity:.7;margin-left:5px}
+  .sechd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap}
+  .sechd h4{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .frm{border:1px solid var(--line);border-radius:10px;padding:13px;background:#faf9f5;margin-bottom:13px}
+  .frm .r{display:grid;gap:9px;margin-bottom:9px}
+  .frm .r.c2{grid-template-columns:1fr 1fr}.frm .r.c3{grid-template-columns:1fr 1fr 1fr}
+  .frm label{display:block;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:3px}
+  .frm input,.frm select{width:100%;font-family:var(--font);font-size:12.5px;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink)}
+  .frm input:focus,.frm select:focus{outline:none;border-color:var(--g600)}
+  .pill2{font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+  .pill2.paid,.pill2.settled{background:#f1efe4;color:var(--ok)}
+  .pill2.pending,.pill2.recorded{background:#f6efe1;color:var(--amber)}
+  .pill2.overdue{background:#f9edea;color:var(--red)}
+  .pill2.included{background:#eef4f9;color:var(--blue)}
+  .sumbar{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}
+  .sumbar>div{border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:#faf9f5}
+  .sumbar .l{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+  .sumbar .v{font-size:15px;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums}
+  table.g7{width:100%;border-collapse:collapse;font-size:12.5px}
+  table.g7 th{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:700;padding:8px 6px;background:#faf9f5;border-bottom:1px solid var(--line);text-align:center}
+  table.g7 td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:center}
+  table.g7 th:first-child,table.g7 td:first-child{text-align:left;font-weight:600;white-space:nowrap;padding-left:12px}
+  table.g7 tr:last-child td{border-bottom:none}
+  table.g7 input[type=checkbox]{width:17px;height:17px;accent-color:var(--g600);cursor:pointer}
+  table.g7 select{font-family:var(--font);font-size:11.5px;padding:4px 5px;border:1px solid var(--line);border-radius:6px;background:#fff}
+  .ucard{border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:10px;padding:14px;margin-bottom:14px;background:#fff}
+  .ucard.w{border-left-color:var(--blue)}
+  .ucard .uh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px}
+  .ucard .uh b{font-size:14px}
+  .ucard .uh select{font-family:var(--font);font-size:11.5px;font-weight:600;padding:5px 9px;border:1px solid var(--line);border-radius:7px;background:#fff;cursor:pointer}
+  .mtr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  .mtr .box{border:1px solid var(--line);border-radius:9px;padding:11px;background:#faf9f5}
+  .mtr .box .t{font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+  .mtr .box input{width:100%;font-family:var(--font);font-size:12px;padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:#fff;margin-bottom:6px;color:var(--ink)}
+  .mtr .box input.big{text-align:center;font-size:19px;font-weight:800;padding:8px}
+  .ucalc{border-top:1px dashed var(--line);margin-top:11px;padding-top:11px;display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--muted)}
+  .ucalc b{font-size:17px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+  .mphoto{width:100%;height:58px;object-fit:cover;border-radius:7px;margin-top:2px;cursor:zoom-in;display:block;border:1px solid var(--line)}
+  .savebar{position:sticky;bottom:0;margin:16px -20px -18px;padding:12px 20px;background:#fffdf7;border-top:1px solid #e3d9c2;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;z-index:5}
+  .savebar .w{font-size:12px;font-weight:600;color:var(--amber)}
+  .frm label .req{color:var(--red);margin-left:2px}
+  .frm .hint{font-size:10.5px;color:var(--faint);margin-top:4px;line-height:1.4}
+  .frm input.bad,.frm select.bad{border-color:var(--red);background:#fdf6f4}
+  .money.own{color:var(--g600);font-weight:700}
+  .miss{font-size:10px;font-weight:700;color:var(--red);background:#f9edea;padding:2px 7px;border-radius:20px;white-space:nowrap}
+  .incl{padding:13px;background:#eef4f9;border:1px solid #bcd6e6;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--blue);text-align:center}
   @media(max-width:620px){
     .ov{padding:12px 8px}
     .modal .mh{flex-wrap:wrap;gap:8px}
     .task{padding:9px 10px}
     .tact .mini{flex:1 1 auto;text-align:center}
+    .mtabs{padding:0 8px}.mtab{padding:10px 9px;font-size:10px}
+    .frm .r.c2,.frm .r.c3,.sumbar,.mtr{grid-template-columns:1fr}
   }
   @media(max-width:1000px){.tiles{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:760px){.shell{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px}.side .user,.nl{display:none}.nav{flex-direction:row;flex-wrap:wrap}.main{padding:16px}}
@@ -245,11 +298,13 @@
 <div class="ov" id="mngOv" onclick="if(event.target===this)closeMng()">
   <div class="modal mng">
     <div class="mh"><div><h3 id="mngTitle">Manage booking</h3><div class="sub" id="mngSub"></div></div>
-      <div><button class="btn" onclick="printMng()">&#128438; Print</button> <button class="cls" onclick="closeMng()">&#10005; Close</button></div></div>
+      <div><button class="btn" onclick="printMng()">Print</button> <button class="cls" onclick="closeMng()">&#10005; Close</button></div></div>
+    <div class="mtabs" id="mngTabs"></div>
     <div class="mb" id="mngBody"><div class="state">Loading&hellip;</div></div>
   </div>
 </div>
 <div class="lbx" id="lbx" onclick="this.classList.remove('on')"><img id="lbxImg" src="" alt=""></div>
+<input type="file" id="upMeter" accept="image/*" style="display:none" onchange="doMeterUpload(this)">
 <input type="file" id="upIn" multiple accept="image/*,video/mp4,video/webm,application/pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="doUpload(this)">
 
 <!-- DOCUMENT (contract/invoice/receipt) MODAL -->
@@ -278,7 +333,7 @@
     try{
       var q=function(t,sel){return fetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel),{headers:H}).then(function(r){return r.json();});};
       var res=await Promise.all([
-        fetch(SB_URL+'/rest/v1/bookings?select=id,booking_ref,villa_id,guest_id,owner_id,check_in,check_out,nights,total,client_pay,security_deposit,mgroup_commission,owner_net,co_agent_net,agent_name,status,currency&order=check_in.desc&limit=300',{headers:H}).then(function(r){return r.json();}),
+        fetch(SB_URL+'/rest/v1/bookings?select=id,booking_ref,villa_id,guest_id,owner_id,check_in,check_out,nights,guests_count,adults,children,rate_per_night,total,client_pay,security_deposit,mgroup_commission,owner_net,co_agent_net,agent_name,agent_commission,status,currency,source,special_requests&order=check_in.desc&limit=300',{headers:H}).then(function(r){return r.json();}),
         q('rental_villas','id,name,area,owner_id'), q('owners','id,name,email,phone'), q('guests','id,name,email,phone,nationality'),
         fetch(SB_URL+'/rest/v1/checkin_tasks?select=booking_id,is_done&limit=5000',{headers:H}).then(function(r){return r.json();})
       ]);
@@ -305,9 +360,34 @@
         '<td><b>'+fmtD(b.check_in)+'</b> → <b>'+fmtD(b.check_out)+'</b></td><td class="ref">'+esc(b.booking_ref||'—')+'</td>'+
         '<td><div class="vn">'+esc(vname(b.villa_id))+'</div><div class="sub">'+esc(varea(b.villa_id))+'</div></td>'+
         '<td>'+esc(gname(b.guest_id))+'</td><td class="num">'+(b.nights||'–')+'</td><td class="money">'+money(b.total)+'</td>'+
-        '<td style="white-space:nowrap">'+progChip(b.id)+'<button class="rowbtn" onclick="openMng(\'' + b.id + '\')">Manage</button></td></tr>';
+        '<td style="white-space:nowrap">'+progChip(b.id)+'<button class="rowbtn" onclick="openMng(\'' + b.id + '\')">Manage</button>'+
+        '<button class="rowbtn" onclick="shareOwner(\'' + b.id + '\',this)">Share to owner</button></td></tr>';
     }).join('')||'<tr><td colspan="8" class="state">No bookings</td></tr>';
   }
+  // Create a read-only link to this booking and hand it to the admin to send to the owner.
+  async function shareOwner(bid,btn){
+    var b=(DATA.bk||[]).filter(function(x){return x.id===bid;})[0];
+    var code=sessionStorage.getItem('mg_admin_code')||prompt('Admin passcode');
+    if(!code)return;
+    var t=btn.textContent; btn.textContent='Creating…'; btn.disabled=true;
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/booking-share',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({action:'create',passcode:code,booking_id:bid,days:60})});
+      var d=await r.json();
+      if(!r.ok){ sessionStorage.removeItem('mg_admin_code');
+        alert(d.error==='unauthorized'?'Wrong admin passcode':'Could not create the link'); return; }
+      sessionStorage.setItem('mg_admin_code',code);
+      var url=location.origin+location.pathname.replace(/[^/]*$/,'')+'owner-portal.html#s/'+d.token;
+      var msg='MGROUP Estates — booking '+((b&&b.booking_ref)||'')+'\n'
+        +'Open your booking here (no login needed, link valid 60 days):\n'+url;
+      try{ await navigator.clipboard.writeText(msg); btn.textContent='Copied'; }
+      catch(e){ prompt('Copy this link and send it to the owner:',url); btn.textContent=t; }
+      setTimeout(function(){btn.textContent=t;},2200);
+    }catch(e){ alert('Could not create the link'); btn.textContent=t; }
+    finally{ btn.disabled=false; }
+  }
+
   async function chSt(sel){try{await fetch(SB_URL+'/rest/v1/bookings?id=eq.'+sel.getAttribute('data-id'),{method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify({status:sel.value})});sel.className='st-select '+stCls(sel.value);}catch(e){alert('Save failed');}}
 
   function outstanding(b){var t=N(b.total),p=N(b.client_pay);var o=t-p;return (['cancelled','checked_out','no_show'].indexOf(b.status)>-1)?0:(o>0?o:0);}
@@ -384,30 +464,88 @@
       '<label class="chk"><input type="checkbox" id="pf_dates"> Booking dates</label>'+
       '<label class="chk"><input type="checkbox" id="pf_guest"> Guest names</label>'+
       '<label class="chk"><input type="checkbox" id="pf_total"> Booking total (client paid)</label>'+
-      '<div style="margin-top:14px;display:flex;gap:9px;align-items:center;flex-wrap:wrap"><button class="btn" onclick="saveOwnerPrefs(\''+id+'\')">Save what this owner sees</button><button class="btn" style="background:#fff;color:var(--ink)" onclick="setOwnerPw(\''+id+'\',\''+esc(a.o.name)+'\')">🔑 Set portal password</button></div>'+
-      '<div class="sub" style="margin-top:8px" id="pf_msg">owner logs in at mgroupestates.com/admin/owner-portal with email + password</div>';
-    loadOwnerPrefs(id);
+      '<div style="margin-top:14px"><button class="btn" onclick="saveOwnerPrefs(\''+id+'\')">Save what this owner sees</button></div>'+
+      '<div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--faint);margin:20px 0 8px">Portal login</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:520px">'+
+        '<label style="font-size:11px;font-weight:700;color:var(--faint)">USER<input id="pu_user" type="text" autocomplete="off" placeholder="email or username" style="display:block;width:100%;margin-top:5px;font:inherit;font-size:14px;padding:10px 12px;border:1px solid var(--line);border-radius:9px"></label>'+
+        '<label style="font-size:11px;font-weight:700;color:var(--faint)">PASSWORD<input id="pu_pw" type="text" autocomplete="new-password" placeholder="leave blank to keep current" style="display:block;width:100%;margin-top:5px;font:inherit;font-size:14px;padding:10px 12px;border:1px solid var(--line);border-radius:9px"></label>'+
+      '</div>'+
+      '<div style="margin-top:12px;display:flex;gap:9px;flex-wrap:wrap"><button class="btn" onclick="saveOwnerLogin(\''+id+'\',\''+esc(a.o.name)+'\')">Save login</button></div>'+
+      '<div id="pu_list" style="margin-top:12px"></div>'+
+      '<div class="sub" style="margin-top:8px" id="pf_msg">owner logs in at mgroupestates.com/admin/owner-portal.html</div>';
     document.getElementById('ownBody').innerHTML=body;
+    loadOwnerPrefs(id); loadOwnerLogin(id);
     document.body.classList.add('pmode-own');
     document.getElementById('ownOv').classList.add('open');
   }
   function closeOwn(){document.getElementById('ownOv').classList.remove('open');document.body.classList.remove('pmode-own');}
-  async function setOwnerPw(id,name){
-    var o=DATA.omap[id]||{};
-    var uname=(o.email||'').trim()||prompt('Login email for '+name+':');
-    if(!uname)return;
-    var pw=prompt('Set portal password for '+name+'\nLogin email: '+uname);
-    if(!pw)return;
+  function adminCode(){
+    var c=sessionStorage.getItem('mg_admin_code');
+    if(!c){c=prompt('Admin passcode'); if(c)sessionStorage.setItem('mg_admin_code',c);}
+    return c;
+  }
+  async function portalUser(payload){
+    var code=adminCode(); if(!code)return null;
+    var r=await fetch(SB_URL+'/functions/v1/admin-portal-user',{method:'POST',
+      headers:Object.assign({'Content-Type':'application/json'},H),
+      body:JSON.stringify(Object.assign({passcode:code},payload))});
+    var d=await r.json();
+    if(r.status===401){sessionStorage.removeItem('mg_admin_code');}
+    return {ok:r.ok,status:r.status,data:d};
+  }
+  function renderLogins(id,rows){
+    var box=document.getElementById('pu_list'); if(!box)return;
+    if(!rows||!rows.length){box.innerHTML='<div class="sub">No portal login yet — fill USER and PASSWORD above.</div>';return;}
+    box.innerHTML='<div class="sub" style="margin-bottom:6px">Existing logins for this owner</div>'
+      +rows.map(function(r){
+        return '<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:13px">'
+          +'<b style="flex:1">'+esc(r.username||r.email||'—')+'</b>'
+          +'<span class="sub">'+(r.hashed?'hashed':'plain text')+(r.is_active===false?' · disabled':'')+'</span>'
+          +'<button class="rowbtn" onclick="fillLogin(\''+esc(r.username||r.email||'')+'\')">Use</button>'
+          +(rows.length>1?'<button class="rowbtn" onclick="delLogin(\''+id+'\',\''+r.id+'\')">Delete</button>':'')
+          +'</div>';
+      }).join('');
+  }
+  function fillLogin(u){var el=document.getElementById('pu_user'); if(el){el.value=u;el.focus();}}
+  async function delLogin(id,rowId){
+    if(!confirm('Delete this login? The owner can no longer sign in with it.'))return;
+    var res=await portalUser({action:'delete',owner_id:id,id:rowId});
+    if(res&&res.ok)renderLogins(id,res.data.rows);
+  }
+  async function loadOwnerLogin(id){
+    var u=document.getElementById('pu_user'); if(!u)return;
     try{
-      var r=await fetch(SB_URL+'/rest/v1/portal_users?select=id&role=eq.owner&owner_id=eq.'+id,{headers:H});
-      var rows=await r.json();
-      if(rows&&rows.length){
-        await fetch(SB_URL+'/rest/v1/portal_users?id=eq.'+rows[0].id,{method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify({username:uname,email:uname,password_hash:pw,display_name:name,is_active:true})});
-      }else{
-        await fetch(SB_URL+'/rest/v1/portal_users',{method:'POST',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify({username:uname,email:uname,password_hash:pw,role:'owner',display_name:name,owner_id:id,is_active:true})});
+      var res=await portalUser({action:'get',owner_id:id});
+      if(res&&res.ok){
+        var rows=res.data.rows||[];
+        renderLogins(id,rows);
+        if(rows.length===1)u.value=rows[0].username||rows[0].email||'';
+        var m=document.getElementById('pf_msg');
+        if(m&&rows.length)m.textContent=rows.length>1
+          ? 'This owner has '+rows.length+' logins — delete the ones you do not use.'
+          : 'Login exists — leave PASSWORD blank to keep the current one.';
       }
-      alert('✓ Portal ready for '+name+'\nLogin: '+uname+'\nURL: mgroupestates.com/admin/owner-portal');
-    }catch(e){alert('Could not set portal: '+e.message);}
+    }catch(e){}
+  }
+  async function saveOwnerLogin(id,name){
+    var u=(document.getElementById('pu_user')||{}).value||'';
+    var p=(document.getElementById('pu_pw')||{}).value||'';
+    var m=document.getElementById('pf_msg');
+    var say=function(t,bad){if(m){m.textContent=t;m.style.color=bad?'var(--red)':'var(--faint)';}};
+    if(u.trim().length<3){say('USER must be at least 3 characters',1);return;}
+    say('Saving…');
+    var res=await portalUser({action:'set',owner_id:id,username:u.trim(),password:p,display_name:name});
+    if(!res){say('Cancelled');return;}
+    if(!res.ok){
+      var msg={unauthorized:'Wrong admin passcode',username_taken:'That USER is already used by another owner',
+               weak_password:'Password must be at least 6 characters',
+               password_required:'Set a password for the first login'};
+      say(msg[res.data.error]||('Could not save: '+(res.data.detail||res.data.error||'')),1);return;
+    }
+    document.getElementById('pu_pw').value='';
+    renderLogins(id,res.data.rows);
+    say((res.data.mode==='created'?'Login created':'Login saved')+' — user: '+res.data.username
+        +(p?' · new password set (hashed)':' · password unchanged'));
   }
   async function loadOwnerPrefs(id){
     var def={net:true,dates:true,guest:false,total:false};
@@ -519,7 +657,7 @@
     ['checkout','farewell'],['checkout','meter_reading_out'],['checkout','damage_check'],
     ['checkout','return_deposit'],['checkout','close_house']
   ];
-  var MNG={id:null,tasks:[],files:{}};
+  var MNG={id:null,tasks:[],files:{},bp:{},tab:'checklist',payEdit:null,payForm:false,dirty:false,tdirty:{},bkEdit:false};
 
   function nice(x){x=String(x||'').replace(/[_-]+/g,' ').trim();return x?x.charAt(0).toUpperCase()+x.slice(1):'Task';}
   function fmtDT(t){if(!t)return '';var d=new Date(t);if(isNaN(d))return '';return d.getDate()+' '+MON[d.getMonth()]+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
@@ -528,23 +666,29 @@
     return '<span class="mngchip'+(c.d===c.n?' full':'')+'">'+c.d+'/'+c.n+'</span>';}
 
   async function openMng(id){
-    MNG.id=id;MNG.tasks=[];MNG.files={};
+    MNG.id=id;MNG.tasks=[];MNG.files={};MNG.bp={};MNG.tab='checklist';MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;MNG.tdirty={};
     var b=DATA.bk.find(function(x){return x.id===id;})||{};
-    document.getElementById('mngTitle').textContent='Checklist · '+(b.booking_ref||'Booking');
+    document.getElementById('mngTitle').textContent='Manage · '+(b.booking_ref||'Booking');
     document.getElementById('mngSub').textContent=vname(b.villa_id)+' · '+gname(b.guest_id)+' · '+fmtD(b.check_in)+' → '+fmtD(b.check_out);
     document.getElementById('mngBody').innerHTML='<div class="state">Loading…</div>';
     document.getElementById('mngOv').classList.add('open');
     await loadTasks();
   }
-  function closeMng(){document.getElementById('mngOv').classList.remove('open');document.body.classList.remove('pmode-mng');}
+  function closeMng(){
+    if(!leaveOk())return;
+    MNG.dirty=false;MNG.tdirty={};
+    document.getElementById('mngOv').classList.remove('open');document.body.classList.remove('pmode-mng');
+  }
   function printMng(){document.body.classList.add('pmode-mng');window.print();setTimeout(function(){document.body.classList.remove('pmode-mng');},400);}
 
   async function loadTasks(){
     try{
       var res=await Promise.all([
         fetch(SB_URL+'/rest/v1/checkin_tasks?select=*&booking_id=eq.'+MNG.id+'&order=sort_order.asc',{headers:H}).then(function(r){return r.json();}),
-        fetch(SB_URL+'/rest/v1/checkin_task_files?select=*&booking_id=eq.'+MNG.id+'&order=created_at.asc',{headers:H}).then(function(r){return r.json();})
+        fetch(SB_URL+'/rest/v1/checkin_task_files?select=*&booking_id=eq.'+MNG.id+'&order=created_at.asc',{headers:H}).then(function(r){return r.json();}),
+        fetch(SB_URL+'/rest/v1/bookings?select=internal_notes&id=eq.'+MNG.id,{headers:H}).then(function(r){return r.json();})
       ]);
+      MNG.bp=parseNotes(((res[2]||[])[0]||{}).internal_notes);
       MNG.tasks=res[0]||[]; MNG.files={};
       (res[1]||[]).forEach(function(f){(MNG.files[f.task_id]=MNG.files[f.task_id]||[]).push(f);});
       DATA.tk[MNG.id]={n:MNG.tasks.length,d:MNG.tasks.filter(function(t){return t.is_done;}).length};
@@ -552,8 +696,85 @@
     }catch(e){document.getElementById('mngBody').innerHTML='<div class="state" style="color:var(--red)">Could not load checklist: '+esc(e.message)+'</div>';}
   }
 
+  function parseNotes(raw){
+    if(!raw)return {};
+    if(typeof raw==='object')return raw;
+    try{var d=JSON.parse(raw);return (d&&typeof d==='object')?d:{_text:String(raw)};}catch(e){return {_text:String(raw)};}
+  }
+  async function bpSave(){
+    var r=await fetch(SB_URL+'/rest/v1/bookings?id=eq.'+MNG.id,{method:'PATCH',headers:JH,
+      body:JSON.stringify({internal_notes:JSON.stringify(MNG.bp)})});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+  }
+
+  function mngTab(t){
+    if(t!==MNG.tab&&!leaveOk())return;
+    MNG.tab=t;MNG.payForm=false;MNG.payEdit=null;MNG.dirty=false;MNG.tdirty={};MNG.bkEdit=false;
+    document.getElementById('mngOv').scrollTop=0;renderMng();
+  }
+  function leaveOk(){
+    if(!MNG.dirty)return true;
+    return confirm('You have unsaved changes on this tab. Leave without saving?');
+  }
+  function markDirty(){var was=MNG.dirty;MNG.dirty=true;if(!was)renderMng();}
+  function saveBar(){
+    return MNG.dirty
+      ? '<div class="savebar"><span class="w">&#9679; Unsaved changes — nothing is written until you save</span>'+
+        '<span style="display:flex;gap:8px"><button class="btn" onclick="mngRevert()">Discard</button>'+
+        '<button class="btn primary" onclick="mngSaveNow()">Save changes</button></span></div>'
+      : '';
+  }
+  async function mngRevert(){
+    if(!confirm('Discard the unsaved changes on this tab?'))return;
+    MNG.dirty=false;MNG.tdirty={};
+    await loadTasks();
+  }
+  async function mngSaveNow(){
+    if(MNG.tab==='booking')return bkSave();
+    if(MNG.tab==='checklist')return saveChecklist();
+    if(MNG.tab==='house')return houseSave();
+    if(MNG.tab==='payments'){MNG.dirty=false;renderMng();return;}
+    MNG.dirty=false;renderMng();
+  }
+
+  function renderTabs(){
+    var pays=(MNG.bp.payments||[]).length;
+    var done=MNG.tasks.filter(function(t){return t.is_done;}).length;
+    var defs=[
+      ['booking','Booking',''],
+      ['checklist','Checklist',MNG.tasks.length?done+'/'+MNG.tasks.length:''],
+      ['payments','Payments',pays?String(pays):''],
+      ['house','Housekeeper',houseCount()?String(houseCount()):''],
+      ['util','Utilities',utilCount()?String(utilCount()):'']
+    ];
+    document.getElementById('mngTabs').innerHTML=defs.map(function(d){
+      return '<button class="mtab'+(MNG.tab===d[0]?' on':'')+'" onclick="mngTab(\''+d[0]+'\')">'+d[1]+
+             (d[2]?'<span class="n">'+esc(d[2])+'</span>':'')+'</button>';
+    }).join('');
+  }
+  function houseCount(){
+    var sc=MNG.bp.cleaning_schedule||{},n=0;
+    HSVC.forEach(function(s){var d=sc[s[0]]||{};HDAY.forEach(function(k){if(d[k])n++;});});
+    return n;
+  }
+  function utilCount(){
+    var n=0;['electricity','water'].forEach(function(k){var u=MNG.bp[k];if(u&&(u.is_included_free||u.meter_in!=null||u.meter_out!=null))n++;});
+    return n;
+  }
+
   function renderMng(){
-    var box=document.getElementById('mngBody'), ov=document.getElementById('mngOv'), sy=ov.scrollTop;
+    var ov=document.getElementById('mngOv'), sy=ov.scrollTop;
+    renderTabs();
+    if(MNG.tab==='booking'){renderBk();ov.scrollTop=sy;return;}
+    if(MNG.tab==='payments'){renderPay();ov.scrollTop=sy;return;}
+    if(MNG.tab==='house'){renderHouse();ov.scrollTop=sy;return;}
+    if(MNG.tab==='util'){renderUtil();ov.scrollTop=sy;return;}
+    renderChecklist();
+    ov.scrollTop=sy;
+  }
+
+  function renderChecklist(){
+    var box=document.getElementById('mngBody');
     if(!MNG.tasks.length){
       box.innerHTML='<div class="state">No checklist for this booking yet.<div style="margin-top:14px"><button class="btn primary" onclick="seedTasks()">Create standard checklist</button></div></div>';
       return;
@@ -572,8 +793,8 @@
     }).join('');
     html+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">'+
       TYORD.filter(function(k){return !by[k];}).map(function(k){return '<button class="mini" onclick="addTask(\''+k+'\')">+ '+esc(TY[k])+'</button>';}).join('')+'</div>';
+    html+=saveBar();
     box.innerHTML=html;
-    ov.scrollTop=sy;
   }
 
   function taskHtml(t){
@@ -583,7 +804,7 @@
       '<div class="tn"><span>'+esc(nice(t.task_name))+'</span>'+
         (t.description?'<div class="sub" style="font-weight:400;margin-top:2px">'+esc(t.description)+'</div>':'')+'</div>'+
       '<div class="meta">'+(t.is_done?esc(fmtDT(t.done_at))+(t.done_by?'<br>'+esc(t.done_by):''):'')+'</div></div>'+
-      '<textarea placeholder="Notes — meter reading, damage found, remarks…" onchange="saveNote(this,\''+t.id+'\')">'+esc(t.notes||'')+'</textarea>'+
+      '<textarea id="nt-'+t.id+'" placeholder="Notes — meter reading, damage found, remarks…" oninput="saveNote(this,\''+t.id+'\')">'+esc(t.notes||'')+'</textarea>'+
       '<div class="tact">'+
         '<button class="mini" onclick="pickFile(\''+t.id+'\')">📎 Attach photo / file</button>'+
         '<button class="mini" onclick="renameTask(\''+t.id+'\')">✎ Rename</button>'+
@@ -614,30 +835,47 @@
     }catch(e){alert('Could not remove file: '+e.message);}
   }
 
-  async function tgl(cb,id){
-    var on=cb.checked;
-    var body={is_done:on,done_at:on?new Date().toISOString():null,done_by:on?'Admin':null};
+  // Checklist edits are buffered — nothing reaches Supabase until "Save changes".
+  function collectNotes(){
+    MNG.tasks.forEach(function(t){
+      var el=document.getElementById('nt-'+t.id);
+      if(el&&el.value!==(t.notes||'')){t.notes=el.value;MNG.tdirty[t.id]=1;}
+    });
+  }
+  function tgl(cb,id){
+    collectNotes();
+    var t=MNG.tasks.find(function(x){return x.id===id;}); if(!t)return;
+    t.is_done=cb.checked;
+    t.done_at=cb.checked?new Date().toISOString():null;
+    t.done_by=cb.checked?'Admin':null;
+    MNG.tdirty[id]=1; MNG.dirty=true;
+    renderMng();
+  }
+  function saveNote(el,id){
+    var t=MNG.tasks.find(function(x){return x.id===id;}); if(!t)return;
+    if(el.value===(t.notes||''))return;
+    t.notes=el.value; MNG.tdirty[id]=1;
+    markDirty();
+  }
+  async function saveChecklist(){
+    collectNotes();
+    var ids=Object.keys(MNG.tdirty);
+    if(!ids.length){MNG.dirty=false;renderMng();return;}
     try{
-      var r=await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'PATCH',headers:JH,body:JSON.stringify(body)});
-      if(!r.ok)throw new Error('HTTP '+r.status);
-      var t=MNG.tasks.find(function(x){return x.id===id;});
-      if(t){t.is_done=body.is_done;t.done_at=body.done_at;t.done_by=body.done_by;}
+      for(var i=0;i<ids.length;i++){
+        var t=MNG.tasks.find(function(x){return x.id===ids[i];}); if(!t)continue;
+        var r=await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+t.id,{method:'PATCH',headers:JH,
+          body:JSON.stringify({is_done:!!t.is_done,done_at:t.done_at||null,done_by:t.done_by||null,notes:t.notes||null})});
+        if(!r.ok)throw new Error('HTTP '+r.status);
+      }
+      MNG.tdirty={};MNG.dirty=false;
       DATA.tk[MNG.id]={n:MNG.tasks.length,d:MNG.tasks.filter(function(x){return x.is_done;}).length};
       renderMng();renderBookings();
-    }catch(e){cb.checked=!on;alert('Could not save: '+e.message);}
-  }
-
-  async function saveNote(el,id){
-    var v=el.value;
-    try{
-      var r=await fetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'PATCH',headers:JH,body:JSON.stringify({notes:v||null})});
-      if(!r.ok)throw new Error('HTTP '+r.status);
-      var t=MNG.tasks.find(function(x){return x.id===id;}); if(t)t.notes=v;
-      el.style.borderColor='var(--ok)';setTimeout(function(){el.style.borderColor='';},900);
-    }catch(e){alert('Could not save note: '+e.message);}
+    }catch(e){alert('Could not save the checklist: '+e.message);}
   }
 
   async function renameTask(id){
+    if(MNG.dirty&&!confirm('You have unsaved checklist changes. Renaming a task reloads the list and discards them. Continue?'))return;
     var t=MNG.tasks.find(function(x){return x.id===id;}); if(!t)return;
     var v=prompt('Task name',nice(t.task_name)); if(v===null)return; v=v.trim(); if(!v)return;
     try{
@@ -647,6 +885,7 @@
   }
 
   async function addTask(type){
+    if(MNG.dirty&&!confirm('You have unsaved checklist changes. Adding a task reloads the list and discards them. Continue?'))return;
     var v=prompt('New task in "'+(TY[type]||type)+'"'); if(!v)return; v=v.trim(); if(!v)return;
     var same=MNG.tasks.filter(function(t){return t.task_type===type;});
     var so=same.reduce(function(m,t){return Math.max(m,Number(t.sort_order||0));},0)+1;
@@ -659,6 +898,7 @@
   }
 
   async function delTask(id){
+    if(MNG.dirty&&!confirm('You have unsaved checklist changes. Removing a task reloads the list and discards them. Continue?'))return;
     var t=MNG.tasks.find(function(x){return x.id===id;}); if(!t)return;
     if(!confirm('Remove "'+nice(t.task_name)+'" from this checklist?'))return;
     try{
@@ -681,6 +921,360 @@
       if(!r.ok)throw new Error('HTTP '+r.status);
       await loadTasks();
     }catch(e){box.innerHTML='<div class="state" style="color:var(--red)">Could not create checklist: '+esc(e.message)+'</div>';}
+  }
+
+  // ---------- BOOKING DETAILS (view / edit) ----------
+  var BKST=[['inquiry','Inquiry'],['confirmed','Confirmed'],['deposit','Deposit paid'],['fully_paid','Fully paid'],
+            ['checked_in','Checked-in'],['checked_out','Checked-out'],['cancelled','Cancelled'],['no_show','No show']];
+  function renderBk(){
+    var b=DATA.bk.find(function(x){return x.id===MNG.id;})||{};
+    document.getElementById('mngBody').innerHTML=MNG.bkEdit?bkForm(b):bkView(b);
+  }
+  function kv(l,v){return '<div class="kv"><span>'+l+'</span><b>'+v+'</b></div>';}
+  function bkView(b){
+    var g=DATA.gmap[b.guest_id]||{}, o=DATA.omap[b.owner_id]||{};
+    var cur=(b.currency==='USD')?'USD':'THB';
+    return '<div class="sechd"><h4>Booking details</h4><button class="btn primary" onclick="bkEditOn()">&#9998; Edit booking</button></div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 26px">'+
+      '<div>'+
+        kv('Reference','<span class="ref">'+esc(b.booking_ref||'—')+'</span>')+
+        kv('Villa',esc(vname(b.villa_id)))+
+        kv('Guest',esc(g.name||'—'))+
+        kv('Owner',esc(o.name||'—'))+
+        kv('Status',esc((BKST.find(function(x){return x[0]===b.status;})||['','—'])[1]))+
+        kv('Source',esc(b.source||'—'))+
+        kv('Agent',esc(b.agent_name||'—'))+
+      '</div><div>'+
+        kv('Check-in',fmtD(b.check_in))+
+        kv('Check-out',fmtD(b.check_out))+
+        kv('Nights',(b.nights||'—'))+
+        kv('Guests',(b.guests_count||'—')+(b.adults||b.children?' <span class="sub">('+N(b.adults)+' ad · '+N(b.children)+' ch)</span>':''))+
+        kv('Rate / night',money(b.rate_per_night))+
+        kv('Currency',cur)+
+      '</div></div>'+
+      '<div style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:20px 0 6px">Money</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 26px"><div>'+
+        kv('Total (to client)',money(b.total))+
+        kv('Client paid',money(b.client_pay))+
+        kv('Security deposit',money(b.security_deposit))+
+      '</div><div>'+
+        kv('MGROUP commission',money(b.mgroup_commission))+
+        kv('Owner net','<span class="money own">'+money(b.owner_net)+'</span>')+
+        kv('Co-agent net',money(b.co_agent_net))+
+      '</div></div>'+
+      (b.special_requests?'<div style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:20px 0 6px">Special requests</div><div style="font-size:13px;line-height:1.6">'+esc(b.special_requests)+'</div>':'');
+  }
+  function fld(id,label,val,type,extra){
+    return '<div><label>'+label+'</label><input id="bk_'+id+'" type="'+(type||'text')+'"'+(extra||'')+
+      ' value="'+esc(val==null?'':val)+'" oninput="markDirty()"></div>';
+  }
+  function bkForm(b){
+    var g=DATA.gmap[b.guest_id]||{}, o=DATA.omap[b.owner_id]||{};
+    var vlist=Object.values(DATA.vmap).sort(function(a,c){return (a.name||'').localeCompare(c.name||'');});
+    var glist=Object.values(DATA.gmap).sort(function(a,c){return (a.name||'').localeCompare(c.name||'');});
+    var olist=Object.values(DATA.omap).sort(function(a,c){return (a.name||'').localeCompare(c.name||'');});
+    var sel=function(id,label,list,cur,blank){
+      return '<div><label>'+label+'</label><select id="bk_'+id+'" onchange="markDirty()">'+
+        (blank?'<option value="">— '+blank+' —</option>':'')+
+        list.map(function(x){var v=(x instanceof Array)?x[0]:x.id,l=(x instanceof Array)?x[1]:x.name;
+          return '<option value="'+esc(v)+'"'+(v===cur?' selected':'')+'>'+esc(l)+'</option>';}).join('')+'</select></div>';
+    };
+    return '<div class="sechd"><h4>Edit booking</h4><span class="sub">Nothing is written until you press Save</span></div>'+
+      '<div class="frm"><div class="r c3">'+
+        fld('booking_ref','Reference',b.booking_ref)+
+        sel('status','Status',BKST,b.status)+
+        sel('currency','Currency',[['THB','THB'],['USD','USD']],(b.currency==='USD')?'USD':'THB')+
+      '</div><div class="r c3">'+
+        sel('villa_id','Villa',vlist,b.villa_id,'none')+
+        sel('guest_id','Guest',glist,b.guest_id,'none')+
+        sel('owner_id','Owner',olist,b.owner_id,'none')+
+      '</div><div class="r c3">'+
+        fld('check_in','Check-in',b.check_in,'date')+
+        fld('check_out','Check-out',b.check_out,'date')+
+        fld('nights','Nights',b.nights,'number',' step="1" min="0"')+
+      '</div><div class="r c3">'+
+        fld('guests_count','Guests total',b.guests_count,'number',' step="1" min="0"')+
+        fld('adults','Adults',b.adults,'number',' step="1" min="0"')+
+        fld('children','Children',b.children,'number',' step="1" min="0"')+
+      '</div><div class="r c3">'+
+        fld('rate_per_night','Rate / night',b.rate_per_night,'number',' step="0.01"')+
+        fld('total','Total (to client)',b.total,'number',' step="0.01"')+
+        fld('client_pay','Client paid',b.client_pay,'number',' step="0.01"')+
+      '</div><div class="r c3">'+
+        fld('security_deposit','Security deposit',b.security_deposit,'number',' step="0.01"')+
+        fld('mgroup_commission','MGROUP commission',b.mgroup_commission,'number',' step="0.01"')+
+        fld('owner_net','Owner net',b.owner_net,'number',' step="0.01"')+
+      '</div><div class="r c3">'+
+        fld('agent_name','Agent name',b.agent_name)+
+        fld('co_agent_net','Co-agent net',b.co_agent_net,'number',' step="0.01"')+
+        fld('source','Source',b.source)+
+      '</div><div class="r">'+
+        '<div><label>Special requests</label><input id="bk_special_requests" value="'+esc(b.special_requests||'')+'" oninput="markDirty()"></div>'+
+      '</div>'+
+      '<div style="display:flex;gap:8px"><button class="btn primary" onclick="bkSave()">Save booking</button>'+
+      '<button class="btn" onclick="bkEditOff()">Cancel</button></div></div>'+saveBar();
+  }
+  function bkEditOn(){MNG.bkEdit=true;MNG.dirty=false;renderMng();}
+  function bkEditOff(){
+    if(MNG.dirty&&!confirm('Discard the changes to this booking?'))return;
+    MNG.bkEdit=false;MNG.dirty=false;renderMng();
+  }
+  function bkNum(id){var e=document.getElementById('bk_'+id);if(!e)return null;var v=e.value.trim();return v===''?null:Number(v);}
+  function bkStr(id){var e=document.getElementById('bk_'+id);if(!e)return null;var v=e.value.trim();return v===''?null:v;}
+  async function bkSave(){
+    var ci=bkStr('check_in'), co=bkStr('check_out');
+    if(ci&&co&&Date.parse(co)<=Date.parse(ci)){alert('Check-out must be after check-in.');return;}
+    var body={booking_ref:bkStr('booking_ref'),status:bkStr('status'),currency:bkStr('currency'),
+      villa_id:bkStr('villa_id'),guest_id:bkStr('guest_id'),owner_id:bkStr('owner_id'),
+      check_in:ci,check_out:co,nights:bkNum('nights'),
+      guests_count:bkNum('guests_count'),adults:bkNum('adults'),children:bkNum('children'),
+      rate_per_night:bkNum('rate_per_night'),total:bkNum('total'),client_pay:bkNum('client_pay'),
+      security_deposit:bkNum('security_deposit'),mgroup_commission:bkNum('mgroup_commission'),
+      owner_net:bkNum('owner_net'),agent_name:bkStr('agent_name'),co_agent_net:bkNum('co_agent_net'),
+      source:bkStr('source'),special_requests:bkStr('special_requests')};
+    try{
+      var r=await fetch(SB_URL+'/rest/v1/bookings?id=eq.'+MNG.id,{method:'PATCH',headers:JH,body:JSON.stringify(body)});
+      if(!r.ok)throw new Error('HTTP '+r.status+' '+(await r.text()).slice(0,120));
+      var b=DATA.bk.find(function(x){return x.id===MNG.id;});
+      if(b)Object.keys(body).forEach(function(k){b[k]=body[k];});
+      MNG.dirty=false;MNG.bkEdit=false;
+      var sub=document.getElementById('mngSub');
+      if(b&&sub)sub.textContent=vname(b.villa_id)+' · '+gname(b.guest_id)+' · '+fmtD(b.check_in)+' → '+fmtD(b.check_out);
+      document.getElementById('mngTitle').textContent='Manage · '+((b&&b.booking_ref)||'Booking');
+      renderMng();renderAll();
+    }catch(e){alert('Could not save booking: '+e.message);}
+  }
+
+  // ---------- PAYMENTS ----------
+  var PAYLBL=['100% Full Payment','10% Payment Booking','1st 50% Payment','2nd 50% Payment','Security Deposit Check-in'];
+  var PAYMTH=[['cash','Cash'],['transfer','Bank Transfer'],['credit_card','Credit Card'],['promptpay','PromptPay']];
+  var PAYST=[['pending','Pending'],['paid','Paid'],['overdue','Overdue']];
+  function opts(list,sel){return list.map(function(o){var v=(o instanceof Array)?o[0]:o,l=(o instanceof Array)?o[1]:o;
+    return '<option value="'+esc(v)+'"'+(v===sel?' selected':'')+'>'+esc(l)+'</option>';}).join('');}
+
+  function renderPay(){
+    var b=DATA.bk.find(function(x){return x.id===MNG.id;})||{};
+    var ps=MNG.bp.payments||[];
+    var e=(MNG.payEdit!=null)?ps[MNG.payEdit]:null;
+    var html='<div class="sechd"><h4>Payment installments</h4>'+
+      (MNG.payForm?'':'<button class="btn primary" onclick="payOpen(null)">+ Add payment</button>')+'</div>';
+    if(MNG.payForm){
+      html+='<datalist id="paylbls">'+PAYLBL.map(function(l){return '<option value="'+esc(l)+'">';}).join('')+'</datalist>'+
+        '<div class="frm"><div class="r c2">'+
+        '<div><label>Payment type<span class="req">*</span></label>'+
+          '<input id="py_label" list="paylbls" autocomplete="off" placeholder="Type anything, or pick a preset" value="'+esc(e?e.label:'')+'">'+
+          '<div class="hint">Free text — every client pays on their own terms.</div></div>'+
+        '<div><label>Method</label><select id="py_method"><option value="">— Select —</option>'+opts(PAYMTH,(e&&e.payment_method)||'')+'</select></div></div>'+
+        '<div class="r c2">'+
+        '<div><label>Amount to client<span class="req">*</span></label><input id="py_amount" type="number" step="0.01" value="'+(e?N(e.amount):'')+'" oninput="paySplit()">'+
+          '<div class="hint">What the guest transfers. The <b>agent portal</b> shows this figure.</div></div>'+
+        '<div><label>Owner net<span class="req">*</span></label><input id="py_owner" type="number" step="0.01" value="'+((e&&e.owner_net!=null)?N(e.owner_net):'')+'" oninput="paySplit()">'+
+          '<div class="hint">The owner&#39;s share of this installment. The <b>owner portal</b> shows only this figure.</div></div></div>'+
+        '<div class="r c3">'+
+        '<div><label>Due date</label><input id="py_due" type="date" value="'+esc((e&&e.due_date)||'')+'"></div>'+
+        '<div><label>Paid date</label><input id="py_paid" type="date" value="'+esc((e&&e.paid_date)||'')+'"></div>'+
+        '<div><label>Status</label><select id="py_status">'+opts(PAYST,(e&&e.status)||'pending')+'</select></div></div>'+
+        '<div class="r"><div><label>Reference / notes</label><input id="py_notes" value="'+esc((e&&e.notes)||'')+'"></div></div>'+
+        '<div class="ucalc" id="pySplit" style="margin-bottom:11px"></div>'+
+        '<div style="display:flex;gap:8px"><button class="btn primary" onclick="paySave()">'+(e?'Save changes':'Save payment')+'</button>'+
+        '<button class="btn" onclick="payCancel()">Cancel</button></div></div>';
+    }
+    html+='<div class="tablecard" style="border-radius:10px"><table><thead><tr><th>Type</th><th class="money">To client</th>'+
+      '<th class="money">Owner net</th><th>Due</th><th>Paid</th><th>Status</th><th></th></tr></thead><tbody>'+
+      (ps.length?ps.map(function(p,i){
+        return '<tr><td><b>'+esc(p.label||'—')+'</b>'+
+          (p.payment_method?'<div class="sub">'+esc(nice(p.payment_method))+'</div>':'')+
+          (p.notes?'<div class="sub">'+esc(p.notes)+'</div>':'')+'</td>'+
+          '<td class="money">'+money(p.amount)+'</td>'+
+          '<td class="money own">'+(p.owner_net==null?'<span class="miss">not set</span>':money(p.owner_net))+'</td>'+
+          '<td class="sub">'+esc(p.due_date||'—')+'</td><td class="sub">'+esc(p.paid_date||'—')+'</td>'+
+          '<td><span class="pill2 '+esc(p.status||'pending')+'">'+esc(p.status||'pending')+'</span></td>'+
+          '<td style="white-space:nowrap"><button class="mini" onclick="payOpen('+i+')">Edit</button> '+
+          '<button class="mini" style="color:var(--red)" onclick="payDel('+i+')">&#10005;</button></td></tr>';
+      }).join(''):'<tr><td colspan="7" class="state">No payments recorded yet</td></tr>')+'</tbody></table></div>';
+    var cli=0,cliPaid=0,own=0,ownPaid=0,noOwn=0;
+    ps.forEach(function(p){
+      var a=N(p.amount); cli+=a; if(p.status==='paid')cliPaid+=a;
+      if(p.owner_net==null){noOwn++;return;}
+      own+=N(p.owner_net); if(p.status==='paid')ownPaid+=N(p.owner_net);
+    });
+    html+='<div class="sumbar"><div><div class="l">Booking total</div><div class="v">'+money(b.total)+'</div></div>'+
+      '<div><div class="l">To client — recorded</div><div class="v">'+money(cli)+'</div></div>'+
+      '<div><div class="l">To client — paid</div><div class="v paid">'+money(cliPaid)+'</div></div>'+
+      '<div><div class="l">Owner net — paid</div><div class="v own">'+money(ownPaid)+'</div></div></div>'+
+      '<div class="sub" style="margin-top:9px">Owner net recorded '+money(own)+' of the booking&#39;s '+money(b.owner_net)+'.'+
+      (noOwn?' <span style="color:var(--red)">'+noOwn+' installment'+(noOwn>1?'s have':' has')+' no owner net yet — the owner portal cannot show '+(noOwn>1?'them':'it')+'.</span>':'')+'</div>';
+    document.getElementById('mngBody').innerHTML=html;
+    if(MNG.payForm)paySplit();
+  }
+  function paySplit(){
+    var el=document.getElementById('pySplit'); if(!el)return;
+    var a=parseFloat((document.getElementById('py_amount')||{}).value),
+        o=parseFloat((document.getElementById('py_owner')||{}).value);
+    if(isNaN(a)||isNaN(o)){el.innerHTML='<span>Fill in both amounts to see the split</span><b>&mdash;</b>';return;}
+    var d=a-o;
+    el.innerHTML='<span>Owner '+money(o)+' &nbsp;·&nbsp; MGROUP / agent '+money(d)+'</span>'+
+      (d<0?'<b style="color:var(--red)">owner net exceeds the client amount</b>':'<b>'+money(a)+'</b>');
+  }
+  function payOpen(i){MNG.payEdit=i;MNG.payForm=true;renderMng();}
+  function payCancel(){MNG.payEdit=null;MNG.payForm=false;renderMng();}
+  function bad(id,on){var e=document.getElementById(id);if(e)e.classList.toggle('bad',!!on);}
+  async function paySave(){
+    var label=document.getElementById('py_label').value.trim();
+    var amt=document.getElementById('py_amount').value.trim();
+    var own=document.getElementById('py_owner').value.trim();
+    bad('py_label',!label); bad('py_amount',amt===''); bad('py_owner',own==='');
+    if(!label||amt===''||own===''){alert('Payment type, amount to client and owner net are all required.');return;}
+    if(Number(own)>Number(amt)&&!confirm('Owner net is larger than the amount the client pays. Save anyway?'))return;
+    var e={label:label,amount:Number(amt),owner_net:Number(own),
+      due_date:document.getElementById('py_due').value||null,
+      paid_date:document.getElementById('py_paid').value||null,
+      status:document.getElementById('py_status').value,
+      payment_method:document.getElementById('py_method').value||null,
+      notes:document.getElementById('py_notes').value.trim()||null};
+    if(!MNG.bp.payments)MNG.bp.payments=[];
+    var prev=(MNG.payEdit!=null)?MNG.bp.payments[MNG.payEdit]:null;
+    e.created_at=(prev&&prev.created_at)||new Date().toISOString();
+    var snapshot=JSON.parse(JSON.stringify(MNG.bp.payments));
+    if(MNG.payEdit!=null)MNG.bp.payments[MNG.payEdit]=e; else MNG.bp.payments.push(e);
+    try{await bpSave();MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;renderMng();}
+    catch(err){MNG.bp.payments=snapshot;alert('Could not save payment: '+err.message);}
+  }
+  async function payDel(i){
+    var p=(MNG.bp.payments||[])[i]; if(!p)return;
+    if(!confirm('Remove "'+(p.label||'this payment')+'" ('+money(p.amount)+')?\n\nThis is saved immediately.'))return;
+    var snapshot=JSON.parse(JSON.stringify(MNG.bp.payments));
+    MNG.bp.payments.splice(i,1);
+    try{await bpSave();renderMng();}catch(e){MNG.bp.payments=snapshot;alert('Could not remove: '+e.message);}
+  }
+
+  // ---------- HOUSEKEEPER (weekly service schedule) ----------
+  var HSVC=[['cleaning','Cleaning','&#129529;'],['linen','Linen change','&#128716;'],['pool','Pool','&#127946;'],['gardener','Gardener','&#127795;']];
+  var HDAY=['mon','tue','wed','thu','fri','sat','sun'];
+  var HDAYL={mon:'Mon',tue:'Tue',wed:'Wed',thu:'Thu',fri:'Fri',sat:'Sat',sun:'Sun'};
+  function hourOpts(sel){var o='<option value="">HH</option>';for(var h=0;h<24;h++){var v=(h<10?'0':'')+h;o+='<option value="'+v+'"'+(sel===v?' selected':'')+'>'+v+'</option>';}return o;}
+  function minOpts(sel){return '<option value="">MM</option>'+['00','15','30','45'].map(function(m){return '<option value="'+m+'"'+(sel===m?' selected':'')+'>'+m+'</option>';}).join('');}
+
+  function renderHouse(){
+    var sc=MNG.bp.cleaning_schedule||{};
+    var html='<div class="sechd"><h4>Weekly service schedule</h4><span class="sub">'+houseCount()+' visits per week</span></div>'+
+      '<div class="tablecard" style="border-radius:10px"><table class="g7"><thead><tr><th>Service</th>'+
+      HDAY.map(function(d){return '<th>'+HDAYL[d]+'</th>';}).join('')+'<th style="width:120px">Time</th></tr></thead><tbody>'+
+      HSVC.map(function(sv){
+        var d=sc[sv[0]]||{}, t=(d.time||''), th=t.split(':')[0]||'', tm=t.split(':')[1]||'';
+        return '<tr><td>'+sv[2]+' '+sv[1]+'</td>'+
+          HDAY.map(function(k){return '<td><input type="checkbox" id="hk_'+sv[0]+'_'+k+'"'+(d[k]?' checked':'')+' onchange="markDirty()"></td>';}).join('')+
+          '<td><div style="display:flex;gap:3px;align-items:center;justify-content:center">'+
+          '<select id="hk_'+sv[0]+'_h">'+hourOpts(th)+'</select><b>:</b><select id="hk_'+sv[0]+'_m">'+minOpts(tm)+'</select></div></td></tr>';
+      }).join('')+'</tbody></table></div>'+
+      '<div style="margin-top:14px;display:flex;gap:9px;align-items:center"><button class="btn primary" onclick="houseSave()">Save schedule</button>'+
+      '<span class="sub" id="hkMsg"></span></div>'+saveBar();
+    document.getElementById('mngBody').innerHTML=html;
+  }
+  async function houseSave(){
+    var sc={};
+    HSVC.forEach(function(sv){
+      var d={};
+      HDAY.forEach(function(k){if(document.getElementById('hk_'+sv[0]+'_'+k).checked)d[k]=true;});
+      var h=document.getElementById('hk_'+sv[0]+'_h').value, m=document.getElementById('hk_'+sv[0]+'_m').value;
+      if(h&&m)d.time=h+':'+m;
+      sc[sv[0]]=d;
+    });
+    MNG.bp.cleaning_schedule=sc;
+    try{await bpSave();MNG.dirty=false;renderMng();document.getElementById('hkMsg').innerHTML='&#10003; Saved';}
+    catch(e){alert('Could not save schedule: '+e.message);}
+  }
+
+  // ---------- UTILITIES (electricity + water) ----------
+  var UDEF={electricity:{label:'Electricity',icon:'&#9889;',cls:''},water:{label:'Water',icon:'&#128167;',cls:' w'}};
+  function renderUtil(){
+    document.getElementById('mngBody').innerHTML=['electricity','water'].map(utilCard).join('')+
+      '<div class="sub">Readings are stored on the booking, so the check-out settlement and the owner statement use the same numbers.</div>';
+    ['electricity','water'].forEach(utilCalc);
+  }
+  function utilCard(k){
+    var u=MNG.bp[k]||{}, d=UDEF[k], inc=!!u.is_included_free;
+    var mIn=(u.meter_in==null?'':u.meter_in), mOut=(u.meter_out==null?'':u.meter_out);
+    var h='<div class="ucard'+d.cls+'"><div class="uh"><b>'+d.icon+' '+d.label+'</b>'+
+      '<select id="ut_'+k+'_mode" onchange="renderUtilMode(\''+k+'\')">'+
+      '<option value="exclude"'+(inc?'':' selected')+'>Exclude — guest pays</option>'+
+      '<option value="include"'+(inc?' selected':'')+'>Include in rent</option></select></div>';
+    h+='<div id="ut_'+k+'_incl" class="incl"'+(inc?'':' style="display:none"')+'>'+d.icon+' '+d.label+' is included in the rental price</div>';
+    h+='<div id="ut_'+k+'_fields"'+(inc?' style="display:none"':'')+'>'+
+      '<div class="mtr">'+
+        utilBox(k,'in','Check-in reading',u.recorded_in_date,mIn,u.meter_in_photo)+
+        utilBox(k,'out','Check-out reading',u.recorded_out_date,mOut,u.meter_out_photo)+
+      '</div>'+
+      '<div class="frm" style="margin-bottom:0"><div class="r c3">'+
+        '<div><label>Rate / unit (THB)</label><input id="ut_'+k+'_rate" type="number" step="0.01" value="'+N(u.rate_per_unit)+'" oninput="utilCalc(\''+k+'\');markDirty()"></div>'+
+        '<div><label>Status</label><select id="ut_'+k+'_status" onchange="markDirty()">'+opts([['pending','Pending'],['recorded','Recorded'],['settled','Settled']],u.status||'pending')+'</select></div>'+
+        '<div><label>Notes</label><input id="ut_'+k+'_notes" value="'+esc(u.notes||'')+'" oninput="markDirty()"></div></div>'+
+        '<div class="ucalc" id="ut_'+k+'_calc"></div></div>';
+    h+='</div><div style="margin-top:11px;display:flex;gap:9px;align-items:center">'+
+      '<button class="btn primary" onclick="utilSave(\''+k+'\')">Save '+d.label.toLowerCase()+'</button>'+
+      '<span class="sub" id="ut_'+k+'_msg"></span></div></div>';
+    return h;
+  }
+  function utilBox(k,slot,title,date,val,photo){
+    return '<div class="box"><div class="t">'+title+'</div>'+
+      '<input id="ut_'+k+'_'+slot+'_date" type="date" value="'+esc(date||'')+'" onchange="markDirty()">'+
+      '<input id="ut_'+k+'_'+slot+'" class="big" type="number" step="0.01" placeholder="—" value="'+val+'" oninput="utilCalc(\''+k+'\');markDirty()">'+
+      '<button class="mini" style="width:100%;text-align:center" onclick="pickMeter(\''+k+'\',\''+slot+'\')">&#128247; '+(photo?'Replace photo':'Attach meter photo')+'</button>'+
+      (photo?'<img class="mphoto" src="'+esc(photo)+'" alt="" onclick="lbOpen(\''+esc(photo)+'\')">':'')+'</div>';
+  }
+  function renderUtilMode(k){
+    var inc=document.getElementById('ut_'+k+'_mode').value==='include';
+    document.getElementById('ut_'+k+'_incl').style.display=inc?'':'none';
+    document.getElementById('ut_'+k+'_fields').style.display=inc?'none':'';
+  }
+  function utilCalc(k){
+    var el=document.getElementById('ut_'+k+'_calc'); if(!el)return;
+    var a=parseFloat(document.getElementById('ut_'+k+'_in').value),
+        b=parseFloat(document.getElementById('ut_'+k+'_out').value),
+        r=N(document.getElementById('ut_'+k+'_rate').value);
+    if(isNaN(a)||isNaN(b)||b<a){el.innerHTML='<span>Enter both readings to calculate</span><b>&mdash;</b>';return;}
+    var un=Math.round((b-a)*100)/100;
+    el.innerHTML='<span>'+un.toLocaleString()+' units &times; '+money(r)+'</span><b>'+money(Math.round(un*r))+'</b>';
+  }
+  function utilCollect(k){
+    var inc=document.getElementById('ut_'+k+'_mode').value==='include';
+    var a=parseFloat(document.getElementById('ut_'+k+'_in').value),
+        b=parseFloat(document.getElementById('ut_'+k+'_out').value);
+    var prev=MNG.bp[k]||{};
+    return {meter_in:isNaN(a)?null:a, meter_out:isNaN(b)?null:b,
+      meter_in_photo:prev.meter_in_photo||null, meter_out_photo:prev.meter_out_photo||null,
+      rate_per_unit:N(document.getElementById('ut_'+k+'_rate').value),
+      status:inc?'included':document.getElementById('ut_'+k+'_status').value,
+      is_included_free:inc,
+      notes:document.getElementById('ut_'+k+'_notes').value.trim()||null,
+      recorded_in_date:document.getElementById('ut_'+k+'_in_date').value||null,
+      recorded_out_date:document.getElementById('ut_'+k+'_out_date').value||null};
+  }
+  async function utilSave(k){
+    MNG.bp[k]=utilCollect(k);
+    try{await bpSave();MNG.dirty=false;renderMng();var m=document.getElementById('ut_'+k+'_msg');if(m)m.innerHTML='&#10003; Saved';}
+    catch(e){alert('Could not save '+k+': '+e.message);}
+  }
+  function pickMeter(k,slot){var i=document.getElementById('upMeter');i.setAttribute('data-k',k);i.setAttribute('data-s',slot);i.value='';i.click();}
+  async function doMeterUpload(inp){
+    var k=inp.getAttribute('data-k'), slot=inp.getAttribute('data-s'), f=(inp.files||[])[0];
+    inp.value=''; if(!f)return;
+    var msg=document.getElementById('ut_'+k+'_msg'); if(msg)msg.textContent='Uploading…';
+    var mime=(f.type||'').toLowerCase();
+    if(OKMIME.indexOf(mime)<0){alert('Meter photos must be an image (JPG, PNG, WEBP, HEIC).');if(msg)msg.textContent='';return;}
+    if(f.size>25*1024*1024){alert('Photo is over 25 MB.');if(msg)msg.textContent='';return;}
+    try{
+      var safe=f.name.replace(/[^A-Za-z0-9._-]+/g,'-').slice(-60);
+      var path='checkin/'+MNG.id+'/meters/'+k+'-'+slot+'-'+Date.now()+'-'+safe;
+      var up=await fetch(SB_URL+'/storage/v1/object/media/'+path,{method:'POST',
+        headers:Object.assign({},H,{'Content-Type':mime}),body:f});
+      if(!up.ok)throw new Error('storage HTTP '+up.status);
+      var e=utilCollect(k);
+      e[slot==='in'?'meter_in_photo':'meter_out_photo']=SB_URL+'/storage/v1/object/public/media/'+path;
+      MNG.bp[k]=e;
+      await bpSave();
+      renderMng();
+    }catch(e){alert('Could not attach meter photo: '+e.message);if(msg)msg.textContent='';}
   }
 
   // ---------- attachments ----------

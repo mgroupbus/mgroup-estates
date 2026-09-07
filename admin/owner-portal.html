@@ -171,6 +171,10 @@
   .pvsub{font-size:12.5px;color:var(--muted);margin-top:4px}
   .paybar{height:8px;border-radius:5px;background:#efece4;overflow:hidden}
   .paybar i{display:block;height:100%;background:#5c9c63}
+  .sharebar{background:var(--goldt);border:1px solid #e6d6ad;color:var(--gold);border-radius:10px;
+    padding:10px 15px;margin:0 0 18px;font-size:12.5px;font-weight:600}
+  .sharebar b{font-weight:800}
+  @media print{.sharebar{display:none}}
   .acts{display:flex;gap:8px;flex-wrap:wrap}
   .abtn{font-family:var(--font);font-size:12.5px;font-weight:700;padding:9px 15px;border-radius:9px;cursor:pointer;
     border:1px solid var(--line);background:var(--card);color:var(--muted);white-space:nowrap}
@@ -282,6 +286,7 @@
     <div class="tablecard" id="guestTable"><div class="state">Loading…</div></div>
   </div>
 
+  <div class="sharebar" id="shareBar" style="display:none"><b>Shared by MGROUP</b><span id="shareExp"></span></div>
   <div id="view-booking" style="display:none">
     <div class="back" onclick="goBack()">&larr; Back to bookings</div>
     <div id="bookingDetail"></div>
@@ -311,7 +316,7 @@
   function money(x){return '฿'+Number(x||0).toLocaleString('en-US');}
   function fmtD(d){if(!d)return '—';var p=String(d).split('-');if(p.length<3)return d;return p[2].padStart(2,'0')+'.'+p[1].padStart(2,'0')+'.'+p[0];}
   function N(x){return Number(x||0);}
-  var DATA={bk:[],villas:[],vmap:{},gmap:{},guests:{},prefs:{},tasks:{}};
+  var DATA={bk:[],villas:[],vmap:{},gmap:{},guests:{},prefs:{},tasks:{},sched:{}};
   function qq(t,sel,extra){return fetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel)+(extra||''),{headers:H}).then(function(r){return r.json();});}
   function arr(x){return Array.isArray(x)?x:[];}
   function nice(x){x=String(x||'').replace(/[_-]+/g,' ').trim();return x?x.charAt(0).toUpperCase()+x.slice(1):'—';}
@@ -322,6 +327,7 @@
   function route(){
     var p=(location.hash||'#home').slice(1).split('/');
     if(p[0]==='villa'&&p[1]){renderVilla(p[1]);return;}
+    if(p[0]==='s'&&p[1]){openShared(p[1]);return;}
     if(p[0]==='booking'||p[0]==='process'){if(p[1]){renderBooking(p[1]);return;}}
     showView(p[0]||'home');
   }
@@ -402,16 +408,18 @@
     document.getElementById('dvTitle').textContent=title||'Document';
     body.className='dvbody'; body.innerHTML='<div class="dvmsg">Preparing watermarked copy…</div>';
     dv.classList.add('on');
-    var tok=DATA.token||'';
-    if(!tok){body.innerHTML='<div class="dvmsg">Please sign out and sign in again to view documents.</div>';return;}
+    var tok=DATA.token||'', sTok=DATA.shareToken||'';
+    if(!tok&&!sTok){body.innerHTML='<div class="dvmsg">Please sign out and sign in again to view documents.</div>';return;}
     try{
       var r=await fetch(SB_URL+'/functions/v1/owner-file',{method:'POST',
         headers:Object.assign({'Content-Type':'application/json'},H),
-        body:JSON.stringify({token:tok,attachment_id:id})});
+        body:JSON.stringify(sTok?{share_token:sTok,attachment_id:id}:{token:tok,attachment_id:id})});
       if(!r.ok){
         var msg={unauthorized:'Your session expired — please sign in again.',
                  forbidden:'This document is not linked to your villa.',
                  not_shared:'MGROUP has not shared this document with you.',
+                 revoked:'This link has been turned off by MGROUP.',
+                 expired:'This link has expired.',
                  file_missing:'The file could not be found.',
                  unsupported_type:'Only PDF, JPG and PNG documents can be shown.'};
         var j={}; try{j=await r.json();}catch(e){}
@@ -477,87 +485,42 @@
       +'<div class="stages">'+acc+'</div>';
   }
   function openProcess(bid){ location.hash='booking/'+bid; }
-  function rr(c,x,y,w,h,r){if(c.roundRect){c.beginPath();c.roundRect(x,y,w,h,r);}else{c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}}
-  function drawCard(b){
-    var S=2, W=1000, PAD=56, X=PAD+40;
-    var p=stageStats(b), c=collected(b), v=(DATA.vmap[b.villa_id]||{}).name||'MGROUP Estates';
-    var H=470+(p.total?p.stages.length*74+56:0);
-    var cv=document.createElement('canvas'); cv.width=W*S; cv.height=H*S;
-    var x=cv.getContext('2d'); x.scale(S,S);
-    var F=function(sz,w,fam){return (w||400)+' '+sz+'px '+(fam||"'Figtree',-apple-system,sans-serif");};
-    x.fillStyle='#f0eee7'; x.fillRect(0,0,W,H);
-    x.fillStyle='#fff'; rr(x,40,40,W-80,H-80,26); x.fill();
-    var y=40+PAD+16;
-
-    x.fillStyle='#9aa199'; x.font=F(17,700); if('letterSpacing' in x)x.letterSpacing='3px';
-    x.fillText(String(v).toUpperCase(),X,y); if('letterSpacing' in x)x.letterSpacing='0px';
-    y+=46;
-    x.fillStyle='#1a201d'; x.font=F(50,800); x.fillText(b.booking_ref||'—',X,y);
-    var wRef=x.measureText(b.booking_ref||'—').width;
-    var stTxt=String(b.status||'').replace(/_/g,' ');
-    if(stTxt){
-      x.font=F(17,700); var wS=x.measureText(stTxt).width;
-      var done=/checked_out|confirmed/.test(b.status||'');
-      x.fillStyle=done?'#e6f0e4':'#efece4'; rr(x,X+wRef+22,y-24,wS+30,34,17); x.fill();
-      x.fillStyle=done?'#3f7a46':'#7d7466'; x.fillText(stTxt.charAt(0).toUpperCase()+stTxt.slice(1),X+wRef+37,y-1);
+  async function openShared(tok){
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.querySelector('.top').style.display='none';
+    document.querySelector('.nav').style.display='none';
+    var bar=document.getElementById('shareBar'), det=document.getElementById('bookingDetail');
+    showView('booking'); bar.style.display='block';
+    det.innerHTML='<div class="state">Opening…</div>';
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/booking-share',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({action:'view',token:tok})});
+      var d=await r.json();
+      if(!r.ok){
+        var msg={not_found:'This link is not valid.',revoked:'This link has been turned off by MGROUP.',
+                 expired:'This link has expired. Please ask MGROUP for a new one.'};
+        bar.style.display='none';
+        det.innerHTML='<div class="sec"><div class="state">'+esc(msg[d.error]||'This link could not be opened.')+'</div></div>';
+        return;
+      }
+      DATA.shareToken=tok;
+      DATA.bk=[d.booking];
+      DATA.vmap={}; if(d.villa)DATA.vmap[d.villa.id]=d.villa;
+      DATA.gmap={}; if(d.booking.guest_id&&d.guest_name)DATA.gmap[d.booking.guest_id]=d.guest_name;
+      DATA.tasks={}; DATA.tasks[d.booking.id]=d.tasks||[];
+      DATA.att={villa:{},guest:{},booking:{}};
+      (d.attachments||[]).forEach(function(a){var g=DATA.att[a.entity_type];if(g)(g[a.entity_id]=g[a.entity_id]||[]).push(a);});
+      DATA.prefs={net:true,dates:true,guest:true};
+      document.getElementById('shareExp').textContent=d.expires_at
+        ? ' · link valid until '+fmtD(String(d.expires_at).slice(0,10)) : '';
+      renderBooking(d.booking.id);
+      document.querySelector('#view-booking .back').style.display='none';
+    }catch(e){
+      bar.style.display='none';
+      det.innerHTML='<div class="sec"><div class="state">Could not open this link.</div></div>';
     }
-    y+=42;
-    x.fillStyle='#6f776f'; x.font=F(25,500,"'Cormorant Garamond',Georgia,serif");
-    var nn=N(b.nights)||nights(b.check_in,b.check_out);
-    x.fillText(fmtD(b.check_in)+'  \u2192  '+fmtD(b.check_out)+(nn?'   \u00b7   '+nn+' nights':'')+'   \u00b7   '+party(b),X,y);
-    y+=34;
-    x.strokeStyle='#e6e2d7'; x.lineWidth=1; x.beginPath(); x.moveTo(X,y); x.lineTo(W-X,y); x.stroke();
-    y+=44;
-
-    var lab=function(t){x.fillStyle='#a97e42'; x.font=F(15,800); if('letterSpacing' in x)x.letterSpacing='2.4px';
-      x.fillText(t,X,y); if('letterSpacing' in x)x.letterSpacing='0px'; y+=30;};
-    var bar=function(pct,col){x.fillStyle='#efece4'; rr(x,X,y,W-X*2,10,5); x.fill();
-      if(pct>0){x.fillStyle=col; rr(x,X,y,Math.max(10,(W-X*2)*pct/100),10,5); x.fill();} y+=30;};
-
-    lab('PAYMENT');
-    x.fillStyle='#1a201d'; x.font=F(30,800);
-    var amt=money(c.paid), wAmt=x.measureText(amt).width;
-    x.fillText(amt,X,y);
-    x.fillStyle='#9aa199'; x.font=F(19,500);
-    x.fillText('received of '+money(c.net)+(c.balance?'   \u00b7   '+money(c.balance)+' still to come':''),X+wAmt+18,y);
-    y+=22; bar(c.pct,'#5c9c63');
-    y+=14;
-
-    if(p.total){
-      lab('PROGRESS  \u00b7  '+p.done+' / '+p.total+' STEPS');
-      p.stages.forEach(function(st){
-        x.fillStyle='#1a201d'; x.font=F(20,700); x.fillText(st.label,X,y+4);
-        x.fillStyle=st.done===st.total?'#3f7a46':'#6f776f'; x.font=F(20,800);
-        var t=st.done+' / '+st.total; x.fillText(t,W-X-x.measureText(t).width,y+4);
-        y+=20; bar(Math.round(st.done/st.total*100),st.done===st.total?'#5c9c63':'#a97e42');
-        y+=14;
-      });
-    }
-    x.fillStyle='#9aa199'; x.font=F(16,600); if('letterSpacing' in x)x.letterSpacing='2px';
-    x.fillText('MGROUP ESTATES  \u00b7  OWNER DASHBOARD',X,H-40-PAD+16);
-    if('letterSpacing' in x)x.letterSpacing='0px';
-    return cv;
-  }
-  async function shareBooking(bid,el){
-    var b=DATA.bk.filter(function(x){return x.id===bid;})[0]; if(!b)return;
-    var t=el?el.textContent:''; if(el)el.textContent='Preparing…';
-    try{ if(document.fonts&&document.fonts.ready)await document.fonts.ready; }catch(e){}
-    var cv=drawCard(b);
-    cv.toBlob(async function(blob){
-      if(el)el.textContent=t;
-      if(!blob)return;
-      var name=(b.booking_ref||'booking').replace(/[^\w.-]/g,'_')+'.png';
-      try{
-        var file=new File([blob],name,{type:'image/png'});
-        if(navigator.canShare&&navigator.canShare({files:[file]})){
-          await navigator.share({files:[file],title:b.booking_ref||'Booking'});
-          return;
-        }
-      }catch(e){ if(e&&e.name==='AbortError')return; }
-      var url=URL.createObjectURL(blob), a=document.createElement('a');
-      a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function(){URL.revokeObjectURL(url);},5000);
-    },'image/png');
   }
 
   function renderBooking(bid){
@@ -570,7 +533,6 @@
       +'<h2>'+esc(b.booking_ref||'—')+' <span class="st st-'+esc(st)+'" style="vertical-align:6px;font-size:11px">'
       +esc((b.status||'—').replace(/_/g,' '))+'</span></h2></div>'
       +'<div class="acts">'
-      +'<span class="abtn wa" onclick="shareBooking(\''+b.id+'\',this)">Share</span>'
       +'<span class="abtn" onclick="window.print()">Print</span></div></div>'
       +'<div class="pvsub">'+fmtD(b.check_in)+' &rarr; '+fmtD(b.check_out)+'</div>'
       +'<div class="sec" style="margin-top:16px"><div class="detbox">'+bkDetail(b,P,true)+'</div></div>';
@@ -585,6 +547,7 @@
   // How much of the OWNER's own net has been collected. Gross figures and the
   // agent's share never reach the portal.
   function collected(b){
+    if(b.__pay)return b.__pay;
     var t=N(b.total), p=N(b.client_pay), net=N(b.owner_net);
     var st=String(b.status||'').toLowerCase();
     var ratio;
@@ -595,7 +558,40 @@
     var paid=Math.round(net*ratio);
     return {net:net,paid:paid,balance:Math.max(0,net-paid),pct:net>0?Math.round(paid/net*100):(paid>0?100:0),known:t>0||p>0||net>0};
   }
+  // The installment schedule the admin keys in, showing ONLY this owner's net.
+  function schedBlock(b){
+    var rows=DATA.sched[b.id]||[];
+    if(!rows.length)return '';
+    var known=rows.filter(function(r){return r.owner_net!=null;});
+    var paid=0,coming=0;
+    known.forEach(function(r){var v=N(r.owner_net);if(r.status==='paid')paid+=v;else coming+=v;});
+    var tot=paid+coming, pct=tot>0?Math.round(paid/tot*100):0;
+    var pend=rows.length-known.length;
+    var body=rows.map(function(r){
+      var st=r.status==='paid'?'st-confirmed':(r.status==='overdue'?'st-cancelled':'st-pending');
+      var amt=r.owner_net==null
+        ? '<span style="color:var(--faint)">being finalised</span>'
+        : '<b>'+money(r.owner_net)+'</b>';
+      var when=r.status==='paid'?(r.paid_date||''):(r.due_date||'');
+      return '<div class="prow"><span>'+esc(r.label||'Installment')+
+        (when?' <span style="color:var(--faint)">· '+esc(when)+'</span>':'')+'</span>'+
+        '<span style="display:inline-flex;gap:10px;align-items:center">'+amt+
+        '<span class="st '+st+'">'+esc(r.status||'pending')+'</span></span></div>';
+    }).join('');
+    return '<div class="dgh">Payment schedule</div>'+
+      '<div style="font-size:12px;color:var(--faint);margin:-4px 0 10px">Your net for each installment, as agreed with MGROUP.</div>'+
+      body+
+      (pend?'<div style="font-size:11.5px;color:var(--faint);margin-top:8px">'+pend+' installment'+(pend>1?'s are':' is')+' still being finalised by MGROUP.</div>':'')+
+      '<div class="paybar" style="margin-top:12px"><i style="width:'+pct+'%"></i></div>'+
+      '<div class="dgrid" style="margin-top:14px">'+
+        dg('Received',money(paid))+
+        dg('Still to come',coming?'<span style="color:var(--red)">'+money(coming)+'</span>':'—')+
+        dg('My net (scheduled)',money(tot))+
+      '</div>';
+  }
   function payBlock(b){
+    var sb=schedBlock(b);
+    if(sb)return sb;
     var c=collected(b);
     if(!c.known)return '<div class="dgh">Payment</div><div style="font-size:12.5px;color:var(--faint)">No payment recorded for this booking yet</div>';
     var label=c.balance>0?(c.paid>0?'Partly received':'Not received yet'):'Received in full';
@@ -912,8 +908,10 @@
         q('rental_villas','id,name,area,location,bedrooms,bathrooms,max_guests,sqm,pool_type,view_type,cover_image,images,amenities,features_included,features_excluded,description','&owner_id=eq.'+ownerId),
         q('guests','id,name,nationality'),
         q('contracts','booking_id,contract_no,type,status','&owner_id=eq.'+ownerId),
-        q('expenses','id,villa_id,booking_id,category,amount,currency,meter_start,meter_end,units,period_start,period_end,note,created_at','&order=period_start.desc')
+        q('expenses','id,villa_id,booking_id,category,amount,currency,meter_start,meter_end,units,period_start,period_end,note,created_at','&order=period_start.desc'),
+        q('owner_payment_schedule','booking_id,seq,label,owner_net,due_date,paid_date,status','&owner_id=eq.'+ownerId+'&order=seq.asc')
       ]);
+      DATA.sched={}; (Array.isArray(res[5])?res[5]:[]).forEach(function(r){(DATA.sched[r.booking_id]=DATA.sched[r.booking_id]||[]).push(r);});
       var bk=res[0]||[], villas=res[1]||[], gmap={}; (res[2]||[]).forEach(function(g){gmap[g.id]=g.name;DATA.guests[g.id]=g;});
       DATA.contracts={}; (res[3]||[]).forEach(function(c){if(c.booking_id)DATA.contracts[c.booking_id]=c;});
       DATA.att={villa:{},guest:{},booking:{}};
