@@ -937,8 +937,6 @@
         '<button class="mini" onclick="event.stopPropagation();addTask(\''+k+'\')">+ Add task</button></div>'+
         '<div class="tgbody">'+ts.map(taskHtml).join('')+'</div></div>';
     }).join('');
-    html+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">'+
-      TYORD.filter(function(k){return !by[k];}).map(function(k){return '<button class="mini" onclick="addTask(\''+k+'\')">+ '+esc(TY[k])+'</button>';}).join('')+'</div>';
     html+=saveBar();
     box.innerHTML=html;
   }
