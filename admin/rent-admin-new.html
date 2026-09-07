@@ -161,6 +161,18 @@
   }
   @media(max-width:1000px){.tiles{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:760px){.shell{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px}.side .user,.nl{display:none}.nav{flex-direction:row;flex-wrap:wrap}.main{padding:16px}}
+  /* villas */
+  .vfilter{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+  .vfilter input,.vfilter select{font-family:var(--font);font-size:12.5px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+  .vfilter input{min-width:230px}
+  .vfilter input:focus,.vfilter select:focus{outline:none;border-color:var(--g600)}
+  .own-select{font-family:var(--font);font-size:12px;font-weight:600;border-radius:7px;padding:5px 8px;border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--g600);max-width:200px}
+  .own-select.none{color:var(--red);border-color:#e6c3b8;background:#f9edea;font-weight:700}
+  .frm label.chk{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--muted);margin-bottom:0}
+  .frm label.chk input[type=checkbox]{width:16px;height:16px;flex:none;accent-color:var(--g600);cursor:pointer}
+  .frm textarea{width:100%;font-family:var(--font);font-size:12.5px;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);resize:vertical;min-height:56px}
+  .frm textarea:focus{outline:none;border-color:var(--g600)}
+  .warn{color:var(--red);font-weight:700}
   /* generated document paper */
   .paper{font-family:var(--font);color:#1a201d}
   .paper .top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--g700);padding-bottom:14px;margin-bottom:18px}
@@ -219,6 +231,7 @@
       <button class="active" data-v="dash" onclick="go('dash',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</button>
       <button data-v="bookings" onclick="go('bookings',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>All Bookings</button>
       <button data-v="finance" onclick="go('finance',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>Finance</button>
+      <button data-v="villas" onclick="go('villas',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-7a2 2 0 012-2h16a2 2 0 012 2v7"/><path d="M4 11V7a2 2 0 012-2h12a2 2 0 012 2v4"/><path d="M2 17h20"/><path d="M12 5v6"/></svg>Villas</button>
       <button data-v="owners" onclick="go('owners',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 4l9 6.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/></svg>Owners</button>
       <button data-v="clients" onclick="go('clients',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.3 2.9-5.3 6.5-5.3s6.5 2 6.5 5.3"/><path d="M17 5.5a3 3 0 010 5.6"/><path d="M21.5 20c0-2.4-1.3-4-3.3-4.7"/></svg>Clients</button>
       <button data-v="agents" onclick="go('agents',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="3.5"/><path d="m15 11 2 2 4.5-4.5"/></svg>Agents</button>
@@ -259,9 +272,26 @@
       <div class="tablecard"><table><thead><tr><th>Ref</th><th>Villa</th><th class="money">Total</th><th class="money">Paid</th><th class="money">Balance</th><th class="money">Deposit</th><th class="money">MGROUP</th><th class="money">Owner net</th></tr></thead><tbody id="finRows"><tr><td colspan="8" class="state">Loading…</td></tr></tbody></table></div>
     </div>
 
+    <!-- VILLAS -->
+    <div id="v-villas" class="view">
+      <div class="head"><div><div class="crumb">Portfolio</div><h2>Villas</h2></div><button class="btn primary" onclick="openVilla('')">+ Add villa</button></div>
+      <div class="tiles">
+        <div class="tile"><div class="l">Villas</div><div class="v" id="vl-n">&mdash;</div><div class="s">in the portfolio</div></div>
+        <div class="tile"><div class="l">Active</div><div class="v" id="vl-act">&mdash;</div><div class="s">bookable</div></div>
+        <div class="tile"><div class="l">Owner linked</div><div class="v" id="vl-own">&mdash;</div><div class="s">ready for bookings</div></div>
+        <div class="tile"><div class="l">No owner yet</div><div class="v" id="vl-noown" style="color:var(--red)">&mdash;</div><div class="s">&#3612;&#3641;&#3585; owner &#3585;&#3656;&#3629;&#3609;&#3592;&#3638;&#3591;&#3626;&#3619;&#3657;&#3634;&#3591; booking &#3652;&#3604;&#3657;</div></div>
+      </div>
+      <div class="vfilter">
+        <input id="vlq" type="search" placeholder="Search villa, area or owner&hellip;" oninput="renderVillas()">
+        <select id="vlown" onchange="renderVillas()"><option value="">All owners</option><option value="__none">No owner linked</option></select>
+        <select id="vlst" onchange="renderVillas()"><option value="">Active + inactive</option><option value="1">Active only</option><option value="0">Inactive only</option></select>
+      </div>
+      <div class="tablecard"><table><thead><tr><th>Villa</th><th>Owner</th><th class="num">Beds</th><th class="num">Guests</th><th class="money">Rate / night</th><th class="num">Bookings</th><th>Status</th><th></th></tr></thead><tbody id="vlRows"><tr><td colspan="8" class="state">Loading&hellip;</td></tr></tbody></table></div>
+    </div>
+
     <!-- OWNERS -->
     <div id="v-owners" class="view">
-      <div class="head"><div><div class="crumb">Partners</div><h2>Owners</h2></div></div>
+      <div class="head"><div><div class="crumb">Partners</div><h2>Owners</h2></div><button class="btn primary" onclick="openOwnerEdit('')">+ Add owner</button></div>
       <div class="tablecard"><table><thead><tr><th>Owner</th><th>Villa(s)</th><th class="num">Bookings</th><th class="money">Owner net (total)</th><th>Portal</th><th></th></tr></thead><tbody id="ownRows"><tr><td colspan="6" class="state">Loading…</td></tr></tbody></table></div>
     </div>
 
@@ -284,6 +314,22 @@
       <div class="tablecard"><table><thead><tr><th>Ref</th><th>Villa</th><th>Guest</th><th>Stay</th><th>Generate document</th></tr></thead><tbody id="docRows"><tr><td colspan="5" class="state">Loading…</td></tr></tbody></table></div>
     </div>
   </main>
+</div>
+
+<!-- OWNER ADD / EDIT MODAL -->
+<div class="ov" id="ownEdOv" onclick="if(event.target===this)closeOwnerEdit()">
+  <div class="modal">
+    <div class="mh"><div><h3 id="ownEdTitle">Add owner</h3><div class="sub" id="ownEdSub"></div></div><button class="cls" onclick="closeOwnerEdit()">&#10005; Close</button></div>
+    <div class="mb" id="ownEdBody"></div>
+  </div>
+</div>
+
+<!-- VILLA ADD / EDIT MODAL -->
+<div class="ov" id="vilOv" onclick="if(event.target===this)closeVilla()">
+  <div class="modal">
+    <div class="mh"><div><h3 id="vilTitle">Add villa</h3><div class="sub" id="vilSub"></div></div><button class="cls" onclick="closeVilla()">&#10005; Close</button></div>
+    <div class="mb" id="vilBody"></div>
+  </div>
 </div>
 
 <!-- OWNER SUMMARY MODAL -->
@@ -324,7 +370,9 @@
   function money(x){return (x==null||x==='')?'฿0':'฿'+Number(x).toLocaleString('en-US');}
   function fmtD(d){if(!d)return '—';var p=d.split('-');if(p.length<3)return d;return (+p[2])+' '+MON[+p[1]-1]+" '"+p[0].slice(2);}
   function stCls(v){return (v||'').replace(/_/g,'');}
-  var DATA={bk:[],vmap:{},gmap:{},omap:{},tk:{}};
+  var DATA={bk:[],villas:[],vmap:{},gmap:{},omap:{},tk:{}};
+  var OFIELDS='id,name,email,phone,line_id,notes';
+  var VFIELDS='id,name,slug,area,location,villa_type,bedrooms,bathrooms,max_guests,price_per_night,price_per_month,min_nights,cleaning_fee,security_deposit,owner_id,description,is_active';
 
   function go(v,el){document.querySelectorAll('.nav button').forEach(function(b){b.classList.remove('active');});el.classList.add('active');
     document.querySelectorAll('.view').forEach(function(x){x.classList.remove('on');});document.getElementById('v-'+v).classList.add('on');window.scrollTo(0,0);}
@@ -334,13 +382,13 @@
       var q=function(t,sel){return fetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel),{headers:H}).then(function(r){return r.json();});};
       var res=await Promise.all([
         fetch(SB_URL+'/rest/v1/bookings?select=id,booking_ref,villa_id,guest_id,owner_id,check_in,check_out,nights,guests_count,adults,children,rate_per_night,total,client_pay,security_deposit,mgroup_commission,owner_net,co_agent_net,agent_name,agent_commission,status,currency,source,special_requests&order=check_in.desc&limit=300',{headers:H}).then(function(r){return r.json();}),
-        q('rental_villas','id,name,area,owner_id'), q('owners','id,name,email,phone'), q('guests','id,name,email,phone,nationality'),
+        q('rental_villas',VFIELDS), q('owners',OFIELDS), q('guests','id,name,email,phone,nationality'),
         fetch(SB_URL+'/rest/v1/checkin_tasks?select=booking_id,is_done&limit=5000',{headers:H}).then(function(r){return r.json();})
       ]);
       DATA.bk=res[0]||[];
       DATA.tk={}; (res[4]||[]).forEach(function(t){var c=DATA.tk[t.booking_id]||(DATA.tk[t.booking_id]={n:0,d:0});c.n++;if(t.is_done)c.d++;});
-      (res[1]||[]).forEach(function(v){DATA.vmap[v.id]=v;});
-      (res[2]||[]).forEach(function(o){DATA.omap[o.id]=o;});
+      setVillas(res[1]||[]);
+      DATA.omap={}; (res[2]||[]).forEach(function(o){DATA.omap[o.id]=o;});
       (res[3]||[]).forEach(function(g){DATA.gmap[g.id]=g;});
       renderAll();
     }catch(e){document.getElementById('bkRows').innerHTML='<tr><td colspan="8" class="state" style="color:var(--red)">Load failed: '+esc(e.message)+'</td></tr>';}
@@ -350,7 +398,7 @@
   var varea=function(id){return (DATA.vmap[id]||{}).area||'';};
   var gname=function(id){return (DATA.gmap[id]||{}).name||'—';};
 
-  function renderAll(){renderBookings();renderDash();renderFinance();renderOwners();renderClients();renderAgents();renderDocs();}
+  function renderAll(){renderBookings();renderDash();renderFinance();renderVillas();renderOwners();renderClients();renderAgents();renderDocs();}
 
   function renderBookings(){
     var ST=[['inquiry','Inquiry'],['confirmed','Confirmed'],['deposit','Deposit paid'],['fully_paid','Fully paid'],['checked_in','Checked-in'],['checked_out','Checked-out'],['cancelled','Cancelled'],['no_show','No show']];
@@ -433,6 +481,7 @@
   function ownerAgg(){
     var agg={};
     Object.values(DATA.omap).forEach(function(o){agg[o.id]={o:o,villas:{},n:0,net:0};});
+    (DATA.villas||[]).forEach(function(v){if(v.owner_id&&agg[v.owner_id])agg[v.owner_id].villas[v.name]=1;});
     DATA.bk.forEach(function(b){if(b.owner_id&&agg[b.owner_id]){agg[b.owner_id].n++;agg[b.owner_id].net+=N(b.owner_net);if(b.villa_id)agg[b.owner_id].villas[vname(b.villa_id)]=1;}});
     return agg;
   }
@@ -443,7 +492,8 @@
         '<td>'+(vlist.length?esc(vlist.join(', ')):'<span class="sub">—</span>')+'</td>'+
         '<td class="num">'+a.n+'</td><td class="money">'+money(a.net)+'</td>'+
         '<td><span class="pill">portal</span></td>'+
-        '<td><button class="rowbtn" onclick="openOwn(\''+id+'\')">Summary → PDF</button></td></tr>';
+        '<td style="white-space:nowrap"><button class="rowbtn" onclick="openOwnerEdit(\''+id+'\')">Edit</button>'+
+        '<button class="rowbtn" onclick="openOwn(\''+id+'\')">Summary → PDF</button></td></tr>';
     }).join('');
     document.getElementById('ownRows').innerHTML=rows||'<tr><td colspan="6" class="state">No owners</td></tr>';
   }
@@ -1316,6 +1366,342 @@
     if(st)st.textContent=okN?'✓ '+okN+' attached':'';
     inp.value='';
     if(okN)await loadTasks();
+  }
+
+  /* ---------- owner add / edit ---------- */
+  var OWE={id:''};
+  function omsg(t,bad){var e=document.getElementById('of_msg');if(e){e.textContent=t;e.className=bad?'sub warn':'sub';}}
+  async function reloadOwners(){
+    var r=await fetch(SB_URL+'/rest/v1/owners?select='+encodeURIComponent(OFIELDS),{headers:H});
+    var rows=await r.json();
+    DATA.omap={}; (rows||[]).forEach(function(o){DATA.omap[o.id]=o;});
+    renderVillas(); renderOwners();
+  }
+  function openOwnerEdit(id){
+    var o=id?(DATA.omap[id]||{}):{};
+    OWE.id=id||'';
+    document.getElementById('ownEdTitle').textContent=id?'Edit owner':'Add owner';
+    document.getElementById('ownEdSub').textContent=id?(o.name||''):'เพิ่มเจ้าของใหม่ แล้วค่อยผูกกับวิลล่าในเมนู Villas';
+    var nv=(DATA.villas||[]).filter(function(v){return v.owner_id===id;}).map(function(v){return v.name;});
+    document.getElementById('ownEdBody').innerHTML=
+      '<div class="frm">'+
+        '<div class="r"><div><label>Owner name *</label><input id="of_name" type="text" value="'+esc(o.name||'')+'" placeholder="Khun ..."></div></div>'+
+        '<div class="r c3">'+
+          '<div><label>Email</label><input id="of_email" type="email" value="'+esc(o.email||'')+'"></div>'+
+          '<div><label>Phone</label><input id="of_phone" type="text" value="'+esc(o.phone||'')+'"></div>'+
+          '<div><label>LINE ID</label><input id="of_line" type="text" value="'+esc(o.line_id||'')+'"></div>'+
+        '</div>'+
+        '<div class="r"><div><label>Notes</label><textarea id="of_notes" placeholder="เงื่อนไขค่าคอม, บัญชีโอนเงิน, ฯลฯ">'+esc(o.notes||'')+'</textarea></div></div>'+
+      '</div>'+
+      (id?'<div class="frm"><div class="sechd"><h4>Villas linked</h4></div><div style="font-size:13px">'+(nv.length?esc(nv.join(', ')):'<span class="sub">ยังไม่ได้ผูกวิลล่า — ไปผูกได้ที่เมนู Villas</span>')+'</div></div>':'')+
+      '<div style="display:flex;gap:9px;justify-content:'+(id?'space-between':'flex-end')+';flex-wrap:wrap;align-items:center">'+
+        (id?'<button class="rowbtn" style="color:var(--red);border-color:#e6c3b8" onclick="deleteOwner(this)">Delete owner</button>':'')+
+        '<span style="display:flex;gap:9px">'+
+          '<button class="btn" onclick="closeOwnerEdit()">Cancel</button>'+
+          '<button class="btn primary" onclick="saveOwner(this)">'+(id?'Save changes':'Add owner')+'</button>'+
+        '</span>'+
+      '</div>'+
+      '<div class="sub" id="of_msg" style="margin-top:9px"></div>';
+    document.getElementById('ownEdOv').classList.add('open');
+    var f=document.getElementById('of_name'); if(f&&!id)f.focus();
+  }
+  function closeOwnerEdit(){document.getElementById('ownEdOv').classList.remove('open');OWE.id='';}
+
+  async function saveOwner(btn){
+    var name=vv('of_name').trim();
+    if(!name){return omsg('Owner name is required',true);}
+    var row={name:name,email:vv('of_email').trim()||null,phone:vv('of_phone').trim()||null,
+      line_id:vv('of_line').trim()||null,notes:vv('of_notes').trim()||null};
+    var t=btn.textContent; btn.disabled=true; btn.textContent='Saving…';
+    try{
+      var url=SB_URL+'/rest/v1/owners'+(OWE.id?'?id=eq.'+OWE.id:'');
+      var r=await fetch(url,{method:OWE.id?'PATCH':'POST',
+        headers:Object.assign({},H,{'Content-Type':'application/json',Prefer:'return=representation'}),
+        body:JSON.stringify(row)});
+      var txt=await r.text(); if(!r.ok)throw new Error('HTTP '+r.status+' '+txt);
+      await reloadOwners();
+      closeOwnerEdit();
+    }catch(e){ omsg('Save failed: '+e.message,true); }
+    finally{ btn.disabled=false; btn.textContent=t; }
+  }
+
+  // Same rule as villas: an owner can only go once nothing points at them.
+  async function deleteOwner(btn){
+    var id=OWE.id; if(!id)return;
+    var o=DATA.omap[id]||{};
+    var t=btn.textContent; btn.disabled=true; btn.textContent='Checking…';
+    try{
+      var tabs=[['rental_villas','owner_id','villa'],['bookings','owner_id','booking'],['contracts','owner_id','contract'],['owner_reports','owner_id','owner report'],['portal_users','owner_id','portal login']];
+      var blk=[];
+      await Promise.all(tabs.map(async function(x){
+        try{
+          var r=await fetch(SB_URL+'/rest/v1/'+x[0]+'?select=id&'+x[1]+'=eq.'+id+'&limit=200',{headers:H});
+          if(!r.ok)return; var rows=await r.json();
+          if(rows&&rows.length)blk.push(rows.length+' '+x[2]+(rows.length>1?'s':''));
+        }catch(e){}
+      }));
+      if(blk.length){ omsg('ลบไม่ได้ — เจ้าของรายนี้ยังมี '+blk.join(', ')+' ผูกอยู่ ต้องถอดออกก่อน',true); return; }
+      if(!window.confirm('ลบเจ้าของ “'+(o.name||'')+'” ออกจากระบบถาวร?')) return;
+      btn.textContent='Deleting…';
+      var r2=await fetch(SB_URL+'/rest/v1/owners?id=eq.'+id,{method:'DELETE',headers:H});
+      if(!r2.ok)throw new Error('HTTP '+r2.status+' '+(await r2.text()));
+      await reloadOwners();
+      closeOwnerEdit();
+    }catch(e){ omsg('Delete failed: '+e.message,true); }
+    finally{ btn.disabled=false; btn.textContent=t; }
+  }
+
+  /* ================= VILLAS ================= */
+  var VIL={id:''};
+  function setVillas(rows){
+    DATA.villas=(rows||[]).slice().sort(function(a,b){return (a.name||'').localeCompare(b.name||'');});
+    DATA.vmap={}; DATA.villas.forEach(function(v){DATA.vmap[v.id]=v;});
+  }
+  function vById(id){return DATA.vmap[id]||null;}
+  function vv(id){var e=document.getElementById(id);return e?(e.value||''):'';}
+  function vnum(id){var n=Number((vv(id)||'').replace(/,/g,''));return isFinite(n)?n:0;}
+  function vmsg(t,bad){var e=document.getElementById('vf_msg');if(e){e.textContent=t;e.className=bad?'sub warn':'sub';}}
+  function ownersSorted(){return Object.keys(DATA.omap).map(function(k){return DATA.omap[k];}).sort(function(a,b){return (a.name||'').localeCompare(b.name||'');});}
+  function ownerOpts(sel){return '<option value="">&mdash; no owner linked &mdash;</option>'+ownersSorted().map(function(o){return '<option value="'+o.id+'"'+(o.id===sel?' selected':'')+'>'+esc(o.name)+'</option>';}).join('');}
+  function ownerName(id){return (DATA.omap[id]||{}).name||'';}
+  function slugify(s){return (s||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
+  function uniqSlug(base,skipId){
+    base=base||'villa'; var out=base,n=2;
+    var taken=function(x){return (DATA.villas||[]).some(function(v){return v.slug===x&&v.id!==skipId;});};
+    while(taken(out)){out=base+'-'+n;n++;}
+    return out;
+  }
+  function villaBookings(id){var n=0;DATA.bk.forEach(function(b){if(b.villa_id===id)n++;});return n;}
+
+  function renderVillas(){
+    var list=DATA.villas||[];
+    var box=document.getElementById('vlRows'); if(!box)return;
+    // owner filter — rebuild, keeping the current choice
+    var os=document.getElementById('vlown'), cur=os.value;
+    os.innerHTML='<option value="">All owners</option><option value="__none">No owner linked</option>'
+      +ownersSorted().map(function(o){return '<option value="'+o.id+'">'+esc(o.name)+'</option>';}).join('');
+    os.value=cur; if(os.value!==cur)os.value='';
+    var fo=os.value, fs=document.getElementById('vlst').value, qs=(document.getElementById('vlq').value||'').toLowerCase().trim();
+
+    var act=0,own=0;
+    list.forEach(function(v){if(v.is_active)act++;if(v.owner_id)own++;});
+    document.getElementById('vl-n').textContent=list.length;
+    document.getElementById('vl-act').textContent=act;
+    document.getElementById('vl-own').textContent=own;
+    document.getElementById('vl-noown').textContent=list.length-own;
+
+    var rows=list.filter(function(v){
+      if(fo==='__none'&&v.owner_id)return false;
+      if(fo&&fo!=='__none'&&v.owner_id!==fo)return false;
+      if(fs==='1'&&!v.is_active)return false;
+      if(fs==='0'&&v.is_active)return false;
+      if(qs){
+        var hay=((v.name||'')+' '+(v.area||'')+' '+(v.location||'')+' '+ownerName(v.owner_id)).toLowerCase();
+        if(hay.indexOf(qs)<0)return false;
+      }
+      return true;
+    });
+    box.innerHTML=rows.map(function(v){
+      var n=villaBookings(v.id), sub=[v.area||v.location||'', v.slug||''].filter(Boolean).join(' · ');
+      return '<tr>'+
+        '<td><div class="vn">'+esc(v.name)+'</div><div class="sub">'+(sub?esc(sub):'&mdash;')+'</div></td>'+
+        '<td><select class="own-select'+(v.owner_id?'':' none')+'" data-id="'+v.id+'" onchange="linkOwner(this)">'+ownerOpts(v.owner_id)+'</select></td>'+
+        '<td class="num">'+(v.bedrooms||0)+'</td>'+
+        '<td class="num">'+(v.max_guests||0)+'</td>'+
+        '<td class="money">'+(N(v.price_per_night)?money(v.price_per_night):'<span class="sub">&mdash;</span>')+'</td>'+
+        '<td class="num">'+(n||'&ndash;')+'</td>'+
+        '<td><select class="st-select '+(v.is_active?'confirmed':'checkedout')+'" data-id="'+v.id+'" onchange="chVillaActive(this)">'+
+          '<option value="1"'+(v.is_active?' selected':'')+'>Active</option>'+
+          '<option value="0"'+(v.is_active?'':' selected')+'>Inactive</option></select></td>'+
+        '<td style="white-space:nowrap"><button class="rowbtn" onclick="openVilla(\''+v.id+'\')">Edit</button></td></tr>';
+    }).join('')||'<tr><td colspan="8" class="state">No villas match</td></tr>';
+  }
+
+  async function sbVilla(id,body){
+    var r=await fetch(SB_URL+'/rest/v1/rental_villas?id=eq.'+id,{method:'PATCH',
+      headers:Object.assign({},H,{'Content-Type':'application/json',Prefer:'return=representation'}),body:JSON.stringify(body)});
+    var t=await r.text(); if(!r.ok)throw new Error('HTTP '+r.status+' '+t);
+    try{return JSON.parse(t)[0];}catch(e){return null;}
+  }
+  async function reloadVillas(){
+    var r=await fetch(SB_URL+'/rest/v1/rental_villas?select='+encodeURIComponent(VFIELDS),{headers:H});
+    setVillas(await r.json());
+    renderAll();
+  }
+
+  // Link (or unlink) the owner straight from the row — this is what Add Booking checks.
+  async function linkOwner(sel){
+    var id=sel.getAttribute('data-id');
+    sel.disabled=true;
+    try{
+      var val=sel.value||null;
+      await sbVilla(id,{owner_id:val,updated_at:new Date().toISOString()});
+      var v=vById(id); if(v)v.owner_id=val;
+      sel.className='own-select'+(val?'':' none');
+      renderVillas(); renderOwners();
+    }catch(e){ alert('Could not link the owner: '+e.message); renderVillas(); }
+    finally{ sel.disabled=false; }
+  }
+  async function chVillaActive(sel){
+    var id=sel.getAttribute('data-id');
+    sel.disabled=true;
+    try{
+      var on=sel.value==='1';
+      await sbVilla(id,{is_active:on,updated_at:new Date().toISOString()});
+      var v=vById(id); if(v)v.is_active=on;
+      renderVillas();
+    }catch(e){ alert('Could not change the status: '+e.message); renderVillas(); }
+    finally{ sel.disabled=false; }
+  }
+
+  function openVilla(id){
+    var v=id?(vById(id)||{}):{};
+    VIL.id=id||'';
+    var TYPES=['villa','apartment','condominium','townhouse','penthouse','house'];
+    var num=function(x){return (x==null||x==='')?'':String(Number(x));};
+    document.getElementById('vilTitle').textContent=id?'Edit villa':'Add villa';
+    document.getElementById('vilSub').textContent=id?(v.name||''):'เพิ่มวิลล่าเข้าพอร์ต แล้วผูก owner';
+    document.getElementById('vilBody').innerHTML=
+      '<div class="frm">'+
+        '<div class="r c2">'+
+          '<div><label>Villa name *</label><input id="vf_name" type="text" value="'+esc(v.name||'')+'" placeholder="Villa Bell"></div>'+
+          '<div><label>Slug (URL)</label><input id="vf_slug" type="text" value="'+esc(v.slug||'')+'" placeholder="auto from the name"></div>'+
+        '</div>'+
+        '<div class="r c3">'+
+          '<div><label>Area</label><input id="vf_area" type="text" value="'+esc(v.area||'')+'" placeholder="Laguna"></div>'+
+          '<div><label>Location / project</label><input id="vf_loc" type="text" value="'+esc(v.location||'')+'" placeholder="Bang Tao, Phuket"></div>'+
+          '<div><label>Type</label><select id="vf_type">'+TYPES.map(function(t){return '<option value="'+t+'"'+((v.villa_type||'villa')===t?' selected':'')+'>'+t+'</option>';}).join('')+'</select></div>'+
+        '</div>'+
+        '<div class="r c3">'+
+          '<div><label>Bedrooms</label><input id="vf_bed" type="number" min="0" value="'+esc(num(v.bedrooms))+'"></div>'+
+          '<div><label>Bathrooms</label><input id="vf_bath" type="number" min="0" value="'+esc(num(v.bathrooms))+'"></div>'+
+          '<div><label>Max guests</label><input id="vf_guests" type="number" min="0" value="'+esc(num(v.max_guests))+'"></div>'+
+        '</div>'+
+        '<div class="r c3">'+
+          '<div><label>Rate / night (THB)</label><input id="vf_rate" type="number" min="0" value="'+esc(num(v.price_per_night))+'"></div>'+
+          '<div><label>Rate / month (THB)</label><input id="vf_month" type="number" min="0" value="'+esc(num(v.price_per_month))+'"></div>'+
+          '<div><label>Min nights</label><input id="vf_min" type="number" min="1" value="'+esc(num(v.min_nights)||'1')+'"></div>'+
+        '</div>'+
+        '<div class="r c2">'+
+          '<div><label>Cleaning fee (THB)</label><input id="vf_clean" type="number" min="0" value="'+esc(num(v.cleaning_fee))+'"></div>'+
+          '<div><label>Security deposit (THB)</label><input id="vf_dep" type="number" min="0" value="'+esc(num(v.security_deposit))+'"></div>'+
+        '</div>'+
+        '<div class="r"><div><label>Notes / description</label><textarea id="vf_desc" placeholder="Short internal description">'+esc(v.description||'')+'</textarea></div></div>'+
+      '</div>'+
+      '<div class="frm">'+
+        '<div class="sechd"><h4>Owner</h4><button class="mini" onclick="toggleNewOwner()">+ New owner</button></div>'+
+        '<div class="r"><div><label>Linked owner</label><select id="vf_owner">'+ownerOpts(v.owner_id)+'</select></div></div>'+
+        '<div id="vf_newown" style="display:none">'+
+          '<div class="r c3">'+
+            '<div><label>Owner name *</label><input id="vo_name" type="text" placeholder="Khun ..."></div>'+
+            '<div><label>Email</label><input id="vo_email" type="email"></div>'+
+            '<div><label>Phone</label><input id="vo_phone" type="text"></div>'+
+          '</div>'+
+          '<button class="btn" onclick="createOwner(this)">Create owner</button>'+
+        '</div>'+
+        '<label class="chk" style="margin-top:6px"><input type="checkbox" id="vf_active"'+(v.is_active===false?'':' checked')+'> Active &mdash; offer this villa in bookings</label>'+
+      '</div>'+
+      '<div style="display:flex;gap:9px;justify-content:'+(id?'space-between':'flex-end')+';flex-wrap:wrap;align-items:center">'+
+        (id?'<button class="rowbtn" style="color:var(--red);border-color:#e6c3b8" onclick="deleteVilla(this)">Delete villa</button>':'')+
+        '<span style="display:flex;gap:9px">'+
+        '<button class="btn" onclick="closeVilla()">Cancel</button>'+
+        '<button class="btn primary" onclick="saveVilla(this)">'+(id?'Save changes':'Add villa')+'</button>'+
+        '</span>'+
+      '</div>'+
+      '<div class="sub" id="vf_msg" style="margin-top:9px">'+(id?'':'ต้องผูก owner ก่อน จึงจะสร้าง booking ของวิลล่านี้ได้')+'</div>';
+    document.getElementById('vilOv').classList.add('open');
+    var nf=document.getElementById('vf_name'); if(nf&&!id)nf.focus();
+  }
+  function closeVilla(){document.getElementById('vilOv').classList.remove('open');VIL.id='';}
+  function toggleNewOwner(){
+    var b=document.getElementById('vf_newown');
+    b.style.display=b.style.display==='none'?'block':'none';
+    if(b.style.display==='block')document.getElementById('vo_name').focus();
+  }
+
+  async function createOwner(btn){
+    var n=vv('vo_name').trim(); if(!n){return vmsg('Owner name is required',true);}
+    var t=btn.textContent; btn.disabled=true; btn.textContent='Creating…';
+    try{
+      var r=await fetch(SB_URL+'/rest/v1/owners',{method:'POST',
+        headers:Object.assign({},H,{'Content-Type':'application/json',Prefer:'return=representation'}),
+        body:JSON.stringify({name:n,email:vv('vo_email').trim()||null,phone:vv('vo_phone').trim()||null})});
+      var txt=await r.text(); if(!r.ok)throw new Error('HTTP '+r.status+' '+txt);
+      var o=JSON.parse(txt)[0];
+      DATA.omap[o.id]=o;
+      document.getElementById('vf_owner').innerHTML=ownerOpts(o.id);
+      document.getElementById('vf_newown').style.display='none';
+      ['vo_name','vo_email','vo_phone'].forEach(function(k){document.getElementById(k).value='';});
+      vmsg('Owner “'+o.name+'” created and selected — save the villa to link it.',false);
+      renderOwners();
+    }catch(e){ vmsg('Could not create the owner: '+e.message,true); }
+    finally{ btn.disabled=false; btn.textContent=t; }
+  }
+
+  // A villa is only deletable while nothing points at it — otherwise Inactive is the right move.
+  async function villaBlockers(id){
+    var t=[['bookings','villa_id','booking'],['contracts','villa_id','contract'],['owner_reports','villa_id','owner report']];
+    var out=[];
+    await Promise.all(t.map(async function(x){
+      try{
+        var r=await fetch(SB_URL+'/rest/v1/'+x[0]+'?select=id&'+x[1]+'=eq.'+id+'&limit=200',{headers:H});
+        if(!r.ok)return; var rows=await r.json();
+        if(rows&&rows.length)out.push(rows.length+' '+x[2]+(rows.length>1?'s':''));
+      }catch(e){}
+    }));
+    return out;
+  }
+  async function deleteVilla(btn){
+    var id=VIL.id; if(!id)return;
+    var v=vById(id)||{};
+    var t=btn.textContent; btn.disabled=true; btn.textContent='Checking…';
+    try{
+      var blk=await villaBlockers(id);
+      if(blk.length){
+        vmsg('ลบไม่ได้ — วิลล่านี้ยังมี '+blk.join(', ')+' ผูกอยู่ ถ้าไม่ให้รับ booking แล้ว ให้ตั้งเป็น Inactive แทน',true);
+        return;
+      }
+      if(!window.confirm('ลบ “'+(v.name||'')+'” ออกจากระบบถาวร?\nข้อมูล villa guide ของวิลล่านี้จะถูกลบไปด้วย')) return;
+      btn.textContent='Deleting…';
+      var r=await fetch(SB_URL+'/rest/v1/rental_villas?id=eq.'+id,{method:'DELETE',headers:H});
+      if(!r.ok)throw new Error('HTTP '+r.status+' '+(await r.text()));
+      await reloadVillas();
+      closeVilla();
+    }catch(e){ vmsg('Delete failed: '+e.message,true); }
+    finally{ btn.disabled=false; btn.textContent=t; }
+  }
+
+  async function saveVilla(btn){
+    var name=vv('vf_name').trim();
+    if(!name){return vmsg('Villa name is required',true);}
+    var row={
+      name:name,
+      slug:uniqSlug(slugify(vv('vf_slug'))||slugify(name),VIL.id),
+      area:vv('vf_area').trim(),
+      location:vv('vf_loc').trim()||null,
+      villa_type:vv('vf_type'),
+      bedrooms:vnum('vf_bed'), bathrooms:vnum('vf_bath'), max_guests:vnum('vf_guests'),
+      price_per_night:vnum('vf_rate'), price_per_month:vnum('vf_month'),
+      min_nights:vnum('vf_min')||1,
+      cleaning_fee:vnum('vf_clean'), security_deposit:vnum('vf_dep'),
+      description:vv('vf_desc').trim()||null,
+      owner_id:vv('vf_owner')||null,
+      is_active:document.getElementById('vf_active').checked,
+      updated_at:new Date().toISOString()
+    };
+    var t=btn.textContent; btn.disabled=true; btn.textContent='Saving…';
+    try{
+      if(VIL.id){ await sbVilla(VIL.id,row); }
+      else{
+        var r=await fetch(SB_URL+'/rest/v1/rental_villas',{method:'POST',
+          headers:Object.assign({},H,{'Content-Type':'application/json',Prefer:'return=representation'}),
+          body:JSON.stringify(row)});
+        var txt=await r.text(); if(!r.ok)throw new Error('HTTP '+r.status+' '+txt);
+      }
+      await reloadVillas();
+      closeVilla();
+    }catch(e){ vmsg('Save failed: '+e.message,true); }
+    finally{ btn.disabled=false; btn.textContent=t; }
   }
 
   loadAll();
