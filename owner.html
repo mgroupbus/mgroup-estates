@@ -377,7 +377,7 @@
 <div class="pvbar" id="pvbar">
   <span class="pvinfo">Preview — this is exactly what will be saved</span>
   <span class="pvbtns"><span class="abtn" onclick="closePreview()">Close</span>
-  <span class="abtn" onclick="window.print()">Print</span>
+  <span class="abtn" onclick="window.print()">Save PDF</span>
   <span class="abtn wa" id="pvSave" onclick="savePdf(this)">Download PDF</span></span>
 </div>
 
@@ -805,7 +805,7 @@
       +esc((b.status||'—').replace(/_/g,' '))+'</span></h2></div>'
       +'<div class="acts">'
       +'<span class="abtn" onclick="shareLink(\''+b.id+'\',this)">Share link</span>'
-      +'<span class="abtn" onclick="openPreview(\'booking\')">Print</span></div></div>'
+      +'<span class="abtn" onclick="openPreview(\'booking\')">Save PDF</span></div></div>'
       +'<div class="pvsub">'+fmtD(b.check_in)+' &rarr; '+fmtD(b.check_out)+'</div>'
       +'<div class="sec" style="margin-top:16px"><div class="detbox">'+bkDetail(b,P,true)+'</div></div>';
     document.getElementById('bookingDetail').innerHTML=html;
