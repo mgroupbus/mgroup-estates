@@ -1,13 +1,13 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MGROUP Admin — New Booking</title>
 <script>if(sessionStorage.getItem("mg_admin")!=="ok"){location.replace("/admin/index.html");}</script>
-<meta name="theme-color" content="#1d3a30"><link rel="manifest" href="/admin/manifest.json">
+<meta name="theme-color" content="#23262b"><link rel="manifest" href="/admin/manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap');
   :root{
-    --green-900:#1d3a30;--green-800:#22453a;--green-700:#2b5646;--green-600:#356b56;
-    --green-500:#3f8062;--green-400:#57a07d;--green-tint:#e7efe9;
+    --green-900:#23262b;--green-800:#2d3138;--green-700:#3b4048;--green-600:#a97e42;
+    --green-500:#c29a45;--green-400:#cbab6a;--green-tint:#f3ecdf;
     --cream:#f0eee7;--cream-2:#e7e4da;--card:#fff;--line:#e6e2d7;
     --ink:#1a201d;--muted:#6f776f;--faint:#9aa199;--gold:#cf9f49;
     --blue:#2f6f9e;--amber:#b7842a;--red:#b5533a;
@@ -19,20 +19,20 @@
   .shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
 
   /* SIDEBAR */
-  .side{background:var(--green-900);color:#cfe0d6;display:flex;flex-direction:column;padding:18px 13px;position:sticky;top:0;height:100vh}
+  .side{background:var(--green-900);color:#d9d5cc;display:flex;flex-direction:column;padding:18px 13px;position:sticky;top:0;height:100vh}
   .brand{display:flex;gap:11px;align-items:center;padding:4px 8px 18px}
   .brand .mark{width:32px;height:32px;border-radius:8px;background:var(--green-tint);color:var(--green-800);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px}
   .brand h1{font-size:14px;font-weight:700;color:#fff}
-  .brand p{font-size:10px;color:#7fa392;font-family:var(--mono)}
-  .nav-label{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#6f9384;padding:9px 10px 5px}
-  .nav a{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:8px;color:#bcd2c6;font-size:13px;text-decoration:none;font-weight:500}
+  .brand p{font-size:10px;color:#9a948a;font-family:var(--mono)}
+  .nav-label{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#8a847a;padding:9px 10px 5px}
+  .nav a{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:8px;color:#cfcabf;font-size:13px;text-decoration:none;font-weight:500}
   .nav a svg{width:16px;height:16px;opacity:.85;flex:none}
   .nav a:hover{background:var(--green-800);color:#fff}
   .nav a.active{background:var(--green-600);color:#fff;font-weight:600}
   .side .user{margin-top:auto;background:var(--green-800);border-radius:11px;padding:10px;display:flex;gap:10px;align-items:center}
   .avatar{width:32px;height:32px;border-radius:8px;background:var(--gold);color:#3a2a08;font-weight:700;display:flex;align-items:center;justify-content:center}
   .side .user .nm{font-size:12px;color:#fff;font-weight:600}
-  .side .user .rl{font-size:10px;color:#89ab9b}
+  .side .user .rl{font-size:10px;color:#a89f92}
 
   /* MAIN */
   .main{padding:24px 30px 40px}
@@ -77,9 +77,9 @@
 
   /* SUMMARY SIDEBAR */
   .summary{position:sticky;top:24px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .sum-head{background:var(--green-800);color:#eaf2ec;padding:16px 18px;background-image:radial-gradient(120% 140% at 100% 0,rgba(87,160,125,.4),transparent 55%)}
+  .sum-head{background:var(--green-800);color:#eaf2ec;padding:16px 18px;background-image:radial-gradient(120% 140% at 100% 0,rgba(169,126,66,.4),transparent 55%)}
   .sum-head .vn{font-size:15px;font-weight:700}
-  .sum-head .meta{font-size:12px;color:#a9c6b6;margin-top:4px;font-variant-numeric:tabular-nums}
+  .sum-head .meta{font-size:12px;color:#b8b0a4;margin-top:4px;font-variant-numeric:tabular-nums}
   .sum-body{padding:16px 18px}
   .line{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;font-variant-numeric:tabular-nums}
   .line .lb{color:var(--muted)}
