@@ -248,9 +248,9 @@
         <div class="tile"><div class="l">Upcoming</div><div class="v" id="d-up">—</div><div class="s">confirmed, not yet in</div></div>
         <div class="tile"><div class="l">Checked-in now</div><div class="v" id="d-in">—</div><div class="s">staying</div></div>
         <div class="tile"><div class="l">Revenue this year</div><div class="v" id="d-rev">—</div><div class="s" id="d-revyr">—</div></div>
-        <div class="tile"><div class="l">To collect</div><div class="v" id="d-col" style="color:var(--red)">—</div><div class="s">outstanding balance</div></div>
+        <div class="tile"><div class="l">To collect</div><div class="v" id="d-col" style="color:var(--red)">—</div><div class="s" id="d-colyr">latest year</div></div>
       </div>
-      <div class="card"><div class="ch">Revenue by year</div><div class="tablecard" style="border:none"><table><thead><tr><th>Year</th><th class="num">Bookings</th><th class="money">Revenue</th></tr></thead><tbody id="d-years"></tbody></table></div></div>
+      <div class="card"><div class="ch">Upcoming — confirmed bookings</div><div class="tablecard" style="border:none"><table><thead><tr><th>Ref</th><th>Villa</th><th>Guest</th><th>Stay</th><th class="money">Total</th></tr></thead><tbody id="d-upcoming"></tbody></table></div></div>
       <div class="card"><div class="ch">Payment terms — to collect</div><div class="tablecard" style="border:none"><table><thead><tr><th>Ref</th><th>Villa</th><th>Guest</th><th class="money">Total</th><th class="money">Paid</th><th class="money">Balance</th></tr></thead><tbody id="d-collect"></tbody></table></div></div>
     </div>
 
@@ -270,6 +270,7 @@
         <div class="tile"><div class="l">MGROUP commission</div><div class="v" id="f-comm">—</div></div>
       </div>
       <div class="tablecard"><table><thead><tr><th>Ref</th><th>Villa</th><th class="money">Total</th><th class="money">Paid</th><th class="money">Balance</th><th class="money">Deposit</th><th class="money">MGROUP</th><th class="money">Owner net</th></tr></thead><tbody id="finRows"><tr><td colspan="8" class="state">Loading…</td></tr></tbody></table></div>
+      <div class="card" style="margin-top:16px"><div class="ch">Revenue by year</div><div class="tablecard" style="border:none"><table><thead><tr><th>Year</th><th class="num">Bookings</th><th class="money">Revenue</th></tr></thead><tbody id="f-years"></tbody></table></div></div>
     </div>
 
     <!-- VILLAS -->
@@ -441,23 +442,25 @@
   function outstanding(b){var t=N(b.total),p=N(b.client_pay);var o=t-p;return (['cancelled','checked_out','no_show'].indexOf(b.status)>-1)?0:(o>0?o:0);}
 
   function renderDash(){
-    var today=DATA.bk.length?maxToday():'';
-    var up=0,inn=0,revYr=0,col=0,yr={};var THISYR=(new Date().getFullYear())+'';
+    var inn=0,revYr=0,yr={};var THISYR=(new Date().getFullYear())+'';
+    var todayStr=new Date().toISOString().slice(0,10);
     DATA.bk.forEach(function(b){
-      if(b.status==='confirmed'||b.status==='deposit'||b.status==='fully_paid')up++;
       if(b.status==='checked_in')inn++;
-      col+=outstanding(b);
-      var y=(b.check_in||'----').slice(0,4);
-      if(!yr[y])yr[y]={n:0,rev:0};yr[y].n++;yr[y].rev+=N(b.total);
+      var y=(b.check_in||'----').slice(0,4); yr[y]=(yr[y]||0)+1;
       if(y===THISYR)revYr+=N(b.total);
     });
-    document.getElementById('d-up').textContent=up;
+    var latestYr=Object.keys(yr).filter(function(y){return y!=='----';}).sort().reverse()[0]||THISYR;
+    var col=0; DATA.bk.forEach(function(b){ if((b.check_in||'').slice(0,4)===latestYr) col+=outstanding(b); });
+    // upcoming = confirmed/deposit/fully_paid AND check-in today or later
+    var upc=DATA.bk.filter(function(b){return ['confirmed','deposit','fully_paid'].indexOf(b.status)>-1 && (b.check_in||'')>=todayStr;})
+      .sort(function(a,b){return (a.check_in||'').localeCompare(b.check_in||'');});
+    document.getElementById('d-up').textContent=upc.length;
     document.getElementById('d-in').textContent=inn;
     document.getElementById('d-rev').textContent='฿'+(revYr/1e6).toFixed(2)+'M';
     document.getElementById('d-revyr').textContent=THISYR;
     document.getElementById('d-col').textContent='฿'+(col/1e6).toFixed(2)+'M';
-    var yrs=Object.keys(yr).sort().reverse();
-    document.getElementById('d-years').innerHTML=yrs.map(function(y){return '<tr><td><b>'+y+'</b></td><td class="num">'+yr[y].n+'</td><td class="money">'+money(yr[y].rev)+'</td></tr>';}).join('');
+    var cy=document.getElementById('d-colyr'); if(cy)cy.textContent=latestYr+' · outstanding';
+    document.getElementById('d-upcoming').innerHTML=upc.length?upc.map(function(b){return '<tr><td class="ref">'+esc(b.booking_ref||'—')+'</td><td>'+esc(vname(b.villa_id))+'</td><td>'+esc(gname(b.guest_id))+'</td><td>'+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'</td><td class="money">'+money(b.total)+'</td></tr>';}).join(''):'<tr><td colspan="5" class="state">No upcoming confirmed bookings</td></tr>';
     var coll=DATA.bk.filter(function(b){return outstanding(b)>0;});
     document.getElementById('d-collect').innerHTML=coll.length?coll.map(function(b){return '<tr><td class="ref">'+esc(b.booking_ref||'—')+'</td><td>'+esc(vname(b.villa_id))+'</td><td>'+esc(gname(b.guest_id))+'</td><td class="money">'+money(b.total)+'</td><td class="money paid">'+money(b.client_pay)+'</td><td class="money bal">'+money(outstanding(b))+'</td></tr>';}).join(''):'<tr><td colspan="6" class="state">Nothing outstanding 🎉</td></tr>';
   }
@@ -476,6 +479,9 @@
     document.getElementById('f-paid').textContent='฿'+(p/1e6).toFixed(2)+'M';
     document.getElementById('f-bal').textContent='฿'+((t-p)/1e6).toFixed(2)+'M';
     document.getElementById('f-comm').textContent='฿'+(c/1e6).toFixed(2)+'M';
+    var yr={};DATA.bk.forEach(function(b){var y=(b.check_in||'----').slice(0,4);if(!yr[y])yr[y]={n:0,rev:0};yr[y].n++;yr[y].rev+=N(b.total);});
+    var fy=document.getElementById('f-years');
+    if(fy)fy.innerHTML=Object.keys(yr).filter(function(y){return y!=='----';}).sort().reverse().map(function(y){return '<tr><td><b>'+y+'</b></td><td class="num">'+yr[y].n+'</td><td class="money">'+money(yr[y].rev)+'</td></tr>';}).join('');
   }
 
   function ownerAgg(){
