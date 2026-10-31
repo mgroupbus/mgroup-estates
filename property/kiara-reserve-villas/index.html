@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css?v=169">
+<style>
+/* the detail panel was an overlay; on its own page it is just content */
+#detOverlay{position:static!important;transform:none!important;inset:auto!important;
+  height:auto!important;overflow:visible!important;pointer-events:auto!important;
+  z-index:auto!important;display:block!important;opacity:1!important;background:transparent!important}
+#detPanel{transform:none!important;position:static!important;max-width:none!important;
+  height:auto!important;min-height:0!important}
+/* the panel carried its own logo bar + close/share buttons because it
+   used to float over the site; on a real page the site nav does that job */
+.det-topbar{display:none!important}
+.det-close,.det-topbar-close,.det-icon-btn{display:none!important}
+/* site nav is fixed — clear its height before the back link */
+.prop-back{max-width:1180px;margin:0 auto;padding:88px 24px 14px}
+@media(max-width:640px){.prop-back{padding:76px 18px 10px}}
+.prop-back a{font-family:var(--font-body);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:600;color:rgba(13,13,13,.6);text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.prop-back a:hover{color:var(--ink,#0D0D0D)}
+.prop-missing{max-width:640px;margin:0 auto;padding:120px 24px;text-align:center}
+</style>
+<title>Kiara Reserve Villas — Villa for sale in Phuket | MGROUP Estates</title>
+<meta name="description" content="Exclusive 17-villa development in Layan overlooking Layan Bay. Open-air living with state-of-the-art technology in nature-centric setting.">
+<link rel="canonical" href="https://mgroupestates.com/property/kiara-reserve-villas/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MGROUP Estates">
+<meta property="og:title" content="Kiara Reserve Villas">
+<meta property="og:description" content="Exclusive 17-villa development in Layan overlooking Layan Bay. Open-air living with state-of-the-art technology in nature-centric setting.">
+<meta property="og:url" content="https://mgroupestates.com/property/kiara-reserve-villas/">
+<meta property="og:image" content="https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property-bucket/sale/p8/floorplan/1776601662290-9uxt9q.avif">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kiara Reserve Villas">
+<meta name="twitter:description" content="Exclusive 17-villa development in Layan overlooking Layan Bay. Open-air living with state-of-the-art technology in nature-centric setting.">
+<meta name="twitter:image" content="https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property-bucket/sale/p8/floorplan/1776601662290-9uxt9q.avif">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "RealEstateListing", "name": "Kiara Reserve Villas", "url": "https://mgroupestates.com/property/kiara-reserve-villas/", "description": "Exclusive 17-villa development in Layan overlooking Layan Bay. Open-air living with state-of-the-art technology in nature-centric setting.", "datePosted": "2026-03-30", "provider": {"@type": "RealEstateAgent", "name": "MGROUP Estates", "url": "https://mgroupestates.com", "areaServed": "Phuket, Thailand"}, "image": ["https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property-bucket/sale/p8/floorplan/1776601662290-9uxt9q.avif", "https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property-bucket/sale/p8/project/1776601662593-i8e8vi.avif", "https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property-bucket/sale/p8/project/1776601663045-b15sg5.avif", "https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property-bucket/sale/p8/project/1776601663315-2in79r.avif", "https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property-bucket/sale/p8/project/1776601663525-0j1ahw.avif", "https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property-bucket/sale/p8/project/1776601663874-527ozh.avif"], "offers": {"@type": "Offer", "price": 75000000, "priceCurrency": "THB", "availability": "https://schema.org/InStock", "url": "https://mgroupestates.com/property/kiara-reserve-villas/"}, "about": {"@type": "SingleFamilyResidence", "name": "Kiara Reserve Villas", "address": {"@type": "PostalAddress", "addressLocality": "Choeng Thale", "addressRegion": "Phuket", "addressCountry": "TH", "streetAddress": "Layan, Phuket"}, "numberOfBedrooms": 3, "numberOfBathroomsTotal": 3, "floorSize": {"@type": "QuantitativeValue", "value": 501, "unitCode": "MTK"}, "amenityFeature": [{"@type": "LocationFeatureSpecification", "name": "Bedrooms", "value": 3}, {"@type": "LocationFeatureSpecification", "name": "Bathrooms", "value": 3}, {"@type": "LocationFeatureSpecification", "name": "Pool", "value": "Private + Common"}]}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://mgroupestates.com/"}, {"@type": "ListItem", "position": 2, "name": "Collections", "item": "https://mgroupestates.com/collections"}, {"@type": "ListItem", "position": 3, "name": "Kiara Reserve Villas", "item": "https://mgroupestates.com/property/kiara-reserve-villas/"}]}</script>
+<script>window.MG_PROPERTY_ID=8;</script>
+</head>
+<body data-property-id="8" data-page="property">
+<div id="mobileNavOverlay" onclick="closeMob()"></div>
+<nav id="mainNav">
+  <a href="/index.html" class="nav-logo"><img src="/assets/logo.png?v=123" class="nav-logo-img" alt="MGROUP Estates"></a>
+  <div class="nav-center">
+    <a href="/index.html">Home</a>
+    <a href="/collections.html">Collections</a>
+    <a href="https://rent.mgroupestates.com">Rent</a>
+      <a href="/lifestyle.html">Lifestyle Concierge</a>
+    <!-- <a href="/insights.html">Insights</a> -->
+    <a href="/how-to-buy.html">How to Buy</a>
+    <a href="/contact.html">Contact</a>
+  </div>
+  <div class="nav-right">
+    <div class="lang-selector" id="langSelector">
+      <button class="lang-btn" onclick="toggleLangMenu(event)"><span id="langCode">EN</span><span class="lang-caret">▾</span></button>
+      <div class="lang-dropdown" id="langDropdown">
+        <div class="lang-option active" data-lang="en" onclick="setLang('en','EN')">EN — English</div>
+        <div class="lang-option" data-lang="th" onclick="setLang('th','TH')">TH — ภาษาไทย</div>
+        <div class="lang-option" data-lang="ru" onclick="setLang('ru','RU')">RU — Русский</div>
+      </div>
+    </div>
+    <button id="hamburgerBtn" aria-label="Menu">
+      <span class="ham-line"></span>
+      <span class="ham-line"></span>
+      <span class="ham-line"></span>
+    </button>
+  </div>
+</nav>
+<div id="mobileNav">
+  <button class="mob-close" onclick="closeMob()">✕</button>
+  <a href="/index.html" >Home</a>
+  <a href="/collections.html" >Collections</a>
+  <a href="https://rent.mgroupestates.com" >Rent</a>
+  <a href="/lifestyle.html" >Lifestyle Concierge</a>
+  <!-- <a href="/insights.html" >Insights</a> -->
+  <a href="/how-to-buy.html" >How to Buy</a>
+  <a href="/contact.html" >Contact</a>
+</div>
+<div class="prop-back"><a href="/collections.html">&#8592; Back to Collections</a></div>
+<div class="det-overlay" id="detOverlay">
+  <div class="det-panel" id="detPanel">
+    <div class="det-topbar">
+      <div class="det-topbar-logo"><img src="/assets/logo.png?v=123" style="height:22px;width:auto;filter:brightness(0);display:block" alt="MGROUP Estates"></div>
+      <div class="det-topbar-right">
+        <button class="det-icon-btn" title="Share" onclick="if(navigator.share){navigator.share({title:document.getElementById('detTitle').textContent,url:window.location.href})}else{navigator.clipboard&&navigator.clipboard.writeText(window.location.href);alert('Link copied!')}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </button>
+        <button class="det-icon-btn det-save-btn" id="detSaveBtn" title="Save" onclick="toggleDetSave(this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+        <button class="det-close-btn" onclick="closeDetail()">✕</button>
+      </div>
+    </div>
+    <div class="det-body"><div id="mgPrerender" style="max-width:860px;margin:0 auto;padding:40px 24px"><h1 class="det-title">Kiara Reserve Villas</h1><p class="det-location">Layan, Phuket, Choeng Thale, Phuket</p><p class="det-price-main">From ฿ 75,000,000</p><p class="det-specs-line">3 bedrooms · 3 bathrooms · 501 sqm built</p><p>Exclusive 17-villa development in Layan overlooking Layan Bay. Open-air living with state-of-the-art technology in nature-centric setting. 3BR (501 m²) and 4BR (655 m²) configurations, 3 stories. 20 minutes to Phuket International Airport.</p><ul><li><strong>Layan Beach</strong> — 500 metres to pristine Layan Beach — Phuket&#x27;s finest</li><li><strong>Anantara</strong> — Managed by award-winning Anantara Hotels &amp; Resorts</li><li><strong>Private Pool</strong> — Three en-suite bedrooms with private pool &amp; garden</li><li><strong>Managed Returns</strong> — 6–8% managed yield with Anantara&#x27;s occupancy guarantee</li></ul></div><script>(function(){var t=0;(function go(){var live=document.getElementById('detTitle');if(live&&live.textContent.trim()){var b=document.getElementById('mgPrerender');if(b)b.remove();return;}if(++t<60)setTimeout(go,200);})();})();</script>
+      <div class="det-inner">
+        <!-- LEFT -->
+        <div>
+          <div class="det-gallery">
+            <div class="det-gallery-main" id="detGalleryMain"></div>
+            <div class="det-gallery-count" id="detGalleryCount">1 / 6</div>
+            <button class="det-gal-arr det-gal-prev" onclick="galNav(-1)" aria-label="Previous">&#8249;</button>
+            <button class="det-gal-arr det-gal-next" onclick="galNav(1)" aria-label="Next">&#8250;</button>
+          </div>
+          <div class="det-thumbs" id="detThumbs"></div>
+          <div class="det-header">
+            <div class="det-breadcrumb">Properties <span>›</span> <span id="detCollLabel">—</span></div>
+            <div class="det-badge" id="detBadge"></div>
+            <h1 class="det-title" id="detTitle"></h1>
+            <div class="det-location" id="detLocation"></div>
+            <div class="det-specs-row">
+          <div class="det-spec" id="dsBedsWrap">
+            <span class="det-spec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 18.5v-6a2 2 0 0 1 2-2h15a2 2 0 0 1 2 2v6"/><path d="M2.5 18.5h19"/><path d="M5.5 10.5V8a1.5 1.5 0 0 1 1.5-1.5h10A1.5 1.5 0 0 1 18.5 8v2.5"/><path d="M4 18.5v2M20 18.5v2"/></svg></span>
+            <span class="det-spec-val" id="dsBeds">—</span><span class="det-spec-lbl">Bedrooms</span>
+          </div>
+          <div class="det-spec" id="dsBathsWrap">
+            <span class="det-spec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12.5h18v2.5a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-2.5Z"/><path d="M6.5 12.5V6.2A2.2 2.2 0 0 1 8.7 4h.1a2.2 2.2 0 0 1 2.2 2.2"/><path d="M9.4 6.6h2.6"/><path d="M7.5 19.5 6.5 21M16.5 19.5l1 1.5"/></svg></span>
+            <span class="det-spec-val" id="dsBaths">—</span><span class="det-spec-lbl">Bathrooms</span>
+          </div>
+          <div class="det-spec" id="dsSqmWrap">
+            <span class="det-spec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10.6 9-7.1 9 7.1"/><path d="M5.4 9.2V20a.8.8 0 0 0 .8.8h11.6a.8.8 0 0 0 .8-.8V9.2"/><path d="M10 20.8v-5h4v5"/></svg></span>
+            <span class="det-spec-val" id="dsSqm">—</span><span class="det-spec-unit">sqm</span><span class="det-spec-lbl">Build</span>
+          </div>
+          <div class="det-spec" id="dsLandWrap">
+            <span class="det-spec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.8h4.4M4 4.8v4.4M20 4.8h-4.4M20 4.8v4.4M4 19.2h4.4M4 19.2v-4.4M20 19.2h-4.4M20 19.2v-4.4"/></svg></span>
+            <span class="det-spec-val" id="dsLand">—</span><span class="det-spec-unit">sqm</span><span class="det-spec-lbl">Plot</span>
+          </div>
+        </div>
+              <!-- Price inline block under title -->
+            <div class="det-inline-price">
+              <div class="det-inline-price-lbl">Asking Price</div>
+              <div class="det-price-line"><span class="det-inline-price-main" id="detPriceInline"></span><span class="det-inline-price-usd" id="detUsdInline"></span></div>
+
+            </div>
+            
+          </div>
+          
+        <nav class="det-jump" id="detJump" aria-label="Sections">
+          <div class="det-jump-inner" id="detJumpInner"></div>
+        </nav>
+        <div class="det-sections">
+      <!-- Key Highlights — from property_details (category 'highlight') -->
+      <div class="det-open-section" id="detHighlightsSection" style="display:none">
+        <div class="det-section-title">Key Highlights</div>
+        <div class="det-highlights" id="detHighlights"></div>
+      </div>
+
+            <!-- Floor Plan -->
+            <div class="det-open-section" id="detFloorplanSection" style="display:none">
+              <div class="det-fp-header">
+                <span class="det-section-title" style="margin-bottom:0">Floor Plan</span>
+                <select class="det-fp-select" id="detFpSelect" onchange="showFpImage(this.value,this.options[this.selectedIndex].text)">
+                  <option value="">— Select —</option>
+                </select>
+              </div>
+              <div id="detFpImageWrap" style="display:none;margin-top:14px;">
+                <img id="detFpImg" src="" alt="Floor Plan" style="width:100%;border:1px solid var(--line2);">
+              </div>
+              <div id="detFpPlaceholder" style="display:none;margin-top:14px;height:200px;background:var(--page);border:1px solid var(--line2);display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+                <span style="font-size:28px"><svg class="mgi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 10h18M10 10v11"/></svg></span>
+                <span id="detFpPlaceholderLbl" style="font-size:11px;color:var(--stone);letter-spacing:0.08em;">Floor plan coming soon</span>
+              </div>
+            </div>
+
+            <!-- Description with optional media -->
+            <div class="det-open-section">
+              <div class="det-section-title">Property Description</div>
+              <div class="det-desc" id="detDesc"></div>
+              <div class="det-media-grid" id="detMediaGrid" style="display:none;margin-top:20px;"></div>
+            </div>
+
+            <!-- Features — always open -->
+            <div class="det-open-section">
+              <div class="det-section-title">Features &amp; Amenities</div>
+              <div class="det-feats" id="detFeats"></div>
+            </div>
+
+            <!-- Unit layouts (from property_unit_types) -->
+            <section class="det-open-section det-layouts" id="detLayouts" style="display:none">
+              <h2 class="det-section-title">Layouts</h2>
+              <div class="det-series-tabs" id="detSeriesTabs"></div>
+              <div class="det-unit-tabs" id="detUnitTabs"></div>
+              <div class="det-unit-panel" id="detUnitPanel">
+                <div class="det-unit-meta" id="detUnitMeta">
+                  <span class="um-sqm">—</span> ·
+                  <span class="um-br">—</span> BR ·
+                  <span class="um-ba">—</span> BA ·
+                  <span class="um-price">—</span>
+                </div>
+                <div class="det-unit-floorplans" id="detUnitFloorplans"></div>
+              </div>
+            </section>
+
+            <!-- General floor plans (property_images floorplan) -->
+            <section class="det-open-section det-floorplans" id="detFloorplansSection" style="display:none">
+              <h2 class="det-section-title">Floor Plans</h2>
+              <div class="det-fp-grid" id="detFpGrid"></div>
+            </section>
+
+            <!-- Video -->
+            <section class="det-open-section det-video" id="detVideoSection" style="display:none">
+              <h2 class="det-section-title">Video Tour</h2>
+              <div class="det-video-wrap" id="detVideoWrap"></div>
+            </section>
+
+            <!-- Location & Nearby — always open, with category icons -->
+            <div class="det-open-section">
+              <div class="det-section-title">Location &amp; Nearby</div>
+              <!-- Category filter -->
+              <div class="det-nearby-cats" id="detNearbyCats">
+                <button class="det-ncat active" data-cat="all" onclick="filterNearby(this,'all')">All</button>
+                <button class="det-ncat" data-cat="beach" onclick="filterNearby(this,'beach')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 20h20M12 3C8 3 4 7 4 12h16c0-5-4-9-8-9z"/><path d="M12 3v9"/></svg> Beach
+                </button>
+                <button class="det-ncat" data-cat="mall" onclick="filterNearby(this,'mall')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Shopping
+                </button>
+                <button class="det-ncat" data-cat="wellness" onclick="filterNearby(this,'wellness')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Wellness
+                </button>
+                <button class="det-ncat" data-cat="school" onclick="filterNearby(this,'school')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h20v14H2zM8 21h8M12 17v4"/></svg> School
+                </button>
+              </div>
+              <div style="position:relative;height:200px;overflow:hidden;border:1px solid var(--line2);margin-bottom:14px;">
+                <iframe id="detMapIframe" width="100%" height="200" frameborder="0" style="border:0;display:block;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="about:blank"></iframe>
+                <div id="detMapOverlay" style="position:absolute;inset:0;background:var(--page);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+                  <span style="font-size:28px;"></span>
+                  <span id="detMapLoc" style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--stone);"></span>
+                </div>
+              </div>
+              <div class="det-nearby-grid" id="detNearby"></div>
+            </div>
+
+          </div>
+        </div>
+        <!-- RIGHT SIDEBAR -->
+        <div class="det-right">
+          <div class="det-sidebar">
+            <div class="det-divider"></div>
+            <div class="det-agent">
+              <div class="det-agent-av" aria-hidden="true">M</div>
+              <div>
+                <div class="det-agent-name">MGROUP ESTATES</div>
+                <div class="det-agent-title">Private Client Advisory</div>
+              </div>
+            </div>
+            <div class="det-divider"></div>
+
+            <!-- ── 3-ACCORDION CONTACT ── -->
+            <div class="sid-acc-group">
+
+              <!-- 1. SCHEDULE -->
+              <div class="sid-acc-item" id="sidAcc1">
+                <button class="sid-acc-trigger" onclick="toggleSidAcc(1)">
+                  <span class="sid-acc-icon"><svg class="mgi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
+                  <span class="sid-acc-label">Schedule a Viewing</span>
+                  <span class="sid-acc-arrow" id="sidArr1">▾</span>
+                </button>
+                <div class="sid-acc-body" id="sidBody1">
+                  <div class="sid-acc-inner">
+                    <!-- Mini calendar inline -->
+                    <div class="sid-cal-nav">
+                      <button class="sid-cal-arr" onclick="sidChangeMonth(-1)">‹</button>
+                      <div class="sid-cal-month" id="sidCalLbl"></div>
+                      <button class="sid-cal-arr" onclick="sidChangeMonth(1)">›</button>
+                    </div>
+                    <div class="sid-cal-grid">
+                      <div class="sid-dow">Su</div><div class="sid-dow">Mo</div><div class="sid-dow">Tu</div>
+                      <div class="sid-dow">We</div><div class="sid-dow">Th</div><div class="sid-dow">Fr</div><div class="sid-dow">Sa</div>
+                      <div id="sidCalDays" style="display:contents"></div>
+                    </div>
+                    <div id="sidTimeWrap" style="display:none">
+                      <div class="sid-time-lbl">Available Times</div>
+                      <div class="sid-time-grid" id="sidTimeGrid"></div>
+                    </div>
+                    <div id="sidVisitWrap" style="display:none">
+                      <div class="sid-time-lbl">Visit Type</div>
+                      <div class="sid-visit-row">
+                        <div class="sid-visit" onclick="sidSelVisit(this,'in-person')"><svg class="mgi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/></svg> In Person</div>
+                        <div class="sid-visit" onclick="sidSelVisit(this,'virtual')"><svg class="mgi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4V8z"/></svg> Virtual</div>
+                      </div>
+                    </div>
+                    <div class="sid-time-lbl" style="margin-top:16px">Your Details</div>
+                    <input type="text"  class="sid-inp" id="schName"  placeholder="Name">
+                    <input type="tel"   class="sid-inp" id="schPhone" placeholder="Phone or WhatsApp">
+                    <input type="email" class="sid-inp" id="schEmail" placeholder="Email (optional)">
+                    <div id="sidSchedSummary" class="sid-summary" style="display:none"></div>
+                    <button class="sid-submit-btn" id="sidSchedBtn" onclick="sidConfirmSchedule()" disabled>Confirm Viewing →</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. SEND ENQUIRY -->
+              <div class="sid-acc-item" id="sidAcc2">
+                <button class="sid-acc-trigger" onclick="toggleSidAcc(2)">
+                  <span class="sid-acc-icon"><svg class="mgi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="m2 7 10 7 10-7"/></svg></span>
+                  <span class="sid-acc-label">Send Enquiry</span>
+                  <span class="sid-acc-arrow" id="sidArr2">▾</span>
+                </button>
+                <div class="sid-acc-body" id="sidBody2">
+                  <div class="sid-acc-inner">
+                    <!-- Agent mini card -->
+                    <div class="enq-agent-row">
+                      <div class="enq-agent-av" aria-hidden="true">M</div>
+                      <div class="enq-agent-info">
+                        <div class="enq-agent-name">MGROUP ESTATES</div>
+                        <div class="enq-agent-link">View Listings</div>
+                      </div>
+                    </div>
+                    <input type="text" class="sid-inp" id="enqName" placeholder="Name">
+                    <input type="text" class="sid-inp" id="enqPhone" placeholder="Phone">
+                    <input type="email" class="sid-inp" id="enqEmail" placeholder="Email">
+                    <textarea class="sid-ta" id="enqMsg" placeholder="Hello, I am interested in this property..."></textarea>
+                    <div class="enq-select-wrap">
+                      <select class="sid-inp enq-select" id="enqRole">
+                        <option value="" disabled selected>Select</option>
+                        <option value="buyer">I'm a buyer</option>
+                        <option value="tenant">I'm a tenant</option>
+                        <option value="agent">I'm an agent</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                    <p class="enq-terms">By submitting you agree to our <a href="#" style="color:var(--stone)">Terms of Use</a></p>
+                    <button class="sid-submit-btn" onclick="sidSendEnquiry()">Send Message →</button>
+                    <div class="sid-sent" id="enqSent" style="display:none">✓ Sent! We'll be in touch within 2 hours.</div>
+                  </div>
+                </div>
+              </div>
+              </div>
+        <div class="sid-brochure">
+          <div class="sid-brochure-top">
+            <span class="sid-brochure-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7l-4-4z"/><path d="M14 3v4h4"/></svg>
+            </span>
+            <div>
+              <div class="sid-brochure-lbl">Presentation</div>
+              <div class="sid-brochure-title">Full brochure</div>
+            </div>
+          </div>
+          <p class="sid-brochure-sub">Photography, specifications, layouts and pricing — as a print-ready PDF.</p>
+          <button class="sid-brochure-btn pdf-gate-btn" type="button" onclick="downloadPropertyPDF()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            Download PDF
+          </button>
+        </div>
+
+
+            </div><!-- /sid-acc-group -->
+
+
+          </div>
+        </div>
+      </div>
+          <!-- ── SIMILAR PROPERTIES (full width, below the advisory card) ── -->
+          <div class="det-similar" id="detSimilarWrap">
+        <div class="det-similar-lbl">Similar Properties</div>
+        <div class="det-sim-shell">
+          <button class="det-sim-arrow det-sim-arrow--prev" aria-label="Previous" onclick="simScroll(-1)">&#8249;</button>
+          <div class="det-sim-scroll" id="detSimilar"></div>
+          <button class="det-sim-arrow det-sim-arrow--next" aria-label="Next" onclick="simScroll(1)">&#8250;</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="video-lightbox" id="videoLightbox" onclick="closeVideoLightbox(event)">
+  <div class="video-lightbox-inner" id="videoLightboxInner">
+    <button class="video-lightbox-close" onclick="closeVideoLightbox()">&times;</button>
+  </div>
+</div>
+<div class="book-overlay" id="bookOverlay">
+  <div class="book-modal">
+    <div class="book-hd">
+      <div>
+        <div class="book-hd-title">Schedule a Viewing</div>
+        <div class="book-hd-sub" id="bookPropSub"></div>
+      </div>
+      <button class="book-close" onclick="closeBooking()">✕</button>
+    </div>
+    <div class="book-bd">
+      <div class="book-steps">
+        <div class="book-step-tab active" id="bst1">1 · Date & Time</div>
+        <div class="book-step-tab" id="bst2">2 · Visit Type</div>
+        <div class="book-step-tab" id="bst3">3 · Your Details</div>
+      </div>
+      <!-- Step 1 -->
+      <div class="book-panel active" id="bsp1">
+        <div class="cal-nav">
+          <button class="cal-arr" onclick="changeMonth(-1)">‹</button>
+          <div class="cal-month-lbl" id="calLbl"></div>
+          <button class="cal-arr" onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="cal-grid">
+          <div class="cal-dow">Su</div><div class="cal-dow">Mo</div><div class="cal-dow">Tu</div>
+          <div class="cal-dow">We</div><div class="cal-dow">Th</div><div class="cal-dow">Fr</div><div class="cal-dow">Sa</div>
+          <div id="calDays" style="display:contents"></div>
+        </div>
+        <div id="timeSectWrap" style="display:none">
+          <div class="time-sect-lbl">Available Times</div>
+          <div class="time-grid" id="timeGrid"></div>
+        </div>
+        <div class="book-footer">
+          <button class="book-btn-next" id="bsn1" onclick="bsGoStep(2)" disabled>Continue →</button>
+        </div>
+      </div>
+      <!-- Step 2 -->
+      <div class="book-panel" id="bsp2">
+        <div class="time-sect-lbl" style="margin-top:0">How would you like to view?</div>
+        <div class="visit-grid">
+          <div class="visit-type" onclick="selVisit(this,'in-person')"><div class="vt-ico"><svg class="mgi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/></svg></div><div class="vt-lbl">In Person</div><div class="vt-sub">Visit with our agent</div></div>
+          <div class="visit-type" onclick="selVisit(this,'virtual')"><div class="vt-ico"><svg class="mgi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4V8z"/></svg></div><div class="vt-lbl">Virtual Tour</div><div class="vt-sub">Zoom / FaceTime</div></div>
+        </div>
+        <div class="book-summary" id="bs2Summary"></div>
+        <div class="book-footer">
+          <button class="book-btn-back" onclick="bsGoStep(1)">← Back</button>
+          <button class="book-btn-next" id="bsn2" onclick="bsGoStep(3)" disabled>Continue →</button>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div class="book-panel" id="bsp3">
+        <div class="book-summary" id="bs3Summary"></div>
+        <div class="book-form-row">
+          <div><label class="bf-lbl">First Name *</label><input type="text" class="bf-inp" id="bfFirst" oninput="validateBf()" placeholder="Alexandra"></div>
+          <div><label class="bf-lbl">Last Name *</label><input type="text" class="bf-inp" id="bfLast" oninput="validateBf()" placeholder="Chen"></div>
+        </div>
+        <div class="book-form-row">
+          <div><label class="bf-lbl">Email *</label><input type="email" class="bf-inp" id="bfEmail" oninput="validateBf()" placeholder="your@email.com"></div>
+          <div><label class="bf-lbl">Phone *</label><input type="text" class="bf-inp" id="bfPhone" oninput="validateBf()" ></div>
+        </div>
+        <div class="book-form-row full" style="margin-top:2px;">
+          <label class="bf-lbl">Language Preference</label>
+          <select class="bf-inp" style="margin-bottom:0">
+            <option>English</option><option>Thai</option><option>Russian</option><option>Chinese</option><option>Other</option>
+          </select>
+        </div>
+        <div class="book-form-row full" style="margin-top:10px;">
+          <label class="bf-lbl">Notes (optional)</label>
+          <textarea class="bf-ta" placeholder="Any specific questions or requirements..."></textarea>
+        </div>
+        <div class="book-footer">
+          <button class="book-btn-back" onclick="bsGoStep(2)">← Back</button>
+          <button class="book-btn-next" id="bsn3" onclick="confirmBooking()" disabled>Confirm Viewing</button>
+        </div>
+      </div>
+      <!-- Success -->
+      <div class="book-panel" id="bspSuccess">
+        <div class="book-success">
+          <div class="book-success-ico">✓</div>
+          <div class="book-success-title">Viewing Confirmed</div>
+          <div class="book-success-msg" id="bsSuccessMsg"></div>
+          <div class="book-success-ref" id="bsSuccessRef"></div>
+          <button class="det-cta-outline" style="margin-top:20px;width:auto;padding:10px 24px;" onclick="closeBooking()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="prop-missing" id="propMissing" hidden>
+  <h2 class="pg-title">Property <em>not found</em></h2>
+  <p class="pg-sub">This listing may have been removed. <a href="/collections.html">Browse the collection</a>.</p>
+</div>
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo"><img src="/assets/logo.png?v=123" class="footer-logo-img" alt="MGROUP Estates"></div>
+          <div class="footer-org">
+            <div class="footer-org-name">M GROUP BUSINESS CO.,LTD</div>
+            <address class="footer-org-addr">63/202, Thepkasattri Road, Kohkaew Sub-district,<br>Muang District, Phuket 83000</address>
+            <a class="footer-org-mail" href="mailto:contact@mgroupestates.com">contact@mgroupestates.com</a>
+          </div>
+    </div>
+    <div class="footer-col">
+            <div class="footer-col-title">Menu</div>
+            <a href="/index.html">Home</a>
+            <a href="/collections.html">Collections</a>
+            <a href="https://rent.mgroupestates.com">Rent</a>
+            <a href="/lifestyle.html">Lifestyle Concierge</a>
+            <a href="/how-to-buy.html">How to Buy</a>
+            <a href="/contact.html">Contact</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Destinations</div>
+            <a href="/collections.html">Phuket</a>
+            <a href="/collections.html">Samui</a>
+            <a href="/collections.html">Bangkok</a>
+          </div>
+        <div class="footer-bottom">
+    <div>
+      <div class="footer-copy">© 2026 M GROUP BUSINESS CO.,LTD — All Rights Reserved</div>
+      <div class="footer-legal">
+        <a href="#" onclick="openPrivacy();return false">Privacy Policy</a>
+        <a href="#" onclick="openCookie();return false">Cookie Policy</a>
+      </div>
+    </div>
+    <div class="footer-follow">
+      <div class="footer-follow-lbl">Follow Us</div>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/mgroupestates" target="_blank" rel="noopener" class="footer-soc" title="Instagram" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.7" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@mgroupestates" target="_blank" rel="noopener" class="footer-soc" title="TikTok" aria-label="TikTok">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M19.6 7.1c-1.5-.3-2.9-1.1-3.9-2.3-.5-.6-.8-1.2-1-1.9-.1-.4-.2-.8-.2-1.3h-3.3v13.2c0 1.3-1.1 2.4-2.4 2.4-.7 0-1.4-.3-1.9-.8-.4-.5-.7-1.1-.7-1.8 0-1.3 1.1-2.4 2.4-2.4.3 0 .5.1.8.2v-3.3c-.3 0-.5-.1-.8-.1-3.1 0-5.7 2.5-5.7 5.7 0 1.9 1 3.6 2.5 4.6 1 .7 2.1 1.1 3.3 1.1 3.1 0 5.7-2.5 5.7-5.7V9.8c1.2.8 2.6 1.4 4.2 1.5V8c-.3 0-.5 0-.8-.1z"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@mgroupestates" target="_blank" rel="noopener" class="footer-soc" title="YouTube" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M23.5 6.5c-.3-1-1-1.8-2-2C19.6 4 12 4 12 4s-7.6 0-9.5.5c-1 .2-1.7 1-2 2C0 8.4 0 12 0 12s0 3.6.5 5.5c.3 1 1 1.8 2 2 1.9.5 9.5.5 9.5.5s7.6 0 9.5-.5c1-.2 1.7-1 2-2 .5-1.9.5-5.5.5-5.5s0-3.6-.5-5.5zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg>
+        </a>
+          <a href="https://wa.me/66899723321" target="_blank" rel="noopener" class="footer-soc" title="WhatsApp" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.6-.92-2.2-.24-.58-.48-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47s1.06 2.86 1.21 3.06c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35z"/><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.24 8.23z"/></svg>
+          </a>
+      </div>
+    </div>
+  </div>
+</footer>
+<div class="policy-modal" id="privacyModal" onclick="if(event.target===this)closePrivacy()">
+  <div class="policy-box">
+    <button class="policy-close" onclick="closePrivacy()" aria-label="Close">&#x2715;</button>
+    <div class="policy-lbl">Legal</div>
+    <h2 class="policy-title">Privacy Policy</h2>
+    <p>MGROUP Estates ("we", "our", "us") respects your privacy. This policy explains how we collect, use and protect the personal information you share with us through our website and property enquiries.</p>
+
+    <h3>Information We Collect</h3>
+    <p>When you contact us or submit an enquiry, we may collect your name, email address, phone number, and any details you include in your message. We also collect anonymous analytics data about how visitors use our website.</p>
+
+    <h3>How We Use Your Information</h3>
+    <ul>
+      <li>To respond to your enquiries and provide property consultancy services</li>
+      <li>To share property listings and market updates relevant to your interest</li>
+      <li>To improve our website and services</li>
+      <li>To comply with legal obligations</li>
+    </ul>
+
+    <h3>Data Sharing</h3>
+    <p>We do not sell your personal information. We may share information with trusted service providers (e.g., email delivery, CRM) strictly for the purpose of operating our business. Property partners may receive your enquiry only when you explicitly request introduction.</p>
+
+    <h3>Your Rights</h3>
+    <p>You have the right to access, correct or delete your personal data. To exercise these rights, contact us at <a href="mailto:contact@mgroupestates.com">contact@mgroupestates.com</a>.</p>
+
+    <h3>Data Security</h3>
+    <p>We take reasonable measures to protect your information from unauthorised access, disclosure or loss. However, no online transmission is completely secure.</p>
+
+    <h3>Contact</h3>
+    <p>For questions regarding this Privacy Policy, please email <a href="mailto:contact@mgroupestates.com">contact@mgroupestates.com</a>.</p>
+
+    <div class="policy-updated">Last updated: January 2026</div>
+  </div>
+</div>
+<div class="policy-modal" id="cookieModal" onclick="if(event.target===this)closeCookie()">
+  <div class="policy-box">
+    <button class="policy-close" onclick="closeCookie()" aria-label="Close">&#x2715;</button>
+    <div class="policy-lbl">Legal</div>
+    <h2 class="policy-title">Cookie Policy</h2>
+    <p>This policy explains how MGROUP Estates uses cookies and similar technologies on our website.</p>
+
+    <h3>What Are Cookies</h3>
+    <p>Cookies are small text files stored on your device when you visit a website. They help websites remember your preferences and understand how visitors interact with content.</p>
+
+    <h3>Cookies We Use</h3>
+    <ul>
+      <li><strong>Essential cookies</strong> — required for the website to function properly (e.g., remembering your cookie consent).</li>
+      <li><strong>Analytics cookies</strong> — help us understand how visitors use our site so we can improve it. These are anonymous.</li>
+      <li><strong>Preference cookies</strong> — remember your language and display settings.</li>
+    </ul>
+
+    <h3>Third-Party Cookies</h3>
+    <p>We may use services such as Google Fonts and embedded video providers that set their own cookies. These third parties have their own privacy policies.</p>
+
+    <h3>Managing Cookies</h3>
+    <p>You can control or delete cookies through your browser settings. Disabling cookies may affect some website features. Most browsers allow you to refuse cookies entirely or be notified before one is set.</p>
+
+    <h3>Contact</h3>
+    <p>For questions about our use of cookies, please email <a href="mailto:contact@mgroupestates.com">contact@mgroupestates.com</a>.</p>
+
+    <div class="policy-updated">Last updated: January 2026</div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="/assets/app.js?v=169"></script>
+
+
+
+
+<div class="pdf-only pdf-cover">
+  <img class="pdf-logo" src="/assets/logo.png?v=123" alt="MGROUP Estates">
+  <div class="pdf-cover-lbl">Property Presentation</div>
+</div>
+<div class="pdf-only pdf-foot">
+  <span>M GROUP BUSINESS CO.,LTD &nbsp;·&nbsp; 63/202 Thepkasattri Road, Kohkaew, Muang, Phuket 83000</span>
+  <span>contact@mgroupestates.com &nbsp;·&nbsp; mgroupestates.com</span>
+</div>
+</body>
+</html>

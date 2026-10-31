@@ -834,7 +834,7 @@ function renderGrid() {
     const collLabel = (p.colls || [p.coll])[0] || '';
     const collDisplay = collLabel.charAt(0).toUpperCase() + collLabel.slice(1).replace(/-/g,' ');
     return `
-    <div class="prop-card" onclick="location.href='property.html?id=${p.id}'">
+    <div class="prop-card" onclick="location.href='${mgPropUrl(p.id)}'">
       <div class="prop-card-img">
         <div class="prop-card-img-inner" style="background-color:#0a0a0a;background-image:${p.img ? 'url('+mgImg(p.img, mgCardW())+')' : p.bg};background-size:cover;background-position:center;background-repeat:no-repeat;"></div>
         <div class="prop-card-img-overlay"></div>
@@ -1008,7 +1008,7 @@ function renderInvSlider() {
     const specsHtml = specs.length ? `<div style="display:flex;gap:10px;margin-top:6px;">${specs.join('')}</div>` : '';
     const collDisplay = c.coll ? (c.coll.charAt(0).toUpperCase()+c.coll.slice(1).replace(/-/g,' ')) : '';
     return `
-    <div class="inv-card" onclick="${c.propId ? `location.href='property.html?id='+${c.propId}` : ''}" data-idx="${i}" style="${c.propId ? 'cursor:pointer' : 'cursor:default'}">
+    <div class="inv-card" onclick="${c.propId ? `location.href=mgPropUrl(${c.propId})` : ''}" data-idx="${i}" style="${c.propId ? 'cursor:pointer' : 'cursor:default'}">
       <div class="inv-card-img">
         <div class="inv-card-img-inner" style="background-color:#0a0a0a;background-image:${c.img ? 'url('+mgImg(c.img, mgCardW())+')' : c.bg};background-size:cover;background-position:center;background-repeat:no-repeat;width:100%;height:100%;"></div>
         <div class="inv-card-img-overlay"></div>
@@ -1897,7 +1897,7 @@ async function openDetail(id) {
     if(x.sqm) specs.push(`<span style="display:inline-flex;align-items:center;gap:3px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10.6 9-7.1 9 7.1"/><path d="M5.4 9.2V20a.8.8 0 0 0 .8.8h11.6a.8.8 0 0 0 .8-.8V9.2"/><path d="M10 20.8v-5h4v5"/></svg><span style="font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:13px;color:rgba(255,255,255,0.9)">${x.sqm}</span><span style="font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:9px;letter-spacing:0.13em;text-transform:uppercase;color:rgba(255,255,255,0.6)">sqm</span></span>`);
     const specsHtml=specs.length?`<div style="display:flex;gap:10px;margin-top:6px;">${specs.join('')}</div>`:'';
     const collDisplay=x.coll?(x.coll.charAt(0).toUpperCase()+x.coll.slice(1).replace(/-/g,' ')):'';
-    return `<div class="det-sim-card" onclick=\"location.href='property.html?id=${x.id}'\"><div class="det-sim-img" style="background-image:url(${mgImg(x.img||'', mgCardW())});"><div class="det-sim-img-overlay"></div><div class="det-sim-over">${collDisplay?`<div class="inv-card-coll">${collDisplay}</div>`:''}<div class="det-sim-name">${x.name}</div>${specsHtml}<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.15);display:flex;align-items:baseline;justify-content:space-between;"><span class="inv-card-price" style="font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap;">${x.price}</span><span class="det-sim-loc" style="font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);text-align:right;">${x.loc||''}</span></div></div></div></div>`;
+    return `<div class="det-sim-card" onclick=\"location.href='${mgPropUrl(x.id)}'\"><div class="det-sim-img" style="background-image:url(${mgImg(x.img||'', mgCardW())});"><div class="det-sim-img-overlay"></div><div class="det-sim-over">${collDisplay?`<div class="inv-card-coll">${collDisplay}</div>`:''}<div class="det-sim-name">${x.name}</div>${specsHtml}<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.15);display:flex;align-items:baseline;justify-content:space-between;"><span class="inv-card-price" style="font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap;">${x.price}</span><span class="det-sim-loc" style="font-family:'Figtree','Noto Sans Thai',sans-serif;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);text-align:right;">${x.loc||''}</span></div></div></div></div>`;
   }).join('');
 
   // Land size
@@ -3266,14 +3266,23 @@ function selectCollFromSelect(el){
     openDetail(id);
     var ov = document.getElementById('detOverlay');
     if (ov) ov.classList.add('open');
-    document.title = (document.querySelector('.det-title') || {}).textContent
-      ? document.querySelector('.det-title').textContent + ' — MGROUP Estates'
-      : document.title;
+    /* A generated listing page arrives with a title written for search
+       results — "<name> — Villa for sale in Phuket | MGROUP Estates".
+       Only the query-string page needs one composed here. */
+    if (!window.MG_PROPERTY_ID) {
+      var t = (document.querySelector('.det-title') || {}).textContent;
+      if (t) document.title = t + ' — MGROUP Estates';
+    }
     return true;
   }
 
   document.addEventListener('DOMContentLoaded', function(){
-    var id = parseInt(new URLSearchParams(location.search).get('id'), 10);
+    /* A generated listing page carries its id in the document rather
+       than the query string, because its URL is /property/<slug>/ —
+       the readable address crawlers and people are given. */
+    var id = parseInt(new URLSearchParams(location.search).get('id'), 10)
+          || parseInt(window.MG_PROPERTY_ID, 10)
+          || parseInt((document.body && document.body.getAttribute('data-property-id')) || '', 10);
     if (!id) { document.getElementById('propMissing').hidden = false; return; }
 
     /* PROPS arrive from Supabase asynchronously — poll briefly rather
@@ -3482,6 +3491,16 @@ var MG_MUTED = [107, 90, 71];
    width tracks the layout, so derive it from the viewport and multiply
    by the pixel ratio (capped at 2 — beyond that the extra bytes buy
    nothing the eye can see). */
+/* Listing links point at the generated page for that property —
+   /property/anchan-burgundy/ rather than /property?id=13. The readable
+   URL is the one indexed, shared and shown in search results; the id
+   form still works for anything already linked. */
+var MG_SLUGS = {"34": "villa-anchali", "5": "the-residences-at-intercontinental-phuket", "15": "banyan-tree-oceanus", "24": "pavara-vhana-collection", "31": "canvas-by-sansiri", "28": "the-teak-phuket", "6": "the-standard-residence-phuket-bang-tao", "14": "angsana-beachfront-residences-sea-view", "19": "botanica-grand-avenue-grand-villa-zone-a1", "7": "tri-vananda", "12": "botanica-montazure", "8": "kiara-reserve-villas", "30": "banyan-tree-nammu", "32": "kiara-reserve-condominium", "33": "garden-atlas-bayview", "13": "anchan-burgundy", "18": "botanica-grand-avenue-villa-type-c"};
+function mgPropUrl(id){
+  var s = MG_SLUGS[id];
+  return s ? '/property/' + s + '/' : 'property.html?id=' + id;
+}
+
 function mgCardW(){
   var vw = window.innerWidth || 1440;
   var css = vw >= 1200 ? 560
