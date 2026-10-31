@@ -5829,8 +5829,8 @@ nav.scrolled{
    text from the photograph without dimming the image. */
 .btn-hero-primary,.btn-hero-ghost{
   background:transparent!important;color:#fff!important;
-  border:1px solid rgba(255,255,255,.45)!important;
-  transition:background .3s,color .3s,border-color .3s,transform .3s}
+  border:0!important;box-shadow:none;
+  transition:background .3s,color .3s,box-shadow .35s,transform .35s}
 .btn-hero-primary:hover,.btn-hero-ghost:hover,
 .btn-hero-primary:focus-visible,.btn-hero-ghost:focus-visible{
   background:#fff!important;color:var(--ink,#33291F)!important;
@@ -5986,3 +5986,21 @@ p + p{margin-top:14px}
 .det-agent-name,.enq-agent-name{letter-spacing:.08em;white-space:nowrap}
 .det-agent > div:last-child,.enq-agent-info{flex:1 1 auto;min-width:0}
 .det-agent,.enq-agent-row{align-items:center}
+
+/* ═══ Outlines off; depth only on hover ══════════════════════════
+   The EN switch, the footer social icons and the two hero buttons were
+   each drawn as a hairline rectangle. Over the video that reads as a
+   grid of empty boxes before you have even looked at what is inside
+   them. Nothing is outlined at rest now; the hero buttons lift on a
+   soft shadow instead, which does the same job of saying "this is a
+   control" without drawing a box around everything. */
+.nav-lang,nav.scrolled .nav-lang,.lang-btn,nav.scrolled .lang-btn{border:0!important}
+.footer-soc{border:0!important}
+.footer-soc:hover{border:0!important;color:rgba(255,255,255,.95)}
+
+.btn-hero-primary:hover,.btn-hero-ghost:hover,
+.btn-hero-primary:focus-visible,.btn-hero-ghost:focus-visible{
+  box-shadow:0 14px 38px rgba(0,0,0,.42),0 3px 10px rgba(0,0,0,.28);
+  transform:translateY(-2px)}
+.btn-hero-primary:active,.btn-hero-ghost:active{
+  transform:translateY(0);box-shadow:0 6px 16px rgba(0,0,0,.3)}
