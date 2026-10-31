@@ -1,0 +1,1552 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MGROUP · Guest Portal</title>
+<meta name="theme-color" content="#12a9d8">
+<meta name="robots" content="noindex,nofollow">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+  :root{
+    --ink:#212121;--muted:#757575;--faint:#9e9e9e;--line:#eeeeee;--line2:#f4f4f4;
+    --cream:#f5f5f5;--sand:#f0f1f3;--card:#fff;
+    /* header gradient, as on the reference account screen */
+    --grad:linear-gradient(150deg,#45d3d0 0%,#20b2dc 52%,#3d86e8 100%);
+    --gold:#00a3b8;--gold2:#3d86e8;--goldt:#e2f7f9;--goldl:#bceaf0;--goldd:#00808f;
+    --accent:#f44622;--accentt:#ffeeea;
+    --bronze:#212121;--red:#f44622;--green:#12a15f;--blue:#3d86e8;
+    --coral:#f44622;--violet:#7b5cf0;--pink:#ef5da8;--amber:#f5a623;
+    --font:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --mono:ui-monospace,Menlo,monospace;
+    --shadow:0 1px 3px rgba(0,0,0,.05);
+    --tab:calc(58px + env(safe-area-inset-bottom,0px));
+  }
+  /* one accent per concierge category */
+  .cc-transfer{--cc:#0e86dd;--ccb:#e3f1fd}
+  .cc-dining{--cc:#f0870f;--ccb:#fff0dc}
+  .cc-wellness{--cc:#12a15f;--ccb:#e0f7ea}
+  .cc-excursion{--cc:#00aec4;--ccb:#dbf6fa}
+  .cc-home{--cc:#7b5cf0;--ccb:#ede9fe}
+  .cc-family{--cc:#ef5da8;--ccb:#fde9f3}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--cream);color:var(--ink);font-family:var(--font);font-size:14px;
+    -webkit-font-smoothing:antialiased;overscroll-behavior-y:none}
+  button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+  svg{display:block;flex:none}
+  .ic{width:20px;height:20px;stroke:currentColor;stroke-width:1.6;fill:none;
+    stroke-linecap:round;stroke-linejoin:round}
+  .ic.s{width:16px;height:16px;stroke-width:1.8}
+  .ic.l{width:24px;height:24px}
+  .hide{display:none!important}
+
+  /* ---------- SIGN IN ---------- */
+  #login{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:28px 22px;
+    background:linear-gradient(180deg,#c9f2f4 0%,#e4f4fb 42%,var(--cream) 100%)}
+  .lwrap{width:100%;max-width:372px;text-align:center}
+  .lmark{width:52px;height:52px;margin:0 auto 20px;border-radius:16px;background:var(--grad);
+    display:flex;align-items:center;justify-content:center;color:#fff;
+    font-family:var(--font);font-size:22px;font-weight:600;letter-spacing:-.01em;
+    box-shadow:0 12px 28px -10px rgba(18,169,216,.65)}
+  .ltitle{font-family:var(--font);font-size:27px;font-weight:600;line-height:1.15;letter-spacing:-.025em}
+  .ltitle .e{color:var(--gold)}
+  .lrule{width:32px;height:1px;background:var(--gold);margin:15px auto 13px}
+  .llead{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:26px}
+  .lform{display:flex;flex-direction:column;gap:10px}
+  .lform input{padding:13px 15px;border-radius:11px;border:1px solid var(--line);
+    background:rgba(255,255,255,.92);outline:none;font-size:15px;transition:border-color .15s,box-shadow .15s}
+  .lform input::placeholder{color:#b3b8b0}
+  .lform input:focus{border-color:var(--gold);background:#fff;box-shadow:0 0 0 3px rgba(0,174,196,.16)}
+  .lbtn{margin-top:4px;padding:15px;border:none;border-radius:14px;background:var(--accent);color:#fff;
+    font-weight:600;cursor:pointer;transition:filter .15s}
+  .lbtn:hover{filter:brightness(1.06)}.lbtn:disabled{opacity:.6;cursor:default}
+  .lerr{min-height:17px;margin-top:12px;font-size:12.5px;color:var(--red)}
+  .lnote{margin-top:22px;padding-top:17px;border-top:1px solid rgba(160,190,210,.55);
+    font-size:12px;line-height:1.65;color:var(--faint)}
+  .lfoot{margin-top:22px;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:#7d94a6}
+
+  /* ---------- SHELL ---------- */
+  #app{display:none;flex-direction:column;min-height:100dvh;max-width:520px;margin:0 auto;
+    background:var(--cream);padding-bottom:var(--tab)}
+  .top{position:sticky;top:0;z-index:20;background:var(--grad);color:#fff;
+    border-bottom:none;padding:12px 18px;
+    display:flex;align-items:center;gap:12px;min-height:56px}
+  .top .back{display:flex;align-items:center;justify-content:center;width:34px;height:34px;margin-left:-7px;
+    border-radius:10px;border:none;background:transparent;color:#fff;cursor:pointer}
+  .top .back:hover{background:rgba(255,255,255,.18)}
+  .top .tt{flex:1;min-width:0}
+  .top .tt b{display:block;font-size:17px;font-weight:600;line-height:1.25;letter-spacing:-.015em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .top .tt b .e{color:#c9f6ff}
+  .top .tt b .villa{font-size:16.5px;line-height:1.3;font-weight:600}
+  .top .tt>span{display:block;font-size:11px;color:rgba(255,255,255,.78);margin-top:1px}
+  .iconbtn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;
+    border-radius:11px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.18);
+    color:#fff;cursor:pointer;transition:background .15s}
+  .iconbtn:hover{background:rgba(255,255,255,.3)}
+  .sheet .iconbtn{border-color:var(--line);background:#fff;color:var(--ink)}
+  .sheet .iconbtn:hover{background:var(--sand)}
+
+  main{padding:0 18px 26px}
+  .view{display:none}.view.on{display:block;padding-top:18px;animation:fade .22s ease both}
+  .view.hashero.on{padding-top:0}
+  .hero{margin:0 -18px 16px;padding:2px 18px 24px;background:var(--grad);color:#fff;
+    border-radius:0 0 22px 22px;display:flex;align-items:center;gap:14px}
+  .hero.mid{flex-direction:column;text-align:center;gap:11px;padding-top:14px}
+  .hero .avat{box-shadow:0 0 0 3px rgba(255,255,255,.28)}
+  .hero.mid .avat{width:74px;height:74px;font-size:26px}
+  .hero .nm{font-size:20px;font-weight:600;line-height:1.25;letter-spacing:-.01em}
+  .hero .sub{font-size:12.5px;color:rgba(255,255,255,.82);margin-top:3px;
+    display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .hero.mid .sub{justify-content:center}
+  .hero .sub .dot{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.6)}
+  .hero .edit{display:inline-flex;align-items:center;gap:4px;margin-top:7px;font-size:12.5px;
+    font-weight:500;color:#fff;background:none;border:none;cursor:pointer;padding:0}
+  .hero .edit .ic{width:15px;height:15px}
+  @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){.view.on{animation:none}}
+
+  /* ---------- PROFILE HEAD ---------- */
+  .phead{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+  .avat{width:54px;height:54px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+    background:var(--grad);color:#fff;
+    font-family:var(--font);font-size:19px;font-weight:600;letter-spacing:-.01em;
+    box-shadow:0 8px 20px -9px rgba(18,169,216,.8)}
+  .phead .nm{font-size:21px;font-weight:600;line-height:1.2;letter-spacing:-.025em}
+  .phead .sub{font-size:11.5px;color:var(--muted);margin-top:3px;display:flex;align-items:center;gap:5px}
+  .phead .sub .dot{width:3px;height:3px;border-radius:50%;background:var(--faint)}
+
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-bottom:12px;
+    background:var(--card);border-radius:16px;padding:16px 8px;box-shadow:var(--shadow)}
+  .tile{background:transparent;border:none;padding:2px 4px;text-align:center;position:relative}
+  .tile+.tile:before{content:"";position:absolute;left:0;top:12%;bottom:12%;width:1px;background:var(--line)}
+  .tile .v{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.15;color:var(--ink)}
+  .tile .l{font-size:12px;color:var(--muted);font-weight:400;margin-top:3px}
+
+  .sumcard{background:var(--card);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow)}
+  .sumrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;
+    border-bottom:1px solid var(--line2);font-size:13.5px}
+  .sumrow:first-child{padding-top:0}
+  .sumrow:last-of-type{border-bottom:none;padding-bottom:2px}
+  .sumrow .k{color:var(--muted);display:flex;align-items:center;gap:8px}
+  .sumrow .v{font-weight:600;font-variant-numeric:tabular-nums}
+  .sumrow .v.due{color:var(--coral)}
+  .sumrow .v.ok{color:var(--green)}
+  .sumx{display:flex;align-items:center;gap:7px;margin-top:12px;padding-top:11px;
+    border-top:1px solid var(--line2);font-size:12px;font-weight:600;color:var(--gold)}
+  #homeList>.sect:first-child{margin-top:22px}
+
+  .sect{display:flex;align-items:baseline;justify-content:space-between;margin:24px 0 11px}
+  .sect:first-child{margin-top:0}
+  .sect h3{font-size:13px;letter-spacing:0;color:var(--ink);font-weight:600}
+  .sect .more{font-size:12px;color:var(--gold);font-weight:600;cursor:pointer;background:none;border:none}
+
+  /* ---------- BOOKING CARD ---------- */
+  .bcard{display:block;width:100%;text-align:left;background:var(--card);border:none;
+    border-radius:16px;overflow:hidden;margin-bottom:12px;cursor:pointer;box-shadow:var(--shadow);
+    transition:transform .16s,box-shadow .16s}
+  .bcard:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.10)}
+  .bcard:active{transform:none}
+  .bimg{position:relative;height:132px;background:linear-gradient(140deg,#cdeff5,#dfe9fb);
+    background-size:cover;background-position:center}
+  .bimg .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:40px;font-weight:600;letter-spacing:-.02em;color:rgba(33,33,33,.22)}
+  .bimg .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(20,24,22,.58))}
+  .bimg .cd{position:absolute;left:12px;bottom:11px;color:#fff;font-size:11.5px;font-weight:500;
+    letter-spacing:.02em;text-shadow:0 1px 6px rgba(0,0,0,.5);display:flex;align-items:center;gap:6px}
+  .bimg .st{position:absolute;right:11px;top:11px}
+  .bbody{padding:13px 15px 15px}
+  .villaname{font-weight:600;letter-spacing:-.012em;font-variant-numeric:lining-nums}
+  .bbody .nm{font-size:17px;line-height:1.32;color:var(--ink)}
+  .bbody .ref{font-family:var(--mono);font-size:10.5px;color:var(--faint);letter-spacing:.04em;margin-top:3px}
+  .bmeta{display:flex;align-items:center;gap:13px;margin-top:11px;padding-top:11px;border-top:1px solid var(--line2);
+    font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+  .bmeta span{display:flex;align-items:center;gap:5px}
+  .bmeta .go{margin-left:auto;color:var(--gold)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;
+    color:var(--cc,var(--gold));background:var(--ccb,var(--goldt));
+    border:1px solid transparent;border-radius:20px;padding:4px 10px;white-space:nowrap}
+  .chip .ic{width:13px;height:13px;stroke-width:1.9}
+  .chip.more{color:var(--faint);background:var(--sand);border-color:var(--line)}
+  /* what MGROUP has arranged for this trip */
+  .inc{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line2);width:100%;
+    background:none;border-left:none;border-right:none;border-top:none;text-align:left;cursor:pointer}
+  .inc:hover .t{color:var(--gold)}
+  .inc .chv{color:var(--faint);display:flex}
+  .inc:first-of-type{padding-top:0}
+  .inc:last-child{border-bottom:none;padding-bottom:0}
+  .inc .i{width:34px;height:34px;flex:none;border-radius:10px;
+    background:var(--ccb,var(--goldt));color:var(--cc,var(--gold));
+    display:flex;align-items:center;justify-content:center}
+  .inc .i .ic{width:17px;height:17px}
+  .inc .b{flex:1;min-width:0}
+  .inc .t{font-size:14px;font-weight:500;line-height:1.3}
+  .inc .m{font-size:11.5px;color:var(--faint);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap}
+  .inc .m span{display:flex;align-items:center;gap:4px}
+  .inc .r{flex:none;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+  .inc .pr{font-size:12.5px;font-weight:600;color:var(--bronze);font-variant-numeric:tabular-nums}
+  .tag{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
+    color:var(--faint);background:var(--sand);border-radius:5px;padding:3px 7px}
+
+  .st{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;padding:4px 10px;border-radius:20px;
+    letter-spacing:.03em;background:#8d9490;color:#fff;white-space:nowrap}
+  .st{background:#8fa2b3}
+  .st-inquiry,.st-pending{background:#f5a623}
+  .st-deposit{background:#f78f1e}
+  .st-confirmed{background:#12b76a}
+  .st-fully_paid{background:#059669}
+  .st-checked_in{background:#0e86dd}
+  .st-checked_out{background:#8fa2b3}
+  .st-cancelled,.st-canceled,.st-no_show{background:#e5493b}
+  .st-new{background:#f5a623}.st-done{background:#12b76a}.st-declined{background:#e5493b}
+
+  /* ---------- PANELS ---------- */
+  .panel{background:var(--card);border:none;border-radius:16px;padding:16px 18px;
+    margin-bottom:12px;box-shadow:var(--shadow)}
+  .panel>h4{font-size:11.5px;letter-spacing:.02em;color:var(--muted);
+    font-weight:500;margin-bottom:13px;display:flex;align-items:center;gap:7px}
+  .panel>h4 .ic{color:var(--gold)}
+  .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:14px 18px}
+  .kv .k{font-size:12px;color:var(--muted);font-weight:400}
+  .kv .v{font-size:14.5px;font-weight:600;margin-top:3px;line-height:1.35}
+  .kv .v.sm{font-size:13px;font-weight:500;color:var(--muted)}
+  .rowline{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:11px 0;border-bottom:1px solid var(--line2);font-size:13.5px}
+  .rowline:last-child{border-bottom:none;padding-bottom:0}
+  .rowline:first-of-type{padding-top:0}
+  .rowline .k{color:var(--muted);display:flex;align-items:center;gap:8px}
+  .rowline .v{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+  .rowline .v.big{font-size:16px}
+  .rowline .v.due{color:var(--red)}
+  .rowline .v.ok{color:var(--green)}
+
+  /* stay timeline */
+  .tl{position:relative;padding-left:26px}
+  .tl:before{content:"";position:absolute;left:8px;top:7px;bottom:7px;width:1px;background:var(--line)}
+  .tlrow{position:relative;padding:9px 0}
+  .tlrow .dot{position:absolute;left:-22px;top:12px;width:11px;height:11px;border-radius:50%;
+    background:#fff;border:2px solid var(--line)}
+  .tlrow.done .dot{background:var(--green);border-color:var(--green)}
+  .tlrow.now .dot{background:var(--gold);border-color:var(--gold);
+    box-shadow:0 0 0 4px rgba(0,174,196,.2)}
+  .tlrow .lb{font-size:13.5px;font-weight:500}
+  .tlrow .sb{font-size:11.5px;color:var(--faint);margin-top:2px}
+  .bar{height:5px;border-radius:5px;background:var(--sand);overflow:hidden;margin-top:9px}
+  .bar i{display:block;height:100%;border-radius:5px;background:var(--grad);transition:width .5s ease}
+  .bar.g i{background:var(--green)}
+
+  /* code chips (wifi / door) */
+  .codes{display:grid;grid-template-columns:repeat(auto-fit,minmax(142px,1fr));gap:10px}
+  .code{background:var(--goldt);border:1px solid var(--goldl);border-radius:12px;padding:11px 13px;cursor:pointer;
+    text-align:left;width:100%;transition:background .15s}
+  .code:hover{background:#d2f1f6}
+  .code .k{font-size:11.5px;color:var(--goldd);font-weight:500;
+    display:flex;align-items:center;gap:6px}
+  .code .v{font-family:var(--mono);font-size:15px;font-weight:600;margin-top:6px;
+    color:var(--ink);word-break:break-all}
+  .locked{display:flex;align-items:flex-start;gap:10px;background:var(--sand);border-radius:12px;
+    padding:12px 13px;font-size:12.5px;color:var(--muted);line-height:1.55}
+  .locked .ic{color:var(--faint);margin-top:1px}
+
+  .note{font-size:12.5px;color:var(--muted);line-height:1.65;white-space:pre-wrap}
+  .empty{text-align:center;padding:44px 22px;color:var(--faint)}
+  .empty .ic{width:34px;height:34px;stroke-width:1.3;margin:0 auto 12px;color:var(--goldl)}
+  .empty b{display:block;font-size:16.5px;font-weight:600;color:var(--ink);margin-bottom:5px;letter-spacing:-.015em}
+  .empty p{font-size:12.5px;line-height:1.6}
+
+  .cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px;
+    border:none;border-radius:14px;background:var(--accent);color:#fff;font-weight:600;font-size:15px;
+    cursor:pointer;transition:filter .15s}
+  .cta:hover{filter:brightness(1.06)}
+  .cta.ghost{background:#fff;color:var(--ink);border:1px solid var(--line);font-weight:500;
+    box-shadow:var(--shadow)}
+  .cta.ghost:hover{background:#fafafa}
+  .cta:disabled{opacity:.55;cursor:default}
+
+  /* ---------- CONCIERGE ---------- */
+  .lead{font-size:13.5px;line-height:1.6;color:var(--muted);margin-bottom:18px}
+  .cats{display:flex;gap:8px;overflow-x:auto;margin:0 -18px 18px;padding:2px 18px 6px;
+    scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .cats::-webkit-scrollbar{display:none}
+  .cat{flex:none;display:flex;align-items:center;gap:7px;padding:9px 14px;border-radius:22px;
+    border:1px solid var(--line);background:#fff;color:var(--muted);font-size:12.5px;font-weight:600;
+    cursor:pointer;white-space:nowrap;transition:.15s}
+  .cat .ic{width:16px;height:16px}
+  .cat:hover{border-color:var(--goldl);color:var(--gold)}
+  .cat.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .svc{display:flex;gap:14px;background:var(--card);border:none;border-radius:16px;
+    padding:15px 16px;margin-bottom:10px;width:100%;text-align:left;cursor:pointer;box-shadow:var(--shadow);
+    transition:box-shadow .16s,transform .16s}
+  .svc:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.10)}
+  .svc .sic{width:40px;height:40px;flex:none;border-radius:12px;
+    background:var(--ccb,var(--goldt));color:var(--cc,var(--gold));
+    display:flex;align-items:center;justify-content:center}
+  .svc .sb{flex:1;min-width:0}
+  .svc .t{font-size:14.5px;font-weight:500;line-height:1.3}
+  .svc .b{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:3px}
+  .svc .m{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:11.5px;color:var(--faint);flex-wrap:wrap}
+  .svc .m .pr{color:var(--bronze);font-weight:600;font-variant-numeric:tabular-nums}
+  .svc .m em{font-style:normal;display:flex;align-items:center;gap:4px}
+
+  /* request rows */
+  .rq{background:var(--card);border:none;border-radius:16px;padding:15px 16px;margin-bottom:10px;
+    box-shadow:var(--shadow)}
+  .rq .hd{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .rq .t{font-size:14.5px;font-weight:500;line-height:1.3}
+  .rq .m{font-size:12px;color:var(--muted);margin-top:5px;display:flex;gap:12px;flex-wrap:wrap}
+  .rq .m span{display:flex;align-items:center;gap:5px}
+  .rq .nt{font-size:12.5px;color:var(--muted);line-height:1.55;margin-top:9px;
+    padding-top:9px;border-top:1px solid var(--line2);white-space:pre-wrap}
+  .rq .ans{margin-top:9px;background:var(--goldt);border:1px solid var(--goldl);border-radius:10px;
+    padding:10px 12px;font-size:12.5px;line-height:1.55;color:#0a5f6b}
+  .rq .ans b{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;color:var(--goldd)}
+  .rq .act{margin-top:10px;display:flex;gap:8px}
+  .mini{font-size:12px;font-weight:600;padding:7px 13px;border-radius:9px;border:1px solid var(--line);
+    background:#fff;color:var(--muted);cursor:pointer}
+  .mini:hover{border-color:var(--red);color:var(--red)}
+
+  /* ---------- ACCOUNT ---------- */
+  .memb{background:#d9f4f6;border-radius:16px;padding:16px 17px;color:var(--goldd);
+    margin:-32px 0 12px;position:relative;box-shadow:var(--shadow)}
+  .memb .hd{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .memb .t{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px;color:#06636f}
+  .memb .t .ic{width:19px;height:19px}
+  .memb .see{display:inline-flex;align-items:center;gap:3px;font-size:12.5px;font-weight:500;
+    color:#06636f;background:none;border:none;cursor:pointer;padding:0;white-space:nowrap}
+  .memb .see .ic{width:14px;height:14px}
+  .memb .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .memb .qa{display:flex;align-items:center;gap:9px;background:none;border:none;padding:0;
+    cursor:pointer;text-align:left;color:#06636f;text-decoration:none}
+  .memb .qa .qi{width:28px;height:28px;flex:none;border-radius:9px;background:#fff;color:#0e9aab;
+    display:flex;align-items:center;justify-content:center}
+  .memb .qa .qi .ic{width:16px;height:16px}
+  .memb .qa span{font-size:12.5px;font-weight:500;line-height:1.3}
+  .menu{background:var(--card);border:none;border-radius:16px;overflow:hidden;
+    margin-bottom:12px;box-shadow:var(--shadow)}
+  .mrow{display:flex;align-items:center;gap:14px;width:100%;padding:16px 18px;background:none;border:none;
+    cursor:pointer;text-align:left;text-decoration:none;color:inherit;position:relative}
+  .mrow+.mrow:before{content:"";position:absolute;left:56px;right:0;top:0;height:1px;background:var(--line)}
+  .mrow:hover{background:#fafafa}
+  .mrow .mi{color:var(--ink);flex:none}
+  .mrow .mi .ic{width:23px;height:23px;stroke-width:1.5}
+  .mrow .mt{flex:1;min-width:0}
+  .mrow .mt b{display:block;font-size:15px;font-weight:500}
+  .mrow .mt span{display:block;font-size:12px;color:var(--faint);margin-top:2px}
+  .mrow .ch{color:var(--faint);flex:none}
+  .mrow.danger .mi,.mrow.danger .mt b{color:var(--red)}
+
+  /* ---------- PROFILE ---------- */
+  .pfhead{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:22px}
+  .pfhead .avat{width:76px;height:76px;font-size:30px;margin-bottom:13px}
+  .pfhead .nm{font-size:22px;font-weight:600;line-height:1.2;letter-spacing:-.025em}
+  .pfhead .sub{font-size:12px;color:var(--faint);margin-top:5px}
+  .ro{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:13px 0;
+    border-bottom:1px solid var(--line2)}
+  .ro .k{flex:none;padding-top:2px}
+  .ro .v{flex:1;min-width:0}
+  .ro:last-child{border-bottom:none;padding-bottom:0}
+  .ro:first-child{padding-top:0}
+  .ro .k{font-size:12.5px;color:var(--muted);font-weight:400;
+    display:flex;align-items:center;gap:7px}
+  .ro .v{font-size:14px;font-weight:500;text-align:right;word-break:break-word}
+  .ro .v.mono{font-family:var(--mono);letter-spacing:.06em}
+  .ro .v.none{color:var(--faint);font-weight:500}
+
+  /* ---------- SHARE BANNER ---------- */
+  .sharebar{display:flex;align-items:center;gap:9px;background:var(--goldt);border:1px solid var(--goldl);
+    color:#0a5f6b;border-radius:12px;padding:10px 13px;font-size:12px;margin-bottom:16px;line-height:1.5}
+  .sharebar b{font-weight:600}
+  .sharebar .ic{color:var(--gold);flex:none}
+
+  /* ---------- TAB BAR ---------- */
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;
+    max-width:520px;margin:0 auto;background:rgba(255,255,255,.97);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;
+    border:none;background:none;color:var(--faint);cursor:pointer;transition:color .15s}
+  .tab span{font-size:10.5px;letter-spacing:0;font-weight:500}
+  .tab.on{color:var(--accent)}
+  .tab .bdg{position:absolute;transform:translate(11px,-4px);min-width:15px;height:15px;padding:0 4px;
+    border-radius:8px;background:var(--accent);color:#fff;font-size:9px;font-weight:500;
+    display:flex;align-items:center;justify-content:center}
+
+  /* ---------- SHEET ---------- */
+  .scrim{position:fixed;inset:0;z-index:40;background:rgba(24,28,26,.5);opacity:0;pointer-events:none;
+    transition:opacity .22s}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-width:520px;margin:0 auto;
+    background:var(--cream);border-radius:20px 20px 0 0;transform:translateY(101%);
+    transition:transform .28s cubic-bezier(.32,.72,0,1);max-height:92dvh;display:flex;flex-direction:column}
+  .sheet.on{transform:none}
+  .shd{display:flex;align-items:center;gap:12px;padding:16px 18px 12px;border-bottom:1px solid var(--line)}
+  .shd .grip{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:36px;height:4px;
+    border-radius:3px;background:var(--line)}
+  .shd h3{flex:1;font-size:17.5px;font-weight:600;line-height:1.3;letter-spacing:-.015em}
+  .sbd{padding:16px 18px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .sft{padding:12px 18px calc(16px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);
+    background:var(--cream)}
+  .fld{margin-bottom:13px}
+  .fld label{display:block;font-size:12.5px;color:var(--muted);font-weight:400;margin-bottom:6px}
+  .fld input,.fld select,.fld textarea{width:100%;padding:12px 13px;border-radius:11px;border:1px solid var(--line);
+    background:#fff;outline:none;font-size:14.5px;transition:border-color .15s,box-shadow .15s}
+  .fld textarea{min-height:82px;resize:vertical;line-height:1.55}
+  .fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(0,174,196,.16)}
+  .fld input:disabled{background:var(--sand);color:var(--muted)}
+  .f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .svcbox{background:var(--goldt);border:1px solid var(--goldl);border-radius:13px;padding:13px 14px;margin-bottom:15px}
+  .svcbox .t{font-size:14.5px;font-weight:500}
+  .svcbox .d{font-size:12.5px;color:#0a5f6b;line-height:1.6;margin-top:5px}
+  .svcbox .p{font-size:12.5px;font-weight:600;color:var(--bronze);margin-top:8px;font-variant-numeric:tabular-nums}
+
+  .linkbox{font-family:var(--mono);font-size:12.5px;line-height:1.6;word-break:break-all;
+    background:var(--sand);border-radius:12px;padding:13px 14px;color:var(--muted)}
+
+  /* ---------- TOAST ---------- */
+  #toast{position:fixed;left:50%;bottom:calc(var(--tab) + 16px);transform:translate(-50%,14px);z-index:60;
+    background:#123043;color:#fff;font-size:13px;font-weight:600;padding:11px 17px;border-radius:11px;
+    opacity:0;pointer-events:none;transition:.22s;max-width:88vw;text-align:center;
+    box-shadow:0 12px 30px -10px rgba(0,0,0,.5)}
+  #toast.on{opacity:1;transform:translate(-50%,0)}
+
+  .spin{width:19px;height:19px;border:2px solid rgba(255,255,255,.32);border-top-color:#fff;
+    border-radius:50%;animation:sp .7s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:54px 0;color:var(--faint);font-size:13px}
+  .loading .spin{border-color:var(--line);border-top-color:var(--gold)}
+
+  @media(min-width:521px){
+    body{background:#dfeaf2}
+    #app{box-shadow:0 0 60px -20px rgba(26,32,29,.22);min-height:100dvh}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ SIGN IN ============ -->
+<div id="login">
+  <div class="lwrap">
+    <div class="lmark">M</div>
+    <div class="ltitle">Guest<span class="e"> Portal</span></div>
+    <div class="lrule"></div>
+    <p class="llead">Your stays, your villa, and everything we can arrange for you.</p>
+    <form class="lform" id="lform" autocomplete="on">
+      <input id="lemail" type="email" placeholder="Email" autocomplete="username" required>
+      <input id="lpass" type="password" placeholder="Password" autocomplete="current-password" required>
+      <button class="lbtn" id="lbtn" type="submit">Sign in</button>
+    </form>
+    <div class="lerr" id="lerr"></div>
+    <div class="lnote">No account? Every booking we send you in chat opens without a sign-in.
+      Ask your MGROUP contact for your link.</div>
+    <div class="lfoot">MGROUP Estates · Phuket</div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app">
+  <header class="top">
+    <button class="back hide" id="btnBack" aria-label="Back"></button>
+    <div class="tt">
+      <b id="topTitle">Your stays</b>
+      <span id="topSub"></span>
+    </div>
+    <button class="iconbtn hide" id="btnShare" aria-label="Share this booking"></button>
+    <button class="iconbtn hide" id="btnHelp" aria-label="Contact MGROUP"></button>
+  </header>
+
+  <main>
+    <div class="loading" id="boot"><div class="spin"></div>Loading your stays…</div>
+
+    <!-- HOME -->
+    <section class="view hashero" id="view-home">
+      <div class="hero">
+        <div class="avat" id="avat">G</div>
+        <div>
+          <div class="nm" id="pName">Guest</div>
+          <div class="sub" id="pSub"></div>
+          <button class="edit" id="pEdit"></button>
+        </div>
+      </div>
+      <div id="shareBanner"></div>
+      <div class="tiles" id="tiles"></div>
+      <div id="summary"></div>
+      <div id="homeList"></div>
+    </section>
+
+    <!-- BOOKING -->
+    <section class="view" id="view-booking"><div id="bookingBody"></div></section>
+
+    <!-- CONCIERGE -->
+    <section class="view" id="view-concierge">
+      <p class="lead" id="cLead">Tell us what you would like. We arrange it and confirm in your requests.</p>
+      <div class="cats" id="cats"></div>
+      <div id="svcList"></div>
+    </section>
+
+    <!-- REQUESTS -->
+    <section class="view" id="view-requests"><div id="reqList"></div></section>
+
+    <!-- ACCOUNT -->
+    <section class="view hashero" id="view-account"><div id="accBody"></div></section>
+
+    <!-- PROFILE -->
+    <section class="view hashero" id="view-profile"><div id="pfBody"></div></section>
+  </main>
+
+  <nav class="tabbar" id="tabbar"></nav>
+</div>
+
+<div class="scrim" id="scrim" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="shd"><div class="grip"></div>
+    <h3 id="shTitle">Request</h3>
+    <button class="iconbtn" id="shClose" aria-label="Close" onclick="closeSheet()"></button>
+  </div>
+  <div class="sbd" id="shBody"></div>
+  <div class="sft" id="shFoot"></div>
+</div>
+<div id="toast"></div>
+
+<script>
+(function(){
+  'use strict';
+  var SB_URL='https://iwipvfkjfsveycppqhxc.supabase.co';
+  var SB_KEY=atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW1sM2FYQjJabXRxWm5OMlpYbGpjSEJ4YUhoaklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTnpRM056STVOellzSW1WNGNDSTZNakE1TURNME9EazNObjAuVF9Yd3BCcE5kZXFRTGpYdXVsRVB3bFV2Q045dVhITlRqM0I3dE14YnRGbw==');
+  var H={apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json'};
+  var WHATSAPP='https://wa.me/66808888888';
+
+  /* ---------- icons: UI line set, drawn inline ---------- */
+  var P={
+    home:'<path d="M3 10.6 12 3.2l9 7.4V20a1 1 0 0 1-1 1h-4.6v-6.3H8.6V21H4a1 1 0 0 1-1-1z"/>',
+    bell:'<path d="M18 16.2v-5.1a6 6 0 1 0-12 0v5.1L4 19.2h16z"/><path d="M9.8 22h4.4"/>',
+    list:'<path d="M8.5 6.5h12M8.5 12h12M8.5 17.5h12M3.6 6.5h.02M3.6 12h.02M3.6 17.5h.02"/>',
+    user:'<circle cx="12" cy="8" r="3.8"/><path d="M4.4 20.6a7.6 7.6 0 0 1 15.2 0"/>',
+    chev:'<path d="m9.5 5.5 6.4 6.5-6.4 6.5"/>',
+    back:'<path d="m14.5 5.5-6.4 6.5 6.4 6.5"/>',
+    cal:'<rect x="3.2" y="5.2" width="17.6" height="15.6" rx="2.4"/><path d="M8 3v4.2M16 3v4.2M3.2 10.4h17.6"/>',
+    users:'<circle cx="9.2" cy="8" r="3.4"/><path d="M2.8 20a6.4 6.4 0 0 1 12.8 0"/><path d="M16.4 5.4a3.4 3.4 0 0 1 0 5.2M17.6 14.4A6.4 6.4 0 0 1 21.4 20"/>',
+    moon:'<path d="M20.2 14.4A8.6 8.6 0 1 1 9.5 3.8a7 7 0 0 0 10.7 10.6z"/>',
+    wifi:'<path d="M2.2 8.6a15 15 0 0 1 19.6 0M5.6 12.3a10 10 0 0 1 12.8 0M9 16a5 5 0 0 1 6 0"/><path d="M12 19.8h.02"/>',
+    key:'<circle cx="7.8" cy="16.2" r="3.8"/><path d="m10.6 13.4 8.6-8.6M17.2 6.8l2.2 2.2M14.6 9.4l2.2 2.2"/>',
+    clock:'<circle cx="12" cy="12" r="8.8"/><path d="M12 6.8V12l3.4 2"/>',
+    pin:'<path d="M12 21.2s6.8-6.1 6.8-10.6a6.8 6.8 0 1 0-13.6 0c0 4.5 6.8 10.6 6.8 10.6z"/><circle cx="12" cy="10.4" r="2.5"/>',
+    phone:'<path d="M6.2 3.2h2.9l2 4.9-2.4 1.5a12.2 12.2 0 0 0 5.7 5.7l1.5-2.4 4.9 2v2.9a2 2 0 0 1-2.2 2A17 17 0 0 1 4.2 5.4a2 2 0 0 1 2-2.2z"/>',
+    shield:'<path d="M12 3.2 19 6v6.1c0 4.4-3 8.3-7 9.1-4-.8-7-4.7-7-9.1V6z"/><path d="m9.2 12.1 2 2 3.6-3.7"/>',
+    car:'<path d="M5.2 17.2v-5.6l1.7-4.4h10.2l1.7 4.4v5.6"/><path d="M3.4 17.2h17.2"/><path d="M6.8 17.2v2.2H4.2v-2.2M19.8 17.2v2.2h-2.6v-2.2"/><circle cx="8" cy="13.6" r="1"/><circle cx="16" cy="13.6" r="1"/>',
+    dine:'<path d="M6.6 3.2v5.4a2.2 2.2 0 0 0 4.4 0V3.2M8.8 10.8V20.8"/><path d="M17.4 20.8V3.6c1.7.7 2.8 2.7 2.8 5.2s-1.1 4.4-2.8 4.7"/>',
+    leaf:'<path d="M4.4 20c-.6-8 5-14.6 15.4-15.6C20.6 13.6 14.4 20 5.6 20z"/><path d="M7.4 17.2c2.6-3.8 5.6-6 9-7.4"/>',
+    boat:'<path d="M3 18.4c1.9 1.9 3.9 1.9 5.8 0s3.9-1.9 5.8 0 3.9 1.9 5.8 0"/><path d="M5.4 15.2h13.2l-2.4-4.4H7.8z"/><path d="M12 10.8V3l-4.6 7.8"/>',
+    housecheck:'<path d="M3.4 10.6 12 3.6l8.6 7v9.6H3.4z"/><path d="m9 14.4 2.2 2.2 4-4"/>',
+    family:'<circle cx="8.6" cy="7.2" r="3"/><circle cx="17" cy="9.4" r="2.2"/><path d="M3 20a5.6 5.6 0 0 1 11.2 0"/><path d="M15.6 20a4 4 0 0 1 5.4-3.7"/>',
+    check:'<path d="m5.4 12.6 4.4 4.4 8.8-9.6"/>',
+    x:'<path d="M6.4 6.4 17.6 17.6M17.6 6.4 6.4 17.6"/>',
+    plus:'<path d="M12 5.4v13.2M5.4 12h13.2"/>',
+    share:'<circle cx="17.8" cy="5.4" r="2.6"/><circle cx="6.2" cy="12" r="2.6"/><circle cx="17.8" cy="18.6" r="2.6"/><path d="m8.5 10.7 7-3.9M8.5 13.3l7 3.9"/>',
+    copy:'<rect x="9" y="9" width="11.8" height="11.8" rx="2.2"/><path d="M5.4 15H4.4a1.2 1.2 0 0 1-1.2-1.2V4.4A1.2 1.2 0 0 1 4.4 3.2h9.4A1.2 1.2 0 0 1 15 4.4v1"/>',
+    card:'<rect x="2.6" y="5" width="18.8" height="14" rx="2.4"/><path d="M2.6 10h18.8"/><path d="M6.4 14.6h3.2"/>',
+    file:'<path d="M14 3.2H7a1.4 1.4 0 0 0-1.4 1.4v14.8A1.4 1.4 0 0 0 7 20.8h10a1.4 1.4 0 0 0 1.4-1.4V7.6z"/><path d="M14 3.2v4.4h4.4"/>',
+    logout:'<path d="M14.6 3.6h3.8a1.4 1.4 0 0 1 1.4 1.4v14a1.4 1.4 0 0 1-1.4 1.4h-3.8"/><path d="m9.6 8.2-3.8 3.8 3.8 3.8M5.8 12h9.2"/>',
+    info:'<circle cx="12" cy="12" r="8.8"/><path d="M12 11v5.4M12 7.8h.02"/>',
+    mail:'<rect x="3" y="5" width="18" height="14" rx="2.2"/><path d="m3.5 6.6 8.5 6 8.5-6"/>',
+    lock:'<rect x="4.4" y="10.2" width="15.2" height="10.6" rx="2.2"/><path d="M8 10.2V7.4a4 4 0 0 1 8 0v2.8"/>',
+    star:'<path d="m12 3.4 2.7 5.6 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1L3.2 9.9l6.1-.9z"/>',
+    sparkle:'<path d="M12 3.2 13.9 9l5.8 1.9-5.8 1.9L12 18.6l-1.9-5.8L4.3 10.9 10.1 9z"/><path d="M18.6 16.4l.7 2.1 2.1.7-2.1.7-.7 2.1-.7-2.1-2.1-.7 2.1-.7z"/>',
+    dots:'<circle cx="5.4" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18.6" cy="12" r="1.4"/>',
+    door:'<path d="M6 21V4.2a1.2 1.2 0 0 1 1.2-1.2h9.6A1.2 1.2 0 0 1 18 4.2V21"/><path d="M3.6 21h16.8"/><circle cx="14.6" cy="12.4" r="1"/>',
+    bed:'<path d="M3.2 19.2v-9.4M3.2 13.4h17.6a0 0 0 0 1 0 0v5.8"/><path d="M6.8 13.4v-2.6a1.2 1.2 0 0 1 1.2-1.2h3a1.2 1.2 0 0 1 1.2 1.2v2.6"/><path d="M3.2 16.8h17.6"/>'
+  };
+  function I(n,cls){return '<svg class="ic'+(cls?' '+cls:'')+'" viewBox="0 0 24 24" aria-hidden="true">'+(P[n]||'')+'</svg>';}
+  window.__I=I;
+
+  /* ---------- small helpers ---------- */
+  function $(id){return document.getElementById(id);}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function N(x){var n=Number(x);return isFinite(n)?n:0;}
+  var SYM={THB:'฿',USD:'$',EUR:'€',GBP:'£',RUB:'₽'};
+  function money(v,cur){
+    if(v==null||v==='')return '—';
+    var c=cur||'THB',s=SYM[c];
+    var n=Math.round(N(v)).toLocaleString('en-US');
+    return s?s+n:n+' '+c;
+  }
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function D(s){if(!s)return null;var p=String(s).slice(0,10).split('-');
+    return p.length===3?new Date(+p[0],+p[1]-1,+p[2]):null;}
+  function fmtDate(s,withYear){var d=D(s);if(!d)return '—';
+    return d.getDate()+' '+MON[d.getMonth()]+(withYear===false?'':' '+d.getFullYear());}
+  function fmtLong(s){var d=D(s);if(!d)return '—';
+    var wd=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()];
+    return wd+', '+d.getDate()+' '+MON[d.getMonth()]+' '+d.getFullYear();}
+  function fmtRange(a,b){
+    var x=D(a),y=D(b);if(!x||!y)return '—';
+    var sameY=x.getFullYear()===y.getFullYear();
+    return fmtDate(a,!sameY)+' – '+fmtDate(b,true);
+  }
+  function today(){var d=new Date();d.setHours(0,0,0,0);return d;}
+  function daysTo(s){var d=D(s);if(!d)return null;return Math.round((d-today())/86400000);}
+  function nightsOf(b){
+    if(b.nights)return N(b.nights);
+    var a=D(b.check_in),c=D(b.check_out);
+    return a&&c?Math.max(0,Math.round((c-a)/86400000)):0;
+  }
+  var ST={
+    inquiry:'Enquiry',pending:'Pending',deposit:'Deposit paid',confirmed:'Confirmed',
+    fully_paid:'Paid in full',checked_in:'You are here',checked_out:'Completed',
+    cancelled:'Cancelled',canceled:'Cancelled',no_show:'Not taken up',
+    'new':'Received',done:'Arranged',declined:'Not available'
+  };
+  function stLabel(s){return ST[String(s||'').toLowerCase()]||
+    String(s||'—').replace(/[_-]+/g,' ').replace(/^./,function(c){return c.toUpperCase();});}
+  function stPill(s){return '<span class="st st-'+esc(String(s||'').toLowerCase())+'">'+esc(stLabel(s))+'</span>';}
+  function initials(n){
+    var p=String(n||'G').trim().split(/\s+/);
+    return ((p[0]||'G')[0]+(p.length>1?p[p.length-1][0]:'')).toUpperCase();
+  }
+  function firstName(n){return String(n||'').trim().split(/\s+/)[0]||'there';}
+  var TO;
+  function toast(msg){
+    var t=$('toast');t.textContent=msg;t.classList.add('on');
+    clearTimeout(TO);TO=setTimeout(function(){t.classList.remove('on');},2400);
+  }
+  function copyText(txt,okMsg){
+    function fallback(){
+      var ta=document.createElement('textarea');ta.value=txt;ta.setAttribute('readonly','');
+      ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);
+      ta.select();try{document.execCommand('copy');toast(okMsg||'Copied');}catch(e){}
+      document.body.removeChild(ta);
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(function(){toast(okMsg||'Copied');},fallback);
+    }else fallback();
+  }
+
+  /* ---------- state ---------- */
+  var S={mode:'',token:'',share:'',guest:null,bookings:[],villas:{},services:[],
+          requests:[],atts:[],expires:null,cat:'all',bid:null,view:'home'};
+  var KEY='mg_guest_token';
+
+  function api(action,extra){
+    var body=Object.assign({action:action},extra||{});
+    if(S.share)body.share=S.share; else body.token=S.token;
+    return fetch(SB_URL+'/functions/v1/guest-data',
+      {method:'POST',headers:H,body:JSON.stringify(body)})
+      .then(function(r){return r.json().then(function(d){
+        if(!r.ok)throw Object.assign(new Error(d.error||'failed'),{code:d.error,status:r.status});
+        return d;});});
+  }
+
+  /* ---------- sign in ---------- */
+  $('lform').addEventListener('submit',function(e){
+    e.preventDefault();
+    var btn=$('lbtn'),err=$('lerr');
+    err.textContent='';btn.disabled=true;btn.textContent='Signing in…';
+    fetch(SB_URL+'/functions/v1/portal-login',{method:'POST',headers:H,
+      body:JSON.stringify({email:$('lemail').value.trim(),password:$('lpass').value})})
+      .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d};});})
+      .then(function(res){
+        if(!res.ok||!res.d.token)throw new Error(res.d.error||'invalid_credentials');
+        if(res.d.role!=='guest')throw new Error('not_a_guest');
+        S.token=res.d.token;
+        try{sessionStorage.setItem(KEY,S.token);}catch(e){}
+        start();
+      })
+      .catch(function(e){
+        err.textContent=e.message==='not_a_guest'
+          ? 'That account belongs to the owner portal — open /owner instead.'
+          : 'We could not sign you in. Check your email and password.';
+        btn.disabled=false;btn.textContent='Sign in';
+      });
+  });
+
+  /* ---------- boot ---------- */
+  function hashParts(){return (location.hash||'#home').slice(1).split('/');}
+  function boot(){
+    var p=hashParts();
+    if(p[0]==='s'&&p[1]){S.share=p[1];start();return;}
+    var t='';try{t=sessionStorage.getItem(KEY)||'';}catch(e){}
+    if(t){S.token=t;start();return;}
+    $('login').style.display='flex';$('app').style.display='none';
+  }
+  function start(){
+    $('login').style.display='none';
+    $('app').style.display='flex';
+    $('boot').style.display='';
+    api('bootstrap').then(function(d){
+      S.mode=d.mode;S.guest=d.guest;S.bookings=d.bookings||[];S.services=d.services||[];
+      S.requests=d.requests||[];S.atts=d.attachments||[];S.expires=d.expires_at||null;
+      S.villas={};(d.villas||[]).forEach(function(v){S.villas[v.id]=v;});
+      $('boot').style.display='none';
+      buildTabs();renderHome();renderConcierge();renderRequests();renderAccount();renderProfile();
+      if(S.share&&S.bookings.length===1&&hashParts()[0]==='s'){
+        S.bid=S.bookings[0].id;
+        history.replaceState(null,'','#booking/'+S.bid);
+      }
+      route();
+    }).catch(function(e){
+      $('boot').style.display='none';
+      var m={expired:['This link has expired','Ask your MGROUP contact to send you a fresh one.'],
+             revoked:['This link was withdrawn','Ask your MGROUP contact to send you a new one.'],
+             not_found:['We could not find this link','Please check it was copied in full.'],
+             unauthorized:['Your session has ended','Please sign in again.']}[e.code]
+             ||['Something went wrong','Please try again in a moment.'];
+      if(e.code==='unauthorized'){
+        try{sessionStorage.removeItem(KEY);}catch(x){}
+        S.token='';$('app').style.display='none';$('login').style.display='flex';return;
+      }
+      $('view-home').innerHTML='<div class="empty">'+I('info')+'<b>'+esc(m[0])+'</b><p>'+esc(m[1])+'</p></div>';
+      $('view-home').classList.add('on');
+      $('tabbar').style.display='none';
+    });
+  }
+
+  /* ---------- tabs + routing ---------- */
+  var TABS=[];
+  function buildTabs(){
+    TABS=S.share
+      ? [['booking','Stay','bed'],['concierge','Concierge','bell'],['requests','Requests','list']]
+      : [['home','Stays','home'],['concierge','Concierge','bell'],['requests','Requests','list'],['account','Account','user']];
+    $('tabbar').innerHTML=TABS.map(function(t){
+      var open=t[0]==='requests'?S.requests.filter(function(r){return r.status==='new';}).length:0;
+      return '<button class="tab" data-tab="'+t[0]+'">'+I(t[2],'l')
+        +(open?'<i class="bdg">'+open+'</i>':'')+'<span>'+esc(t[1])+'</span></button>';
+    }).join('');
+    Array.prototype.forEach.call($('tabbar').querySelectorAll('.tab'),function(b){
+      b.addEventListener('click',function(){
+        var t=b.getAttribute('data-tab');
+        go(t==='booking'?('booking/'+(S.bid||'')):t);
+      });
+    });
+  }
+  function go(h){ if((location.hash||'').slice(1)===h)route(); else location.hash=h; }
+
+  function route(){
+    var p=hashParts(),v=p[0]||'home';
+    if(v==='s'){ v=S.bid?'booking':'home'; }
+    if(v==='booking'){
+      var id=p[1]||S.bid;
+      if(!id||!S.bookings.some(function(b){return b.id===id;})){v='home';}
+      else {S.bid=id;renderBooking(id);}
+    }
+    if(v==='concierge'&&p[1])S.bid=p[1];
+    if(v==='profile')renderProfile();
+    if(S.share&&v==='home'&&S.bid){go('booking/'+S.bid);return;}
+    S.view=v;
+    ['home','booking','concierge','requests','account','profile'].forEach(function(k){
+      var el=$('view-'+k);if(el)el.classList.toggle('on',k===v);
+    });
+    var tabFor=v==='booking'&&S.share?'booking':(v==='profile'?'account':v);
+    Array.prototype.forEach.call($('tabbar').querySelectorAll('.tab'),function(b){
+      b.classList.toggle('on',b.getAttribute('data-tab')===tabFor);
+    });
+    setTop(v);
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',route);
+
+  function setTop(v){
+    var t=$('topTitle'),s=$('topSub'),back=$('btnBack'),help=$('btnHelp');
+    var showBack=(v==='booking'&&!S.share)||(v==='concierge'&&S.view==='concierge'&&false);
+    back.classList.toggle('hide',!((v==='booking'&&!S.share)||v==='profile'));
+    back.innerHTML=I('back');
+    help.classList.remove('hide');help.innerHTML=I('phone');
+    var sb=$('btnShare');
+    sb.classList.toggle('hide',v!=='booking'||!S.bid);
+    sb.innerHTML=I('share');
+    var titles={home:['Your<span class="e"> stays</span>',''],
+      booking:['Your<span class="e"> stay</span>',''],
+      concierge:['<span class="e">Concierge</span>','What may we arrange?'],
+      requests:['Your<span class="e"> requests</span>','What we are arranging'],
+      account:['<span class="e">Account</span>',''],
+      profile:['My<span class="e"> details</span>','What we hold on file for you']};
+    var x=titles[v]||titles.home;
+    if(v==='booking'){
+      var b=byId(S.bid),vi=b?S.villas[b.villa_id]:null;
+      t.innerHTML='<span class="villa villaname">'+esc((vi&&vi.name)||'Your stay')+'</span>';
+      s.textContent=b?(b.booking_ref||''):'';
+    }else{
+      t.innerHTML=x[0];
+      var n=S.bookings.length;
+      s.textContent=v==='home'?(n?n+' booking'+(n===1?'':'s'):'')
+        :(v==='account'&&S.guest?(S.guest.email||''):x[1]);
+    }
+  }
+  $('btnBack').addEventListener('click',function(){
+    if(history.length>1)history.back(); else go('home');
+  });
+  $('btnHelp').addEventListener('click',contactSheet);
+  $('btnShare').addEventListener('click',function(){ if(S.bid)shareSheet(S.bid); });
+
+  function byId(id){return S.bookings.filter(function(b){return b.id===id;})[0]||null;}
+  function villaOf(b){return (b&&S.villas[b.villa_id])||null;}
+  function coverOf(v){
+    if(!v)return '';
+    if(v.cover_image)return v.cover_image;
+    if(Array.isArray(v.images)&&v.images.length)return v.images[0];
+    return '';
+  }
+  function phaseOf(b){
+    var st=String(b.status||'').toLowerCase();
+    if(st==='cancelled'||st==='canceled'||st==='no_show')return 'off';
+    if(st==='checked_in')return 'now';
+    var out=daysTo(b.check_out),inn=daysTo(b.check_in);
+    if(out!=null&&out<0)return 'past';
+    if(inn!=null&&inn<=0&&out!=null&&out>=0)return 'now';
+    return 'next';
+  }
+  function whenText(b){
+    var ph=phaseOf(b);
+    if(ph==='off')return 'Cancelled';
+    if(ph==='now')return 'You are staying now';
+    if(ph==='past'){var d=D(b.check_out);return d?('Stayed '+MON[d.getMonth()]+' '+d.getFullYear()):'Past stay';}
+    var n=daysTo(b.check_in);
+    if(n===0)return 'Arriving today';
+    if(n===1)return 'Arriving tomorrow';
+    if(n!=null&&n>1)return 'In '+n+' days';
+    return 'Upcoming';
+  }
+
+  /* Concierge rows MGROUP has settled for a trip — what the guest sees as
+     part of the booking, rather than as an open request. */
+  function tripItems(bid){
+    return S.requests.filter(function(r){
+      if(r.booking_id!==bid)return false;
+      if(r.status==='cancelled'||r.status==='declined')return false;
+      return r.source==='admin'||r.status==='confirmed'||r.status==='done';
+    });
+  }
+
+  /* ---------- booking card ---------- */
+  function bcard(b){
+    var v=villaOf(b),img=coverOf(v),n=nightsOf(b);
+    var g=N(b.guests_count)||(N(b.adults)+N(b.children))||null;
+    return '<button class="bcard" data-open="'+esc(b.id)+'">'
+      +'<div class="bimg"'+(img?' style="background-image:url('+"'"+esc(img)+"'"+')"':'')+'>'
+        +(img?'':'<div class="ph villaname">'+esc(initials((v&&v.name)||'MG'))+'</div>')
+        +'<div class="scrim"></div>'
+        +'<div class="st">'+stPill(b.status).replace('<span class="st ','<span class="st ')+'</div>'
+        +'<div class="cd">'+I('clock','s')+esc(whenText(b))+'</div>'
+      +'</div>'
+      +'<div class="bbody">'
+        +'<div class="nm villaname">'+esc((v&&v.name)||'Villa')+'</div>'
+        +'<div class="ref">'+esc(b.booking_ref||'')+(v&&v.area?' · '+esc(v.area):'')+'</div>'
+        +'<div class="bmeta">'
+          +'<span>'+I('cal','s')+esc(fmtRange(b.check_in,b.check_out))+'</span>'
+          +(n?'<span>'+I('moon','s')+n+'</span>':'')
+          +(g?'<span>'+I('users','s')+g+'</span>':'')
+          +'<span class="go">'+I('chev','s')+'</span>'
+        +'</div>'
+        +chipRow(tripItems(b.id))
+      +'</div></button>';
+  }
+
+  function chipRow(items){
+    if(!items.length)return '';
+    var show=items.slice(0,3),rest=items.length-show.length;
+    return '<div class="chips">'
+      +show.map(function(r){
+        return '<span class="chip cc-'+esc(r.category||'')+'">'+I(catIcon(r.category),'s')
+          +esc(r.service_title)+'</span>';
+      }).join('')
+      +(rest>0?'<span class="chip more">+'+rest+' more</span>':'')
+      +'</div>';
+  }
+
+  /* ---------- HOME ---------- */
+  function renderHome(){
+    var g=S.guest||{},bk=S.bookings;
+    $('avat').textContent=initials(g.name);
+    $('pName').textContent=(bk.length?'Welcome back, ':'Welcome, ')+firstName(g.name);
+    var nights=bk.reduce(function(a,b){return a+(phaseOf(b)==='off'?0:nightsOf(b));},0);
+    var next=bk.filter(function(b){return phaseOf(b)==='next'||phaseOf(b)==='now';});
+    $('pSub').innerHTML='<span>MGROUP private client</span><i class="dot"></i>'
+      +'<span>'+bk.length+' booking'+(bk.length===1?'':'s')+'</span>';
+    var ed=$('pEdit');
+    if(ed){
+      ed.style.display=S.share?'none':'';
+      ed.innerHTML='Update personal info'+I('chev','s');
+      ed.onclick=function(){go('profile');};
+    }
+    $('tiles').innerHTML=
+      '<div class="tile"><div class="v">'+bk.length+'</div><div class="l">Stays</div></div>'
+     +'<div class="tile"><div class="v">'+nights+'</div><div class="l">Nights</div></div>'
+     +'<div class="tile"><div class="v">'+next.length+'</div><div class="l">Ahead</div></div>';
+
+    // money across every live booking, so the first screen answers "where do I stand"
+    var live=bk.filter(function(b){return phaseOf(b)!=='off';});
+    var cur=(live[0]&&live[0].__pay&&live[0].__pay.currency)||'THB';
+    var mixed=live.some(function(b){return (b.__pay&&b.__pay.currency||'THB')!==cur;});
+    var tot=0,paid=0,due=0,known=false;
+    live.forEach(function(b){var p=b.__pay||{};if(!p.known)return;known=true;
+      tot+=N(p.total);paid+=N(p.paid);due+=N(p.balance);});
+    var extras=S.requests.filter(function(r){
+      return r.status!=='cancelled'&&r.status!=='declined'&&
+             (r.source==='admin'||r.status==='confirmed'||r.status==='done');}).length;
+    $('summary').innerHTML=(known&&!mixed)
+      ? '<div class="sumcard">'
+        +'<div class="sumrow"><span class="k">'+I('card','s')+'Booked with MGROUP</span>'
+          +'<span class="v">'+esc(money(tot,cur))+'</span></div>'
+        +'<div class="sumrow"><span class="k">'+I('check','s')+'Paid</span>'
+          +'<span class="v ok">'+esc(money(paid,cur))+'</span></div>'
+        +'<div class="sumrow"><span class="k">'+I('clock','s')+'Balance</span>'
+          +'<span class="v '+(due>0?'due':'ok')+'">'+(due>0?esc(money(due,cur)):'Settled')+'</span></div>'
+        +'<div class="bar'+(due>0?'':' g')+'"><i style="width:'
+          +Math.max(2,tot>0?Math.round(paid/tot*100):(paid>0?100:0))+'%"></i></div>'
+        +(extras?'<div class="sumx">'+I('sparkle','s')+extras+' extra'+(extras===1?'':'s')
+          +' arranged across your trips</div>':'')
+      +'</div>'
+      : '';
+
+    $('shareBanner').innerHTML=S.share
+      ? '<div class="sharebar">'+I('share','s')+'<div>Shared with you by <b>MGROUP Estates</b>'
+        +(S.expires?' · valid until '+esc(fmtDate(S.expires)):'')+'. No sign-in needed.</div></div>'
+      : '';
+
+    var live=bk.filter(function(b){return phaseOf(b)==='now';});
+    var soon=bk.filter(function(b){return phaseOf(b)==='next';})
+              .sort(function(a,b){return String(a.check_in).localeCompare(String(b.check_in));});
+    var past=bk.filter(function(b){var p=phaseOf(b);return p==='past'||p==='off';});
+
+    var out='';
+    if(!bk.length){
+      out='<div class="empty">'+I('bed')+'<b>No stays yet</b>'
+        +'<p>When we confirm a booking for you it appears here, with everything you need for the villa.</p></div>';
+    }else{
+      if(live.length)out+='<div class="sect"><h3>Staying now</h3></div>'+live.map(bcard).join('');
+      if(soon.length)out+='<div class="sect"><h3>Upcoming</h3></div>'+soon.map(bcard).join('');
+      if(past.length)out+='<div class="sect"><h3>Past stays</h3></div>'+past.map(bcard).join('');
+    }
+    $('homeList').innerHTML=out;
+    bindOpen($('homeList'));
+  }
+  function bindOpen(root){
+    Array.prototype.forEach.call(root.querySelectorAll('[data-open]'),function(el){
+      el.addEventListener('click',function(){go('booking/'+el.getAttribute('data-open'));});
+    });
+  }
+
+  /* ---------- BOOKING DETAIL ---------- */
+  function pill(list){return list.filter(Boolean).join(' · ');}
+  function nearby(j){
+    if(!j)return [];
+    var a=j;if(typeof a==='string'){try{a=JSON.parse(a);}catch(e){return [];}}
+    if(!Array.isArray(a))return [];
+    return a.map(function(x){
+      if(typeof x==='string')return {name:x};
+      return {name:x.name||x.title||'',note:x.note||x.type||x.cuisine||x.distance||''};
+    }).filter(function(x){return x.name;});
+  }
+  function renderBooking(id){
+    var b=byId(id);if(!b)return;
+    var v=villaOf(b),gd=b.guide||null,img=coverOf(v),pay=b.__pay||{},n=nightsOf(b);
+    var ph=phaseOf(b);
+    var adults=N(b.adults),kids=N(b.children),pets=N(b.pets);
+    var gtot=N(b.guests_count)||(adults+kids);
+    var out='';
+
+    if(S.share){
+      out+='<div class="sharebar">'+I('share','s')+'<div>Shared with you by <b>MGROUP Estates</b>'
+        +(S.expires?' · valid until '+esc(fmtDate(S.expires)):'')+'. No sign-in needed.</div></div>';
+    }
+
+    /* hero */
+    out+='<div class="bcard" style="cursor:default;margin-bottom:14px">'
+      +'<div class="bimg" style="height:158px'+(img?';background-image:url('+"'"+esc(img)+"'"+')':'')+'">'
+        +(img?'':'<div class="ph villaname">'+esc(initials((v&&v.name)||'MG'))+'</div>')
+        +'<div class="scrim"></div><div class="st">'+stPill(b.status)+'</div>'
+        +'<div class="cd">'+I('clock','s')+esc(whenText(b))+'</div></div>'
+      +'<div class="bbody"><div class="nm villaname">'+esc((v&&v.name)||'Villa')+'</div>'
+      +'<div class="ref">'+esc(b.booking_ref||'')+'</div>'
+      +'<div class="bmeta"><span>'+I('pin','s')+esc((v&&(v.area||v.location))||'Phuket')+'</span>'
+      +(v&&v.bedrooms?'<span>'+I('bed','s')+v.bedrooms+' bed</span>':'')
+      +(v&&v.max_guests?'<span>'+I('users','s')+'up to '+v.max_guests+'</span>':'')
+      +'</div></div></div>';
+
+    /* dates */
+    out+='<div class="panel"><h4>'+I('cal','s')+'Your stay</h4><div class="kv">'
+      +'<div><div class="k">Check in</div><div class="v">'+esc(fmtLong(b.check_in))+'</div>'
+        +'<div class="v sm">'+esc((gd&&gd.checkin_time)||'from 15:00')+'</div></div>'
+      +'<div><div class="k">Check out</div><div class="v">'+esc(fmtLong(b.check_out))+'</div>'
+        +'<div class="v sm">'+esc((gd&&gd.checkout_time)||'by 11:00')+'</div></div>'
+      +'<div><div class="k">Nights</div><div class="v">'+n+'</div></div>'
+      +'<div><div class="k">Guests</div><div class="v">'+(gtot||'—')+'</div>'
+        +'<div class="v sm">'+esc(pill([adults?adults+' adult'+(adults===1?'':'s'):'',
+            kids?kids+' child'+(kids===1?'':'ren'):'',pets?pets+' pet'+(pets===1?'':'s'):''])||'—')+'</div></div>'
+      +'</div></div>';
+
+    /* what MGROUP has arranged for this trip */
+    var inc=tripItems(b.id);
+    if(inc.length){
+      out+='<div class="panel"><h4>'+I('sparkle','s')+'Included in this trip</h4>'
+        +inc.map(function(r){
+          var meta=[];
+          if(r.requested_for)meta.push(I('cal','s')+esc(fmtDate(r.requested_for))
+            +(r.requested_time?' \u00b7 '+esc(r.requested_time):''));
+          if(r.people)meta.push(I('users','s')+r.people);
+          if(r.qty&&r.qty>1)meta.push(I('plus','s')+r.qty+'\u00d7');
+          return '<button class="inc cc-'+esc(r.category||'')+'" data-inc="'+esc(r.id)+'">'
+            +'<div class="i">'+I(catIcon(r.category))+'</div>'
+            +'<div class="b"><div class="t">'+esc(r.service_title)+'</div>'
+            +(meta.length?'<div class="m">'+meta.map(function(m){return '<span>'+m+'</span>';}).join('')+'</div>':'')
+            +(r.admin_note?'<div class="m" style="color:var(--muted)">'+esc(r.admin_note)+'</div>':'')
+            +'</div>'
+            +'<div class="r">'+stPill(r.status)
+            +(r.price!=null?'<span class="pr">'+esc(money(r.price,r.currency))+'</span>':'')
+            +'<span class="chv">'+I('chev','s')+'</span>'
+            +'</div></button>';
+        }).join('')
+        +'</div>';
+    }
+
+    /* progress */
+    var stages=b.stages||[];
+    if(stages.length&&ph!=='off'){
+      var tot=0,dn=0;stages.forEach(function(s){tot+=s.total;dn+=s.done;});
+      var pct=tot?Math.round(dn/tot*100):0;
+      out+='<div class="panel"><h4>'+I('check','s')+'Preparing your stay</h4><div class="tl">'
+        +stages.map(function(s){
+          var full=s.done>=s.total,part=s.done>0&&!full;
+          return '<div class="tlrow '+(full?'done':part?'now':'')+'"><div class="dot"></div>'
+            +'<div class="lb">'+esc(s.label)+'</div>'
+            +'<div class="sb">'+(full?'Ready':s.done+' of '+s.total+' done')+'</div></div>';
+        }).join('')
+        +'</div><div class="bar'+(pct===100?' g':'')+'"><i style="width:'+pct+'%"></i></div></div>';
+    }
+
+    /* money */
+    if(pay.known){
+      var cur=pay.currency||b.currency||'THB';
+      out+='<div class="panel"><h4>'+I('card','s')+'Payment</h4>'
+        +'<div class="rowline"><div class="k">Total for the stay</div>'
+          +'<div class="v big">'+esc(money(pay.total,cur))+'</div></div>'
+        +'<div class="rowline"><div class="k">'+I('check','s')+'Received</div>'
+          +'<div class="v ok">'+esc(money(pay.paid,cur))+'</div></div>'
+        +'<div class="rowline"><div class="k">'+I('clock','s')+'Balance</div>'
+          +'<div class="v '+(N(pay.balance)>0?'due':'ok')+'">'
+          +(N(pay.balance)>0?esc(money(pay.balance,cur)):'Settled')+'</div></div>'
+        +(N(pay.deposit)>0?'<div class="rowline"><div class="k">'+I('shield','s')
+          +'Security deposit</div><div class="v">'+esc(money(pay.deposit,cur))+'</div></div>':'')
+        +'<div class="bar'+(pay.pct>=100?' g':'')+'"><i style="width:'+Math.max(2,N(pay.pct))+'%"></i></div>'
+        +'</div>';
+    }
+
+    /* access */
+    if(gd){
+      if(gd.access_open&&(gd.wifi_name||gd.wifi_password||gd.door_code||gd.gate_code)){
+        var codes=[];
+        if(gd.wifi_name)codes.push(['wifi','Wi-Fi network',gd.wifi_name]);
+        if(gd.wifi_password)codes.push(['lock','Wi-Fi password',gd.wifi_password]);
+        if(gd.door_code)codes.push(['key','Door code',gd.door_code]);
+        if(gd.gate_code)codes.push(['door','Gate code',gd.gate_code]);
+        out+='<div class="panel"><h4>'+I('key','s')+'Villa access</h4><div class="codes">'
+          +codes.map(function(c){
+            return '<button class="code" data-copy="'+esc(c[2])+'"><div class="k">'+I(c[0],'s')+esc(c[1])+'</div>'
+              +'<div class="v">'+esc(c[2])+'</div></button>';
+          }).join('')+'</div></div>';
+      }else if(!gd.access_open){
+        out+='<div class="panel"><h4>'+I('key','s')+'Villa access</h4>'
+          +'<div class="locked">'+I('lock','s')
+          +'<div>Wi-Fi and door codes appear here the day before you arrive, and stay available '
+          +'until the day after you leave.</div></div></div>';
+      }
+    }
+
+    /* good to know */
+    if(gd){
+      var rows=[['clock','Arrival',gd.checkin_instructions],['clock','Departure',gd.checkout_instructions],
+        ['info','House rules',gd.house_rules],['moon','Quiet hours',gd.quiet_hours],
+        ['leaf','Pool',gd.pool_instructions],['dine','Kitchen',gd.kitchen_guide],
+        ['housecheck','Laundry',gd.laundry_guide],['info','Air conditioning',gd.ac_guide],
+        ['info','Television',gd.tv_guide],['car','Getting around',gd.transport_info]]
+        .filter(function(r){return r[2];});
+      if(rows.length){
+        out+='<div class="panel"><h4>'+I('info','s')+'Good to know</h4>'
+          +rows.map(function(r,i){
+            return '<div style="padding:'+(i?'12px 0 0':'0')+'">'
+              +'<div class="k" style="font-size:12.5px;color:var(--muted);'
+              +'font-weight:500;display:flex;align-items:center;gap:6px">'
+              +I(r[0],'s')+esc(r[1])+'</div>'
+              +'<div class="note" style="margin-top:5px">'+esc(r[2])+'</div></div>';
+          }).join('')+'</div>';
+      }
+      var eats=nearby(gd.restaurants_nearby),see=nearby(gd.attractions_nearby);
+      if(eats.length||see.length){
+        out+='<div class="panel"><h4>'+I('pin','s')+'Around you</h4>'
+          +[['Where to eat',eats],['What to see',see]].filter(function(g){return g[1].length;}).map(function(g){
+            return '<div style="margin-bottom:12px"><div class="k" style="font-size:12.5px;'
+              +'color:var(--ink);font-weight:600;margin-bottom:6px">'+esc(g[0])+'</div>'
+              +g[1].map(function(x){
+                return '<div class="rowline"><div class="k">'+esc(x.name)+'</div>'
+                  +'<div class="v" style="font-weight:500;color:var(--faint);font-size:12px">'+esc(x.note||'')+'</div></div>';
+              }).join('')+'</div>';
+          }).join('')+'</div>';
+      }
+      if(gd.emergency_contact||gd.hospital_nearby||gd.police_nearby){
+        out+='<div class="panel"><h4>'+I('shield','s')+'In an emergency</h4>'
+          +[['phone','MGROUP 24h',gd.emergency_contact],['shield','Nearest hospital',gd.hospital_nearby],
+            ['shield','Police',gd.police_nearby]].filter(function(r){return r[2];}).map(function(r){
+            return '<div class="rowline"><div class="k">'+I(r[0],'s')+esc(r[1])+'</div>'
+              +'<div class="v" style="font-weight:600">'+esc(r[2])+'</div></div>';
+          }).join('')+'</div>';
+      }
+    }
+
+    if(b.special_requests){
+      out+='<div class="panel"><h4>'+I('star','s')+'Noted for your stay</h4>'
+        +'<div class="note">'+esc(b.special_requests)+'</div></div>';
+    }
+
+    var docs=(S.atts||[]).filter(function(a){return a.entity_id===b.id;});
+    if(docs.length){
+      out+='<div class="panel"><h4>'+I('file','s')+'Your documents</h4>'
+        +docs.map(function(a){
+          return '<div class="rowline"><div class="k">'+I('file','s')
+            +esc(a.title||a.category||'Document')+'</div>'
+            +'<div class="v" style="font-weight:500;color:var(--faint);font-size:12px">'
+            +esc(fmtDate(a.created_at))+'</div></div>';
+        }).join('')
+        +'<button class="cta ghost" style="margin-top:13px" id="askDocs">'+I('mail','s')
+        +'Ask for a copy</button></div>';
+    }
+
+    if(ph!=='off'&&ph!=='past'){
+      out+='<button class="cta" data-conc="'+esc(b.id)+'">'+I('bell','s')+'Ask the concierge</button>';
+    }else{
+      out+='<button class="cta ghost" data-conc="'+esc(b.id)+'">'+I('bell','s')+'Book with us again</button>';
+    }
+    out+='<button class="cta ghost" style="margin-top:10px" data-share="'+esc(b.id)+'">'
+      +I('share','s')+'Share this booking</button>';
+
+    $('bookingBody').innerHTML=out;
+    Array.prototype.forEach.call($('bookingBody').querySelectorAll('[data-copy]'),function(el){
+      el.addEventListener('click',function(){copyText(el.getAttribute('data-copy'),'Copied to clipboard');});
+    });
+    Array.prototype.forEach.call($('bookingBody').querySelectorAll('[data-conc]'),function(el){
+      el.addEventListener('click',function(){S.bid=el.getAttribute('data-conc');renderConcierge();go('concierge');});
+    });
+    Array.prototype.forEach.call($('bookingBody').querySelectorAll('[data-share]'),function(el){
+      el.addEventListener('click',function(){shareSheet(el.getAttribute('data-share'));});
+    });
+    Array.prototype.forEach.call($('bookingBody').querySelectorAll('[data-inc]'),function(el){
+      el.addEventListener('click',function(){openTripItem(el.getAttribute('data-inc'));});
+    });
+    var ad=$('askDocs');if(ad)ad.addEventListener('click',contactSheet);
+  }
+
+  /* ---------- CONCIERGE ---------- */
+  var CATS=[['all','Everything','sparkle'],['transfer','Transfers','car'],['dining','Dining','dine'],
+            ['wellness','Wellness','leaf'],['excursion','On the water','boat'],
+            ['home','At the villa','housecheck'],['family','Family','family']];
+  function catIcon(c){
+    for(var i=0;i<CATS.length;i++)if(CATS[i][0]===c)return CATS[i][2];
+    return 'sparkle';
+  }
+  function activeBooking(){
+    if(S.bid&&byId(S.bid))return byId(S.bid);
+    var live=S.bookings.filter(function(b){return phaseOf(b)==='now';})[0];
+    if(live)return live;
+    var next=S.bookings.filter(function(b){return phaseOf(b)==='next';})
+      .sort(function(a,b){return String(a.check_in).localeCompare(String(b.check_in));})[0];
+    return next||S.bookings[0]||null;
+  }
+  function renderConcierge(){
+    var b=activeBooking(),v=villaOf(b);
+    $('cLead').innerHTML=b
+      ? 'Anything you would like for '+esc((v&&v.name)||'your villa')+' — we arrange it and confirm back to you here.'
+      : 'Tell us what you would like and we will come back to you.';
+    var have={};S.services.forEach(function(s){have[s.category]=1;});
+    $('cats').innerHTML=CATS.filter(function(c){return c[0]==='all'||have[c[0]];}).map(function(c){
+      return '<button class="cat'+(S.cat===c[0]?' on':'')+'" data-cat="'+c[0]+'">'+I(c[2])+esc(c[1])+'</button>';
+    }).join('');
+    Array.prototype.forEach.call($('cats').querySelectorAll('[data-cat]'),function(el){
+      el.addEventListener('click',function(){S.cat=el.getAttribute('data-cat');renderConcierge();});
+    });
+
+    var rank={};CATS.forEach(function(c,i){rank[c[0]]=i;});
+    var list=S.services.filter(function(s){return S.cat==='all'||s.category===S.cat;})
+      .slice().sort(function(x,y){
+        var d=(rank[x.category]==null?99:rank[x.category])-(rank[y.category]==null?99:rank[y.category]);
+        return d||(N(x.sort_order)-N(y.sort_order));
+      });
+    if(!list.length){
+      $('svcList').innerHTML='<div class="empty">'+I('bell')+'<b>Nothing listed here yet</b>'
+        +'<p>Message us and we will arrange it anyway.</p></div>';
+    }else{
+      $('svcList').innerHTML=list.map(function(s){
+        return '<button class="svc cc-'+esc(s.category||'')+'" data-svc="'+esc(s.id)+'">'
+          +'<div class="sic">'+I(catIcon(s.category))+'</div>'
+          +'<div class="sb"><div class="t">'+esc(s.title)+'</div>'
+          +(s.blurb?'<div class="b">'+esc(s.blurb)+'</div>':'')
+          +'<div class="m">'
+            +(s.price_from!=null?'<span class="pr">from '+esc(money(s.price_from,s.currency))
+                +(s.unit?' <span style="color:var(--faint);font-weight:600">'+esc(s.unit)+'</span>':'')+'</span>':'')
+            +(s.lead_time?'<em>'+I('clock','s')+esc(s.lead_time)+'</em>':'')
+          +'</div></div>'
+          +'<span style="color:var(--faint);align-self:center">'+I('chev','s')+'</span></button>';
+      }).join('')
+      +'<button class="cta ghost" style="margin-top:6px" id="svcOther">'+I('plus','s')
+      +'Something else</button>';
+      Array.prototype.forEach.call($('svcList').querySelectorAll('[data-svc]'),function(el){
+        el.addEventListener('click',function(){openRequest(el.getAttribute('data-svc'));});
+      });
+      $('svcOther').addEventListener('click',function(){openRequest(null);});
+    }
+  }
+
+  /* ---------- REQUESTS ---------- */
+  function renderRequests(){
+    var rs=S.requests;
+    if(!rs.length){
+      $('reqList').innerHTML='<div class="empty">'+I('list')+'<b>No requests yet</b>'
+        +'<p>Anything you ask the concierge for shows up here, with our answer.</p>'
+        +'<button class="cta ghost" style="max-width:230px;margin:18px auto 0" id="rqGo">'
+        +I('bell','s')+'Open the concierge</button></div>';
+      var g=$('rqGo');if(g)g.addEventListener('click',function(){go('concierge');});
+      return;
+    }
+    $('reqList').innerHTML=rs.map(function(r){
+      var b=byId(r.booking_id),v=villaOf(b);
+      return '<div class="rq"><div class="hd"><div><div class="t">'+esc(r.service_title)+'</div>'
+        +'<div class="m">'
+          +(r.requested_for?'<span>'+I('cal','s')+esc(fmtDate(r.requested_for))
+             +(r.requested_time?' · '+esc(r.requested_time):'')+'</span>':'')
+          +(r.people?'<span>'+I('users','s')+r.people+'</span>':'')
+          +(v?'<span>'+I('pin','s')+esc(v.name)+'</span>':'')
+        +'</div></div>'+stPill(r.status)+'</div>'
+        +(r.notes?'<div class="nt">'+esc(r.notes)+'</div>':'')
+        +(r.admin_note?'<div class="ans"><b>MGROUP</b>'+esc(r.admin_note)+'</div>':'')
+        +(r.status==='new'?'<div class="act"><button class="mini" data-cancel="'+esc(r.id)+'">'
+            +'Withdraw</button></div>':'')
+        +'</div>';
+    }).join('');
+    Array.prototype.forEach.call($('reqList').querySelectorAll('[data-cancel]'),function(el){
+      el.addEventListener('click',function(){
+        var id=el.getAttribute('data-cancel');
+        el.disabled=true;el.textContent='Withdrawing…';
+        api('cancel_request',{request_id:id}).then(function(){
+          S.requests=S.requests.map(function(r){return r.id===id?Object.assign({},r,{status:'cancelled'}):r;});
+          renderRequests();buildTabs();route();toast('Request withdrawn');
+        }).catch(function(){el.disabled=false;el.textContent='Withdraw';toast('Could not withdraw that');});
+      });
+    });
+  }
+
+  /* ---------- ACCOUNT ---------- */
+  function renderAccount(){
+    var g=S.guest||{},bk=S.bookings;
+    var nights=bk.reduce(function(a,b){return a+(phaseOf(b)==='off'?0:nightsOf(b));},0);
+    var open=S.requests.filter(function(r){return r.status==='new';}).length;
+    $('accBody').innerHTML=
+      '<div class="hero"><div class="avat">'+esc(initials(g.name))+'</div>'
+      +'<div><div class="nm">'+esc(g.name||'Guest')+'</div>'
+      +'<div class="sub"><span>'+esc(g.email||g.phone||'MGROUP private client')+'</span></div>'
+      +'<button class="edit" data-acc="profile">Update personal info'+I('chev','s')+'</button>'
+      +'</div></div>'
+      +'<div class="memb"><div class="hd">'
+        +'<div class="t">'+I('sparkle')+'MGROUP concierge</div>'
+        +'<button class="see" data-acc="concierge">See everything'+I('chev','s')+'</button></div>'
+      +'<div class="row">'
+        +'<button class="qa" data-acc="contact"><span class="qi">'+I('phone')+'</span>'
+          +'<span>24-hour villa team</span></button>'
+        +'<button class="qa" data-acc="concierge"><span class="qi">'+I('car')+'</span>'
+          +'<span>Transfers &amp; day trips</span></button>'
+      +'</div></div>'
+      +'<div class="menu">'
+        +mrow('home','My bookings',bk.length+' in total','home')
+        +mrow('list','My requests',open?open+' still open':'Nothing open','requests')
+        +mrow('bell','Concierge','Transfers, dining, wellness and more','concierge')
+      +'</div>'
+      +'<div class="menu">'
+        +mrow('user','My details','Contact, nationality and passport','profile')
+        +mrow('phone','Contact MGROUP','We answer 24 hours','contact')
+        +mrow('info','About your portal','What this page shows','about')
+      +'</div>'
+      +'<div class="menu"><button class="mrow danger" data-acc="out">'
+        +'<span class="mi">'+I('logout')+'</span>'
+        +'<span class="mt"><b>Sign out</b></span>'
+        +'<span class="ch">'+I('chev','s')+'</span></button></div>'
+      +'<div style="text-align:center;margin-top:22px;font-size:9.5px;letter-spacing:.26em;'
+      +'text-transform:uppercase;color:#8b8272">MGROUP Estates · Phuket</div>';
+    Array.prototype.forEach.call($('accBody').querySelectorAll('[data-acc]'),function(el){
+      el.addEventListener('click',function(){
+        var a=el.getAttribute('data-acc');
+        if(a==='out'){try{sessionStorage.removeItem(KEY);}catch(e){}location.hash='';location.reload();return;}
+        if(a==='contact')return contactSheet();
+        if(a==='about')return aboutSheet();
+        go(a);
+      });
+    });
+  }
+  function mrow(icon,title,sub,act){
+    return '<button class="mrow" data-acc="'+esc(act)+'"><span class="mi">'+I(icon)+'</span>'
+      +'<span class="mt"><b>'+esc(title)+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'')+'</span>'
+      +'<span class="ch">'+I('chev','s')+'</span></button>';
+  }
+
+  /* ---------- PROFILE ---------- */
+  function renderProfile(){
+    var g=S.guest||{},bk=S.bookings;
+    var since=g.since?D(String(g.since).slice(0,10)):null;
+    var nights=bk.reduce(function(a,b){return a+(phaseOf(b)==='off'?0:nightsOf(b));},0);
+    var ro=!!S.share; // a share link is a link, not proof of who is holding it
+    function fld(id,label,val,type,ph){
+      return '<div class="fld"><label>'+esc(label)+'</label>'
+        +'<input id="'+id+'" type="'+(type||'text')+'" value="'+esc(val||'')+'"'
+        +(ph?' placeholder="'+esc(ph)+'"':'')+(ro?' disabled':'')+'></div>';
+    }
+    $('pfBody').innerHTML=
+      '<div class="hero mid"><div class="avat">'+esc(initials(g.name))+'</div>'
+      +'<div><div class="nm">'+esc(g.name||'Guest')+'</div>'
+      +'<div class="sub"><span>'
+      +(since?'With MGROUP since '+MON[since.getMonth()]+' '+since.getFullYear():'MGROUP private client')
+      +'</span><i class="dot"></i><span>'+bk.length+' stay'+(bk.length===1?'':'s')
+      +'</span><i class="dot"></i><span>'+nights+' nights</span></div></div></div>'
+
+      +'<div class="panel"><h4>'+I('lock','s')+'On file with MGROUP</h4>'
+        +'<div class="ro"><div class="k">'+I('user','s')+'Full name</div>'
+          +'<div class="v">'+esc(g.name||'\u2014')+'</div></div>'
+        +'<div class="ro"><div class="k">'+I('file','s')+'Passport</div>'
+          +'<div class="v '+(g.passport_masked?'mono':'none')+'">'
+          +esc(g.passport_masked||'Not on file')+'</div></div>'
+        +'<div class="locked" style="margin-top:13px">'+I('info','s')
+        +'<div>Your name and passport are the ones on your rental agreement. '
+        +'To change either, message us and we will update the contract with them.</div></div>'
+      +'</div>'
+
+      +'<div class="panel"><h4>'+I('mail','s')+'How we reach you</h4>'
+        +fld('pf_email','Email',g.email,'email','you@example.com')
+        +fld('pf_phone','Phone / WhatsApp',g.phone,'tel','+66 \u2026')
+        +fld('pf_line','LINE ID',g.line_id,'text','optional')
+        +fld('pf_nat','Nationality',g.nationality,'text','optional')
+        +(ro
+          ? '<div class="locked">'+I('lock','s')+'<div>You are viewing a shared link. '
+            +'Sign in to change your details, or send us the change in chat.</div></div>'
+          : '<button class="cta" id="pfSave">'+I('check','s')+'Save my details</button>')
+      +'</div>'
+
+      +'<div class="menu"><button class="mrow" data-pf="contact"><span class="mi">'+I('phone')+'</span>'
+      +'<span class="mt"><b>Something else to change?</b><span>Message the MGROUP team</span></span>'
+      +'<span class="ch">'+I('chev','s')+'</span></button></div>';
+
+    var sv=$('pfSave');
+    if(sv)sv.addEventListener('click',function(){
+      var btn=this;
+      var body={email:$('pf_email').value,phone:$('pf_phone').value,
+                line_id:$('pf_line').value,nationality:$('pf_nat').value};
+      btn.disabled=true;btn.innerHTML='<span class="spin"></span>Saving\u2026';
+      api('update_profile',body).then(function(d){
+        S.guest=Object.assign({},S.guest,d.guest||body);
+        btn.innerHTML=I('check','s')+'Saved';
+        renderAccount();
+        setTimeout(function(){btn.disabled=false;btn.innerHTML=I('check','s')+'Save my details';},1600);
+        toast('Your details are updated');
+      }).catch(function(e){
+        btn.disabled=false;btn.innerHTML=I('check','s')+'Save my details';
+        toast(e.code==='bad_email'?'That email does not look right':'Could not save \u2014 please try again');
+      });
+    });
+    Array.prototype.forEach.call($('pfBody').querySelectorAll('[data-pf]'),function(el){
+      el.addEventListener('click',contactSheet);
+    });
+  }
+
+  /* ---------- SHEET ---------- */
+  $('shClose').innerHTML=I('x','s');
+  function openSheet(title,bodyHtml,footHtml){
+    $('shTitle').textContent=title;
+    $('shBody').innerHTML=bodyHtml;
+    $('shFoot').innerHTML=footHtml||'';
+    $('scrim').classList.add('on');$('sheet').classList.add('on');
+    document.body.style.overflow='hidden';
+  }
+  function closeSheet(){
+    $('scrim').classList.remove('on');$('sheet').classList.remove('on');
+    document.body.style.overflow='';
+  }
+  window.closeSheet=closeSheet;
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet();});
+
+  function svcById(id){return S.services.filter(function(s){return s.id===id;})[0]||null;}
+
+  function openRequest(svcId){
+    var b=activeBooking();
+    if(!b){toast('No booking to attach this to');return;}
+    var s=svcId?svcById(svcId):null;
+    var v=villaOf(b);
+    var lo=String(b.check_in||'').slice(0,10),hi=String(b.check_out||'').slice(0,10);
+    var t=today().toISOString().slice(0,10);
+    var def=lo&&lo>t?lo:(hi&&hi<t?'':t);
+
+    var body=
+      (s?'<div class="svcbox"><div class="t">'+esc(s.title)+'</div>'
+        +(s.detail?'<div class="d">'+esc(s.detail)+'</div>':'')
+        +(s.price_from!=null?'<div class="p">From '+esc(money(s.price_from,s.currency))
+          +(s.unit?' '+esc(s.unit):'')+(s.lead_time?' · please allow '+esc(s.lead_time):'')+'</div>':'')
+        +'</div>'
+       :'<div class="fld"><label>What would you like?</label>'
+        +'<input id="rqTitle" placeholder="e.g. flowers in the bedroom on arrival" maxlength="120"></div>')
+      +'<div class="fld"><label>For which stay</label><select id="rqBooking">'
+        +S.bookings.map(function(x){
+          var xv=villaOf(x);
+          return '<option value="'+esc(x.id)+'"'+(x.id===b.id?' selected':'')+'>'
+            +esc((xv&&xv.name)||'Villa')+' · '+esc(fmtRange(x.check_in,x.check_out))+'</option>';
+        }).join('')+'</select></div>'
+      +'<div class="f2"><div class="fld"><label>Date</label>'
+        +'<input id="rqDate" type="date" value="'+esc(def)+'"'
+        +(lo?' min="'+esc(lo)+'"':'')+(hi?' max="'+esc(hi)+'"':'')+'></div>'
+        +'<div class="fld"><label>Time</label><input id="rqTime" type="time"></div></div>'
+      +'<div class="fld"><label>How many people</label>'
+        +'<input id="rqPeople" type="number" min="1" max="99" inputmode="numeric" placeholder="'
+        +esc(String(N(b.guests_count)||N(b.adults)+N(b.children)||''))+'"></div>'
+      +'<div class="fld"><label>Anything we should know</label>'
+        +'<textarea id="rqNotes" maxlength="1000" placeholder="Allergies, preferences, pickup address…"></textarea></div>'
+      +'<div class="locked" style="margin-bottom:4px">'+I('info','s')
+        +'<div>Nothing is charged now. We check availability and come back to you with a price to confirm'
+        +(v?' for '+esc(v.name):'')+'.</div></div>';
+
+    openSheet(s?s.title:'Request something',body,
+      '<button class="cta" id="rqSend">'+I('bell','s')+'Send to the concierge</button>');
+
+    $('rqSend').addEventListener('click',function(){
+      var btn=this;
+      var title=s?s.title:String(($('rqTitle')||{}).value||'').trim();
+      if(!title){toast('Tell us what you would like');return;}
+      var bid=$('rqBooking').value;
+      var payload={booking_id:bid,service_id:s?s.id:null,service_title:title,
+        category:s?s.category:null,
+        requested_for:$('rqDate').value||null,requested_time:$('rqTime').value||null,
+        people:$('rqPeople').value||null,notes:$('rqNotes').value||null};
+      btn.disabled=true;btn.innerHTML='<span class="spin"></span>Sending…';
+      api('request',payload).then(function(d){
+        S.requests.unshift({id:d.id,booking_id:bid,service_title:title,
+          category:payload.category,requested_for:payload.requested_for,
+          requested_time:payload.requested_time,people:payload.people?+payload.people:null,
+          notes:payload.notes,status:'new',admin_note:null,created_at:d.created_at});
+        closeSheet();renderRequests();buildTabs();go('requests');
+        toast('Sent — we will confirm shortly');
+      }).catch(function(){
+        btn.disabled=false;btn.innerHTML=I('bell','s')+'Send to the concierge';
+        toast('Could not send that — please try again');
+      });
+    });
+  }
+
+  /* Forward a booking to whoever is travelling with you. The link opens the
+     same page with no sign-in and stops working on its expiry date. */
+  function shareSheet(bid){
+    var b=byId(bid); if(!b)return;
+    if(S.share){ showShareUrl(location.href,S.expires,b); return; }
+    openSheet('Share this booking',
+      '<div class="loading"><div class="spin"></div>Making a link\u2026</div>','');
+    api('create_share',{booking_id:bid,days:60}).then(function(d){
+      showShareUrl(location.origin+location.pathname+'#s/'+d.token,d.expires_at,b);
+    }).catch(function(){
+      openSheet('Share this booking',
+        '<div class="locked">'+I('info','s')+'<div>We could not make a link just now. '
+        +'Please try again, or ask us to send you one.</div></div>',
+        '<button class="cta ghost" id="shAsk">'+I('phone','s')+'Message MGROUP</button>');
+      var a=$('shAsk');if(a)a.addEventListener('click',contactSheet);
+    });
+  }
+  function showShareUrl(url,exp,b){
+    var v=villaOf(b);
+    var msg=(v?v.name+' \u2014 ':'')+fmtRange(b.check_in,b.check_out)
+      +'\nOpen the booking here (no sign-in needed):\n'+url;
+    openSheet('Share this booking',
+      '<p class="lead">Anyone with this link can see the stay, the villa details and what we have arranged. '
+      +'They cannot change anything.</p>'
+      +'<div class="linkbox">'+esc(url)+'</div>'
+      +(exp?'<div class="ro" style="border:none;padding-top:12px"><div class="k">'+I('clock','s')
+        +'Link works until</div><div class="v">'+esc(fmtDate(exp))+'</div></div>':''),
+      '<button class="cta" id="shCopy">'+I('copy','s')+'Copy link</button>'
+      +(navigator.share?'<button class="cta ghost" style="margin-top:9px" id="shSend">'
+        +I('share','s')+'Send\u2026</button>':''));
+    $('shCopy').addEventListener('click',function(){copyText(msg,'Link copied \u2014 paste it in your chat');});
+    var sd=$('shSend');
+    if(sd)sd.addEventListener('click',function(){
+      navigator.share({title:(v&&v.name)||'MGROUP booking',text:msg}).catch(function(){});
+    });
+  }
+
+  /* Everything MGROUP has recorded about one arranged service. */
+  function openTripItem(id){
+    var r=S.requests.filter(function(x){return x.id===id;})[0];
+    if(!r)return;
+    var b=byId(r.booking_id),v=villaOf(b);
+    var svc=S.services.filter(function(x){return x.title===r.service_title;})[0];
+
+    var rows=[];
+    if(r.requested_for)rows.push(['cal','Date',fmtLong(r.requested_for)]);
+    if(r.requested_time)rows.push(['clock','Time',r.requested_time]);
+    if(r.people)rows.push(['users','Passengers',String(r.people)]);
+    if(r.qty&&r.qty>1)rows.push(['plus','Quantity',r.qty+'\u00d7']);
+    var extra=r.details;
+    if(typeof extra==='string'){try{extra=JSON.parse(extra);}catch(e){extra=null;}}
+    if(Array.isArray(extra))extra.forEach(function(d){
+      var k=d&&(d.k||d.label), val=d&&(d.v||d.value);
+      if(k&&val)rows.push(['info',String(k),String(val)]);
+    });
+    if(v)rows.push(['pin','For your stay at',v.name]);
+    if(r.price!=null)rows.push(['card','Price',money(r.price,r.currency)]);
+
+    var body=
+      '<div class="svcbox cc-'+esc(r.category||'')+'" style="background:var(--ccb,var(--goldt));border-color:transparent">'
+        +'<div class="t">'+esc(r.service_title)+'</div>'
+        +(svc&&svc.blurb?'<div class="d">'+esc(svc.blurb)+'</div>':'')
+        +'<div style="margin-top:9px">'+stPill(r.status)+'</div>'
+      +'</div>'
+      +(rows.length
+        ? '<div class="panel" style="box-shadow:none;padding:6px 18px;margin-bottom:12px">'
+          +rows.map(function(x){
+            return '<div class="ro"><div class="k">'+I(x[0],'s')+esc(x[1])+'</div>'
+              +'<div class="v">'+esc(x[2])+'</div></div>';
+          }).join('')+'</div>'
+        : '<div class="locked" style="margin-bottom:12px">'+I('info','s')
+          +'<div>We are still putting the arrangements together. '
+          +'The flight, pick-up time and driver appear here once they are set.</div></div>')
+      +(r.notes?'<div class="panel" style="box-shadow:none"><h4>'+I('star','s')+'What you asked for</h4>'
+        +'<div class="note">'+esc(r.notes)+'</div></div>':'')
+      +(r.admin_note?'<div class="rq"><div class="ans"><b>MGROUP</b>'+esc(r.admin_note)+'</div></div>':'')
+      +(svc&&svc.detail?'<div class="note" style="padding:2px 2px 0">'+esc(svc.detail)+'</div>':'');
+
+    openSheet(r.service_title, body,
+      '<button class="cta ghost" id="tiAsk">'+I('phone','s')+'Ask us about this</button>');
+    var a=$('tiAsk');if(a)a.addEventListener('click',contactSheet);
+  }
+
+  function contactSheet(){
+    var b=activeBooking(),v=villaOf(b);
+    var ref=b?(b.booking_ref||''):'';
+    var msg='Hello MGROUP'+(ref?' — booking '+ref:'')+(v?' at '+v.name:'')+', ';
+    openSheet('Talk to us',
+      '<p class="lead" style="margin-bottom:16px">We answer around the clock while you are with us.</p>'
+      +'<div class="menu">'
+      +'<a class="mrow" href="'+esc(WHATSAPP)+'?text='+encodeURIComponent(msg)+'" target="_blank" rel="noopener">'
+        +'<span class="mi">'+I('phone')+'</span><span class="mt"><b>WhatsApp</b>'
+        +'<span>Fastest — we reply in minutes</span></span><span class="ch">'+I('chev','s')+'</span></a>'
+      +'<a class="mrow" href="mailto:info@mgroupestates.com?subject='+encodeURIComponent('Booking '+ref)+'">'
+        +'<span class="mi">'+I('mail')+'</span><span class="mt"><b>Email</b>'
+        +'<span>info@mgroupestates.com</span></span><span class="ch">'+I('chev','s')+'</span></a>'
+      +'</div>'
+      +(ref?'<button class="cta ghost" id="cpRef">'+I('copy','s')+'Copy booking reference</button>':''),'');
+    var c=$('cpRef');if(c)c.addEventListener('click',function(){copyText(ref,'Reference copied');});
+  }
+
+  function aboutSheet(){
+    openSheet('About your portal',
+      '<p class="note" style="font-size:13.5px">This page shows the bookings MGROUP Estates holds in your name: '
+      +'the villa, your dates, what has been paid, and how we are preparing the house for you.</p>'
+      +'<div class="panel" style="margin-top:16px;box-shadow:none">'
+      +'<h4>'+I('lock','s')+'What we keep private</h4>'
+      +'<div class="note">Wi-Fi and door codes appear only around your stay. Nothing about the villa owner, '
+      +'our commission, or other guests is shown here. Links we send you in chat open one booking only '
+      +'and stop working on their expiry date.</div></div>'
+      +'<div class="panel" style="box-shadow:none"><h4>'+I('bell','s')+'The concierge</h4>'
+      +'<div class="note">Requests you send are read by the MGROUP team, not a robot. '
+      +'Nothing is charged when you send one — we come back with availability and a price first.</div></div>','');
+  }
+
+  boot();
+})();
+</script>
+</body></html>

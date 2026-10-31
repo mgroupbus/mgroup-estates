@@ -3491,12 +3491,47 @@ function mgCardW(){
   return Math.round(css * Math.min(window.devicePixelRatio || 1, 2));
 }
 
+/* Supabase's resize endpoint is a paid add-on, and it can be switched
+   off under the site at any time — it was, and because every photo on
+   the site was routed through it, every photo went blank while the
+   originals sat there loading fine. `/storage/v1/render/image/` then
+   answers 403 FeatureNotEnabled.
+
+   So resizing is treated as an optimisation that may not be there:
+   unknown means serve the original. A probe runs once and, if the
+   feature is live, later renders pick the resized URL up. Nothing ever
+   depends on it to display a picture. */
+var MG_TX = null;            /* null unknown · true live · false off */
+
+function mgProbeTransform(sampleUrl){
+  if (MG_TX !== null || window.__mgTxProbing) return;
+  window.__mgTxProbing = true;
+  var probe = sampleUrl.split('?')[0]
+    .replace('/storage/v1/object/public/', '/storage/v1/render/image/public/')
+    + '?width=16&resize=contain&quality=40';
+  fetch(probe, { method: 'GET', cache: 'no-store' })
+    .then(function(r){
+      MG_TX = r.ok;
+      if (!r.ok) console.warn('MGROUP: image resizing unavailable (' + r.status +
+        ') — serving full-size originals');
+    })
+    .catch(function(){ MG_TX = false; });
+}
+
 function mgImg(url, w, exact){
   var u = String(url || '');
   if (!u) return u;
   var isObj = u.indexOf('/storage/v1/object/public/') !== -1;
   var isRnd = u.indexOf('/storage/v1/render/image/public/') !== -1;
   if (!isObj && !isRnd) return u;                       /* Unsplash etc — leave alone */
+
+  if (MG_TX !== true) {
+    /* Serve the original, and find out whether resizing is back. */
+    if (isObj) mgProbeTransform(u);
+    return isRnd
+      ? u.split('?')[0].replace('/storage/v1/render/image/public/', '/storage/v1/object/public/')
+      : u;
+  }
 
   /* Re-ask, never pass through: the PDF reads its photos off the 200px
      thumbnail strip, so keeping an existing width would have printed
