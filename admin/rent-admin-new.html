@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MGROUP Admin — Rentals</title>
-<script>if(sessionStorage.getItem("mg_admin")!=="ok"){location.replace("/admin/index.html");}</script>
+<script>if(sessionStorage.getItem("mg_admin")!=="ok"||!sessionStorage.getItem("mg_admin_code")){location.replace("/admin/index.html");}</script>
 <meta name="theme-color" content="#23262b"><link rel="manifest" href="/admin/manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <style>
@@ -305,6 +305,12 @@
     white-space:nowrap;background:#8b98a8;color:#fff}
   .crst.new{background:#e0921a}.crst.confirmed{background:#1a7fe0}.crst.done{background:#12a150}
   .crst.declined{background:#e03b2f}.crst.cancelled{background:#7c8a83}
+  .crdet{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .crdet span{font-size:11.5px;color:var(--muted);background:#f5f3ed;border-radius:7px;padding:4px 9px}
+  .crdet span b{color:var(--ink);font-weight:700}
+  .crpre{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .crpre .rowbtn{font-size:11px;padding:4px 9px}
+  .hidden{display:none}
 </style></head><body>
 
 <div class="shell">
@@ -357,7 +363,10 @@
     <!-- CONCIERGE -->
     <div id="v-concierge" class="view">
       <div class="head"><div><div class="crumb">Guest portal</div><h2>Concierge requests</h2></div>
-        <button class="btn" onclick="loadConcierge(true)">Refresh</button></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn" onclick="loadConcierge(true)">Refresh</button>
+          <button class="btn primary" onclick="crAdd()">+ Add to a booking</button>
+        </div></div>
       <div class="tiles tiles3" style="margin-bottom:16px">
         <div class="tile"><div class="l">Open</div><div class="v" id="cr-open">—</div><div class="s">waiting on us</div></div>
         <div class="tile"><div class="l">Arranged</div><div class="v" id="cr-done">—</div><div class="s">all time</div></div>
@@ -443,6 +452,14 @@
   <div class="modal">
     <div class="mh"><div><h3 id="vilTitle">Add villa</h3><div class="sub" id="vilSub"></div></div><button class="cls" onclick="closeVilla()">&#10005; Close</button></div>
     <div class="mb" id="vilBody"></div>
+  </div>
+</div>
+
+<!-- CONCIERGE ITEM MODAL -->
+<div class="ov" id="crOv" onclick="if(event.target===this)closeCr()">
+  <div class="modal">
+    <div class="mh"><div><h3 id="crTitle">Concierge item</h3><div class="sub" id="crSub"></div></div><button class="cls" onclick="closeCr()">&#10005; Close</button></div>
+    <div class="mb" id="crBody"></div>
   </div>
 </div>
 
@@ -721,7 +738,7 @@
   function closeOwn(){document.getElementById('ownOv').classList.remove('open');document.body.classList.remove('pmode-own');}
   function adminCode(){
     var c=sessionStorage.getItem('mg_admin_code');
-    if(!c){c=prompt('Admin passcode'); if(c)sessionStorage.setItem('mg_admin_code',c);}
+    if(!c){ sessionStorage.removeItem('mg_admin'); location.replace('/admin/index.html'); return null; }
     return c;
   }
   async function portalUser(payload){
@@ -1512,9 +1529,12 @@
   async function loadConcierge(force){
     if(DATA.cr&&!force)return renderConcierge();
     try{
-      var r=await sbFetch(SB_URL+'/rest/v1/concierge_requests?select=*&order=created_at.desc&limit=400',{headers:H});
-      DATA.cr=await r.json();
-      if(!Array.isArray(DATA.cr))DATA.cr=[];
+      var res=await Promise.all([
+        sbFetch(SB_URL+'/rest/v1/concierge_requests?select=*&order=created_at.desc&limit=400',{headers:H}),
+        sbFetch(SB_URL+'/rest/v1/concierge_services?select=id,category,title,price_from,unit&is_active=eq.true&order=category,sort_order',{headers:H})
+      ]);
+      DATA.cr=await res[0].json(); if(!Array.isArray(DATA.cr))DATA.cr=[];
+      DATA.svc=await res[1].json(); if(!Array.isArray(DATA.svc))DATA.svc=[];
     }catch(e){ DATA.cr=[]; }
     renderConcierge();
   }
@@ -1541,8 +1561,12 @@
           +(b?'<span>'+esc(b.booking_ref||'')+' · '+esc(vname(b.villa_id))+'</span>':'')
           +(r.requested_for?'<span>for '+fmtD(r.requested_for)+(r.requested_time?' '+esc(r.requested_time):'')+'</span>':'')
           +(r.people?'<span>'+r.people+' people</span>':'')
-          +'<span>asked '+fmtD(String(r.created_at||'').slice(0,10))+'</span>'
-        +'</div></div>'
+          +'<span>'+(r.source==='admin'?'added by MGROUP':'asked by guest')+' '
+            +fmtD(String(r.created_at||'').slice(0,10))+'</span>'
+          +(r.price!=null?'<span><b>'+money(r.price)+'</b></span>':'')
+        +'</div>'
+        +crDetailLine(r)
+        +'</div>'
         +'<span class="crst '+esc(r.status)+'">'+esc((CRST.filter(function(x){return x[0]===r.status;})[0]||[0,r.status])[1])+'</span>'
         +'</div>'
         +(r.notes?'<div class="gnote">'+esc(r.notes)+'</div>':'')
@@ -1550,6 +1574,7 @@
           +'<input id="crn-'+r.id+'" placeholder="What we told the guest…" value="'+esc(r.admin_note||'')+'">'
           +'<select id="crs-'+r.id+'">'+CRST.map(function(x){
               return '<option value="'+x[0]+'"'+(x[0]===r.status?' selected':'')+'>'+x[1]+'</option>';}).join('')+'</select>'
+          +'<button class="btn" onclick="crDetails(\''+r.id+'\')">Details\u2026</button>'
           +'<button class="btn primary" onclick="crSave(\''+r.id+'\',this)">Save</button>'
         +'</div></div>';
     }).join('');
@@ -1681,6 +1706,192 @@
       if(!has){var out=await r.json();if(Array.isArray(out)&&out[0])GD.row=out[0];}
       btn.textContent='Saved'; setTimeout(closeGuide,600);
     }catch(e){ alert('Could not save the guide'); btn.textContent=t; }
+    finally{ btn.disabled=false; }
+  }
+
+
+  // ---------- concierge item: add to a booking, and its trip details ----------
+  // details is [{k,v}] so a new service type never needs a schema change.
+  var CRI={id:'',row:null};
+  var CR_PRESETS={
+    transfer:['Flight','Landing time','Pick-up time','Pick-up','Drop-off','Vehicle','Provider','Driver','Driver phone','Plate','Meeting point','Booking reference'],
+    dining:['Venue','Time','Covers','Menu','Provider','Chef','Booking reference'],
+    wellness:['Therapist','Treatment','Time','Duration','Provider','Where'],
+    excursion:['Boat / vehicle','Departure','Return','Pier','Provider','Skipper','Booking reference'],
+    home:['Time','Provider','Staff','Notes'],
+    family:['Time','Duration','Provider','Carer','Notes']
+  };
+  function crDetailList(r){
+    var d=r&&r.details;
+    if(typeof d==='string'){try{d=JSON.parse(d);}catch(e){d=null;}}
+    return Array.isArray(d)?d.filter(function(x){return x&&(x.k||x.label);}):[];
+  }
+  function crDetailLine(r){
+    var f=crDetailList(r).filter(function(x){return (x.v||x.value);});
+    if(!f.length)return '';
+    return '<div class="crdet">'+f.map(function(x){
+      return '<span><b>'+esc(x.k||x.label)+'</b> '+esc(x.v||x.value)+'</span>';
+    }).join('')+'</div>';
+  }
+  function closeCr(){document.getElementById('crOv').classList.remove('open');CRI.id='';CRI.row=null;}
+
+  function crRowsHtml(rows){
+    return rows.map(function(x,i){
+      return '<div class="r c2" style="margin-bottom:7px" data-row="'+i+'">'
+        +'<div><input class="crk" value="'+esc(x.k||'')+'" placeholder="Label (e.g. Flight)"></div>'
+        +'<div style="display:flex;gap:7px"><input class="crv" value="'+esc(x.v||'')+'" placeholder="Value">'
+        +'<button class="rowbtn" onclick="this.closest(\'[data-row]\').remove()">&#10005;</button></div>'
+        +'</div>';
+    }).join('');
+  }
+  function crAddRow(label){
+    var box=document.getElementById('crRows');
+    box.insertAdjacentHTML('beforeend',crRowsHtml([{k:label||'',v:''}]));
+  }
+  function crCollect(){
+    var out=[];
+    document.querySelectorAll('#crRows [data-row]').forEach(function(el){
+      var k=(el.querySelector('.crk').value||'').trim();
+      var v=(el.querySelector('.crv').value||'').trim();
+      if(k)out.push({k:k,v:v});
+    });
+    return out.length?out:null;
+  }
+
+  function crDetails(id){
+    var r=(DATA.cr||[]).filter(function(x){return x.id===id;})[0]; if(!r)return;
+    CRI.id=id; CRI.row=r;
+    var b=(DATA.bk||[]).filter(function(x){return x.id===r.booking_id;})[0];
+    document.getElementById('crTitle').textContent=r.service_title;
+    document.getElementById('crSub').textContent=gname(r.guest_id)
+      +(b?' · '+(b.booking_ref||'')+' · '+vname(b.villa_id):'');
+    var rows=crDetailList(r).map(function(x){return {k:x.k||x.label||'',v:x.v||x.value||''};});
+    if(!rows.length)rows=[{k:'',v:''}];
+    var presets=CR_PRESETS[r.category]||CR_PRESETS.home;
+    document.getElementById('crBody').innerHTML=
+      '<div class="frm">'
+        +'<div class="r c3">'
+          +'<div><label>Date</label><input id="crf_date" type="date" value="'+esc(r.requested_for||'')+'"></div>'
+          +'<div><label>Time</label><input id="crf_time" type="time" value="'+esc(r.requested_time||'')+'"></div>'
+          +'<div><label>People</label><input id="crf_ppl" type="number" min="1" value="'+esc(r.people==null?'':r.people)+'"></div>'
+        +'</div>'
+        +'<div class="r c3">'
+          +'<div><label>Quantity</label><input id="crf_qty" type="number" min="1" value="'+esc(r.qty==null?'':r.qty)+'"></div>'
+          +'<div><label>Price (THB)</label><input id="crf_price" type="number" min="0" value="'+esc(r.price==null?'':r.price)+'"></div>'
+          +'<div><label>Status</label><select id="crf_status">'+CRST.map(function(x){
+              return '<option value="'+x[0]+'"'+(x[0]===r.status?' selected':'')+'>'+x[1]+'</option>';}).join('')+'</select></div>'
+        +'</div>'
+        +'<div class="sechd" style="margin-top:12px"><h4>Trip details</h4>'
+          +'<span class="sub">shown to the guest when they open this item</span></div>'
+        +'<div id="crRows">'+crRowsHtml(rows)+'</div>'
+        +'<div class="crpre">'+presets.map(function(x){
+            return '<button class="rowbtn" onclick="crAddRow(\''+x.replace(/'/g,"")+'\')">+ '+esc(x)+'</button>';
+          }).join('')+'<button class="rowbtn" onclick="crAddRow(\'\')">+ blank</button></div>'
+        +'<div style="margin-top:12px"><label>Message to the guest</label>'
+          +'<input id="crf_note" value="'+esc(r.admin_note||'')+'" placeholder="Driver will meet you at\u2026"></div>'
+        +'<div class="r" style="justify-content:flex-end;gap:8px;margin-top:14px">'
+          +'<button class="btn" onclick="closeCr()">Cancel</button>'
+          +'<button class="btn primary" onclick="crDetailsSave(this)">Save</button>'
+        +'</div>'
+      +'</div>';
+    document.getElementById('crOv').classList.add('open');
+  }
+  async function crDetailsSave(btn){
+    var g=function(id){var e=document.getElementById(id);return e&&e.value!==''?e.value:null;};
+    var body={
+      requested_for:g('crf_date'), requested_time:g('crf_time'),
+      people:g('crf_ppl')?+g('crf_ppl'):null, qty:g('crf_qty')?+g('crf_qty'):null,
+      price:g('crf_price')?+g('crf_price'):null,
+      status:g('crf_status')||'new', admin_note:g('crf_note'),
+      details:crCollect(), updated_at:new Date().toISOString()
+    };
+    var t=btn.textContent; btn.textContent='Saving…'; btn.disabled=true;
+    try{
+      var r=await sbFetch(SB_URL+'/rest/v1/concierge_requests?id=eq.'+CRI.id,
+        {method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify(body)});
+      if(!r.ok)throw new Error('save failed');
+      (DATA.cr||[]).forEach(function(x){if(x.id===CRI.id)Object.assign(x,body);});
+      closeCr(); renderConcierge();
+    }catch(e){ alert('Could not save'); btn.textContent=t; }
+    finally{ btn.disabled=false; }
+  }
+
+  // Book something for a guest and have it show on their trip.
+  function crAdd(){
+    var svcs=DATA.svc||[];
+    if(!svcs.length){ alert('Loading the service list — try again in a moment.'); loadConcierge(true); return; }
+    var bks=(DATA.bk||[]).filter(function(b){return b.guest_id;})
+      .sort(function(a,b){return String(b.check_in||'').localeCompare(String(a.check_in||''));});
+    CRI.id=''; CRI.row=null;
+    document.getElementById('crTitle').textContent='Add to a booking';
+    document.getElementById('crSub').textContent='It appears in the guest portal under "Included in this trip"';
+    document.getElementById('crBody').innerHTML=
+      '<div class="frm">'
+        +'<div><label>Booking *</label><select id="cra_bk">'
+          +bks.map(function(b){return '<option value="'+b.id+'">'+esc(b.booking_ref||'')+' · '
+            +esc(gname(b.guest_id))+' · '+esc(vname(b.villa_id))+' · '+fmtD(b.check_in)+'</option>';}).join('')
+          +'</select></div>'
+        +'<div style="margin-top:9px"><label>Service *</label><select id="cra_svc">'
+          +svcs.map(function(s){return '<option value="'+s.id+'">'+esc(s.category)+' — '+esc(s.title)+'</option>';}).join('')
+          +'<option value="">— something else —</option></select></div>'
+        +'<div style="margin-top:9px" id="cra_customWrap" class="hidden"><label>Title</label>'
+          +'<input id="cra_custom" placeholder="What did you book for them?"></div>'
+        +'<div class="r c3" style="margin-top:9px">'
+          +'<div><label>Date</label><input id="cra_date" type="date"></div>'
+          +'<div><label>Time</label><input id="cra_time" type="time"></div>'
+          +'<div><label>People</label><input id="cra_ppl" type="number" min="1"></div>'
+        +'</div>'
+        +'<div class="r c2">'
+          +'<div><label>Price (THB)</label><input id="cra_price" type="number" min="0"></div>'
+          +'<div><label>Status</label><select id="cra_status">'+CRST.map(function(x){
+              return '<option value="'+x[0]+'"'+(x[0]==='confirmed'?' selected':'')+'>'+x[1]+'</option>';}).join('')+'</select></div>'
+        +'</div>'
+        +'<div><label>Message to the guest</label><input id="cra_note" placeholder="optional"></div>'
+        +'<div class="r" style="justify-content:flex-end;gap:8px;margin-top:14px">'
+          +'<button class="btn" onclick="closeCr()">Cancel</button>'
+          +'<button class="btn primary" onclick="crAddSave(this)">Add to booking</button>'
+        +'</div>'
+      +'</div>';
+    document.getElementById('cra_svc').onchange=function(){
+      document.getElementById('cra_customWrap').classList.toggle('hidden',!!this.value);
+    };
+    var b0=bks[0]; if(b0&&b0.check_in)document.getElementById('cra_date').value=b0.check_in;
+    document.getElementById('cra_bk').onchange=function(){
+      var b=(DATA.bk||[]).filter(function(x){return x.id===this.value;}.bind(this))[0];
+      if(b&&b.check_in)document.getElementById('cra_date').value=b.check_in;
+    };
+    document.getElementById('crOv').classList.add('open');
+  }
+  async function crAddSave(btn){
+    var bid=document.getElementById('cra_bk').value;
+    var sid=document.getElementById('cra_svc').value;
+    var svc=(DATA.svc||[]).filter(function(s){return s.id===sid;})[0];
+    var title=svc?svc.title:(document.getElementById('cra_custom').value||'').trim();
+    if(!bid){alert('Pick a booking');return;}
+    if(!title){alert('Give it a title');return;}
+    var b=(DATA.bk||[]).filter(function(x){return x.id===bid;})[0];
+    var v=function(id){var e=document.getElementById(id);return e&&e.value!==''?e.value:null;};
+    var body={
+      booking_id:bid, guest_id:b?b.guest_id:null,
+      service_id:svc?svc.id:null, service_title:title,
+      category:svc?svc.category:null,
+      requested_for:v('cra_date'), requested_time:v('cra_time'),
+      people:v('cra_ppl')?+v('cra_ppl'):null,
+      price:v('cra_price')?+v('cra_price'):null,
+      status:v('cra_status')||'confirmed',
+      admin_note:v('cra_note'), source:'admin'
+    };
+    var t=btn.textContent; btn.textContent='Adding…'; btn.disabled=true;
+    try{
+      var r=await sbFetch(SB_URL+'/rest/v1/concierge_requests',
+        {method:'POST',headers:Object.assign({},H,{'Content-Type':'application/json',Prefer:'return=representation'}),
+         body:JSON.stringify(body)});
+      if(!r.ok)throw new Error(await r.text());
+      var out=await r.json();
+      if(Array.isArray(out)&&out[0])(DATA.cr=DATA.cr||[]).unshift(out[0]);
+      closeCr(); renderConcierge();
+      if(Array.isArray(out)&&out[0])crDetails(out[0].id);
+    }catch(e){ alert('Could not add it'); btn.textContent=t; }
     finally{ btn.disabled=false; }
   }
 
