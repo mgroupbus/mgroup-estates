@@ -39,6 +39,9 @@
   .tile .s{font-size:11px;color:var(--faint);margin-top:2px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0;overflow:hidden;margin-bottom:16px}
   .card .ch{font-size:12px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);padding:13px 16px;border-bottom:1px solid var(--line)}
+  .card.up{border-color:#e6d3ad;box-shadow:0 3px 16px rgba(169,126,66,.14)}
+  .card.up .ch{background:linear-gradient(100deg,#a97e42,#c9a24f);color:#fff;border-bottom:none;display:flex;align-items:center;gap:9px}
+  .card.up .ch::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.35);flex:none}
   table{width:100%;border-collapse:collapse;font-size:13px}
   thead th{text-align:left;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);font-weight:700;padding:10px 14px;background:#faf9f5;border-bottom:1px solid var(--line);white-space:nowrap}
   tbody td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
@@ -346,7 +349,7 @@
         <div class="tile"><div class="l">Revenue this year</div><div class="v" id="d-rev">—</div><div class="s" id="d-revyr">—</div></div>
         <div class="tile"><div class="l">To collect</div><div class="v" id="d-col" style="color:var(--red)">—</div><div class="s" id="d-colyr">latest year</div></div>
       </div>
-      <div class="card"><div class="ch">Upcoming — confirmed bookings</div><div class="tablecard" style="border:none"><table><thead><tr><th>Ref</th><th>Check-in → out</th><th>Villa</th><th>Guest</th><th class="money">Total</th></tr></thead><tbody id="d-upcoming"></tbody></table></div></div>
+      <div class="card up"><div class="ch">Upcoming — confirmed bookings</div><div class="tablecard" style="border:none"><table><thead><tr><th>Ref</th><th>Check-in → out</th><th>Villa</th><th>Guest</th><th class="money">Total</th></tr></thead><tbody id="d-upcoming"></tbody></table></div></div>
       <div class="card"><div class="ch">Payment terms — to collect</div><div class="tablecard" style="border:none"><table><thead><tr><th>Ref</th><th>Villa</th><th>Guest</th><th class="money">Total</th><th class="money">Paid</th><th class="money">Balance</th></tr></thead><tbody id="d-collect"></tbody></table></div></div>
     </div>
 
