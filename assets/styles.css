@@ -6091,3 +6091,8 @@ p + p{margin-top:14px}
   .map-list{height:auto;max-height:420px;border-left:0;padding-left:0;
     border-top:1px solid var(--line,#E6DED3);padding-top:6px}
 }
+
+/* OSM's own styling is loud next to the rest of the page — motorways in
+   orange, every shop labelled. Desaturating the tiles keeps the map
+   legible while letting the price pins be the only strong colour. */
+.leaflet-tile-pane{filter:saturate(.38) brightness(1.04) contrast(.94)}

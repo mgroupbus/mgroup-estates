@@ -201,12 +201,15 @@
   function boot() {
     map = L.map('mapCanvas', { scrollWheelZoom: false, zoomControl: true })
            .setView(PHUKET, 11);
-    /* Carto's light basemap instead of standard OSM tiles: the default
-       is dense with road colour and shop labels, which fights the pins
-       and the rest of the site's palette. */
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    /* Plain OpenStreetMap tiles. Carto's light basemap was the nicer
+       match for the palette, but it now answers with an "API KEY
+       REQUIRED" watermark instead of a map — the request still returns
+       200, so it fails looking like it worked. OSM needs no key; the
+       colour is toned down in CSS instead, which gets the quiet map
+       without depending on anyone's key. */
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
     map.on('click', function () { map.scrollWheelZoom.enable(); });
 
