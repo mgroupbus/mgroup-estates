@@ -41,6 +41,7 @@ KEY  = ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im
 PAGES = [  # path, priority, what it is
     ("/",             "1.0", "Home"),
     ("/collections",  "0.9", "Every property for sale"),
+    ("/map",          "0.8", "Map of every listing, filtered by setting"),
     ("/lifestyle",    "0.7", "Lifestyle Concierge"),
     ("/how-to-buy",   "0.7", "How to buy property in Thailand"),
     ("/insights",     "0.6", "Market insights"),

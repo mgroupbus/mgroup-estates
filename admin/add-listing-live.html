@@ -228,7 +228,7 @@
     <!-- NEARBY -->
     <div class="fsec span2">
       <h3>⑥ Nearby <span class="req">*required</span></h3><p class="hint">Fixed reference points on the site — tick what's relevant, add the name &amp; distance. Only named ones show.</p>
-      <div class="fld" style="margin-bottom:13px"><label>📍 Google Maps link <span class="req">*required</span></label><input data-k="mapurl"></div>
+      <div class="fld" style="margin-bottom:13px"><label>📍 Google Maps link <span class="req">*required</span></label><input data-k="mapurl" id="mapurlInput" placeholder="https://www.google.com/maps/place/…/@7.98,98.29,16z"><div id="mapurlHint" style="font-size:11px;margin-top:5px;line-height:1.5;color:#8a8a8a">Open the place in Google Maps on a computer and copy the address bar. A short <code>maps.app.goo.gl</code> link has no coordinates in it.</div></div>
       <div class="nbgrid" id="nbGrid"></div>
     </div>
 
@@ -405,7 +405,7 @@
       if(mm){lat=parseFloat(mm[1]);lng=parseFloat(mm[2]);}
       if(mu){try{await sbInsert('property_location',[{property_id:pid,maps_link:mu,lat:lat,lng:lng,district:val('district')||null}],false);}catch(e){featWarn+='<br><small>⚠ Location not saved (property_location policy).</small>';}}
 
-      var url='https://mgroupestates.com/property?id='+pid;
+      var url='https://mgroupestates.com/property?id='+pid;  /* slug page appears after the next build-seo run */
       if(active)showResult('ok','<div class="big">✓ Published live — id '+pid+'</div>Now on <a href="'+url+'" target="_blank">'+url+'</a>'+featWarn);
       else showResult('ok','<div class="big">✓ Saved as draft — id '+pid+'</div>Hidden (is_active=false). Flip it active in the admin to publish.'+featWarn);
     }catch(e){showResult('bad','<div class="big">Could not save</div><code>'+esc(String(e.message||e))+'</code>');}
@@ -416,5 +416,42 @@
 
   // PWA — installable on mobile home screen
   if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/admin/sw.js').catch(function(){});});}
+</script>
+
+<script>
+/* The share button on a phone gives a maps.app.goo.gl link, which
+   carries no coordinates — neither this page nor the database can turn
+   it into a pin. Say so while the agent is still on the field, rather
+   than letting the listing save without a location. */
+(function(){
+  var inp=document.getElementById('mapurlInput'), hint=document.getElementById('mapurlHint');
+  if(!inp||!hint) return;
+  var base=hint.innerHTML;
+  function check(){
+    var v=(inp.value||'').trim();
+    if(!v){ hint.innerHTML=base; hint.style.color='#8a8a8a'; return; }
+    var m=v.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)||v.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/)
+        ||v.match(/[?&](?:q|ll|daddr|destination)=(-?\d+\.\d+),\s*(-?\d+\.\d+)/)
+        ||v.match(/^\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*$/);
+    if(m){
+      var la=parseFloat(m[1]), ln=parseFloat(m[2]);
+      if(la>=5&&la<=21&&ln>=96&&ln<=106){
+        hint.innerHTML='✓ Coordinates read: <b>'+la+', '+ln+'</b> — this listing will appear on the map.';
+        hint.style.color='#2e7d4f';
+      }else{
+        hint.innerHTML='⚠ Those coordinates are outside Thailand ('+la+', '+ln+'). Check the link.';
+        hint.style.color='#b23c3c';
+      }
+    }else if(/maps\.app\.goo\.gl|goo\.gl\/maps/.test(v)){
+      hint.innerHTML='⚠ Short link — it has no coordinates. Open it, then copy the full address bar from a computer.';
+      hint.style.color='#b23c3c';
+    }else{
+      hint.innerHTML='⚠ No coordinates found in this link. The listing saves, but it will not get a pin on the map.';
+      hint.style.color='#b23c3c';
+    }
+  }
+  inp.addEventListener('input',check);
+  inp.addEventListener('blur',check);
+})();
 </script>
 </body></html>

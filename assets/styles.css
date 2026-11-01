@@ -6004,3 +6004,90 @@ p + p{margin-top:14px}
   transform:translateY(-2px)}
 .btn-hero-primary:active,.btn-hero-ghost:active{
   transform:translateY(0);box-shadow:0 6px 16px rgba(0,0,0,.3)}
+
+/* ═══ PROPERTY MAP ════════════════════════════════════════════════
+   Map on the left, the same listings as a list on the right, one
+   filter row above both. The list is not decoration: a listing with no
+   coordinates yet still has to appear somewhere, and on a phone the
+   list is the primary way through the page. */
+.map-wrap{max-width:1360px;margin:0 auto;padding:0 32px 72px}
+
+.map-filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+.map-chip{font-family:var(--font-body);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;padding:9px 15px;border:0;border-radius:3px;cursor:pointer;
+  background:var(--ivory,#F7F3ED);color:var(--ink,#33291F);
+  display:inline-flex;align-items:center;gap:8px;
+  transition:background .22s,color .22s}
+.map-chip span{font-size:10px;font-variant-numeric:tabular-nums;opacity:.5}
+.map-chip:hover{background:var(--hover-brown,#4A3B2C);color:#fff}
+.map-chip:hover span{opacity:.75}
+.map-chip.is-on{background:var(--black,#33291F);color:#fff}
+.map-chip.is-on span{opacity:.7}
+
+.map-shell{display:grid;grid-template-columns:1fr 340px;gap:20px;
+  align-items:stretch;min-height:560px}
+#mapCanvas{height:620px;border-radius:3px;background:var(--ivory,#F7F3ED);z-index:1}
+.map-list{height:620px;overflow-y:auto;border-left:1px solid var(--line,#E6DED3);
+  padding-left:18px;scrollbar-width:thin}
+
+.map-row{display:grid;gap:3px;width:100%;text-align:left;cursor:pointer;
+  background:none;border:0;border-bottom:1px solid var(--line2,#EFE9E1);
+  padding:14px 6px 14px 0;font-family:var(--font-body);
+  transition:background .2s,padding-left .2s}
+.map-row:hover:not(:disabled){background:var(--ivory,#F7F3ED);padding-left:8px}
+.map-row:last-child{border-bottom:0}
+.map-row--nopin{cursor:default;opacity:.62}
+.map-row-name{font-size:13px;font-weight:600;color:var(--ink,#33291F);line-height:1.4}
+.map-row-meta{font-size:11px;color:var(--stone,#9A8467);letter-spacing:.04em}
+.map-row-price{font-size:13px;font-weight:600;color:var(--price,#8A6534);
+  font-variant-numeric:lining-nums tabular-nums}
+.map-row-flag{font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--stone,#9A8467)}
+
+.map-note{margin:14px 0 0;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--stone,#9A8467)}
+.map-empty{font-size:13px;color:var(--mid,#6B5A47);padding:22px 0;line-height:1.8}
+
+/* A pin that carries its price is readable at a glance; a plain
+   teardrop makes you click every one of them. */
+.map-pin{background:none;border:0}
+.map-pin span{display:inline-flex;align-items:center;justify-content:center;
+  min-width:52px;height:24px;padding:0 9px;border-radius:13px;
+  background:var(--black,#33291F);color:#fff;
+  font-family:var(--font-body);font-size:11px;font-weight:600;
+  letter-spacing:.02em;font-variant-numeric:lining-nums tabular-nums;
+  box-shadow:0 3px 10px rgba(51,41,31,.3);white-space:nowrap}
+.map-pin--sold span{background:var(--silver,#BDAD9A);color:var(--ink,#33291F)}
+
+.map-pop{width:248px}
+.map-pop-img{height:132px;background-size:cover;background-position:center;
+  background-color:var(--ivory,#F7F3ED);border-radius:2px;margin-bottom:11px}
+.map-pop-name{font-family:'Cormorant Garamond',Georgia,serif;font-size:19px;
+  line-height:1.2;color:var(--ink,#33291F)}
+.map-pop-loc{font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--stone,#9A8467);margin-top:5px}
+.map-pop-specs{font-size:11px;color:var(--mid,#6B5A47);margin-top:7px}
+.map-pop-price{font-size:15px;font-weight:600;color:var(--price,#8A6534);
+  margin-top:7px;font-variant-numeric:lining-nums tabular-nums}
+.map-pop-links{display:flex;gap:8px;margin-top:12px}
+.map-pop-btn,.map-pop-dir{flex:1;text-align:center;text-decoration:none;
+  font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:9px 6px;
+  border-radius:2px;transition:background .2s,color .2s}
+.map-pop-btn{background:var(--black,#33291F);color:#fff}
+.map-pop-btn:hover{background:var(--hover-brown,#4A3B2C)}
+.map-pop-dir{background:var(--ivory,#F7F3ED);color:var(--ink,#33291F)}
+.map-pop-dir:hover{background:var(--line,#E6DED3)}
+
+/* Leaflet ships its own look; match the page instead. */
+.leaflet-popup-content-wrapper{border-radius:3px;box-shadow:0 18px 44px rgba(51,41,31,.22)}
+.leaflet-popup-content{margin:12px}
+.leaflet-container{font-family:var(--font-body)}
+.leaflet-control-attribution{font-size:9px;background:rgba(255,255,255,.75)}
+
+@media(max-width:1000px){
+  .map-wrap{padding:0 22px 56px}
+  .map-shell{grid-template-columns:1fr;min-height:0}
+  #mapCanvas{height:420px}
+  .map-list{height:auto;max-height:420px;border-left:0;padding-left:0;
+    border-top:1px solid var(--line,#E6DED3);padding-top:6px}
+}
