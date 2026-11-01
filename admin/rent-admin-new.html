@@ -563,7 +563,7 @@
     try{
       var q=function(t,sel){return sbFetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel),{headers:H}).then(function(r){return r.json();});};
       var res=await Promise.all([
-        sbFetch(SB_URL+'/rest/v1/bookings?select=id,booking_ref,villa_id,guest_id,owner_id,check_in,check_out,nights,guests_count,adults,children,rate_per_night,total,client_pay,security_deposit,mgroup_commission,owner_net,co_agent_net,agent_name,agent_commission,status,currency,source,special_requests&order=check_in.desc&limit=300',{headers:H}).then(function(r){return r.json();}),
+        sbFetch(SB_URL+'/rest/v1/bookings?select=id,booking_ref,villa_id,guest_id,owner_id,check_in,check_out,nights,guests_count,adults,children,rate_per_night,total,client_pay,owner_paid,agent_paid,security_deposit,mgroup_commission,owner_net,co_agent_net,agent_name,agent_commission,status,currency,source,special_requests&order=check_in.desc&limit=300',{headers:H}).then(function(r){return r.json();}),
         q('rental_villas',VFIELDS), q('owners',OFIELDS), q('guests','id,name,email,phone,nationality'),
         sbFetch(SB_URL+'/rest/v1/checkin_tasks?select=booking_id,is_done&limit=5000',{headers:H}).then(function(r){return r.json();})
       ]);
@@ -590,7 +590,7 @@
     var allYears=Array.from(new Set((DATA.bk||[]).map(function(b){return b.check_in?String(b.check_in).slice(0,4):null;}).filter(Boolean))).sort().reverse();
     var cur=ysel?ysel.value:'';
     if(ysel){
-      if(!cur||(cur!=='all'&&allYears.indexOf(cur)<0))cur=allYears[0]||'all';
+      if(!cur||(cur!=='all'&&allYears.indexOf(cur)<0))cur='all';
       ysel.innerHTML='<option value="all">All years</option>'+allYears.map(function(y){return '<option value="'+y+'"'+(y===cur?' selected':'')+'>'+y+'</option>';}).join('');
       if(cur==='all')ysel.value='all';
     }
@@ -1443,6 +1443,18 @@
   function payOpen(i){MNG.payEdit=i;MNG.payForm=true;renderMng();}
   function payCancel(){MNG.payEdit=null;MNG.payForm=false;renderMng();}
   function bad(id,on){var e=document.getElementById(id);if(e)e.classList.toggle('bad',!!on);}
+  // Roll the paid installments up into the booking columns the dashboards/portals read.
+  async function syncPaidColumns(){
+    var ps=(MNG.bp&&MNG.bp.payments)||[];
+    var cli=0,own=0,ag=0;
+    ps.forEach(function(p){ if(p.status==='paid'){ var a=N(p.amount), o=(p.owner_net!=null?N(p.owner_net):0); cli+=a; own+=o; ag+=(a-o); } });
+    var body={client_pay:cli,owner_paid:own,agent_paid:ag};
+    try{
+      await sbFetch(SB_URL+'/rest/v1/bookings?id=eq.'+MNG.id,{method:'PATCH',headers:JH,body:JSON.stringify(body)});
+      var b=DATA.bk.find(function(x){return x.id===MNG.id;});
+      if(b){b.client_pay=cli;b.owner_paid=own;b.agent_paid=ag;}
+    }catch(e){/* columns stay until next save */}
+  }
   async function paySave(){
     var label=document.getElementById('py_label').value.trim();
     var amt=document.getElementById('py_amount').value.trim();
@@ -1466,7 +1478,7 @@
     e.created_at=(prev&&prev.created_at)||new Date().toISOString();
     var snapshot=JSON.parse(JSON.stringify(MNG.bp.payments));
     if(MNG.payEdit!=null)MNG.bp.payments[MNG.payEdit]=e; else MNG.bp.payments.push(e);
-    try{await bpSave();MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;renderMng();}
+    try{await bpSave();await syncPaidColumns();MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;renderMng();renderAll();}
     catch(err){MNG.bp.payments=snapshot;alert('Could not save payment: '+err.message);}
   }
 
@@ -1928,7 +1940,7 @@
     if(!(await mgConfirm('Remove "'+(p.label||'this payment')+'" ('+money(p.amount)+')?\nThis is saved immediately.','Remove')))return;
     var snapshot=JSON.parse(JSON.stringify(MNG.bp.payments));
     MNG.bp.payments.splice(i,1);
-    try{await bpSave();renderMng();}catch(e){MNG.bp.payments=snapshot;alert('Could not remove: '+e.message);}
+    try{await bpSave();await syncPaidColumns();renderMng();renderAll();}catch(e){MNG.bp.payments=snapshot;alert('Could not remove: '+e.message);}
   }
 
   // ---------- HOUSEKEEPER (weekly service schedule) ----------
