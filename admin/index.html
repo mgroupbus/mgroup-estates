@@ -38,7 +38,13 @@
   .gcard .soon{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line);border-radius:20px;padding:3px 9px}
   .foot{margin-top:26px;font-size:10.5px;letter-spacing:.06em;color:var(--faint)}
   .foot a{color:var(--faint);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
-  @media(max-width:600px){body{align-items:flex-start;padding-top:12vh;padding-bottom:40px}}
+  @media(max-width:600px){
+    body{align-items:flex-start;padding-top:9vh;padding-bottom:40px}
+    .cards{grid-template-columns:1fr;gap:12px}
+    .gcard{aspect-ratio:2.6/1;gap:6px}
+    .gcard .em svg{width:30px;height:30px}
+    .gcard .t{font-size:21px}
+  }
   @media(max-width:420px){.logo{width:64%}}
 </style></head><body>
 

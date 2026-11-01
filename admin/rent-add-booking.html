@@ -135,14 +135,14 @@
             <div id="ownerBadge" class="ownerbadge">👤 Owner: <b>Khun Bank</b></div>
           </div>
           <div class="grid3" style="margin-top:13px">
-            <div class="fld"><label>Check-in <span class="req">*</span></label><input type="date" value="2026-08-06"></div>
-            <div class="fld"><label>Check-out <span class="req">*</span></label><input type="date" value="2026-08-13"></div>
-            <div class="fld"><label>Nights</label><input readonly value="7 nights"></div>
+            <div class="fld"><label>Check-in <span class="req">*</span></label><input type="date"></div>
+            <div class="fld"><label>Check-out <span class="req">*</span></label><input type="date"></div>
+            <div class="fld"><label>Nights</label><input readonly placeholder="—"></div>
           </div>
           <div class="grid3" style="margin-top:13px">
-            <div class="fld"><label>Adults</label><select onchange="recalcGuests()" id="adultsSel"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
-            <div class="fld"><label>Children</label><select onchange="recalcGuests()" id="childSel"><option selected>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
-            <div class="fld"><label>Pets</label><select id="petSel"><option>None</option><option selected>1 dog</option><option>2 dogs</option><option>1 cat</option><option>2 cats</option><option>Dog + cat</option></select></div>
+            <div class="fld"><label>Adults</label><select onchange="recalcGuests()" id="adultsSel"><option value="" selected>—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
+            <div class="fld"><label>Children</label><select onchange="recalcGuests()" id="childSel"><option value="" selected>—</option><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+            <div class="fld"><label>Pets</label><select id="petSel"><option selected>None</option><option>1 dog</option><option>2 dogs</option><option>1 cat</option><option>2 cats</option><option>Dog + cat</option></select></div>
           </div>
         </div>
 
@@ -174,7 +174,7 @@
           <h3><span class="n">3</span>Pricing</h3>
           <p class="hint">Choose the rate period — subtotal and total update live on the right.</p>
           <div class="grid3">
-            <div class="fld"><label>Price</label><div class="prefix"><select id="curSel" class="cur" onchange="setCur()"><option value="฿">฿ THB</option><option value="$">$ USD</option></select><input id="rateInput" value="12,000" oninput="recalc()"></div></div>
+            <div class="fld"><label>Price</label><div class="prefix"><select id="curSel" class="cur" onchange="setCur()"><option value="฿">฿ THB</option><option value="$">$ USD</option></select><input id="rateInput" value="" placeholder="0" oninput="recalc()"></div></div>
             <div class="fld"><label>Per</label><select id="ratePeriod" onchange="recalc()"><option value="night">Night</option><option value="week">Week</option><option value="month">Month</option><option value="year">Year</option></select></div>
             <div class="fld"><label>Subtotal</label><input readonly id="subInput" value="฿84,000"></div>
             <div class="fld"><label>Discount</label><div class="prefix"><span id="curDisc">฿</span><input id="discInput" value="0" oninput="recalc()"></div></div>
@@ -212,7 +212,7 @@
       <div class="summary">
         <div class="sum-head">
           <div class="vn" id="sumVilla">The Aqua Residence</div>
-          <div class="meta" id="sumMeta">Aug 6 → Aug 13 · 7 nights · 4 adults</div>
+          <div class="meta" id="sumMeta">Select villa, dates & guests</div>
         </div>
         <div class="sum-body">
           <div class="line"><span class="lb" id="sumSubLbl">Subtotal (7 nights × ฿12,000)</span><span id="sumSub">฿84,000</span></div>
