@@ -122,8 +122,14 @@
     });
 
     if (pinned.length) {
+      /* A phone canvas is a third the width of the desktop one, so the
+         same padding and zoom ceiling that frame the island nicely there
+         open on one street here, with every pin off-screen. Both scale
+         with the canvas. */
+      var narrow = window.innerWidth < 900;
       map.fitBounds(L.latLngBounds(pinned.map(function (p) { return [p.lat, p.lng]; })),
-                    { padding: [48, 48], maxZoom: 14 });
+                    { padding: narrow ? [26, 26] : [48, 48],
+                      maxZoom: narrow ? 12 : 13 });
     } else {
       map.setView(PHUKET, 11);
     }
@@ -201,16 +207,26 @@
   function boot() {
     map = L.map('mapCanvas', { scrollWheelZoom: false, zoomControl: true })
            .setView(PHUKET, 11);
-    /* Plain OpenStreetMap tiles. Carto's light basemap was the nicer
-       match for the palette, but it now answers with an "API KEY
-       REQUIRED" watermark instead of a map — the request still returns
-       200, so it fails looking like it worked. OSM needs no key; the
-       colour is toned down in CSS instead, which gets the quiet map
-       without depending on anyone's key. */
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    /* Esri's Light Gray Canvas, not OpenStreetMap. OSM draws a street
+       atlas — every shop labelled, motorways in orange — and toning it
+       down in CSS only produced a quiet street atlas. This one is drawn
+       as a backdrop: pale land, water, coastline, a trace of road. The
+       place names live on a second, transparent layer so they sit above
+       the land but below the pins. Both are keyless.
+
+       (Carto's basemap would also have suited; it now answers with an
+       "API KEY REQUIRED" watermark served as a normal 200, so it fails
+       looking like it worked.) */
+    var esri = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/';
+    L.tileLayer(esri + 'World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 16,
+      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ'
     }).addTo(map);
+    L.tileLayer(esri + 'World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 16,
+      pane: 'shadowPane'
+    }).addTo(map);
+
     map.on('click', function () { map.scrollWheelZoom.enable(); });
 
     Promise.all([

@@ -6092,7 +6092,9 @@ p + p{margin-top:14px}
     border-top:1px solid var(--line,#E6DED3);padding-top:6px}
 }
 
-/* OSM's own styling is loud next to the rest of the page — motorways in
-   orange, every shop labelled. Desaturating the tiles keeps the map
-   legible while letting the price pins be the only strong colour. */
-.leaflet-tile-pane{filter:saturate(.38) brightness(1.04) contrast(.94)}
+/* Esri's Light Gray Canvas is already a backdrop rather than a street
+   atlas, so it needs no flattening — only a warm cast, because its grey
+   is cool and every other neutral on this site sits in the brown family.
+   The price pins stay the one strong colour on the page. */
+.leaflet-tile-pane{filter:sepia(.34) saturate(.55) brightness(1.03)}
+.leaflet-shadow-pane{filter:sepia(.34) saturate(.5) opacity(.78)}
