@@ -346,7 +346,7 @@
         <div class="tile"><div class="l">Revenue this year</div><div class="v" id="d-rev">—</div><div class="s" id="d-revyr">—</div></div>
         <div class="tile"><div class="l">To collect</div><div class="v" id="d-col" style="color:var(--red)">—</div><div class="s" id="d-colyr">latest year</div></div>
       </div>
-      <div class="card"><div class="ch">Upcoming — confirmed bookings</div><div class="tablecard" style="border:none"><table><thead><tr><th>Ref</th><th>Villa</th><th>Guest</th><th>Stay</th><th class="money">Total</th></tr></thead><tbody id="d-upcoming"></tbody></table></div></div>
+      <div class="card"><div class="ch">Upcoming — confirmed bookings</div><div class="tablecard" style="border:none"><table><thead><tr><th>Ref</th><th>Check-in → out</th><th>Villa</th><th>Guest</th><th class="money">Total</th></tr></thead><tbody id="d-upcoming"></tbody></table></div></div>
       <div class="card"><div class="ch">Payment terms — to collect</div><div class="tablecard" style="border:none"><table><thead><tr><th>Ref</th><th>Villa</th><th>Guest</th><th class="money">Total</th><th class="money">Paid</th><th class="money">Balance</th></tr></thead><tbody id="d-collect"></tbody></table></div></div>
     </div>
 
@@ -666,7 +666,7 @@
     document.getElementById('d-revyr').textContent=THISYR;
     document.getElementById('d-col').textContent='฿'+(col/1e6).toFixed(2)+'M';
     var cy=document.getElementById('d-colyr'); if(cy)cy.textContent=latestYr+' · outstanding';
-    document.getElementById('d-upcoming').innerHTML=upc.length?upc.map(function(b){return '<tr><td class="ref">'+esc(b.booking_ref||'—')+'</td><td>'+esc(vname(b.villa_id))+'</td><td>'+esc(gname(b.guest_id))+'</td><td>'+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'</td><td class="money">'+money(b.total)+'</td></tr>';}).join(''):'<tr><td colspan="5" class="state">No upcoming confirmed bookings</td></tr>';
+    document.getElementById('d-upcoming').innerHTML=upc.length?upc.map(function(b){return '<tr><td class="ref">'+esc(b.booking_ref||'—')+'</td><td><b>'+fmtD(b.check_in)+'</b> → '+fmtD(b.check_out)+'</td><td>'+esc(vname(b.villa_id))+'</td><td>'+esc(gname(b.guest_id))+'</td><td class="money">'+money(b.total)+'</td></tr>';}).join(''):'<tr><td colspan="5" class="state">No upcoming confirmed bookings</td></tr>';
     var coll=DATA.bk.filter(function(b){return outstanding(b)>0;});
     document.getElementById('d-collect').innerHTML=coll.length?coll.map(function(b){return '<tr><td class="ref">'+esc(b.booking_ref||'—')+'</td><td>'+esc(vname(b.villa_id))+'</td><td>'+esc(gname(b.guest_id))+'</td><td class="money">'+money(b.total)+'</td><td class="money paid">'+money(b.client_pay)+'</td><td class="money bal">'+money(outstanding(b))+'</td></tr>';}).join(''):'<tr><td colspan="6" class="state">Nothing outstanding 🎉</td></tr>';
   }
