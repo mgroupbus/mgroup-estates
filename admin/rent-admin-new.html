@@ -1390,6 +1390,7 @@
         '<div><label>Status</label><select id="py_status">'+opts(PAYST,(e&&e.status)||'pending')+'</select></div></div>'+
         '<div class="r"><div><label>Reference / notes</label><input id="py_notes" value="'+esc((e&&e.notes)||'')+'"></div></div>'+
         '<div class="ucalc" id="pySplit" style="margin-bottom:11px"></div>'+
+        '<div id="payErr" style="color:var(--red);font-size:12.5px;font-weight:600;min-height:16px;margin-bottom:8px"></div>'+
         '<div style="display:flex;gap:8px"><button class="btn primary" onclick="paySave()">'+(e?'Save changes':'Save payment')+'</button>'+
         '<button class="btn" onclick="payCancel()">Cancel</button></div></div>';
     }
@@ -1446,9 +1447,14 @@
     var label=document.getElementById('py_label').value.trim();
     var amt=document.getElementById('py_amount').value.trim();
     var own=document.getElementById('py_owner').value.trim();
+    var errEl=document.getElementById('payErr'); if(errEl)errEl.textContent='';
     bad('py_label',!label); bad('py_amount',amt===''); bad('py_owner',own==='');
-    if(!label||amt===''||own===''){alert('Payment type, amount to client and owner net are all required.');return;}
-    if(Number(own)>Number(amt)&&!confirm('Owner net is larger than the amount the client pays. Save anyway?'))return;
+    if(!label||amt===''||own===''){
+      var msg='ต้องกรอกให้ครบ: ประเภท, ยอดแขกจ่าย (Amount) และ Owner net';
+      if(errEl)errEl.textContent=msg; else alert(msg);
+      return;
+    }
+    if(Number(own)>Number(amt)){ if(errEl)errEl.textContent='⚠ Owner net มากกว่ายอดที่แขกจ่าย — ตรวจอีกครั้ง (ยังบันทึกได้)'; }
     var e={label:label,amount:Number(amt),owner_net:Number(own),
       due_date:document.getElementById('py_due').value||null,
       paid_date:document.getElementById('py_paid').value||null,
