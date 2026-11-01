@@ -215,16 +215,22 @@
     .side{position:sticky;top:0;z-index:20;height:auto;flex-direction:column;padding:9px 10px;border-right:none;border-bottom:1px solid var(--line)}
     .brand{padding:2px 4px 8px}
     .side .user,.nl{display:none}
-    .nav{flex-direction:row;flex-wrap:nowrap;overflow-x:auto;gap:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-    .nav::-webkit-scrollbar{display:none}
-    .nav button{width:auto;flex:0 0 auto;white-space:nowrap;padding:8px 12px}
+    .nav{flex-direction:row;flex-wrap:wrap;gap:5px}
+    .nav button{width:auto;flex:0 0 auto;white-space:nowrap;padding:7px 11px;font-size:12.5px;border:1px solid var(--line);background:#fff}
+    .nav button.active{border-color:var(--g600)}
+    .nav button .ic{width:15px;height:15px}
     .main{padding:14px;max-width:100%;min-width:0}
     .view,.head,.card,.tablecard{min-width:0;max-width:100%}
     .head{flex-wrap:wrap;gap:10px;align-items:center}
     .head h2{font-size:21px}
     .head .btn{white-space:nowrap}
+    .tablecard table td,.tablecard table th{white-space:nowrap}
+    .tablecard table .vn,.tablecard table .sub{white-space:nowrap}
   }
-  @media(max-width:480px){.tiles,.tiles.tiles3{grid-template-columns:1fr}}
+  @media(max-width:480px){
+    .tile{padding:11px 13px}
+    .tile .l{font-size:9.5px}.tile .v{font-size:19px;margin-top:3px}.tile .s{font-size:10px}
+  }
   /* villas */
   .vfilter{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
   .vfilter input,.vfilter select{font-family:var(--font);font-size:12.5px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
