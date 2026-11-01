@@ -6098,3 +6098,7 @@ p + p{margin-top:14px}
    The price pins stay the one strong colour on the page. */
 .leaflet-tile-pane{filter:sepia(.34) saturate(.55) brightness(1.03)}
 .leaflet-shadow-pane{filter:sepia(.34) saturate(.5) opacity(.78)}
+/* Leaflet lays tiles on fractional pixels, so the browser leaves a
+   hairline between them. On a photographic map nobody sees it; on a flat
+   pale sea it draws a grid. Half a pixel of overlap closes it. */
+.leaflet-tile-pane .leaflet-tile{width:256.5px;height:256.5px}
