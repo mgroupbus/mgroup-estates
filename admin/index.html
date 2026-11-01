@@ -67,12 +67,12 @@
   <div id="gate">
     <div class="lead">Choose a system</div>
     <div class="cards">
-      <div class="gcard rent" data-href="/admin/rent-admin-new.html" onclick="openSys(this)">
+      <div class="gcard rent" data-href="/admin/rent-admin-new.html" onclick="pick(this)">
         <div class="top"></div>
         <div class="face"><div class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="38" height="38"><path d="M3 10.5 12 4l9 6.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-6h4v6"/></svg></div><div class="t">Rent</div><div class="s">Rental Management</div><div class="go">Enter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div>
         <form class="pwbar" onsubmit="enterSys(this);return false" onclick="event.stopPropagation()"><input type="password" inputmode="numeric" placeholder="Password" autocomplete="off"><button type="submit" aria-label="Enter">&#8594;</button></form>
       </div>
-      <div class="gcard sale" data-href="/admin/sale-hub.html" onclick="openSys(this)">
+      <div class="gcard sale" data-href="/admin/sale-hub.html" onclick="pick(this)">
         <div class="top"></div>
         <div class="face"><div class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="38" height="38"><path d="M4 21h16"/><path d="M6 21V6a1 1 0 011-1h6a1 1 0 011 1v15"/><path d="M14 10h3a1 1 0 011 1v10"/><path d="M9 9h2M9 13h2M9 17h2"/></svg></div><div class="t">Sale</div><div class="s">Property Listings</div><div class="go">Enter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div>
         <form class="pwbar" onsubmit="enterSys(this);return false" onclick="event.stopPropagation()"><input type="password" inputmode="numeric" placeholder="Password" autocomplete="off"><button type="submit" aria-label="Enter">&#8594;</button></form>
@@ -87,6 +87,19 @@
   const HASH='9a2d0f7b38def13c8dda1a2e5cb8a21c9fb864a69a9e22a677db90271c04eed7';
   async function sha256(s){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
     return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0');}).join('');}
+  function authed(){try{return !!localStorage.getItem('mg_admin_code');}catch(e){return false;}}
+  function remember(pw){
+    try{localStorage.setItem('mg_admin','ok');localStorage.setItem('mg_admin_code',pw);}catch(e){}
+    try{sessionStorage.setItem('mg_admin','ok');sessionStorage.setItem('mg_admin_code',pw);}catch(e){}
+  }
+  function pick(card){
+    if(authed()){ // already signed in on this device — go straight in, no password
+      var pw=''; try{pw=localStorage.getItem('mg_admin_code')||'';}catch(e){}
+      try{sessionStorage.setItem('mg_admin','ok');sessionStorage.setItem('mg_admin_code',pw);}catch(e){}
+      location.href=card.getAttribute('data-href'); return;
+    }
+    openSys(card);
+  }
   function openSys(card){
     document.querySelectorAll('.gcard').forEach(function(c){if(c!==card)c.classList.remove('act');});
     card.classList.add('act');
@@ -95,15 +108,18 @@
   async function enterSys(form){
     var card=form.closest('.gcard'); var inp=form.querySelector('input'); var pw=inp.value; if(!pw)return false;
     var h=await sha256(pw);
-    if(h===HASH){
-      try{sessionStorage.setItem('mg_admin','ok');sessionStorage.setItem('mg_admin_code',pw);}catch(e){}
-      location.href=card.getAttribute('data-href');
-    }else{
-      card.classList.add('bad'); inp.value='';
-      setTimeout(function(){card.classList.remove('bad');},450);
-    }
+    if(h===HASH){ remember(pw); location.href=card.getAttribute('data-href'); }
+    else{ card.classList.add('bad'); inp.value=''; setTimeout(function(){card.classList.remove('bad');},450); }
     return false;
   }
-  function logout(){try{sessionStorage.removeItem('mg_admin');sessionStorage.removeItem('mg_admin_code');}catch(e){}document.querySelectorAll('.gcard').forEach(function(c){c.classList.remove('act');});}
+  function logout(){
+    try{localStorage.removeItem('mg_admin');localStorage.removeItem('mg_admin_code');}catch(e){}
+    try{sessionStorage.removeItem('mg_admin');sessionStorage.removeItem('mg_admin_code');}catch(e){}
+    document.querySelectorAll('.gcard').forEach(function(c){c.classList.remove('act');});
+    location.reload();
+  }
+  // keep the standalone home-screen app signed in across launches
+  (function(){try{if(!sessionStorage.getItem('mg_admin_code')&&localStorage.getItem('mg_admin_code')){sessionStorage.setItem('mg_admin','ok');sessionStorage.setItem('mg_admin_code',localStorage.getItem('mg_admin_code'));}}catch(e){}
+    try{document.addEventListener('DOMContentLoaded',function(){if(authed())document.querySelectorAll('.gcard .go').forEach(function(g){g.firstChild.textContent='Open ';});});}catch(e){}})();
 </script>
 </body></html>

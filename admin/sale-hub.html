@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MGROUP · Sale Listings</title>
-<script>if(sessionStorage.getItem('mg_admin')!=='ok'){location.replace('/admin/index.html');}</script>
+<script>try{if(!sessionStorage.getItem('mg_admin_code')&&localStorage.getItem('mg_admin_code')){sessionStorage.setItem('mg_admin','ok');sessionStorage.setItem('mg_admin_code',localStorage.getItem('mg_admin_code'));}}catch(e){}if(sessionStorage.getItem('mg_admin')!=='ok'){location.replace('/admin/index.html');}</script>
 <meta name="theme-color" content="#2f5069">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">

@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MGROUP Admin — Rentals</title>
-<script>if(sessionStorage.getItem("mg_admin")!=="ok"||!sessionStorage.getItem("mg_admin_code")){location.replace("/admin/index.html");}</script>
+<script>try{if(!sessionStorage.getItem("mg_admin_code")&&localStorage.getItem("mg_admin_code")){sessionStorage.setItem("mg_admin","ok");sessionStorage.setItem("mg_admin_code",localStorage.getItem("mg_admin_code"));}}catch(e){}if(sessionStorage.getItem("mg_admin")!=="ok"||!sessionStorage.getItem("mg_admin_code")){location.replace("/admin/index.html");}</script>
 <meta name="theme-color" content="#23262b"><link rel="manifest" href="/admin/manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <style>
@@ -336,7 +336,7 @@
       <button data-v="agents" onclick="go('agents',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="3.5"/><path d="m15 11 2 2 4.5-4.5"/></svg>Agents</button>
       <button data-v="docs" onclick="go('docs',this)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5"/><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M8 13h8M8 17h5"/></svg>Documents</button>
     </div>
-    <div class="user"><div class="avatar">A</div><div><div class="nm">Admin</div><div class="rl" onclick="sessionStorage.removeItem('mg_admin');location.href='/admin/index.html'">Sign out</div></div></div>
+    <div class="user"><div class="avatar">A</div><div><div class="nm">Admin</div><div class="rl" onclick="try{localStorage.removeItem('mg_admin');localStorage.removeItem('mg_admin_code');sessionStorage.removeItem('mg_admin');sessionStorage.removeItem('mg_admin_code');}catch(e){};location.href='/admin/index.html'">Sign out</div></div></div>
   </aside>
 
   <main class="main">
