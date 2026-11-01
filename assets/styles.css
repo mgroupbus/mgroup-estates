@@ -6101,4 +6101,4 @@ p + p{margin-top:14px}
 /* Leaflet lays tiles on fractional pixels, so the browser leaves a
    hairline between them. On a photographic map nobody sees it; on a flat
    pale sea it draws a grid. Half a pixel of overlap closes it. */
-.leaflet-tile-pane .leaflet-tile{width:256.5px;height:256.5px}
+.leaflet-tile-pane .leaflet-tile{width:256.5px!important;height:256.5px!important}
