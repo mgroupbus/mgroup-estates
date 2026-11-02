@@ -271,6 +271,15 @@
   .cno{flex:none;width:24px;height:24px;border-radius:50%;background:var(--goldt);color:var(--gold);
     display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;margin-top:1px}
   .clause b{font-size:14px}
+  /* the one clause that defines the whole service boundary */
+  .clause.key{background:var(--goldt);border-radius:12px;padding:16px 16px 17px;margin:9px 0;
+    border-top:none;box-shadow:inset 3px 0 0 var(--gold)}
+  .clause.key+.clause{border-top:none}
+  .clause.key .cno{background:var(--gold);color:#fff}
+  .clause.key b{font-size:15px}
+  .clause.key .ctext{color:var(--ink)}
+  .keytag{display:table;font-size:9px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--gold);background:#fff;border-radius:999px;padding:4px 9px;margin-bottom:7px}
   .ctext{font-size:13px;color:var(--muted);line-height:1.7;margin-top:5px}
   .issue{border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:10px}
   .issue .ihd{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -1177,7 +1186,9 @@
       html+='<div class="sec"><div class="state">The terms have not been published yet.</div></div>';
     }else{
       html+='<div class="sec">'+TERMS.sections.map(function(t,i){
-        return '<div class="clause"><div class="cno">'+(i+1)+'</div><div>'
+        // is_key marks the clause the owner most needs to read
+        return '<div class="clause'+(t.is_key?' key':'')+'"><div class="cno">'+(i+1)+'</div><div>'
+          +(t.is_key?'<span class="keytag">Please read</span>':'')
           +'<b>'+esc(t.title)+'</b><div class="ctext">'+esc(t.body)+'</div></div></div>';
       }).join('')+'</div>';
     }
