@@ -129,6 +129,7 @@
   /* NAV + VILLA PAGES */
   .nav{display:flex;gap:26px;border-bottom:1px solid var(--line);margin:0 -20px 22px;padding:0 24px}
   .navlink{font-size:12.5px;font-weight:700;letter-spacing:.03em;color:var(--muted);padding:13px 2px;cursor:pointer;border-bottom:2px solid transparent;user-select:none}
+  .navlink .ni,.navlink .nts{display:none}
   .navlink:hover{color:var(--ink)}
   .navlink.on{color:var(--gold);border-bottom-color:var(--gold)}
   .vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
@@ -353,13 +354,18 @@
     .top .who .oswitch{display:flex!important;flex:1;gap:8px;align-items:center;min-width:0}
     .top .who .oswitch select{flex:1;min-width:0}
     .top .out{flex:none}
-    /* on a phone every section is visible at once, as chips on a grid — nothing to swipe past */
-    .nav{margin:0 -14px 18px;padding:12px 14px 14px;gap:7px;display:grid;
-      grid-template-columns:repeat(3,1fr);overflow:visible;white-space:normal}
-    .navlink{padding:11px 6px;border-radius:999px;background:#f2f0ea;color:var(--muted);
-      border-bottom:none;text-align:center;font-size:12px;letter-spacing:0;
-      overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .navlink.on{background:var(--gold);color:#fff;border-bottom:none}
+    /* on a phone the menu is icons on one row — every section on screen, nothing to swipe past */
+    .nav{margin:0 -14px 16px;padding:10px 6px 11px;gap:0;display:flex;
+      overflow:visible;white-space:normal}
+    .navlink{flex:1 1 0;min-width:0;padding:6px 1px 5px;border-bottom:none;border-radius:11px;text-align:center;
+      display:flex;flex-direction:column;align-items:center;gap:4px;
+      font-size:8.5px;font-weight:700;letter-spacing:.01em;color:var(--faint)}
+    .navlink .ni{display:block;width:21px;height:21px}
+    .navlink .nt{display:none}
+    .navlink .nts{display:block}
+    .navlink#navHome .nt,.navlink#navRevenue .nt,.navlink#navVillas .nt,
+    .navlink#navGuests .nt,.navlink#navExpense .nt,.navlink#navTerms .nt{display:block}
+    .navlink.on{color:var(--gold);background:#f6f1e7;border-bottom:none}
     .hd{flex-direction:column;align-items:stretch;gap:12px}
     .hd h2{font-size:22px}
     .hd>div:last-child{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -414,13 +420,13 @@
   </div>
   <div class="stmthead" id="stmtHead"></div>
   <div class="nav">
-    <div class="navlink on" id="navHome" onclick="go('home')">Home</div>
-    <div class="navlink" id="navRevenue" onclick="go('revenue')">Revenue</div>
-    <div class="navlink" id="navVillas" onclick="go('villas')">Villas</div>
-    <div class="navlink" id="navGuests" onclick="go('guests')" style="display:none">Guests</div>
-    <div class="navlink" id="navBulletin" onclick="go('bulletin')">Problem report</div>
-    <div class="navlink" id="navExpense" onclick="go('expense')">Expenses</div>
-    <div class="navlink" id="navTerms" onclick="go('terms')">Terms</div>
+    <div class="navlink on" id="navHome" onclick="go('home')"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.6 12 3.5l9 7.1"/><path d="M5.6 9.1V20h12.8V9.1"/><path d="M9.8 20v-5.4h4.4V20"/></svg><span class="nt">Home</span></div>
+    <div class="navlink" id="navRevenue" onclick="go('revenue')"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5h16"/><rect x="5.2" y="11" width="3.3" height="6"/><rect x="10.4" y="7.4" width="3.3" height="9.6"/><rect x="15.6" y="4" width="3.3" height="13"/></svg><span class="nt">Revenue</span></div>
+    <div class="navlink" id="navVillas" onclick="go('villas')"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 11.2 12 4.6l8.8 6.6"/><path d="M5.4 9.8V16h13.2V9.8"/><path d="M3 19.6c1.4 0 1.4 1.1 2.8 1.1s1.4-1.1 2.8-1.1 1.4 1.1 2.8 1.1 1.4-1.1 2.8-1.1 1.4 1.1 2.8 1.1 1.4-1.1 2.8-1.1"/></svg><span class="nt">Villas</span></div>
+    <div class="navlink" id="navGuests" onclick="go('guests')" style="display:none"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.2" r="3.4"/><path d="M4.8 20.2c0-3.7 3.2-6 7.2-6s7.2 2.3 7.2 6"/></svg><span class="nt">Guests</span></div>
+    <div class="navlink" id="navBulletin" onclick="go('bulletin')"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.8 2.6 20h18.8L12 3.8Z"/><path d="M12 9.8v4.6"/><circle cx="12" cy="17.3" r=".9" fill="currentColor" stroke="none"/></svg><span class="nt">Problem report</span><span class="nts">Problems</span></div>
+    <div class="navlink" id="navExpense" onclick="go('expense')"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.2h12v17.6l-2.4-1.5-2.4 1.5-2.4-1.5L8.4 20.8 6 19.3V3.2Z"/><path d="M9.2 8.1h5.6"/><path d="M9.2 12.1h5.6"/></svg><span class="nt">Expenses</span></div>
+    <div class="navlink" id="navTerms" onclick="go('terms')"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.4 3.2h7.4L18 7.4v13.4H6.4V3.2Z"/><path d="M13.6 3.4v4.2h4.2"/><path d="M9.3 12.4h5.4"/><path d="M9.3 16h5.4"/></svg><span class="nt">Terms</span></div>
   </div>
 
   <div id="view-home">
