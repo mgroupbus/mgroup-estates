@@ -334,7 +334,14 @@
   .appfoot a:hover{text-decoration:underline;text-underline-offset:3px}
   @media(max-width:560px){.appfoot{justify-content:center;text-align:center}}
   @media(max-width:900px){.tiles{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:560px){.tiles{grid-template-columns:1fr}}
+  /* four summary tiles stay a 2x2 block on a phone rather than a tall stack */
+  @media(max-width:560px){
+    .tiles{grid-template-columns:repeat(2,1fr);gap:9px}
+    .tile{padding:12px 13px}
+    .tile .l{font-size:9.5px;letter-spacing:.03em}
+    .tile .v{font-size:19px;margin-top:4px}
+    .tile .s{font-size:10px}
+  }
   /* ---------- phone layout ---------- */
   .dshort{display:none}
   @media(max-width:700px){
@@ -346,10 +353,13 @@
     .top .who .oswitch{display:flex!important;flex:1;gap:8px;align-items:center;min-width:0}
     .top .who .oswitch select{flex:1;min-width:0}
     .top .out{flex:none}
-    .nav{margin:0 -14px 18px;padding:0 18px;gap:20px;overflow-x:auto;white-space:nowrap;
-      -webkit-overflow-scrolling:touch;scrollbar-width:none}
-    .nav::-webkit-scrollbar{display:none}
-    .navlink{flex:none;padding:12px 0}
+    /* on a phone every section is visible at once, as chips on a grid — nothing to swipe past */
+    .nav{margin:0 -14px 18px;padding:12px 14px 14px;gap:7px;display:grid;
+      grid-template-columns:repeat(3,1fr);overflow:visible;white-space:normal}
+    .navlink{padding:11px 6px;border-radius:999px;background:#f2f0ea;color:var(--muted);
+      border-bottom:none;text-align:center;font-size:12px;letter-spacing:0;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .navlink.on{background:var(--gold);color:#fff;border-bottom:none}
     .hd{flex-direction:column;align-items:stretch;gap:12px}
     .hd h2{font-size:22px}
     .hd>div:last-child{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
