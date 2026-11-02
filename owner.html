@@ -248,6 +248,12 @@
   .step.done .dot{background:#12a150;color:#fff}
   .step.now .dot{background:#1a7fe0;color:#fff;box-shadow:0 0 0 3px rgba(26,127,224,.15)}
   .step b{font-size:12.5px}.step.todo b{color:var(--faint)}
+  .clause{display:flex;gap:14px;align-items:flex-start;padding:15px 0;border-top:1px solid var(--line)}
+  .clause:first-child{border-top:none;padding-top:0}
+  .cno{flex:none;width:24px;height:24px;border-radius:50%;background:var(--goldt);color:var(--gold);
+    display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;margin-top:1px}
+  .clause b{font-size:14px}
+  .ctext{font-size:13px;color:var(--muted);line-height:1.7;margin-top:5px}
   .issue{border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:10px}
   .issue .ihd{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
   .issue .ihd b{font-size:14px}
@@ -354,6 +360,7 @@
     <div class="navlink" id="navGuests" onclick="go('guests')" style="display:none">Guests</div>
     <div class="navlink" id="navBulletin" onclick="go('bulletin')">Problem report</div>
     <div class="navlink" id="navExpense" onclick="go('expense')">Expenses</div>
+    <div class="navlink" id="navTerms" onclick="go('terms')">Terms</div>
   </div>
 
   <div id="view-home">
@@ -390,6 +397,12 @@
       <div style="display:flex;gap:9px;align-items:center"><span id="bulVilla"></span>
       <button class="btn" onclick="openReport()">Report a problem</button></div></div>
     <div id="bulBody"></div>
+  </div>
+
+  <div id="view-terms" style="display:none">
+    <div class="hd"><div><div class="crumb">Owner agreement</div><h2>Terms &amp; conditions</h2></div>
+      <button class="btn" onclick="window.print()">Print</button></div>
+    <div id="termsBody"><div class="state">Loading…</div></div>
   </div>
 
   <div id="view-guests" style="display:none">
@@ -451,7 +464,7 @@
   window.addEventListener('hashchange',route);
 
   function showView(v){
-    ['home','villas','villa','guests','revenue','expense','booking','bulletin'].forEach(function(k){
+    ['home','villas','villa','guests','revenue','expense','booking','bulletin','terms'].forEach(function(k){
       var el=document.getElementById('view-'+k); if(el)el.style.display=(k===v?'':'none');
     });
     document.getElementById('navVillas').classList.toggle('on',v==='villas'||v==='villa');
@@ -462,7 +475,9 @@
     if(v==='revenue')renderRevenue();
     document.getElementById('navBulletin').classList.toggle('on',v==='bulletin');
     if(v==='expense')renderExpenses();
+    document.getElementById('navTerms').classList.toggle('on',v==='terms');
     if(v==='bulletin')renderBulletin();
+    if(v==='terms')renderTerms();
     window.scrollTo(0,0);
   }
 
@@ -1048,6 +1063,76 @@
     var tbl=document.querySelector('#view-home .tablecard table'); if(tbl)tbl.innerHTML=thead+'<tbody>'+body+'</tbody>';
   }
 
+  // ---------- Terms: the agreement, then the boundary it creates in practice ----------
+  var TERMS=null;
+  async function renderTerms(){
+    var box=document.getElementById('termsBody'); if(!box)return;
+    if(!TERMS){
+      box.innerHTML='<div class="state">Loading…</div>';
+      try{
+        var r=await fetch(SB_URL+'/functions/v1/owner-terms',{method:'POST',
+          headers:Object.assign({'Content-Type':'application/json'},H),
+          body:JSON.stringify({token:DATA.token||''})});
+        TERMS=r.ok?await r.json():{sections:[]};
+      }catch(e){ TERMS={sections:[]}; }
+    }
+    var provs=DATA.providers||[];
+    var html='';
+    if(TERMS.version||TERMS.effective){
+      html+='<div class="sharenote" style="margin:-4px 0 16px">'
+        +(TERMS.version?esc(TERMS.version):'')
+        +(TERMS.effective?' &nbsp;·&nbsp; in force from '+fmtD(TERMS.effective):'')+'</div>';
+    }
+    if(!(TERMS.sections||[]).length){
+      html+='<div class="sec"><div class="state">The terms have not been published yet.</div></div>';
+    }else{
+      html+='<div class="sec">'+TERMS.sections.map(function(t,i){
+        return '<div class="clause"><div class="cno">'+(i+1)+'</div><div>'
+          +'<b>'+esc(t.title)+'</b><div class="ctext">'+esc(t.body)+'</div></div></div>';
+      }).join('')+'</div>';
+    }
+    // --- how this works ---
+    html+='<div class="sec note"><h4>How this works</h4>'
+      +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>MGROUP looks after the numbers</b>'
+        +'<div class="hs">Bookings, guests, payments and your statements — that is what we manage for you.</div></div></div>'
+      +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>We introduce trusted companies</b>'
+        +'<div class="hs">Housekeepers, technicians and concierge services we have worked with. The list is below.</div></div></div>'
+      +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>We help you communicate and follow up</b>'
+        +'<div class="hs">Report a problem here and we will pass it on and chase the progress for you.</div></div></div>'
+      +'<div class="howrow"><span class="hi no">&times;</span><div><b>We do not manage the property</b>'
+        +'<div class="hs">You engage the company yourself and pay them directly. MGROUP is not a party to that agreement '
+        +'and does not take a fee on it.</div></div></div></div>';
+
+    // --- who to call ---
+    html+='<div class="sec"><h4>Recommended companies</h4>';
+    if(!provs.length){
+      html+='<div style="font-size:12.5px;color:var(--faint)">No companies listed yet — ask MGROUP for an introduction.</div>';
+    }else{
+      var bycat={}; provs.forEach(function(p){(bycat[p.category]=bycat[p.category]||[]).push(p);});
+      html+='<div class="provgrid">'+Object.keys(bycat).map(function(c){
+        return '<div class="provcol"><div class="provhd">'+(PROV_CAT[c]||c)+'</div>'
+          +bycat[c].map(function(p){
+            var lines=[];
+            if(p.company)lines.push(esc(p.company));
+            if(p.area)lines.push(esc(p.area));
+            if(p.note)lines.push(esc(p.note));
+            var wa=p.whatsapp||p.phone;
+            return '<div class="provcard"><b>'+esc(p.name)+'</b>'
+              +(lines.length?'<div class="hs">'+lines.join(' &middot; ')+'</div>':'')
+              +'<div class="provacts">'
+              +(wa?'<a class="docbtn" href="https://wa.me/'+esc(String(wa).replace(/[^0-9]/g,''))+'" target="_blank" rel="noopener">WhatsApp</a>':'')
+              +(p.phone?'<a class="docbtn" href="tel:'+esc(p.phone)+'">'+esc(p.phone)+'</a>':'')
+              +(p.line_id?'<span class="docbtn off">LINE '+esc(p.line_id)+'</span>':'')
+              +'</div></div>';
+          }).join('')+'</div>';
+      }).join('')+'</div>'
+      +'<div class="docnote">You contact and pay these companies directly. MGROUP can introduce you and follow up, '
+      +'but does not manage the work or handle the payment.</div>';
+    }
+    html+='</div>';
+    box.innerHTML=html;
+  }
+
   // ---------- Bulletin: what MGROUP does and does not do, who to call, what has been reported ----------
   var BULVILLA='all';
   var ISSUE_CAT={housekeeping:'Housekeeping',maintenance:'Maintenance',pool:'Pool',garden:'Garden',appliance:'Appliance',other:'Other'};
@@ -1114,46 +1199,6 @@
             +'<td class="go">&rsaquo;</td></tr>'
             +'<tr class="det" id="iss-'+n+'"><td colspan="7"><div class="detbox">'+issueDetail(i)+'</div></td></tr>';
         }).join('')+'</tbody></table></div>';
-    }
-    html+='</div>';
-
-    // --- how this works ---
-    html+='<div class="sec note"><h4>How this works</h4>'
-      +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>MGROUP looks after the numbers</b>'
-        +'<div class="hs">Bookings, guests, payments and your statements — that is what we manage for you.</div></div></div>'
-      +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>We introduce trusted companies</b>'
-        +'<div class="hs">Housekeepers, technicians and concierge services we have worked with. The list is below.</div></div></div>'
-      +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>We help you communicate and follow up</b>'
-        +'<div class="hs">Report a problem here and we will pass it on and chase the progress for you.</div></div></div>'
-      +'<div class="howrow"><span class="hi no">&times;</span><div><b>We do not manage the property</b>'
-        +'<div class="hs">You engage the company yourself and pay them directly. MGROUP is not a party to that agreement '
-        +'and does not take a fee on it.</div></div></div></div>';
-
-    // --- who to call ---
-    html+='<div class="sec"><h4>Recommended companies</h4>';
-    if(!provs.length){
-      html+='<div style="font-size:12.5px;color:var(--faint)">No companies listed yet — ask MGROUP for an introduction.</div>';
-    }else{
-      var bycat={}; provs.forEach(function(p){(bycat[p.category]=bycat[p.category]||[]).push(p);});
-      html+='<div class="provgrid">'+Object.keys(bycat).map(function(c){
-        return '<div class="provcol"><div class="provhd">'+(PROV_CAT[c]||c)+'</div>'
-          +bycat[c].map(function(p){
-            var lines=[];
-            if(p.company)lines.push(esc(p.company));
-            if(p.area)lines.push(esc(p.area));
-            if(p.note)lines.push(esc(p.note));
-            var wa=p.whatsapp||p.phone;
-            return '<div class="provcard"><b>'+esc(p.name)+'</b>'
-              +(lines.length?'<div class="hs">'+lines.join(' &middot; ')+'</div>':'')
-              +'<div class="provacts">'
-              +(wa?'<a class="docbtn" href="https://wa.me/'+esc(String(wa).replace(/[^0-9]/g,''))+'" target="_blank" rel="noopener">WhatsApp</a>':'')
-              +(p.phone?'<a class="docbtn" href="tel:'+esc(p.phone)+'">'+esc(p.phone)+'</a>':'')
-              +(p.line_id?'<span class="docbtn off">LINE '+esc(p.line_id)+'</span>':'')
-              +'</div></div>';
-          }).join('')+'</div>';
-      }).join('')+'</div>'
-      +'<div class="docnote">You contact and pay these companies directly. MGROUP can introduce you and follow up, '
-      +'but does not manage the work or handle the payment.</div>';
     }
     html+='</div>';
 
