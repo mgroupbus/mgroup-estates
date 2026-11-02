@@ -78,9 +78,9 @@
   .hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
   .hd h2{font-size:24px;font-weight:800;letter-spacing:-.02em}.hd .crumb{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:700}
   .btn{font-family:var(--font);font-weight:600;font-size:13px;border-radius:9px;padding:9px 16px;cursor:pointer;border:1px solid var(--gold);background:var(--gold);color:#fff}
-  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:16px}
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:16px}
   .tile .v{font-size:22px}
-  body.previewing .tiles{grid-template-columns:repeat(3,1fr)}
+  body.previewing .tiles{grid-template-columns:repeat(4,1fr)}
   body.previewing .tile{padding:12px 13px}body.previewing .tile .v{font-size:17px}
   .tile{background:transparent;border:1px solid var(--line);border-radius:12px;padding:15px 17px}
   .tile .l{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
@@ -308,7 +308,7 @@
   .appfoot a{color:var(--gold);text-decoration:none;font-weight:600}
   .appfoot a:hover{text-decoration:underline;text-underline-offset:3px}
   @media(max-width:560px){.appfoot{justify-content:center;text-align:center}}
-  @media(max-width:720px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:900px){.tiles{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:560px){.tiles{grid-template-columns:1fr}.top{margin:0 -20px 18px}}
   @media print{.top .out,.hd .btn,.appfoot,.nav,.back{display:none}.top{position:static;background:none;backdrop-filter:none}}
 </style></head><body>
@@ -357,8 +357,6 @@
     <div class="tile"><div class="l">Balance coming</div><div class="v" id="oComing">—</div><div class="s" id="oComingS">not yet checked out</div></div>
     <div class="tile"><div class="l">Still to receive</div><div class="v" id="oDue">—</div><div class="s" id="oDueS">outstanding</div></div>
     <div class="tile"><div class="l">Bookings</div><div class="v" id="oCount">—</div><div class="s">total</div></div>
-    <div class="tile"><div class="l">Checked in</div><div class="v" id="oIn">—</div><div class="s">staying now</div></div>
-    <div class="tile"><div class="l">Upcoming</div><div class="v" id="oUp">—</div><div class="s">confirmed</div></div>
   </div>
   <div class="tablecard"><table><thead><tr><th class="num">#</th><th>Ref</th><th>Status</th><th>Villa</th><th>Stay</th><th>Guest</th><th class="money">My net</th><th class="go"></th></tr></thead><tbody id="oRows"><tr><td colspan="8" class="state">Loading…</td></tr></tbody></table></div>
   </div>
@@ -1007,13 +1005,11 @@
     if(f)f.innerHTML=yearSelect('setHomeYear',HOMEYEAR,all);
     var vf=document.getElementById('homeVilla');
     if(vf)vf.innerHTML=villaSelect('setHomeVilla',HOMEVILLA);
-    var net=0,up=0,inn=0,coming=0,comingN=0,due=0,dueN=0;
+    var net=0,coming=0,comingN=0,due=0,dueN=0;
     bk.forEach(function(b){
       var st=(b.status||'').toLowerCase();
       net+=N(b.owner_net);
       if(st!=='checked_out'&&st!=='cancelled'&&st!=='canceled'){coming+=N(b.owner_net);comingN++;}
-      if(st==='confirmed'||st==='deposit')up++;
-      if(st==='checked_in')inn++;
       var c=collected(b); if(c.balance>0){due+=c.balance;dueN++;}
     });
     var vName=HOMEVILLA==='all'?'':((DATA.vmap[HOMEVILLA]||{}).name||'');
@@ -1025,8 +1021,6 @@
     document.getElementById('oDue').textContent=money(due);
     document.getElementById('oDueS').textContent=dueN?('across '+dueN+' booking'+(dueN>1?'s':'')):'nothing outstanding';
     document.getElementById('oCount').textContent=bk.length;
-    document.getElementById('oIn').textContent=inn;
-    document.getElementById('oUp').textContent=up;
 
     var cols=[{h:'#',cls:'num'},{h:'Ref'},{h:'Status'},{h:'Villa'}];
     if(P.dates)cols.push({h:'Stay'});
