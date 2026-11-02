@@ -291,7 +291,7 @@ Sitemap: {SITE}/sitemap.xml
         "# MGROUP Estates",
         "",
         "> Private property advisory in Thailand. We broker luxury villas, branded",
-        "> residences, condominiums and land in Phuket, Samui and Bangkok, and manage",
+        "> residences, condominiums and land in Phuket, and manage",
         "> rentals and lifestyle concierge for owners and buyers.",
         "",
         "M GROUP BUSINESS CO.,LTD — 63/202, Thepkasattri Road, Kohkaew Sub-district,",
