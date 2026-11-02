@@ -241,6 +241,13 @@
   .provcard:first-of-type{border-top:none;padding-top:0}
   .provacts{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
   .provacts a.docbtn{text-decoration:none}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:4px}
+  .step{display:flex;gap:9px;align-items:flex-start}
+  .step .dot{flex:none;width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:800;background:#efece4;color:#9aa199}
+  .step.done .dot{background:#12a150;color:#fff}
+  .step.now .dot{background:#1a7fe0;color:#fff;box-shadow:0 0 0 3px rgba(26,127,224,.15)}
+  .step b{font-size:12.5px}.step.todo b{color:var(--faint)}
   .issue{border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:10px}
   .issue .ihd{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
   .issue .ihd b{font-size:14px}
@@ -1047,6 +1054,30 @@
   var PROV_CAT={housekeeping:'Housekeeping',maintenance:'Maintenance &amp; repairs',pool:'Pool care',garden:'Garden',
                 concierge:'Concierge',laundry:'Laundry',security:'Security',other:'Other'};
   var ISSUE_ST={open:'st-pending',in_progress:'st-checked_in',resolved:'st-confirmed',closed:'st-checked_out'};
+  var ISSUE_STEP={open:1,in_progress:2,resolved:3,closed:4};
+  var ISSUE_STEP_LABEL={open:'Reported',in_progress:'Being fixed',resolved:'Fixed',closed:'Closed'};
+  var ISSUE_STEPS=[['Reported','You told MGROUP'],['Passed on','MGROUP briefed a company'],
+                   ['Fixed','The company finished the work'],['Closed','Nothing left to do']];
+  function toggleIssue(n){
+    var d=document.getElementById('iss-'+n); if(!d)return;
+    var on=d.classList.toggle('on');
+    var r=d.previousElementSibling; if(r)r.classList.toggle('open',on);
+  }
+  function issueDetail(i){
+    var at=ISSUE_STEP[i.status]||1;
+    var steps='<div class="steps">'+ISSUE_STEPS.map(function(s2,k){
+      var n=k+1, cls=n<at?'done':(n===at?'now':'todo');
+      return '<div class="step '+cls+'"><span class="dot">'+(n<at?'&#10003;':n)+'</span>'
+        +'<div><b>'+s2[0]+'</b><div class="hs">'+s2[1]+'</div></div></div>';
+    }).join('')+'</div>';
+    var photos=docsFor('issue',i.id);
+    return steps
+      +(i.detail?'<div class="dgh">What you told us</div><div class="itext">'+esc(i.detail)+'</div>':'')
+      +(i.admin_note?'<div class="dgh">Where it stands</div><div class="inote">'+esc(i.admin_note)+'</div>':'')
+      +(photos.length?'<div class="dgh">Photos</div>'+docBtns(photos):'')
+      +(i.status!=='closed'&&i.status!=='resolved'
+         ? '<div style="margin-top:14px"><span class="docbtn" onclick="event.stopPropagation();closeIssue(\''+i.id+'\')">Mark as sorted</span></div>' : '');
+  }
   function setBulVilla(v){BULVILLA=v;renderBulletin();}
 
   function renderBulletin(){
@@ -1107,20 +1138,22 @@
     if(!issues.length){
       html+='<div style="font-size:12.5px;color:var(--faint)">Nothing reported yet. Use <b>Report a problem</b> above and MGROUP will pass it on.</div>';
     }else{
-      html+=issues.map(function(i){
-        var photos=docsFor('issue',i.id);
-        return '<div class="issue"><div class="ihd">'
-          +'<span class="st '+(ISSUE_ST[i.status]||'')+'">'+esc(String(i.status).replace(/_/g,' '))+'</span>'
-          +'<b>'+esc(i.title)+'</b>'
-          +'<span class="hs">'+esc(ISSUE_CAT[i.category]||i.category)+' &middot; '
-          +esc((DATA.vmap[i.villa_id]||{}).name||'')+' &middot; '+fmtD(String(i.created_at).slice(0,10))+'</span></div>'
-          +(i.detail?'<div class="itext">'+esc(i.detail)+'</div>':'')
-          +(i.admin_note?'<div class="inote"><b>MGROUP:</b> '+esc(i.admin_note)+'</div>':'')
-          +(photos.length?docBtns(photos):'')
-          +(i.status!=='closed'&&i.status!=='resolved'
-             ? '<div style="margin-top:9px"><span class="docbtn" onclick="closeIssue(\''+i.id+'\')">Mark as sorted</span></div>' : '')
-          +'</div>';
-      }).join('');
+      html+='<div class="tablecard" style="border:none"><table><thead><tr>'
+        +'<th class="num">#</th><th>Date</th><th>Villa</th><th>Problem</th><th>Reported by</th><th>Stage</th><th class="go"></th>'
+        +'</tr></thead><tbody>'
+        +issues.map(function(i,n){
+          var st=ISSUE_STEP[i.status]||1;
+          return '<tr class="bkrow" onclick="toggleIssue('+n+')">'
+            +'<td class="num">'+(n+1)+'</td>'
+            +'<td>'+fmtD(String(i.created_at).slice(0,10))+'</td>'
+            +'<td>'+esc((DATA.vmap[i.villa_id]||{}).name||'—')+'</td>'
+            +'<td><b>'+esc(i.title)+'</b><div class="hs">'+esc(ISSUE_CAT[i.category]||i.category)+'</div></td>'
+            +'<td>'+(i.reported_by==='owner'?'You':'MGROUP')+'</td>'
+            +'<td><span class="st '+(ISSUE_ST[i.status]||'')+'">'+esc(ISSUE_STEP_LABEL[i.status]||i.status)+'</span>'
+              +'<div class="hs">Step '+st+' of 4</div></td>'
+            +'<td class="go">&rsaquo;</td></tr>'
+            +'<tr class="det" id="iss-'+n+'"><td colspan="7"><div class="detbox">'+issueDetail(i)+'</div></td></tr>';
+        }).join('')+'</tbody></table></div>';
     }
     html+='</div>';
 
