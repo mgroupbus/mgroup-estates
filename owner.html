@@ -79,6 +79,10 @@
   .hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
   .hd h2{font-size:24px;font-weight:800;letter-spacing:-.02em}.hd .crumb{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:700}
   .btn{font-family:var(--font);font-weight:600;font-size:13px;border-radius:9px;padding:9px 16px;cursor:pointer;border:1px solid var(--gold);background:var(--gold);color:#fff}
+  /* the statement sits beside the filters, quiet — it is not the thing to do first */
+  .btn.quiet{font-size:12px;font-weight:700;padding:8px 13px;border-color:var(--line);
+    background:transparent;color:var(--muted)}
+  .btn.quiet:hover{border-color:var(--gold);color:var(--gold)}
   .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:16px}
   .tile .v{font-size:22px}
   body.previewing .tiles{grid-template-columns:repeat(4,1fr)}
@@ -368,9 +372,11 @@
     .navlink.on{color:var(--gold);background:#f6f1e7;border-bottom:none}
     .hd{flex-direction:column;align-items:stretch;gap:12px}
     .hd h2{font-size:22px}
-    .hd>div:last-child{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-    .hd .ysel{flex:1 1 130px;min-width:0}
+    .hd>div:last-child{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+    .hd>div:last-child>span{flex:1 1 0;min-width:0}
+    .hd .ysel{width:100%;min-width:0;font-size:12.5px;padding-left:10px}
     .hd .btn{flex:1 1 100%;text-align:center}
+    .hd .btn.quiet{flex:0 0 auto;padding:8px 10px;font-size:11px;white-space:nowrap}
     .acts{width:100%}.acts .abtn{flex:1;text-align:center}
     .tablecard{margin:0 -14px;border-radius:0;border-left:none;border-right:none}
     .detbox{padding:14px}
@@ -431,7 +437,7 @@
 
   <div id="view-home">
   <div class="hd"><div><div class="crumb">My Statement</div><h2 id="oTitle">Dashboard</h2></div>
-  <div style="display:flex;gap:9px;align-items:center"><span id="homeVilla"></span><span id="homeFilter"></span><button class="btn" onclick="openPreview('statement')">Download statement (PDF)</button></div></div>
+  <div style="display:flex;gap:9px;align-items:center"><span id="homeVilla"></span><span id="homeFilter"></span><button class="btn quiet" onclick="openPreview('statement')">Statement (PDF)</button></div></div>
   <div class="tiles">
     <div class="tile"><div class="l">My earnings (owner net)</div><div class="v" id="oNet">—</div><div class="s">all bookings</div></div>
     <div class="tile"><div class="l">Balance coming</div><div class="v" id="oComing">—</div><div class="s" id="oComingS">not yet checked out</div></div>
