@@ -322,7 +322,47 @@
   .appfoot a:hover{text-decoration:underline;text-underline-offset:3px}
   @media(max-width:560px){.appfoot{justify-content:center;text-align:center}}
   @media(max-width:900px){.tiles{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:560px){.tiles{grid-template-columns:1fr}.top{margin:0 -20px 18px}}
+  @media(max-width:560px){.tiles{grid-template-columns:1fr}}
+  /* ---------- phone layout ---------- */
+  @media(max-width:700px){
+    #app{padding:0 14px 0}
+    .top{flex-direction:column;align-items:stretch;gap:10px;margin:0 -14px 16px;padding:14px 18px}
+    .top .b{font-size:19px;line-height:1.25}
+    .top .b #oGreet{display:inline}
+    .top .who{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%}
+    .top .who .oswitch{display:flex!important;flex:1;gap:8px;align-items:center;min-width:0}
+    .top .who .oswitch select{flex:1;min-width:0}
+    .top .out{flex:none}
+    .nav{margin:0 -14px 18px;padding:0 18px;gap:20px;overflow-x:auto;white-space:nowrap;
+      -webkit-overflow-scrolling:touch;scrollbar-width:none}
+    .nav::-webkit-scrollbar{display:none}
+    .navlink{flex:none;padding:12px 0}
+    .hd{flex-direction:column;align-items:stretch;gap:12px}
+    .hd h2{font-size:22px}
+    .hd>div:last-child{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .hd .ysel{flex:1 1 130px;min-width:0}
+    .hd .btn{flex:1 1 100%;text-align:center}
+    .acts{width:100%}.acts .abtn{flex:1;text-align:center}
+    .tablecard{margin:0 -14px;border-radius:0;border-left:none;border-right:none}
+    .detbox{padding:14px}
+    .appfoot{margin:28px -14px 0;padding:18px 18px 22px}
+    .sec{padding:16px 15px}
+    /* the bookings table reads as a card per booking on a phone */
+    #view-home table{min-width:0}
+    #view-home thead{display:none}
+    #view-home tbody tr.bkrow{display:block;position:relative;padding:13px 40px 13px 15px;
+      border-bottom:1px solid var(--line)}
+    #view-home tbody tr.bkrow td{display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+      padding:3px 0;border:none;white-space:normal;text-align:left}
+    #view-home tbody tr.bkrow td::before{content:attr(data-l);flex:none;font-size:9.5px;letter-spacing:.09em;
+      text-transform:uppercase;color:var(--faint);font-weight:700}
+    #view-home tbody tr.bkrow td.num{position:absolute;left:15px;top:13px;padding:0}
+    #view-home tbody tr.bkrow td.num::before{content:none}
+    #view-home tbody tr.bkrow td.ref{padding-left:26px;font-size:12px}
+    #view-home tbody tr.bkrow td.go{position:absolute;right:14px;top:50%;transform:translateY(-50%);padding:0}
+    #view-home tbody tr.bkrow td.go::before{content:none}
+    #view-home tbody tr.bkrow td.money{justify-content:space-between}
+  }
   @media print{.top .out,.hd .btn,.appfoot,.nav,.back{display:none}.top{position:static;background:none;backdrop-filter:none}}
 </style></head><body>
 
@@ -1051,12 +1091,12 @@
     cols.push({h:'',cls:'go'});
     var thead='<thead><tr>'+cols.map(function(c){return '<th'+(c.cls?' class="'+c.cls+'"':'')+'>'+c.h+'</th>';}).join('')+'</tr></thead>';
     var body=bk.length?bk.map(function(b,i){
-      var td=['<td class="num">'+(i+1)+'</td>','<td class="ref">'+esc(b.booking_ref||'—')+'</td>',
-        '<td><span class="st st-'+esc((b.status||'').toLowerCase().replace(/[^a-z_]/g,''))+'">'+esc((b.status||'—').replace(/_/g,' '))+'</span></td>',
-        '<td>'+esc((DATA.vmap[b.villa_id]||{}).name||'—')+'</td>'];
-      if(P.dates)td.push('<td>'+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'</td>');
-      if(P.guest)td.push('<td>'+esc(DATA.gmap[b.guest_id]||'—')+'</td>');
-      if(P.net)td.push('<td class="money net">'+money(b.owner_net)+'</td>');
+      var td=['<td class="num">'+(i+1)+'</td>','<td class="ref" data-l="Ref">'+esc(b.booking_ref||'—')+'</td>',
+        '<td data-l="Status"><span class="st st-'+esc((b.status||'').toLowerCase().replace(/[^a-z_]/g,''))+'">'+esc((b.status||'—').replace(/_/g,' '))+'</span></td>',
+        '<td data-l="Villa">'+esc((DATA.vmap[b.villa_id]||{}).name||'—')+'</td>'];
+      if(P.dates)td.push('<td data-l="Stay">'+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'</td>');
+      if(P.guest)td.push('<td data-l="Guest">'+esc(DATA.gmap[b.guest_id]||'—')+'</td>');
+      if(P.net)td.push('<td class="money net" data-l="My net">'+money(b.owner_net)+'</td>');
       td.push('<td class="go">&rsaquo;</td>');
       return '<tr class="bkrow" onclick="openProcess(\''+b.id+'\')">'+td.join('')+'</tr>';
     }).join(''):'<tr><td colspan="'+cols.length+'" class="state">No bookings in this period</td></tr>';
