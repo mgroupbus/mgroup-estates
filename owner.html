@@ -1093,8 +1093,32 @@
     var log=(DATA.serviceLog||[]).filter(function(l){return inVilla(l.villa_id);});
     var provs=DATA.providers||[];
 
+    // --- what has been reported ---
+    var html='<div class="sec"><h4>Problem history</h4>';
+    if(!issues.length){
+      html+='<div style="font-size:12.5px;color:var(--faint)">Nothing reported yet. Use <b>Report a problem</b> above and MGROUP will pass it on.</div>';
+    }else{
+      html+='<div class="tablecard" style="border:none"><table><thead><tr>'
+        +'<th class="num">#</th><th>Date</th><th>Villa</th><th>Problem</th><th>Reported by</th><th>Stage</th><th class="go"></th>'
+        +'</tr></thead><tbody>'
+        +issues.map(function(i,n){
+          var st=ISSUE_STEP[i.status]||1;
+          return '<tr class="bkrow" onclick="toggleIssue('+n+')">'
+            +'<td class="num">'+(n+1)+'</td>'
+            +'<td>'+fmtD(String(i.created_at).slice(0,10))+'</td>'
+            +'<td>'+esc((DATA.vmap[i.villa_id]||{}).name||'—')+'</td>'
+            +'<td><b>'+esc(i.title)+'</b><div class="hs">'+esc(ISSUE_CAT[i.category]||i.category)+'</div></td>'
+            +'<td>'+(i.reported_by==='owner'?'You':'MGROUP')+'</td>'
+            +'<td><span class="st '+(ISSUE_ST[i.status]||'')+'">'+esc(ISSUE_STEP_LABEL[i.status]||i.status)+'</span>'
+              +'<div class="hs">Step '+st+' of 4</div></td>'
+            +'<td class="go">&rsaquo;</td></tr>'
+            +'<tr class="det" id="iss-'+n+'"><td colspan="7"><div class="detbox">'+issueDetail(i)+'</div></td></tr>';
+        }).join('')+'</tbody></table></div>';
+    }
+    html+='</div>';
+
     // --- how this works ---
-    var html='<div class="sec note"><h4>How this works</h4>'
+    html+='<div class="sec note"><h4>How this works</h4>'
       +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>MGROUP looks after the numbers</b>'
         +'<div class="hs">Bookings, guests, payments and your statements — that is what we manage for you.</div></div></div>'
       +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>We introduce trusted companies</b>'
@@ -1130,30 +1154,6 @@
       }).join('')+'</div>'
       +'<div class="docnote">You contact and pay these companies directly. MGROUP can introduce you and follow up, '
       +'but does not manage the work or handle the payment.</div>';
-    }
-    html+='</div>';
-
-    // --- what has been reported ---
-    html+='<div class="sec"><h4>Problem history</h4>';
-    if(!issues.length){
-      html+='<div style="font-size:12.5px;color:var(--faint)">Nothing reported yet. Use <b>Report a problem</b> above and MGROUP will pass it on.</div>';
-    }else{
-      html+='<div class="tablecard" style="border:none"><table><thead><tr>'
-        +'<th class="num">#</th><th>Date</th><th>Villa</th><th>Problem</th><th>Reported by</th><th>Stage</th><th class="go"></th>'
-        +'</tr></thead><tbody>'
-        +issues.map(function(i,n){
-          var st=ISSUE_STEP[i.status]||1;
-          return '<tr class="bkrow" onclick="toggleIssue('+n+')">'
-            +'<td class="num">'+(n+1)+'</td>'
-            +'<td>'+fmtD(String(i.created_at).slice(0,10))+'</td>'
-            +'<td>'+esc((DATA.vmap[i.villa_id]||{}).name||'—')+'</td>'
-            +'<td><b>'+esc(i.title)+'</b><div class="hs">'+esc(ISSUE_CAT[i.category]||i.category)+'</div></td>'
-            +'<td>'+(i.reported_by==='owner'?'You':'MGROUP')+'</td>'
-            +'<td><span class="st '+(ISSUE_ST[i.status]||'')+'">'+esc(ISSUE_STEP_LABEL[i.status]||i.status)+'</span>'
-              +'<div class="hs">Step '+st+' of 4</div></td>'
-            +'<td class="go">&rsaquo;</td></tr>'
-            +'<tr class="det" id="iss-'+n+'"><td colspan="7"><div class="detbox">'+issueDetail(i)+'</div></td></tr>';
-        }).join('')+'</tbody></table></div>';
     }
     html+='</div>';
 
