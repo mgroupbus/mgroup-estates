@@ -227,6 +227,31 @@
   .pvbar .pvbtns{display:flex;gap:9px}
   @media print{.pvbar{display:none!important}body.previewing #app{box-shadow:none;margin:0;padding:0;max-width:none}
     body.previewing{background:#fff}.stmthead{display:block!important}}
+  .sec.note{background:#fbfaf6}
+  .howrow{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
+  .howrow:first-of-type{border-top:none;padding-top:0}
+  .howrow b{font-size:13.5px}
+  .hi{flex:none;width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:800;margin-top:1px}
+  .hi.ok{background:#e6f0e4;color:#2b7a44}.hi.no{background:#f8e6e1;color:#c0392b}
+  .hs{font-size:12px;color:var(--muted);line-height:1.55;margin-top:2px}
+  .provgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+  .provhd{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:9px}
+  .provcard{padding:10px 0;border-top:1px solid var(--line)}
+  .provcard:first-of-type{border-top:none;padding-top:0}
+  .provacts{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+  .provacts a.docbtn{text-decoration:none}
+  .issue{border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:10px}
+  .issue .ihd{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .issue .ihd b{font-size:14px}
+  .itext{font-size:13px;color:var(--muted);line-height:1.6;margin-top:7px}
+  .inote{font-size:12.5px;background:var(--goldt);border:1px solid #e6d6ad;border-radius:8px;padding:8px 11px;margin-top:9px}
+  .frmrow{margin-top:12px}
+  .frmrow label{display:block;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:5px}
+  .frmrow input[type=text],.frmrow textarea{width:100%;font:inherit;font-size:14px;padding:10px 12px;
+    border:1px solid var(--line);border-radius:9px;background:#fff;outline:none;resize:vertical}
+  .frmrow input:focus,.frmrow textarea:focus{border-color:var(--gold)}
+  @media print{#view-bulletin .upbtn,#view-bulletin .abtn{display:none}}
   .sharenote{font-size:12px;color:var(--gold);font-weight:600;margin-top:4px}
   .dgrid.three{grid-template-columns:repeat(3,1fr);gap:10px 14px}
   .dgrid.two{grid-template-columns:repeat(2,1fr);gap:10px 18px}
@@ -321,6 +346,7 @@
     <div class="navlink" id="navVillas" onclick="go('villas')">Villas</div>
     <div class="navlink" id="navGuests" onclick="go('guests')" style="display:none">Guests</div>
     <div class="navlink" id="navExpense" onclick="go('expense')">Expenses</div>
+    <div class="navlink" id="navBulletin" onclick="go('bulletin')">Bulletin</div>
   </div>
 
   <div id="view-home">
@@ -353,6 +379,13 @@
     <div class="hd"><div><div class="crumb">Running costs</div><h2>Expenses</h2></div><div class="years" id="expVillas"></div></div>
     <div class="tiles" id="expTiles"></div>
     <div id="expList"><div class="state">Loading…</div></div>
+  </div>
+
+  <div id="view-bulletin" style="display:none">
+    <div class="hd"><div><div class="crumb">Services &amp; reports</div><h2>Bulletin</h2></div>
+      <div style="display:flex;gap:9px;align-items:center"><span id="bulVilla"></span>
+      <button class="btn" onclick="openReport()">Report a problem</button></div></div>
+    <div id="bulBody"></div>
   </div>
 
   <div id="view-guests" style="display:none">
@@ -414,7 +447,7 @@
   window.addEventListener('hashchange',route);
 
   function showView(v){
-    ['home','villas','villa','guests','revenue','expense','booking'].forEach(function(k){
+    ['home','villas','villa','guests','revenue','expense','booking','bulletin'].forEach(function(k){
       var el=document.getElementById('view-'+k); if(el)el.style.display=(k===v?'':'none');
     });
     document.getElementById('navVillas').classList.toggle('on',v==='villas'||v==='villa');
@@ -423,7 +456,9 @@
     document.getElementById('navRevenue').classList.toggle('on',v==='revenue');
     document.getElementById('navExpense').classList.toggle('on',v==='expense');
     if(v==='revenue')renderRevenue();
+    document.getElementById('navBulletin').classList.toggle('on',v==='bulletin');
     if(v==='expense')renderExpenses();
+    if(v==='bulletin')renderBulletin();
     window.scrollTo(0,0);
   }
 
@@ -507,7 +542,7 @@
         body:JSON.stringify({token:DATA.token||''})});
       if(r.ok){
         var D=await r.json();
-        DATA.att={villa:{},guest:{},booking:{}};
+        DATA.att={villa:{},guest:{},booking:{},issue:{}};
         (D.attachments||[]).forEach(function(a){var g=DATA.att[a.entity_type];if(g)(g[a.entity_id]=g[a.entity_id]||[]).push(a);});
       }
     }catch(e){}
@@ -659,7 +694,7 @@
       DATA.vmap={}; if(d.villa)DATA.vmap[d.villa.id]=d.villa;
       DATA.gmap={}; if(d.booking.guest_id&&d.guest_name)DATA.gmap[d.booking.guest_id]=d.guest_name;
       DATA.tasks={}; DATA.tasks[d.booking.id]=d.tasks||[];
-      DATA.att={villa:{},guest:{},booking:{}};
+      DATA.att={villa:{},guest:{},booking:{},issue:{}};
       (d.attachments||[]).forEach(function(a){var g=DATA.att[a.entity_type];if(g)(g[a.entity_id]=g[a.entity_id]||[]).push(a);});
       DATA.prefs={net:true,dates:true,guest:true};
       document.getElementById('shareExp').textContent=d.expires_at
@@ -1000,6 +1035,194 @@
     var tbl=document.querySelector('#view-home .tablecard table'); if(tbl)tbl.innerHTML=thead+'<tbody>'+body+'</tbody>';
   }
 
+  // ---------- Bulletin: what MGROUP does and does not do, who to call, what has been reported ----------
+  var BULVILLA='all';
+  var ISSUE_CAT={housekeeping:'Housekeeping',maintenance:'Maintenance',pool:'Pool',garden:'Garden',appliance:'Appliance',other:'Other'};
+  var PROV_CAT={housekeeping:'Housekeeping',maintenance:'Maintenance &amp; repairs',pool:'Pool care',garden:'Garden',
+                concierge:'Concierge',laundry:'Laundry',security:'Security',other:'Other'};
+  var ISSUE_ST={open:'st-pending',in_progress:'st-checked_in',resolved:'st-confirmed',closed:'st-checked_out'};
+  function setBulVilla(v){BULVILLA=v;renderBulletin();}
+
+  function renderBulletin(){
+    var pick=document.getElementById('bulVilla'), box=document.getElementById('bulBody');
+    if(!box)return;
+    pick.innerHTML='<select class="ysel" onchange="setBulVilla(this.value)">'
+      +[{id:'all',name:'All villas'}].concat(DATA.villas||[]).map(function(v){
+        return '<option value="'+v.id+'"'+(BULVILLA===v.id?' selected':'')+'>'+esc(v.name)+'</option>';
+      }).join('')+'</select>';
+
+    var inVilla=function(id){return BULVILLA==='all'||id===BULVILLA;};
+    var issues=(DATA.issues||[]).filter(function(i){return inVilla(i.villa_id);});
+    var log=(DATA.serviceLog||[]).filter(function(l){return inVilla(l.villa_id);});
+    var provs=DATA.providers||[];
+
+    // --- how this works ---
+    var html='<div class="sec note"><h4>How this works</h4>'
+      +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>MGROUP looks after the numbers</b>'
+        +'<div class="hs">Bookings, guests, payments and your statements — that is what we manage for you.</div></div></div>'
+      +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>We introduce trusted companies</b>'
+        +'<div class="hs">Housekeepers, technicians and concierge services we have worked with. The list is below.</div></div></div>'
+      +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>We help you communicate and follow up</b>'
+        +'<div class="hs">Report a problem here and we will pass it on and chase the progress for you.</div></div></div>'
+      +'<div class="howrow"><span class="hi no">&times;</span><div><b>We do not manage the property</b>'
+        +'<div class="hs">You engage the company yourself and pay them directly. MGROUP is not a party to that agreement '
+        +'and does not take a fee on it.</div></div></div></div>';
+
+    // --- who to call ---
+    html+='<div class="sec"><h4>Recommended companies</h4>';
+    if(!provs.length){
+      html+='<div style="font-size:12.5px;color:var(--faint)">No companies listed yet — ask MGROUP for an introduction.</div>';
+    }else{
+      var bycat={}; provs.forEach(function(p){(bycat[p.category]=bycat[p.category]||[]).push(p);});
+      html+='<div class="provgrid">'+Object.keys(bycat).map(function(c){
+        return '<div class="provcol"><div class="provhd">'+(PROV_CAT[c]||c)+'</div>'
+          +bycat[c].map(function(p){
+            var lines=[];
+            if(p.company)lines.push(esc(p.company));
+            if(p.area)lines.push(esc(p.area));
+            if(p.note)lines.push(esc(p.note));
+            var wa=p.whatsapp||p.phone;
+            return '<div class="provcard"><b>'+esc(p.name)+'</b>'
+              +(lines.length?'<div class="hs">'+lines.join(' &middot; ')+'</div>':'')
+              +'<div class="provacts">'
+              +(wa?'<a class="docbtn" href="https://wa.me/'+esc(String(wa).replace(/[^0-9]/g,''))+'" target="_blank" rel="noopener">WhatsApp</a>':'')
+              +(p.phone?'<a class="docbtn" href="tel:'+esc(p.phone)+'">'+esc(p.phone)+'</a>':'')
+              +(p.line_id?'<span class="docbtn off">LINE '+esc(p.line_id)+'</span>':'')
+              +'</div></div>';
+          }).join('')+'</div>';
+      }).join('')+'</div>'
+      +'<div class="docnote">You contact and pay these companies directly. MGROUP can introduce you and follow up, '
+      +'but does not manage the work or handle the payment.</div>';
+    }
+    html+='</div>';
+
+    // --- what has been reported ---
+    html+='<div class="sec"><h4>Problem history</h4>';
+    if(!issues.length){
+      html+='<div style="font-size:12.5px;color:var(--faint)">Nothing reported yet. Use <b>Report a problem</b> above and MGROUP will pass it on.</div>';
+    }else{
+      html+=issues.map(function(i){
+        var photos=docsFor('issue',i.id);
+        return '<div class="issue"><div class="ihd">'
+          +'<span class="st '+(ISSUE_ST[i.status]||'')+'">'+esc(String(i.status).replace(/_/g,' '))+'</span>'
+          +'<b>'+esc(i.title)+'</b>'
+          +'<span class="hs">'+esc(ISSUE_CAT[i.category]||i.category)+' &middot; '
+          +esc((DATA.vmap[i.villa_id]||{}).name||'')+' &middot; '+fmtD(String(i.created_at).slice(0,10))+'</span></div>'
+          +(i.detail?'<div class="itext">'+esc(i.detail)+'</div>':'')
+          +(i.admin_note?'<div class="inote"><b>MGROUP:</b> '+esc(i.admin_note)+'</div>':'')
+          +(photos.length?docBtns(photos):'')
+          +(i.status!=='closed'&&i.status!=='resolved'
+             ? '<div style="margin-top:9px"><span class="docbtn" onclick="closeIssue(\''+i.id+'\')">Mark as sorted</span></div>' : '')
+          +'</div>';
+      }).join('');
+    }
+    html+='</div>';
+
+    // --- housekeeping log that already exists on the bookings ---
+    html+='<div class="sec"><h4>Housekeeping &amp; maintenance log</h4>';
+    if(!log.length){
+      html+='<div style="font-size:12.5px;color:var(--faint)">No housekeeping or maintenance recorded on your stays yet.</div>';
+    }else{
+      html+='<div class="tablecard" style="border:none"><table><thead><tr><th>Date</th><th>Type</th><th>Work</th>'
+        +'<th>Booking</th><th>Status</th><th>Photo</th></tr></thead><tbody>'
+        +log.slice(0,60).map(function(l){
+          return '<tr><td>'+(l.date?fmtD(String(l.date).slice(0,10)):'—')+'</td>'
+            +'<td>'+esc(ISSUE_CAT[l.task_type]||l.task_type)+'</td>'
+            +'<td>'+esc(nice(l.task_name))+(l.note?'<div class="hs">'+esc(l.note)+'</div>':'')+'</td>'
+            +'<td class="ref">'+esc(l.booking_ref||'—')+'</td>'
+            +'<td><span class="st '+(l.is_done?'st-confirmed':'st-pending')+'">'+(l.is_done?'Done':'Pending')+'</span></td>'
+            +'<td>'+(l.photo_url?'<span class="docbtn" onclick="zoom(\''+esc(l.photo_url)+'\')">Photo</span>':'<span style="color:var(--faint)">—</span>')+'</td></tr>';
+        }).join('')+'</tbody></table></div>'
+        +'<div class="docnote">Recorded by the team during each stay. Dates and photos come from the same checklist MGROUP works from.</div>';
+    }
+    html+='</div>';
+    box.innerHTML=html;
+  }
+
+  function openReport(){
+    var villas=DATA.villas||[];
+    if(!villas.length){alert('No villa is linked to your account yet.');return;}
+    var dv=document.getElementById('dv'), body=document.getElementById('dvBody');
+    document.getElementById('dvTitle').textContent='Report a problem';
+    body.className='dvbody scrollable';
+    body.innerHTML='<div class="pvwrap" style="max-width:560px"><div class="sec">'
+      +'<h4>Tell MGROUP what is wrong</h4>'
+      +'<div class="frmrow"><label>Villa</label><select id="rp_villa" class="ysel" style="width:100%">'
+        +villas.map(function(v){return '<option value="'+v.id+'"'+(BULVILLA===v.id?' selected':'')+'>'+esc(v.name)+'</option>';}).join('')
+      +'</select></div>'
+      +'<div class="frmrow"><label>What kind of problem</label><select id="rp_cat" class="ysel" style="width:100%">'
+        +Object.keys(ISSUE_CAT).map(function(k){return '<option value="'+k+'">'+ISSUE_CAT[k]+'</option>';}).join('')
+      +'</select></div>'
+      +'<div class="frmrow"><label>Short title</label><input id="rp_title" type="text" placeholder="Air conditioner in bedroom 2 not cooling"></div>'
+      +'<div class="frmrow"><label>Details (optional)</label><textarea id="rp_detail" rows="4" placeholder="When it started, what you have tried…"></textarea></div>'
+      +'<div class="frmrow"><label>Photos (optional, up to 6)</label>'
+        +'<label class="upbtn">+ Add photos<input id="rp_files" type="file" accept="image/jpeg,image/png,.jpg,.jpeg,.png" multiple hidden onchange="rpNames(this)"></label>'
+        +'<span class="upnote" id="rp_names">JPG or PNG</span></div>'
+      +'<div style="margin-top:14px;display:flex;gap:9px;align-items:center">'
+        +'<span class="abtn wa" onclick="sendReport(this)">Send to MGROUP</span>'
+        +'<span class="abtn" onclick="closeDoc()">Cancel</span></div>'
+      +'<div class="docnote" id="rp_msg">MGROUP will pass this to a company and follow up. You arrange and pay the work directly.</div>'
+      +'</div></div>';
+    dv.classList.add('on');
+  }
+  function rpNames(input){
+    var n=document.getElementById('rp_names');
+    var fs=[].slice.call(input.files||[]).slice(0,6);
+    n.textContent=fs.length?fs.map(function(f){return f.name;}).join(', '):'JPG or PNG';
+  }
+  function readAsData(file){
+    return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result);};r.onerror=rej;r.readAsDataURL(file);});
+  }
+  async function sendReport(el){
+    var msg=document.getElementById('rp_msg');
+    var title=(document.getElementById('rp_title')||{}).value||'';
+    if(title.trim().length<3){msg.textContent='Give the problem a short title first.';msg.style.color='var(--red)';return;}
+    var t=el.textContent; el.textContent='Sending…';
+    var files=[].slice.call((document.getElementById('rp_files')||{}).files||[]).slice(0,6);
+    var photos=[];
+    for(var i=0;i<files.length;i++){
+      if(files[i].size>15*1024*1024)continue;
+      photos.push({name:files[i].name,mime:files[i].type||'image/jpeg',data_base64:await readAsData(files[i])});
+    }
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/owner-issue',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({token:DATA.token||'',villa_id:document.getElementById('rp_villa').value,
+          category:document.getElementById('rp_cat').value,title:title.trim(),
+          detail:(document.getElementById('rp_detail')||{}).value||'',photos:photos})});
+      var d=await r.json();
+      if(!r.ok){
+        msg.textContent=d.error==='unauthorized'?'Your session expired — please sign in again.'
+          :(d.error==='forbidden'?'That villa is not linked to your account.':'Could not send the report.');
+        msg.style.color='var(--red)'; el.textContent=t; return;
+      }
+      closeDoc(); await reloadBulletin();
+    }catch(e){ msg.textContent='Could not send the report.'; msg.style.color='var(--red)'; el.textContent=t; }
+  }
+  async function closeIssue(id){
+    if(!confirm('Mark this as sorted?'))return;
+    try{
+      await fetch(SB_URL+'/functions/v1/owner-issue',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({token:DATA.token||'',action:'close',id:id})});
+      await reloadBulletin();
+    }catch(e){}
+  }
+  async function reloadBulletin(){
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/owner-data',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({token:DATA.token||''})});
+      if(r.ok){
+        var D=await r.json();
+        DATA.issues=D.issues||[]; DATA.providers=D.providers||[]; DATA.serviceLog=D.service_log||[];
+        DATA.att={villa:{},guest:{},booking:{},issue:{}};
+        (D.attachments||[]).forEach(function(a){var g=DATA.att[a.entity_type];if(g)(g[a.entity_id]=g[a.entity_id]||[]).push(a);});
+      }
+    }catch(e){}
+    renderBulletin();
+  }
+
   var EXPVILLA='all';
   var EXPCAT={electricity:'Electricity',water:'Water',damage:'Damage',laundry:'Laundry',cleaning:'Cleaning',
               maintenance:'Maintenance',pool:'Pool',gas:'Gas',internet:'Internet',other:'Other'};
@@ -1294,9 +1517,10 @@
       DATA.sched={}; (D.schedule||[]).forEach(function(x){(DATA.sched[x.booking_id]=DATA.sched[x.booking_id]||[]).push(x);});
       DATA.contracts={}; (D.contracts||[]).forEach(function(c){if(c.booking_id)DATA.contracts[c.booking_id]=c;});
       DATA.tasks={}; (D.tasks||[]).forEach(function(t){(DATA.tasks[t.booking_id]=DATA.tasks[t.booking_id]||[]).push(t);});
-      DATA.att={villa:{},guest:{},booking:{}};
+      DATA.att={villa:{},guest:{},booking:{},issue:{}};
       (D.attachments||[]).forEach(function(a){var g=DATA.att[a.entity_type];if(g)(g[a.entity_id]=g[a.entity_id]||[]).push(a);});
       DATA.expAll=D.expenses||[];
+      DATA.providers=D.providers||[]; DATA.issues=D.issues||[]; DATA.serviceLog=D.service_log||[];
       var vmap={}; villas.forEach(function(v){vmap[v.id]=v;});
       DATA.bk=bk; DATA.villas=villas; DATA.vmap=vmap; DATA.gmap=gmap; DATA.prefs=P;
       DATA.exp=(DATA.expAll||[]).filter(function(x){return vmap[x.villa_id];});
