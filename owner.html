@@ -63,6 +63,7 @@
     border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
   .top .b{font-family:var(--serif);font-size:23px;font-weight:600;letter-spacing:.01em}
   .top .b .e{color:var(--gold)}
+  .top .b .e{margin-left:.26em}
   .top .b.in #oGreet{display:inline-block;animation:hi-word .55s cubic-bezier(.2,.7,.3,1) both}
   .top .b.in .e{display:inline-block;animation:hi-word .55s .12s cubic-bezier(.2,.7,.3,1) both}
   @keyframes hi-word{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
@@ -324,6 +325,7 @@
   @media(max-width:900px){.tiles{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:560px){.tiles{grid-template-columns:1fr}}
   /* ---------- phone layout ---------- */
+  .dshort{display:none}
   @media(max-width:700px){
     #app{padding:0 14px 0}
     .top{flex-direction:column;align-items:stretch;gap:10px;margin:0 -14px 16px;padding:14px 18px}
@@ -347,21 +349,18 @@
     .detbox{padding:14px}
     .appfoot{margin:28px -14px 0;padding:18px 18px 22px}
     .sec{padding:16px 15px}
-    /* the bookings table reads as a card per booking on a phone */
-    #view-home table{min-width:0}
-    #view-home thead{display:none}
-    #view-home tbody tr.bkrow{display:block;position:relative;padding:13px 40px 13px 15px;
-      border-bottom:1px solid var(--line)}
-    #view-home tbody tr.bkrow td{display:flex;justify-content:space-between;align-items:baseline;gap:14px;
-      padding:3px 0;border:none;white-space:normal;text-align:left}
-    #view-home tbody tr.bkrow td::before{content:attr(data-l);flex:none;font-size:9.5px;letter-spacing:.09em;
-      text-transform:uppercase;color:var(--faint);font-weight:700}
-    #view-home tbody tr.bkrow td.num{position:absolute;left:15px;top:13px;padding:0}
-    #view-home tbody tr.bkrow td.num::before{content:none}
-    #view-home tbody tr.bkrow td.ref{padding-left:26px;font-size:12px}
-    #view-home tbody tr.bkrow td.go{position:absolute;right:14px;top:50%;transform:translateY(-50%);padding:0}
-    #view-home tbody tr.bkrow td.go::before{content:none}
-    #view-home tbody tr.bkrow td.money{justify-content:space-between}
+    /* keep a real table on a phone: one line per row, columns stay aligned, swipe sideways */
+    .tablecard{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .tablecard thead th{padding:9px 8px;font-size:8.5px;letter-spacing:.06em}
+    .tablecard tbody td{padding:11px 8px;font-size:11.5px;white-space:nowrap}
+    .dlong{display:none}.dshort{display:inline}
+    #view-home tbody td.go{display:none}#view-home thead th:last-child{display:none}
+    #view-home tbody td.vcell{max-width:92px;overflow:hidden;text-overflow:ellipsis}
+    /* the owner's own number stays pinned at the right edge while the rest swipes */
+    #view-home td.net,#view-home thead th.money{position:sticky;right:0;background:#fff;
+      box-shadow:-9px 0 9px -9px rgba(0,0,0,.2)}
+    .st{font-size:9.5px;padding:3px 7px}
+    .ref{font-size:11px}
   }
   @media print{.top .out,.hd .btn,.appfoot,.nav,.back{display:none}.top{position:static;background:none;backdrop-filter:none}}
 </style></head><body>
@@ -486,6 +485,8 @@
   function esc(x){return (x==null?'':String(x)).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
   function money(x){return '฿'+Number(x||0).toLocaleString('en-US');}
   function fmtD(d){if(!d)return '—';var p=String(d).split('-');if(p.length<3)return d;return p[2].padStart(2,'0')+'.'+p[1].padStart(2,'0')+'.'+p[0];}
+  function fmtDS(d){if(!d)return '—';var p=String(d).split('-');if(p.length<3)return d;return p[2].padStart(2,'0')+'.'+p[1].padStart(2,'0')+'.'+p[0].slice(2);}
+  function stayCell(a,b){return '<span class="dlong">'+fmtD(a)+' → '+fmtD(b)+'</span>'+'<span class="dshort">'+fmtDS(a)+' → '+fmtDS(b)+'</span>';}
   function N(x){return Number(x||0);}
   var DATA={bk:[],villas:[],vmap:{},gmap:{},guests:{},prefs:{},tasks:{},sched:{}};
   function arr(x){return Array.isArray(x)?x:[];}
@@ -1038,6 +1039,8 @@
     return out;
   }
 
+  // Revenue counts in months, not nights — these are long stays. 30 nights = 1 month.
+  function months(n){n=N(n);if(!n)return '0';var m=Math.round(n/30*10)/10;return String(m);}
   function nights(a,b){if(!a||!b)return 0;var d=(new Date(b)-new Date(a))/86400000;return d>0?Math.round(d):0;}
 
   var HOMEYEAR='all', HOMEVILLA='all', GUESTYEAR='all', EXPYEAR='all';
@@ -1084,17 +1087,18 @@
     document.getElementById('oDueS').textContent=dueN?('across '+dueN+' booking'+(dueN>1?'s':'')):'nothing outstanding';
     document.getElementById('oCount').textContent=bk.length;
 
-    var cols=[{h:'#',cls:'num'},{h:'Ref'},{h:'Status'},{h:'Villa'}];
+    var cols=[{h:'#',cls:'num'},{h:'Ref'},{h:'Status'}];
     if(P.dates)cols.push({h:'Stay'});
+    cols.push({h:'Villa'});
     if(P.guest)cols.push({h:'Guest'});
     if(P.net)cols.push({h:'My net',cls:'money'});
     cols.push({h:'',cls:'go'});
     var thead='<thead><tr>'+cols.map(function(c){return '<th'+(c.cls?' class="'+c.cls+'"':'')+'>'+c.h+'</th>';}).join('')+'</tr></thead>';
     var body=bk.length?bk.map(function(b,i){
       var td=['<td class="num">'+(i+1)+'</td>','<td class="ref" data-l="Ref">'+esc(b.booking_ref||'—')+'</td>',
-        '<td data-l="Status"><span class="st st-'+esc((b.status||'').toLowerCase().replace(/[^a-z_]/g,''))+'">'+esc((b.status||'—').replace(/_/g,' '))+'</span></td>',
-        '<td data-l="Villa">'+esc((DATA.vmap[b.villa_id]||{}).name||'—')+'</td>'];
-      if(P.dates)td.push('<td data-l="Stay">'+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'</td>');
+        '<td data-l="Status"><span class="st st-'+esc((b.status||'').toLowerCase().replace(/[^a-z_]/g,''))+'">'+esc((b.status||'—').replace(/_/g,' '))+'</span></td>'];
+      if(P.dates)td.push('<td data-l="Stay">'+stayCell(b.check_in,b.check_out)+'</td>');
+      td.push('<td class="vcell" data-l="Villa">'+esc((DATA.vmap[b.villa_id]||{}).name||'—')+'</td>');
       if(P.guest)td.push('<td data-l="Guest">'+esc(DATA.gmap[b.guest_id]||'—')+'</td>');
       if(P.net)td.push('<td class="money net" data-l="My net">'+money(b.owner_net)+'</td>');
       td.push('<td class="go">&rsaquo;</td>');
@@ -1435,7 +1439,7 @@
     tiles.innerHTML=
       '<div class="tile"><div class="l">Owner net</div><div class="v">'+money(net)+'</div><div class="s">'+(REVYEAR==='all'?'all years':REVYEAR)+'</div></div>'
      +'<div class="tile"><div class="l">Bookings</div><div class="v">'+sel.length+'</div><div class="s">stays</div></div>'
-     +'<div class="tile"><div class="l">Nights booked</div><div class="v">'+nts+'</div><div class="s">total</div></div>'
+     +'<div class="tile"><div class="l">Months booked</div><div class="v">'+months(nts)+'</div><div class="s">'+nts+' nights</div></div>'
      +'<div class="tile"><div class="l">Average per stay</div><div class="v">'+money(avg)+'</div><div class="s">owner net</div></div>';
 
     var buckets=[];
@@ -1453,10 +1457,10 @@
       }
     }
     var max=Math.max.apply(null,buckets.map(function(x){return x.v;}).concat([1]));
-    tbl.innerHTML='<table><thead><tr><th>'+(REVYEAR==='all'?'Year':'Month')+'</th><th>Bookings</th><th>Nights</th>'
+    tbl.innerHTML='<table><thead><tr><th>'+(REVYEAR==='all'?'Year':'Month')+'</th><th>Bookings</th><th>Months</th>'
       +'<th class="money">Owner net</th><th style="width:34%">Share</th></tr></thead><tbody>'
       +buckets.map(function(x){
-        return '<tr'+(x.v?'':' style="opacity:.45"')+'><td><b>'+esc(x.k)+'</b></td><td>'+x.n+'</td><td>'+x.nt+'</td>'
+        return '<tr'+(x.v?'':' style="opacity:.45"')+'><td><b>'+esc(x.k)+'</b></td><td>'+x.n+'</td><td>'+months(x.nt)+'</td>'
           +'<td class="money net">'+money(x.v)+'</td>'
           +'<td><div class="bar"><i style="width:'+Math.round(x.v/max*100)+'%"></i></div></td></tr>';
       }).join('')+'</tbody></table>';
@@ -1622,7 +1626,7 @@
     var h=new Date().getHours();
     document.getElementById('oGreet').textContent=
       h<5?'Still up,':h<12?'Good morning,':h<17?'Good afternoon,':h<21?'Good evening,':'Good evening,';
-    document.getElementById('oName').textContent=' '+name;
+    document.getElementById('oName').textContent=name;
     var hi=document.querySelector('.top .b'); if(hi){hi.classList.remove('in');void hi.offsetWidth;hi.classList.add('in');}
     ['oNet','oComing','oDue'].forEach(function(id){var t=document.getElementById(id).closest('.tile');if(t)t.style.display=P.net?'':'none';});
     try{
