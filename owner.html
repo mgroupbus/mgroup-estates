@@ -278,6 +278,14 @@
   .clause.key .cno{background:var(--gold);color:#fff}
   .clause.key b{font-size:15px}
   .clause.key .ctext{color:var(--ink)}
+  .clist{list-style:none;counter-reset:cl;margin:9px 0 2px}
+  .clist li{counter-increment:cl;position:relative;padding:6px 0 6px 29px;font-size:13px;line-height:1.6;color:var(--muted)}
+  .clist li::before{content:counter(cl);position:absolute;left:0;top:6px;width:19px;height:19px;border-radius:50%;
+    background:#fff;border:1px solid var(--line);color:var(--gold);font-size:10.5px;font-weight:800;
+    display:flex;align-items:center;justify-content:center}
+  .clause.key .clist li{color:var(--ink);font-weight:600}
+  .clause.key .clist li::before{background:var(--gold);border-color:var(--gold);color:#fff}
+  .clist+.ctext{margin-top:8px;font-style:italic}
   .keytag{display:table;font-size:9px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
     color:var(--gold);background:#fff;border-radius:999px;padding:4px 9px;margin-bottom:7px}
   .ctext{font-size:13px;color:var(--muted);line-height:1.7;margin-top:5px}
@@ -1164,6 +1172,23 @@
 
   // ---------- Terms: the agreement, then the boundary it creates in practice ----------
   var TERMS=null;
+  // A clause may be written as numbered lines; those become a real list, the rest stays prose.
+  function clauseBody(txt){
+    var lines=String(txt||'').split(/\n+/).map(function(x){return x.trim();}).filter(Boolean);
+    var out='',items=[];
+    function flush(){
+      if(!items.length)return;
+      out+='<ol class="clist">'+items.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ol>';
+      items=[];
+    }
+    lines.forEach(function(l){
+      var m=l.match(/^\(?\d+[\)\.]\s*(.+)$/);
+      if(m){items.push(m[1]);return;}
+      flush(); out+='<div class="ctext">'+esc(l)+'</div>';
+    });
+    flush();
+    return out;
+  }
   async function renderTerms(){
     var box=document.getElementById('termsBody'); if(!box)return;
     if(!TERMS){
@@ -1189,7 +1214,7 @@
         // is_key marks the clause the owner most needs to read
         return '<div class="clause'+(t.is_key?' key':'')+'"><div class="cno">'+(i+1)+'</div><div>'
           +(t.is_key?'<span class="keytag">Please read</span>':'')
-          +'<b>'+esc(t.title)+'</b><div class="ctext">'+esc(t.body)+'</div></div></div>';
+          +'<b>'+esc(t.title)+'</b>'+clauseBody(t.body)+'</div></div>';
       }).join('')+'</div>';
     }
     // --- how this works ---
