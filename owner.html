@@ -351,7 +351,7 @@
 
   <div id="view-home">
   <div class="hd"><div><div class="crumb">My Statement</div><h2 id="oTitle">Dashboard</h2></div>
-  <div style="display:flex;gap:9px;align-items:center"><span id="homeFilter"></span><button class="btn" onclick="openPreview('statement')">Download statement (PDF)</button></div></div>
+  <div style="display:flex;gap:9px;align-items:center"><span id="homeVilla"></span><span id="homeFilter"></span><button class="btn" onclick="openPreview('statement')">Download statement (PDF)</button></div></div>
   <div class="tiles">
     <div class="tile"><div class="l">My earnings (owner net)</div><div class="v" id="oNet">—</div><div class="s">all bookings</div></div>
     <div class="tile"><div class="l">Balance coming</div><div class="v" id="oComing">—</div><div class="s" id="oComingS">not yet checked out</div></div>
@@ -360,7 +360,6 @@
     <div class="tile"><div class="l">Checked in</div><div class="v" id="oIn">—</div><div class="s">staying now</div></div>
     <div class="tile"><div class="l">Upcoming</div><div class="v" id="oUp">—</div><div class="s">confirmed</div></div>
   </div>
-  <div class="villas" id="oVillas"></div>
   <div class="tablecard"><table><thead><tr><th class="num">#</th><th>Ref</th><th>Status</th><th>Villa</th><th>Stay</th><th>Guest</th><th class="money">My net</th><th class="go"></th></tr></thead><tbody id="oRows"><tr><td colspan="8" class="state">Loading…</td></tr></tbody></table></div>
   </div>
 
@@ -981,7 +980,7 @@
 
   function nights(a,b){if(!a||!b)return 0;var d=(new Date(b)-new Date(a))/86400000;return d>0?Math.round(d):0;}
 
-  var HOMEYEAR='all', GUESTYEAR='all', EXPYEAR='all';
+  var HOMEYEAR='all', HOMEVILLA='all', GUESTYEAR='all', EXPYEAR='all';
   function yearsOf(rows){var y=[];rows.forEach(function(b){if(b.check_in){var v=b.check_in.slice(0,4);if(y.indexOf(v)<0)y.push(v);}});return y.sort().reverse();}
   function yearSelect(fn,cur,rows,allLabel){
     return '<select class="ysel" onchange="'+fn+'(this.value)">'
@@ -992,10 +991,22 @@
   function byYear(rows,y){return y==='all'?rows:rows.filter(function(b){return b.check_in&&b.check_in.slice(0,4)===y;});}
 
   function setHomeYear(y){HOMEYEAR=y;renderHome();}
+  function setHomeVilla(v){HOMEVILLA=v;renderHome();}
+  function villaSelect(fn,cur){
+    var vs=DATA.villas||[];
+    if(!vs.length)return '';
+    return '<select class="ysel" onchange="'+fn+'(this.value)">'
+      +[{id:'all',name:'All villas'}].concat(vs).map(function(v){
+        return '<option value="'+v.id+'"'+(cur===v.id?' selected':'')+'>'+esc(v.name)+'</option>';
+      }).join('')+'</select>';
+  }
   function renderHome(){
-    var P=DATA.prefs||{}, all=DATA.bk||[], bk=byYear(all,HOMEYEAR);
+    var P=DATA.prefs||{}, all=DATA.bk||[];
+    var bk=byYear(all,HOMEYEAR).filter(function(b){return HOMEVILLA==='all'||b.villa_id===HOMEVILLA;});
     var f=document.getElementById('homeFilter');
     if(f)f.innerHTML=yearSelect('setHomeYear',HOMEYEAR,all);
+    var vf=document.getElementById('homeVilla');
+    if(vf)vf.innerHTML=villaSelect('setHomeVilla',HOMEVILLA);
     var net=0,up=0,inn=0,coming=0,comingN=0,due=0,dueN=0;
     bk.forEach(function(b){
       var st=(b.status||'').toLowerCase();
@@ -1005,7 +1016,8 @@
       if(st==='checked_in')inn++;
       var c=collected(b); if(c.balance>0){due+=c.balance;dueN++;}
     });
-    var span=HOMEYEAR==='all'?'all bookings':HOMEYEAR;
+    var vName=HOMEVILLA==='all'?'':((DATA.vmap[HOMEVILLA]||{}).name||'');
+    var span=(HOMEYEAR==='all'?'all bookings':HOMEYEAR)+(vName?' · '+vName:'');
     document.getElementById('oNet').textContent=money(net);
     document.getElementById('oNet').closest('.tile').querySelector('.s').textContent=span;
     document.getElementById('oComing').textContent=money(coming);
@@ -1528,7 +1540,6 @@
       document.getElementById('navGuests').style.display=P.guest?'':'none';
       if(P.guest)renderGuests();
       route();
-      document.getElementById('oVillas').innerHTML=villas.map(function(v){return '<span>'+esc(v.name)+(v.area?' · '+esc(v.area):'')+'</span>';}).join('')||'<span style="background:none;border:none;color:var(--faint)">No villa linked yet</span>';
       renderHome();
     }catch(e){var tb=document.getElementById('oRows');if(tb)tb.innerHTML='<tr><td colspan="7" class="state" style="color:var(--red)">Could not load</td></tr>';}
   }
