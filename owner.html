@@ -1183,7 +1183,7 @@
     }
     // --- how this works ---
     html+='<div class="sec note"><h4>In short</h4>'
-      +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>MGROUP finds the tenant and runs the money</b>'
+      +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>We find the tenant and run the money</b>'
         +'<div class="hs">Marketing, enquiries, the booking, the rent and your statements.</div></div></div>'
       +'<div class="howrow"><span class="hi ok">&#10003;</span><div><b>And four things for the property</b>'
         +'<div class="hs">Water and electricity paid from your petty cash with a balance report &middot; the leasing contract '
@@ -1191,14 +1191,14 @@
       +'<div class="howrow"><span class="hi no">&times;</span><div><b>You prepare and keep up the property</b>'
         +'<div class="hs">Furniture, cleaning between tenancies, repairs, air-conditioner servicing, pool and garden, '
         +'linen. It must be ready and working before a tenancy starts.</div></div></div>'
-      +'<div class="howrow"><span class="hi no">&times;</span><div><b>MGROUP does not manage that work</b>'
+      +'<div class="howrow"><span class="hi no">&times;</span><div><b>We do not manage that work</b>'
         +'<div class="hs">You engage the company and pay it directly. We can introduce one we have worked with and pass '
         +'a message on, but we do not supervise it and take no fee on it.</div></div></div></div>';
 
     // --- who to call ---
     html+='<div class="sec"><h4>Recommended companies</h4>';
     if(!provs.length){
-      html+='<div style="font-size:12.5px;color:var(--faint)">No companies listed yet — ask MGROUP for an introduction.</div>';
+      html+='<div style="font-size:12.5px;color:var(--faint)">No companies listed yet — ask us for an introduction.</div>';
     }else{
       var bycat={}; provs.forEach(function(p){(bycat[p.category]=bycat[p.category]||[]).push(p);});
       html+='<div class="provgrid">'+Object.keys(bycat).map(function(c){
@@ -1208,14 +1208,14 @@
             if(p.company)lines.push(esc(p.company));
             if(p.area)lines.push(esc(p.area));
             if(p.note)lines.push(esc(p.note));
-            // names only — ask MGROUP for the introduction rather than calling from here
+            // names only — the introduction comes from us rather than a call from here
             return '<div class="provcard"><b>'+esc(p.name)+'</b>'
               +(lines.length?'<div class="hs">'+lines.join(' &middot; ')+'</div>':'')
               +'</div>';
           }).join('')+'</div>';
       }).join('')+'</div>'
-      +'<div class="docnote">Ask MGROUP for an introduction to any of these. You deal and settle with them '
-      +'directly &mdash; MGROUP does not manage the work or handle the payment.</div>';
+      +'<div class="docnote">Ask us for an introduction to any of these. You deal and settle with them '
+      +'directly &mdash; we do not manage the work or handle the payment.</div>';
     }
     html+='</div>';
     box.innerHTML=html;
