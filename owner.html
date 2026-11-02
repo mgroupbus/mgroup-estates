@@ -245,6 +245,7 @@
   @media print{.pvbar{display:none!important}body.previewing #app{box-shadow:none;margin:0;padding:0;max-width:none}
     body.previewing{background:#fff}.stmthead{display:block!important}}
   .sec.note{background:#fbfaf6}
+  .termsfoot{display:flex;justify-content:center;padding:4px 0 8px}
   .howrow{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
   .howrow:first-of-type{border-top:none;padding-top:0}
   .howrow b{font-size:13.5px}
@@ -399,7 +400,7 @@
     .st{font-size:9.5px;padding:3px 7px}
     .ref{font-size:11px}
   }
-  @media print{.top .out,.hd .btn,.appfoot,.nav,.back{display:none}.top{position:static;background:none;backdrop-filter:none}}
+  @media print{.top .out,.hd .btn,.termsfoot,.appfoot,.nav,.back{display:none}.top{position:static;background:none;backdrop-filter:none}}
 </style></head><body>
 
 <div id="login">
@@ -476,9 +477,9 @@
   </div>
 
   <div id="view-terms" style="display:none">
-    <div class="hd"><div><div class="crumb">Owner agreement</div><h2>Terms &amp; conditions</h2></div>
-      <button class="btn" onclick="window.print()">Print</button></div>
+    <div class="hd"><div><div class="crumb">Owner agreement</div><h2>Terms &amp; conditions</h2></div></div>
     <div id="termsBody"><div class="state">Loading…</div></div>
+    <div class="termsfoot"><button class="btn quiet" onclick="window.print()">Print these terms</button></div>
   </div>
 
   <div id="view-guests" style="display:none">
@@ -1207,18 +1208,14 @@
             if(p.company)lines.push(esc(p.company));
             if(p.area)lines.push(esc(p.area));
             if(p.note)lines.push(esc(p.note));
-            var wa=p.whatsapp||p.phone;
+            // names only — ask MGROUP for the introduction rather than calling from here
             return '<div class="provcard"><b>'+esc(p.name)+'</b>'
               +(lines.length?'<div class="hs">'+lines.join(' &middot; ')+'</div>':'')
-              +'<div class="provacts">'
-              +(wa?'<a class="docbtn" href="https://wa.me/'+esc(String(wa).replace(/[^0-9]/g,''))+'" target="_blank" rel="noopener">WhatsApp</a>':'')
-              +(p.phone?'<a class="docbtn" href="tel:'+esc(p.phone)+'">'+esc(p.phone)+'</a>':'')
-              +(p.line_id?'<span class="docbtn off">LINE '+esc(p.line_id)+'</span>':'')
-              +'</div></div>';
+              +'</div>';
           }).join('')+'</div>';
       }).join('')+'</div>'
-      +'<div class="docnote">You contact and pay these companies directly. MGROUP can introduce you and follow up, '
-      +'but does not manage the work or handle the payment.</div>';
+      +'<div class="docnote">Ask MGROUP for an introduction to any of these. You deal and settle with them '
+      +'directly &mdash; MGROUP does not manage the work or handle the payment.</div>';
     }
     html+='</div>';
     box.innerHTML=html;
