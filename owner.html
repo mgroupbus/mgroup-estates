@@ -538,7 +538,12 @@
   function renderVillaList(){
     var el=document.getElementById('villaList'); if(!el)return;
     if(!DATA.villas.length){el.innerHTML='<div class="state">No villa linked to your account yet</div>';return;}
-    el.innerHTML=DATA.villas.map(function(v){
+    // active villas first, then the rest; alphabetical inside each group
+    var list=DATA.villas.slice().sort(function(a,b){
+      var aa=a.is_active===false?1:0, bb=b.is_active===false?1:0;
+      return aa!==bb ? aa-bb : String(a.name||'').localeCompare(String(b.name||''));
+    });
+    el.innerHTML=list.map(function(v){
       var img=v.cover_image||arr(v.images)[0]||'';
       var bits=[];
       if(v.bedrooms)bits.push(v.bedrooms+' bed');
