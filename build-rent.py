@@ -159,15 +159,15 @@ NEST_CSS = """
 .nest .ask:hover{text-decoration:underline}
 .nest ul{list-style:none;display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
 .nest li{display:grid;justify-items:center;align-content:start;gap:10px;text-align:center;padding:18px 8px 16px;border-radius:18px;min-width:0;cursor:default;
-  background:linear-gradient(180deg,var(--paper),color-mix(in srgb,var(--paper) 72%,var(--band)));border:1px solid var(--line);
-  transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s}
-.nest li .ic{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;
-  background:radial-gradient(circle at 32% 28%,var(--paper) 0,color-mix(in srgb,var(--accent) 20%,var(--paper)) 72%);
+  background:none;border:0;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.nest li .ic{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 32% 28%,color-mix(in srgb,var(--accent) 6%,var(--band)) 0,color-mix(in srgb,var(--accent) 24%,var(--band)) 75%);
   box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 38%,transparent),0 10px 20px -12px color-mix(in srgb,var(--accent) 80%,transparent);
   transition:background .3s,transform .3s cubic-bezier(.2,.8,.2,1)}
 .nest li svg{width:24px;height:24px;color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round;transition:color .3s}
-.nest li b{font-weight:500;font-size:13px;line-height:1.3;color:var(--ink)}
-.nest li:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent) 45%,var(--line));box-shadow:0 18px 32px -20px rgba(51,41,31,.45)}
+.nest li b{font-weight:500;font-size:13.5px;line-height:1.3;color:var(--ink)}
+.nest li:hover{transform:translateY(-4px)}
 .nest li:hover .ic{background:var(--accent);transform:scale(1.06) rotate(-4deg)}
 .nest li:hover svg{color:var(--accent-ink)}
 @media(max-width:860px){.nest ul{grid-template-columns:repeat(3,1fr)}}
