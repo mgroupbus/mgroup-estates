@@ -225,12 +225,12 @@ body.menu-open{overflow:hidden}
 /* end menu drawer */"""
 
 
-def menu_block(prefix, logo):
+def menu_block(prefix, logo, owners_url):
     home = prefix or ""
     ar = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>'
     items = [
         (home + "#tenant", "", "Tenant", "ผู้เช่า", "Арендаторам", "Find a condominium and book a viewing", "หาคอนโดและนัดดูห้อง", "Выберите кондо и запишитесь на просмотр"),
-        (home + "#owners", "", "Owner", "เจ้าของห้อง", "Владельцам", "List your condominium with us", "ลงประกาศปล่อยเช่ากับเรา", "Сдайте квартиру с нами"),
+        (owners_url, "", "Owner", "เจ้าของห้อง", "Владельцам", "List your condominium with us", "ลงประกาศปล่อยเช่ากับเรา", "Сдайте квартиру с нами"),
         ("#nest", "", "Nest+ concierge", "Nest+ concierge", "Nest+ concierge", "What we take care of for tenants", "บริการดูแลผู้เช่า", "Сервис для арендаторов"),
         (f"https://wa.me/{PHONE}", ' target="_blank" rel="noopener"', "Contact us", "ติดต่อเรา", "Связаться с нами", "Chat with us on WhatsApp", "แชตกับเราทาง WhatsApp", "Напишите нам в WhatsApp"),
     ]
@@ -352,9 +352,9 @@ def update_main():
         % (i + 1, json.dumps(p["name"]), SITE, p["slug"], json.dumps(p["area"].replace(" · ", ", "))) for i, p in enumerate(PROJECTS))
     s = re.sub(r'\{"@type":"ItemList".*?\]\},\n', lambda m: '{"@type":"ItemList","name":"Condominiums for rent in Bang Tao and Cherng Talay, Phuket","numberOfItems":%d,"itemListElement":[\n%s]},\n' % (n, items), s, count=1, flags=re.S)
     if "<!-- MENU:START" in s:
-        s = re.sub(r"<!-- MENU:START.*?<!-- MENU:END -->", lambda m: menu_block("", "assets/logo.png"), s, count=1, flags=re.S)
+        s = re.sub(r"<!-- MENU:START.*?<!-- MENU:END -->", lambda m: menu_block("", "assets/logo.png", "rent/owners.html"), s, count=1, flags=re.S)
     else:
-        s = s.replace("</header>\n", "</header>\n" + menu_block("", "assets/logo.png") + "\n", 1)
+        s = s.replace("</header>\n", "</header>\n" + menu_block("", "assets/logo.png", "rent/owners.html") + "\n", 1)
     s = re.sub(r"/\* menu drawer \*/.*?/\* end menu drawer \*/\n?", "", s, count=1, flags=re.S)
     s = s.replace("/* tabs: tenant / owner */", MENU_CSS + "\n\n/* tabs: tenant / owner */", 1)
     # structured data: each condo points at its own page
@@ -633,7 +633,7 @@ def project_page(p):
     <div class="hdr-r"><div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" class="on">EN</button><button type="button" data-lang="ru">RU</button><button type="button" data-lang="th">TH</button></div>{MENU_BTN}</div>
   </div>
 </header>
-{menu_block("../rent-condo.html", "../assets/logo.png")}
+{menu_block("../rent-condo.html", "../assets/logo.png", "owners.html")}
 
 <main>
 <div class="hero"{hero_style}>
@@ -722,6 +722,180 @@ def project_page(p):
 """
 
 
+OWNER_CSS = r"""
+label{display:grid;gap:6px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mid);font-weight:600}
+input,select,textarea{font:400 15px var(--body);color:var(--ink);padding:12px 14px;border:1px solid var(--line);background:var(--page);border-radius:10px;width:100%;letter-spacing:0;text-transform:none;min-width:0;appearance:none;-webkit-appearance:none}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--stone) 50%),linear-gradient(135deg,var(--stone) 50%,transparent 50%);background-position:calc(100% - 18px) 52%,calc(100% - 13px) 52%;background-size:5px 5px;background-repeat:no-repeat;padding-right:34px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start}
+@media(max-width:860px){.grid2{grid-template-columns:1fr;gap:30px}}
+.grid2>*{min-width:0}
+ol.flow{list-style:none;display:grid;gap:0}
+ol.flow li{display:grid;grid-template-columns:44px 1fr;gap:16px;padding-bottom:26px;position:relative}
+ol.flow li:not(:last-child)::before{content:"";position:absolute;left:21px;top:44px;bottom:0;width:1px;background:var(--line)}
+ol.flow .n{font-variant-numeric:lining-nums;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:600 18px var(--display);border:1px solid var(--accent);color:var(--accent);background:var(--paper)}
+ol.flow li:first-child .n{background:var(--accent);color:var(--accent-ink)}
+ol.flow h3{font-size:23px;margin-top:6px}
+ol.flow p{color:var(--mid);font-size:15px;margin-top:4px}
+ol.flow .when{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--stone);font-weight:600;margin-top:6px}
+form.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:24px;display:grid;gap:14px;box-shadow:var(--shadow)}
+form.card h3{font-size:28px;scroll-margin-top:100px}
+form.card .sub{color:var(--mid);font-size:14px;margin-top:-6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:440px){.two{grid-template-columns:1fr}}
+.note{font-size:12.5px;color:var(--mid)}
+.why{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.why div{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--paper)}
+.why h3{font-size:21px;margin-bottom:4px}
+.why p{font-size:14px;color:var(--mid)}
+@media(max-width:520px){.why{grid-template-columns:1fr}}
+.brand.keep{display:block!important}
+ol.flow .n{font-family:var(--body)!important;font-size:16px!important}
+.page-hero{color:#fffaf2;background:linear-gradient(180deg,rgba(20,15,10,.45),rgba(20,15,10,.55) 50%,rgba(20,15,10,.85)),url("../assets/rent/hero.jpg") center/cover no-repeat,#2a2119}
+.page-hero .wrap{padding-block:clamp(120px,20vw,200px) 40px;display:grid;gap:12px}
+.page-hero .area{font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:#e8d3a8}
+.page-hero h1{font-size:clamp(38px,6vw,64px);max-width:16ch}
+.page-hero p{max-width:52ch;color:rgba(255,250,242,.86)}
+"""
+
+OWNER_BODY = """<div class="grid2">
+      <div>
+        <h3 style="font-size:clamp(28px,3.4vw,38px);margin-bottom:16px" data-th="ทำไมต้องลงประกาศกับเรา" data-ru="Почему стоит сдавать квартиру с нами">Why list your condominium with us</h3>
+        <div class="why">
+          <div><h3 data-th="โฆษณาให้ฟรี" data-ru="Рекламу оплачиваем мы">We pay for the ads</h3><p data-th="ห้องของคุณได้ลงโฆษณาบน Facebook, Instagram, TikTok, YouTube และ WhatsApp" data-ru="Ваша квартира рекламируется в Facebook, Instagram, TikTok, YouTube и WhatsApp.">Your unit is advertised on Facebook, Instagram, TikTok, YouTube and WhatsApp.</p></div>
+          <div><h3 data-th="ผู้เช่าที่ผ่านการคัดกรอง" data-ru="Проверенные арендаторы">Screened tenants</h3><p data-th="เราตรวจสอบผู้เช่าก่อนส่งให้คุณพิจารณา" data-ru="Мы проверяем каждого арендатора, прежде чем представить его вам.">We check every tenant before we bring them to you.</p></div>
+          <div><h3 data-th="ทีมพูด 3 ภาษา" data-ru="Три языка">Three languages</h3><p data-th="ดูแลผู้เช่าไทย อังกฤษ และรัสเซีย" data-ru="Работаем с арендаторами на тайском, английском и русском.">We handle Thai, English and Russian-speaking tenants.</p></div>
+          <div><h3 data-th="ดูแลจบในที่เดียว" data-ru="Одна команда от начала до конца">One team, start to finish</h3><p data-th="ตั้งแต่ถ่ายรูป นัดดูห้อง ทำสัญญา จนส่งมอบกุญแจ" data-ru="Фото, показы, договор и передача ключей.">Photos, viewings, the lease and the key handover.</p></div>
+          <div><h3 data-th="ลูกค้าจากเครือข่ายสากล" data-ru="Международная сеть клиентов">Global buyer network</h3><p data-th="ในเครือ List Sotheby's International Realty Thailand" data-ru="Партнёр List Sotheby&#x27;s International Realty Thailand.">Affiliated with List Sotheby's International Realty Thailand.</p></div>
+          <div><h3 data-th="ไม่มีค่าใช้จ่ายล่วงหน้า" data-ru="Без предоплаты">Nothing to pay upfront</h3><p data-th="เราได้รับค่าคอมมิชชั่นเมื่อปล่อยเช่าสำเร็จเท่านั้น" data-ru="Комиссию мы получаем, только когда квартира сдана.">We earn our commission only when your unit is rented.</p></div>
+        </div>
+        <ol class="flow" style="margin-top:30px">
+          <li><span class="n">1</span><div><h3 data-th="ส่งรายละเอียดห้อง" data-ru="Пришлите данные квартиры">Send your unit details</h3><p data-th="โครงการ เลขห้อง ขนาด และค่าเช่าที่ต้องการ" data-ru="Кондо, номер квартиры, площадь и желаемая цена.">Condominium, unit number, size and your target rent.</p></div></li>
+          <li><span class="n">2</span><div><h3 data-th="เราจัดทำประกาศ" data-ru="Мы готовим объявление">We prepare the listing</h3><p data-th="ถ่ายรูป เขียนรายละเอียด และตั้งราคาร่วมกับคุณ" data-ru="Фото, описание и цена — по согласованию с вами.">Photos, description and pricing, agreed with you.</p></div></li>
+          <li><span class="n">3</span><div><h3 data-th="โปรโมตและพาผู้เช่าดูห้อง" data-ru="Продвигаем и показываем">We promote and show it</h3><p data-th="ยิงโฆษณา ตอบผู้สนใจ และนัดดูห้องแทนคุณ" data-ru="Запускаем рекламу, отвечаем на заявки и проводим показы.">We run the ads, answer enquiries and arrange viewings.</p></div></li>
+          <li><span class="n">4</span><div><h3 data-th="ทำสัญญาและรับค่าเช่า" data-ru="Договор подписан, аренда оплачена">Lease signed, rent paid</h3><p data-th="เราจัดทำสัญญาเช่าและส่งมอบห้องให้ผู้เช่า" data-ru="Готовим договор и передаём квартиру арендатору.">We prepare the agreement and hand over to the tenant.</p></div></li>
+        </ol>
+      </div>
+      <form class="card" id="ownerForm" autocomplete="on">
+        <h3 data-th="ลงประกาศห้องของคุณ" data-ru="Сдать квартиру">List your condominium</h3>
+        <p class="sub" data-th="ส่งรายละเอียด ทีมงานติดต่อกลับภายในวันทำการ" data-ru="Пришлите данные — ответим в тот же рабочий день.">Send the details and we get back to you the same business day.</p>
+        <label for="o-name"><span data-th="ชื่อเจ้าของ" data-ru="Имя владельца">Owner name</span><input id="o-name" type="text" autocomplete="name"></label>
+        <label for="o-condo"><span data-th="โครงการ" data-ru="Кондо">Condominium</span>
+          <select id="o-condo" class="condo-select">{options}<option value="" data-th="โครงการอื่น" data-ru="Другое кондо">Other condominium</option></select></label>
+        <div class="two">
+          <label for="o-unit"><span data-th="เลขห้อง / ขนาด" data-ru="№ квартиры / площадь">Unit no. / size</span><input id="o-unit" type="text" placeholder="A-305 · 45 sqm"></label>
+          <label for="o-bed"><span data-th="ห้องนอน" data-ru="Спальни">Bedrooms</span>
+            <select id="o-bed"><option value="Studio">Studio</option><option value="1 bed" selected>1</option><option value="2 bed">2</option><option value="3+ bed">3+</option></select></label>
+        </div>
+        <div class="two">
+          <label for="o-rent"><span data-th="ค่าเช่าที่ต้องการ (บาท/เดือน)" data-ru="Желаемая цена (бат/мес.)">Target rent (THB/mo)</span><input id="o-rent" type="text" inputmode="numeric"></label>
+          <label for="o-from"><span data-th="ว่างตั้งแต่" data-ru="Свободна с">Available from</span><input id="o-from" type="date"></label>
+        </div>
+        <a class="btn gold" id="ownerSend" href="https://wa.me/{PHONE}" target="_blank" rel="noopener" data-th="ส่งรายละเอียดทาง WhatsApp" data-ru="Отправить в WhatsApp">Send on WhatsApp</a>
+        <p class="note" data-th="ไม่มีค่าใช้จ่ายจนกว่าจะปล่อยเช่าได้" data-ru="Никаких платежей, пока квартира не сдана.">No fee until your unit is rented.</p>
+      </form>
+    </div>"""
+
+
+def owners_page():
+    page_url = f"{SITE}/rent/owners"
+    options = "".join(f"<option>{esc(p['name'])}</option>" for p in PROJECTS)
+    body = OWNER_BODY.format(options=options, PHONE=PHONE)
+    title = "List Your Condominium for Rent in Phuket | MGROUP Estates"
+    desc = "Own a condominium in Bang Tao or Cherng Talay? MGROUP Estates markets it, finds and screens tenants, arranges viewings and prepares the lease."
+    ld = {"@context": "https://schema.org", "@type": "Service", "name": "Condominium rental listing for owners", "url": page_url,
+          "provider": {"@type": "RealEstateAgent", "name": "MGROUP Estates", "url": SITE}, "areaServed": "Phuket", "description": desc}
+    js = r"""
+(function(){
+  var PHONE="%PHONE%", lang="en", src="";
+  var $=function(s){return document.querySelector(s)}, $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+  try{var qs=new URLSearchParams(location.search);src=qs.get("utm_source")||"";if(/^(th|ru)$/.test(qs.get("lang")||""))lang=qs.get("lang")}catch(e){}
+  function v(id){return $(id).value.trim()}
+  function msg(){
+    var th=lang==="th",L=[];
+    L.push(th?"สวัสดีค่ะ ต้องการลงประกาศปล่อยเช่าคอนโดค่ะ":"Hello, I'd like to list my condominium for rent with MGROUP Estates.");
+    if(v("#o-name"))L.push((th?"ชื่อ: ":"Name: ")+v("#o-name"));
+    L.push((th?"โครงการ: ":"Condominium: ")+(v("#o-condo")||(th?"โครงการอื่น":"Other")));
+    if(v("#o-unit"))L.push((th?"ห้อง/ขนาด: ":"Unit/size: ")+v("#o-unit"));
+    L.push((th?"ห้องนอน: ":"Bedrooms: ")+v("#o-bed"));
+    if(v("#o-rent"))L.push((th?"ค่าเช่าที่ต้องการ/เดือน: ":"Target rent/month: ")+v("#o-rent")+" THB");
+    if(v("#o-from"))L.push((th?"ว่างตั้งแต่: ":"Available from: ")+v("#o-from"));
+    if(src)L.push("Source: "+src);
+    return L.join("\n");
+  }
+  function build(){$("#ownerSend").href="https://wa.me/"+PHONE+"?text="+encodeURIComponent(msg())}
+  $$("#ownerForm input,#ownerForm select").forEach(function(el){el.addEventListener("input",build);el.addEventListener("change",build)});
+  var tr=$$("[data-th]");tr.forEach(function(el){el.setAttribute("data-en",el.textContent)});
+  function setLang(l){
+    lang=l;document.documentElement.lang=l;
+    tr.forEach(function(el){el.textContent=el.getAttribute("data-"+l)||el.getAttribute("data-en")});
+    $$(".lang button").forEach(function(b){b.classList.toggle("on",b.dataset.lang===l)});
+    $("#o-name").placeholder=l==="th"?"ชื่อของคุณ":l==="ru"?"Ваше имя":"Your name";
+    build();try{localStorage.setItem("mg-lang",l)}catch(e){}
+  }
+  $$(".lang button").forEach(function(b){b.addEventListener("click",function(){setLang(b.dataset.lang)})});
+  if(lang==="en"){try{var sl=localStorage.getItem("mg-lang");if(sl==="th"||sl==="ru")lang=sl}catch(e){}}
+  setLang(lang);
+})();
+""".replace("%PHONE%", PHONE)
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{esc(title)}</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="{esc(desc)}">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="{page_url}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="List your condominium with MGROUP Estates">
+<meta property="og:description" content="{esc(desc)}">
+<meta property="og:url" content="{page_url}">
+<meta property="og:image" content="{SITE}/assets/rent/hero.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Figtree:wght@300;400;500;600&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
+<style>{CSS}{MENU_CSS}{OWNER_CSS}</style>
+</head>
+<body>
+<header class="top over">
+  <div class="wrap">
+    <a class="brand keep" href="../rent-condo.html" aria-label="MGROUP Estates"><img src="../assets/logo.png" alt="MGROUP Estates" width="126" height="16"></a>
+    <div class="hdr-r"><div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" class="on">EN</button><button type="button" data-lang="ru">RU</button><button type="button" data-lang="th">TH</button></div>{MENU_BTN}</div>
+  </div>
+</header>
+{menu_block("../rent-condo.html", "../assets/logo.png", "owners.html").replace('href="#nest"', 'href="../rent-condo.html#nest"')}
+
+<main>
+<div class="page-hero">
+  <div class="wrap">
+    <span class="area" data-th="สำหรับเจ้าของห้อง">For owners</span>
+    <h1 data-th="ปล่อยเช่าคอนโดของคุณกับเรา">List your condominium with us</h1>
+    <p data-th="เราทำการตลาด หาผู้เช่า และดูแลสัญญาเช่าให้ครบ">We market it, find the tenant and handle the lease.</p>
+  </div>
+</div>
+<section>
+  <div class="wrap">
+{body}
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <small data-th="นำเสนอโดย">Presented by</small>
+    <img src="../assets/logo.png" alt="MGROUP Estates" width="157" height="20">
+    <p>M GROUP BUSINESS CO.,LTD · 63/202 Thepkasattri Rd, Kohkaew, Muang, Phuket 83000<br><a href="https://wa.me/{PHONE}" target="_blank" rel="noopener" data-th="แชตกับเราทาง WhatsApp" data-ru="Написать нам в WhatsApp">Chat with us on WhatsApp</a> · contact@mgroupestates.com</p>
+  </div>
+</footer>
+<script>{js}</script>
+</body>
+</html>
+"""
+
+
 RU = json.load(open(os.path.join(ROOT, "rent", "i18n-ru.json"), encoding="utf-8"))
 RU_PATTERNS = [(r"^(\d+) sqm$", r"\1 м²"), (r"^(\d+) bath$", r"\1 ванн."), (r"^Floor (\d+)$", r"Этаж \1")]
 
@@ -782,7 +956,7 @@ def use_full_word(path):
 def update_index_files():
     sm = os.path.join(ROOT, "sitemap.xml")
     s = open(sm, encoding="utf-8").read()
-    for p in PROJECTS:
+    for p in PROJECTS + [dict(slug="owners")]:
         loc = f"{SITE}/rent/{p['slug']}"
         if loc not in s:
             s = s.replace("</urlset>", f"  <url><loc>{loc}</loc><lastmod>2026-11-03</lastmod><priority>0.8</priority></url>\n</urlset>")
@@ -805,13 +979,14 @@ if __name__ == "__main__":
     os.makedirs(os.path.join(ROOT, "rent"), exist_ok=True)
     for p in PROJECTS:
         open(os.path.join(ROOT, "rent", p["slug"] + ".html"), "w", encoding="utf-8").write(project_page(p))
+    open(os.path.join(ROOT, "rent", "owners.html"), "w", encoding="utf-8").write(owners_page())
     update_main()
     update_index_files()
     missing = []
-    for f in ["rent-condo.html"] + [os.path.join("rent", p["slug"] + ".html") for p in PROJECTS]:
+    for f in ["rent-condo.html", os.path.join("rent", "owners.html")] + [os.path.join("rent", p["slug"] + ".html") for p in PROJECTS]:
         missing += add_ru(os.path.join(ROOT, f))
     if missing:
         print("no Russian for:", sorted(set(missing)))
-    for f in ["rent-condo.html"] + [os.path.join("rent", p["slug"] + ".html") for p in PROJECTS]:
+    for f in ["rent-condo.html", os.path.join("rent", "owners.html")] + [os.path.join("rent", p["slug"] + ".html") for p in PROJECTS]:
         use_full_word(os.path.join(ROOT, f))
     print("built", len(PROJECTS), "condo pages")
