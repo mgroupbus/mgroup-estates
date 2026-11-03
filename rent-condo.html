@@ -169,19 +169,21 @@ section.band{background:var(--band);border-block:1px solid var(--line)}
 
 /* dropdowns */
 .acc{display:grid;gap:10px}
-details.item{scroll-margin-top:84px;background:var(--paper);border:1px solid var(--line);border-radius:16px;transition:border-color .2s,box-shadow .2s}
+details.item{scroll-margin-top:84px;overflow:hidden;background:var(--paper);border:1px solid var(--line);border-radius:16px;transition:border-color .2s,box-shadow .2s}
 details.item[open]{border-color:var(--accent);box-shadow:var(--shadow)}
-details.item>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;padding:18px 20px}
+details.item>summary{list-style:none;cursor:pointer;position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;min-height:clamp(190px,30vw,260px);padding:20px;border-radius:15px;color:#fffaf2;
+  background:linear-gradient(180deg,rgba(20,15,10,0) 30%,rgba(20,15,10,.82)),var(--img,none) center/cover no-repeat,radial-gradient(120% 90% at 85% 0%,#a0865c 0,transparent 55%),linear-gradient(140deg,#5b4936,#241c15)}
+details.item[open]>summary{border-radius:15px 15px 0 0}
 summary::-webkit-details-marker{display:none}
-.mono{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;font:600 19px var(--display);letter-spacing:.04em;color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--paper));border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line))}
-.ttl{min-width:0}
-.ttl h3{font-size:clamp(22px,2.6vw,27px)}
-.ttl .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.tag{font-size:11.5px;font-weight:500;padding:3px 10px;border-radius:999px;background:var(--band);color:var(--mid);border:1px solid var(--line)}
-.chev{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:transform .25s,background .2s}
+.ttl{min-width:0;display:grid;gap:4px}
+.ttl .area{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:#e8d3a8}
+.ttl h3{font-size:clamp(26px,3.4vw,34px);color:#fffaf2}
+.ttl .price{font-size:15.5px;font-weight:600;font-variant-numeric:tabular-nums}
+.ttl .price small{font-weight:400;opacity:.8;font-size:13px}
+.chev{width:38px;height:38px;flex:none;border-radius:50%;border:1px solid rgba(255,250,242,.5);background:rgba(20,15,10,.25);backdrop-filter:blur(4px);display:grid;place-items:center;transition:transform .25s,background .2s}
 .chev svg{width:14px;height:14px}
-details[open]>summary .chev{transform:rotate(180deg);background:var(--ink);color:var(--page);border-color:var(--ink)}
-.body{padding:0 20px 22px 90px;display:grid;gap:18px}
+details.item[open]>summary .chev{transform:rotate(180deg);background:#fffaf2;color:#33291f}
+.body{padding:20px;display:grid;gap:18px}
 .body>p{color:var(--mid);max-width:64ch}
 dl.spec{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 dl.spec div{padding:12px 14px;border-left:1px solid var(--line);min-width:0}
@@ -193,7 +195,7 @@ dl.spec dd{font-size:14px;margin-top:3px}
 .share b{font-weight:600;margin-right:4px}
 .share button{font:500 12px var(--body);padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--page);color:var(--ink);cursor:pointer}
 .share button:hover{border-color:var(--accent);color:var(--accent)}
-@media(max-width:720px){.body{padding-left:20px}dl.spec{grid-template-columns:1fr 1fr}dl.spec div:nth-child(3){border-left:0}dl.spec div:nth-child(n+3){border-top:1px solid var(--line)}details.item>summary{gap:12px;padding:16px}.mono{width:42px;height:42px;font-size:16px}}
+@media(max-width:720px){dl.spec{grid-template-columns:1fr 1fr}dl.spec div:nth-child(3){border-left:0}dl.spec div:nth-child(n+3){border-top:1px solid var(--line)}details.item>summary{padding:16px}}
 
 /* tabs: tenant / owner */
 .tabs{display:inline-flex;padding:4px;border-radius:999px;background:var(--paper);border:1px solid var(--line);margin-bottom:30px}
@@ -231,7 +233,8 @@ details.q{border-bottom:1px solid var(--line)}
 details.q summary{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;cursor:pointer;list-style:none}
 details.q h3{font-size:clamp(20px,2.4vw,24px)}
 details.q p{padding:0 0 20px;color:var(--mid);max-width:68ch}
-details.q[open] .chev{transform:rotate(180deg)}
+details.q .chev{border-color:var(--line);background:none;backdrop-filter:none;color:var(--ink);width:34px;height:34px}
+details.q[open] .chev{transform:rotate(180deg);background:var(--ink);color:var(--page)}
 
 /* footer */
 footer{background:var(--ink);color:color-mix(in srgb,var(--page) 78%,transparent)}
@@ -312,7 +315,7 @@ footer .legal{border-top:1px solid color-mix(in srgb,var(--page) 18%,transparent
     <div class="head">
       <p class="eyebrow" data-th="คอนโดให้เช่า">The condos</p>
       <h2 data-th="เลือกคอนโดที่อยากอยู่">Choose where you'd like to live</h2>
-      <p data-th="แตะชื่อคอนโดเพื่อดูรายละเอียด ห้องว่างและราคาเปลี่ยนตามฤดูกาล เราจึงส่งข้อมูลล่าสุดให้ทาง WhatsApp">Tap a condo to open its details. Availability and rates change with the season, so we send you the current list on WhatsApp.</p>
+      <p data-th="ราคาเช่าต่อเดือน ขึ้นอยู่กับห้องและฤดูกาล แตะเพื่อดูรายละเอียด">Monthly rent ranges. Tap a condo for details.</p>
     </div>
 
     <div class="filters" role="group" aria-label="Filter by area">
@@ -324,70 +327,70 @@ footer .legal{border-top:1px solid color-mix(in srgb,var(--page) 18%,transparent
 
     <div class="acc" id="acc">
       <details class="item" id="standard-residence-bangtao" data-name="The Standard Residence Bangtao" data-area="bangtao">
-        <summary><span class="mono" aria-hidden="true">SR</span><span class="ttl"><h3>The Standard Residence Bangtao</h3><span class="meta"><span class="tag" data-th="บางเทา">Bang Tao</span><span class="tag" data-th="แบรนด์เรสซิเดนซ์">Branded residence</span><span class="tag" data-th="ใกล้ชายหาด">Near the beach</span></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+        <summary style="--img:url('https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property-bucket/sale/p6/project/1776605345368-rwkzb8.webp')"><span class="ttl"><span class="area" data-th="บางเทา">Bang Tao</span><h3>The Standard Residence Bangtao</h3><span class="price">฿70,000 – 180,000 <small data-th="/ เดือน">/ month</small></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
         <div class="body">
           <p data-th="แบรนด์เรสซิเดนซ์ระดับลักชัวรีโดย The Standard และ Central Group ในทำเลหลักของบางเทา เหมาะกับผู้ที่ต้องการไลฟ์สไตล์ดีไซน์จัดใกล้ชายหาด">Luxury branded residences by The Standard and Central Group, in one of Bang Tao's prime locations. For tenants who want a design-led home close to the beach.</p>
-          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="บางเทา, เชิงทะเล">Bang Tao, Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="รายเดือน – รายปี">Monthly – yearly</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="ไลฟ์สไตล์ริมหาด">Beach lifestyle</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="แจ้งตามห้องว่าง">On request</dd></div></dl>
+          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="บางเทา, เชิงทะเล">Bang Tao, Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="รายเดือน – รายปี">Monthly – yearly</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="ไลฟ์สไตล์ริมหาด">Beach lifestyle</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="ตามห้องและฤดูกาล">Varies by unit &amp; season</dd></div></dl>
           <div class="actions"><button type="button" class="btn sm book" data-th="นัดดูห้องนี้">Book a viewing</button><a class="btn wa sm ask" href="https://wa.me/66899723321" target="_blank" rel="noopener" data-th="ถามทาง WhatsApp">Ask on WhatsApp</a></div>
           <div class="share"><b data-th="ลิงก์โฆษณา:">Ad link:</b></div>
         </div>
       </details>
 
       <details class="item" id="the-aqua" data-name="The Aqua" data-area="bangtao">
-        <summary><span class="mono" aria-hidden="true">AQ</span><span class="ttl"><h3>The Aqua</h3><span class="meta"><span class="tag" data-th="บางเทา">Bang Tao</span><span class="tag" data-th="สไตล์รีสอร์ต">Resort-style</span><span class="tag" data-th="สระว่ายน้ำ">Pool living</span></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+        <summary style="--img:url('https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property-bucket/rental/1793524859000-ax2co5.jpg')"><span class="ttl"><span class="area" data-th="บางเทา">Bang Tao</span><h3>The Aqua</h3><span class="price">฿60,000 – 120,000 <small data-th="/ เดือน">/ month</small></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
         <div class="body">
           <p data-th="คอนโดสไตล์รีสอร์ตในย่านบางเทา ใกล้ชายหาด ร้านอาหาร และ Boat Avenue เหมาะกับการเช่าระยะสั้นและระยะยาว">A resort-style condominium in Bang Tao, close to the beach, restaurants and Boat Avenue. Suits both short and long stays.</p>
-          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="บางเทา, เชิงทะเล">Bang Tao, Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="รายเดือน – รายปี">Monthly – yearly</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="พักผ่อน · ครอบครัว">Holidays · couples</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="แจ้งตามห้องว่าง">On request</dd></div></dl>
+          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="บางเทา, เชิงทะเล">Bang Tao, Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="รายเดือน – รายปี">Monthly – yearly</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="พักผ่อน · ครอบครัว">Holidays · couples</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="ตามห้องและฤดูกาล">Varies by unit &amp; season</dd></div></dl>
           <div class="actions"><button type="button" class="btn sm book" data-th="นัดดูห้องนี้">Book a viewing</button><a class="btn wa sm ask" href="https://wa.me/66899723321" target="_blank" rel="noopener" data-th="ถามทาง WhatsApp">Ask on WhatsApp</a></div>
           <div class="share"><b data-th="ลิงก์โฆษณา:">Ad link:</b></div>
         </div>
       </details>
 
       <details class="item" id="the-space" data-name="The Space Choeng Thale" data-area="cherngtalay">
-        <summary><span class="mono" aria-hidden="true">SP</span><span class="ttl"><h3>The Space Choeng Thale</h3><span class="meta"><span class="tag" data-th="เชิงทะเล">Cherng Talay</span><span class="tag" data-th="อยู่ระยะยาว">Long stay</span><span class="tag" data-th="คุ้มค่า">Good value</span></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+        <summary><span class="ttl"><span class="area" data-th="เชิงทะเล">Cherng Talay</span><h3>The Space Choeng Thale</h3><span class="price">฿18,000 – 35,000 <small data-th="/ เดือน">/ month</small></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
         <div class="body">
           <p data-th="คอนโดในเชิงทะเล ฝั่งตะวันตกของภูเก็ต เดินทางสะดวกไปบางเทา ลากูน่า และซูเปอร์มาร์เก็ต เหมาะกับคนทำงานและผู้เช่าระยะยาว">A condominium in Cherng Talay on Phuket's west coast, with easy access to Bang Tao, Laguna and daily shopping. A practical choice for remote workers and long stays.</p>
-          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="เชิงทะเล">Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="6 – 12 เดือน">6 – 12 months</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="ทำงานทางไกล">Remote workers</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="แจ้งตามห้องว่าง">On request</dd></div></dl>
+          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="เชิงทะเล">Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="6 – 12 เดือน">6 – 12 months</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="ทำงานทางไกล">Remote workers</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="ตามห้องและฤดูกาล">Varies by unit &amp; season</dd></div></dl>
           <div class="actions"><button type="button" class="btn sm book" data-th="นัดดูห้องนี้">Book a viewing</button><a class="btn wa sm ask" href="https://wa.me/66899723321" target="_blank" rel="noopener" data-th="ถามทาง WhatsApp">Ask on WhatsApp</a></div>
           <div class="share"><b data-th="ลิงก์โฆษณา:">Ad link:</b></div>
         </div>
       </details>
 
       <details class="item" id="the-base" data-name="The Base Choeng Thale" data-area="cherngtalay">
-        <summary><span class="mono" aria-hidden="true">BA</span><span class="ttl"><h3>The Base Choeng Thale</h3><span class="meta"><span class="tag" data-th="เชิงทะเล">Cherng Talay</span><span class="tag" data-th="ใช้ชีวิตสะดวก">Everyday living</span><span class="tag" data-th="อยู่ระยะยาว">Long stay</span></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+        <summary><span class="ttl"><span class="area" data-th="เชิงทะเล">Cherng Talay</span><h3>The Base Choeng Thale</h3><span class="price">฿15,000 – 30,000 <small data-th="/ เดือน">/ month</small></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
         <div class="body">
           <p data-th="คอนโดในเชิงทะเล สำหรับผู้เช่าที่ต้องการทำเลใช้ชีวิตประจำวันได้สะดวก ใกล้โรงเรียนนานาชาติ ร้านค้า และชายหาดฝั่งตะวันตก">A condominium in Cherng Talay for tenants who want an easy everyday base, near international schools, shops and the west-coast beaches.</p>
-          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="เชิงทะเล">Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="6 – 12 เดือน">6 – 12 months</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="ครอบครัว · คนทำงาน">Families · professionals</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="แจ้งตามห้องว่าง">On request</dd></div></dl>
+          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="เชิงทะเล">Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="6 – 12 เดือน">6 – 12 months</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="ครอบครัว · คนทำงาน">Families · professionals</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="ตามห้องและฤดูกาล">Varies by unit &amp; season</dd></div></dl>
           <div class="actions"><button type="button" class="btn sm book" data-th="นัดดูห้องนี้">Book a viewing</button><a class="btn wa sm ask" href="https://wa.me/66899723321" target="_blank" rel="noopener" data-th="ถามทาง WhatsApp">Ask on WhatsApp</a></div>
           <div class="share"><b data-th="ลิงก์โฆษณา:">Ad link:</b></div>
         </div>
       </details>
 
       <details class="item" id="cassia" data-name="Cassia" data-area="laguna bangtao">
-        <summary><span class="mono" aria-hidden="true">CA</span><span class="ttl"><h3>Cassia</h3><span class="meta"><span class="tag" data-th="ลากูน่า ภูเก็ต">Laguna Phuket</span><span class="tag" data-th="บางเทา">Bang Tao</span><span class="tag" data-th="สไตล์รีสอร์ต">Resort-style</span></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+        <summary><span class="ttl"><span class="area" data-th="ลากูน่า ภูเก็ต">Laguna Phuket</span><h3>Cassia</h3><span class="price">฿35,000 – 90,000 <small data-th="/ เดือน">/ month</small></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
         <div class="body">
           <p data-th="คอนโดสไตล์รีสอร์ตภายในลากูน่า ภูเก็ต ใกล้ทะเลสาบ สนามกอล์ฟ และหาดบางเทา เหมาะกับการพักผ่อนแบบสงบ">A resort-style condominium inside Laguna Phuket, close to the lagoons, golf course and Bang Tao Beach. For a calm, green setting.</p>
-          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="ลากูน่า, บางเทา">Laguna, Bang Tao</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="รายเดือน – รายปี">Monthly – yearly</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="พักผ่อน · ครอบครัว">Holidays · families</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="แจ้งตามห้องว่าง">On request</dd></div></dl>
+          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="ลากูน่า, บางเทา">Laguna, Bang Tao</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="รายเดือน – รายปี">Monthly – yearly</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="พักผ่อน · ครอบครัว">Holidays · families</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="ตามห้องและฤดูกาล">Varies by unit &amp; season</dd></div></dl>
           <div class="actions"><button type="button" class="btn sm book" data-th="นัดดูห้องนี้">Book a viewing</button><a class="btn wa sm ask" href="https://wa.me/66899723321" target="_blank" rel="noopener" data-th="ถามทาง WhatsApp">Ask on WhatsApp</a></div>
           <div class="share"><b data-th="ลิงก์โฆษณา:">Ad link:</b></div>
         </div>
       </details>
 
       <details class="item" id="sky-park" data-name="Sky Park" data-area="laguna cherngtalay">
-        <summary><span class="mono" aria-hidden="true">SK</span><span class="ttl"><h3>Sky Park</h3><span class="meta"><span class="tag" data-th="ลากูน่า ภูเก็ต">Laguna Phuket</span><span class="tag" data-th="เชิงทะเล">Cherng Talay</span><span class="tag" data-th="วิวสวย">Views</span></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+        <summary><span class="ttl"><span class="area" data-th="ลากูน่า · เชิงทะเล">Laguna · Cherng Talay</span><h3>Sky Park</h3><span class="price">฿25,000 – 55,000 <small data-th="/ เดือน">/ month</small></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
         <div class="body">
           <p data-th="คอนโดในย่านลากูน่า เชิงทะเล ใกล้ร้านอาหาร คาเฟ่ และสิ่งอำนวยความสะดวกของลากูน่า เหมาะกับผู้เช่าที่อยากได้ความสะดวกครบในที่เดียว">A condominium in the Laguna area of Cherng Talay, close to Laguna's restaurants, cafés and facilities. Everything you need within a short walk or drive.</p>
-          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="ลากูน่า, เชิงทะเล">Laguna, Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="รายเดือน – รายปี">Monthly – yearly</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="คนทำงาน · คู่รัก">Professionals · couples</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="แจ้งตามห้องว่าง">On request</dd></div></dl>
+          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="ลากูน่า, เชิงทะเล">Laguna, Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="รายเดือน – รายปี">Monthly – yearly</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="คนทำงาน · คู่รัก">Professionals · couples</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="ตามห้องและฤดูกาล">Varies by unit &amp; season</dd></div></dl>
           <div class="actions"><button type="button" class="btn sm book" data-th="นัดดูห้องนี้">Book a viewing</button><a class="btn wa sm ask" href="https://wa.me/66899723321" target="_blank" rel="noopener" data-th="ถามทาง WhatsApp">Ask on WhatsApp</a></div>
           <div class="share"><b data-th="ลิงก์โฆษณา:">Ad link:</b></div>
         </div>
       </details>
 
       <details class="item" id="canvas-sansiri" data-name="Canvas Sansiri" data-area="cherngtalay">
-        <summary><span class="mono" aria-hidden="true">CV</span><span class="ttl"><h3>Canvas Sansiri</h3><span class="meta"><span class="tag" data-th="เชิงทะเล">Cherng Talay</span><span class="tag" data-th="โดยแสนสิริ">By Sansiri</span><span class="tag" data-th="โลว์ไรส์">Low-rise</span></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+        <summary style="--img:url('https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property-bucket/sale/p31/project/1776600364635-zfviyv.jpg')"><span class="ttl"><span class="area" data-th="เชิงทะเล · แสนสิริ">Cherng Talay · Sansiri</span><h3>Canvas Sansiri</h3><span class="price">฿25,000 – 50,000 <small data-th="/ เดือน">/ month</small></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
         <div class="body">
           <p data-th="คอนโดโดยแสนสิริในเชิงทะเล 175 ยูนิต ใน 4 อาคารโลว์ไรส์ พร้อมอาคารส่วนกลางแยก บรรยากาศเป็นส่วนตัว">A Sansiri condominium in Cherng Talay: 175 units across four low-rise buildings, with a separate facilities building. Quiet and private.</p>
-          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="เชิงทะเล">Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="6 – 12 เดือน">6 – 12 months</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="ความเป็นส่วนตัว">Privacy · long stay</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="แจ้งตามห้องว่าง">On request</dd></div></dl>
+          <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="เชิงทะเล">Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="6 – 12 เดือน">6 – 12 months</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="ความเป็นส่วนตัว">Privacy · long stay</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="ตามห้องและฤดูกาล">Varies by unit &amp; season</dd></div></dl>
           <div class="actions"><button type="button" class="btn sm book" data-th="นัดดูห้องนี้">Book a viewing</button><a class="btn wa sm ask" href="https://wa.me/66899723321" target="_blank" rel="noopener" data-th="ถามทาง WhatsApp">Ask on WhatsApp</a></div>
           <div class="share"><b data-th="ลิงก์โฆษณา:">Ad link:</b></div>
         </div>
