@@ -75,6 +75,19 @@ TAGS = {
     "wellness": ("Near wellness", "ใกล้เวลเนส", "Рядом велнес", "Gyms, yoga and spas nearby.", "ใกล้ยิม โยคะ และสปา", "Рядом спортзалы, йога и спа."),
     "sauna":    ("Near a sauna", "ใกล้ซาวน่า", "Рядом сауна", "A sauna on site or close by.", "มีซาวน่าในโครงการหรือใกล้ๆ", "Сауна в комплексе или рядом."),
 }
+# Line icons for the lifestyle fits (24x24, stroke only)
+FIT_ICONS = {
+    "nomad": '<rect x="4" y="5" width="16" height="10" rx="1.5"/><path d="M2 19h20"/>',
+    "pet": '<circle cx="7" cy="9" r="1.6"/><circle cx="11" cy="6" r="1.6"/><circle cx="15.5" cy="7" r="1.6"/><circle cx="18" cy="11" r="1.6"/><path d="M8.5 17.5c0-2.7 2-5 4.3-5s4.2 2.3 4.2 5c0 1.5-1.3 2.2-2.7 1.8-1-.3-2-.3-3 0-1.5.4-2.8-.3-2.8-1.8z"/>',
+    "cook": '<path d="M3 11h13v3a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5z"/><path d="M16 12h5"/><path d="M7 4c-.8 1 .8 2 0 3M11 4c-.8 1 .8 2 0 3"/>',
+    "cafe": '<path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3c-.8 1 .8 2 0 3M12 3c-.8 1 .8 2 0 3"/>',
+    "beach": '<path d="M2 18c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M12 15V6"/><path d="M4 8a8 8 0 0 1 16 0z"/>',
+    "parking": '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M10 16V8h3a2.5 2.5 0 0 1 0 5h-3"/>',
+    "airport": '<path d="M2 16l20-6-3-2-6 2-6-5-2 1 4 5-4 1.2-2-1.5-1.5.5z"/><path d="M3 20h18"/>',
+    "wellness": '<path d="M12 20c-4 0-8-2.5-8-7 3 0 5.5 1.5 8 4 2.5-2.5 5-4 8-4 0 4.5-4 7-8 7z"/><path d="M12 17c-2-2.5-2-6.5 0-10 2 3.5 2 7.5 0 10z"/>',
+    "sauna": '<path d="M3 20h18"/><path d="M5 20v-6h14v6"/><path d="M8 4c-1 1.3 1 2.7 0 4M12 4c-1 1.3 1 2.7 0 4M16 4c-1 1.3 1 2.7 0 4"/>',
+}
+
 FITS = {
     "standard-residence-bangtao": ["beach", "wellness", "sauna", "cafe", "nomad", "cook"],
     "the-aqua": ["beach", "cafe", "cook", "pet", "parking"],
@@ -100,6 +113,72 @@ def fits_filter():
             f'      <div class="fits" role="group" aria-label="Lifestyle">{chips}</div>\n'
             '      <p class="nofit" id="nofit" hidden data-th="ยังไม่มีคอนโดที่ตรงทุกข้อ ลองเอาออกสักข้อ">No condo matches all of these. Remove one to see more.</p>\n'
             '      <!-- FITS:END -->\n    </div>')
+
+
+# Nest+ concierge: what every MGROUP Estates tenant can use. Shown on every rental page.
+NEST = [
+    ('<path d="M14 10a4 4 0 1 1 3.5-2L22 12.5V16h-3v-2h-2v-2l-1.6-1.6A4 4 0 0 1 14 10z" transform="translate(-3 -1)"/><circle cx="10" cy="6" r="1"/>',
+     "Move-in help", "ช่วยย้ายเข้า", "Помощь с заездом",
+     "We meet you at the condo, check the unit with you and hand over the keys.", "พบคุณที่ห้อง ตรวจห้องด้วยกัน และส่งมอบกุญแจ", "Встречаем в квартире, вместе проверяем её и передаём ключи."),
+    ('<path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1"/>',
+     "Internet & utilities", "อินเทอร์เน็ตและน้ำไฟ", "Интернет и коммуналка",
+     "We set up Wi-Fi, electricity and water for you.", "ติดตั้ง Wi-Fi และจัดการค่าน้ำค่าไฟให้", "Подключаем Wi-Fi, электричество и воду."),
+    ('<path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/>',
+     "Cleaning & laundry", "ทำความสะอาดและซักรีด", "Уборка и стирка",
+     "Book weekly cleaning or laundry through us.", "จองแม่บ้านรายสัปดาห์หรือซักรีดผ่านเรา", "Еженедельная уборка или стирка через нас."),
+    ('<path d="M3 15l2-6a2 2 0 0 1 1.9-1.4h10.2A2 2 0 0 1 19 9l2 6v3h-3v-2H6v2H3z"/><circle cx="7.5" cy="13.5" r=".8"/><circle cx="16.5" cy="13.5" r=".8"/>',
+     "Car & scooter rental", "เช่ารถยนต์และมอเตอร์ไซค์", "Аренда машины и байка",
+     "A car or scooter delivered to your condo.", "เช่ารถยนต์หรือมอเตอร์ไซค์ ส่งถึงคอนโด", "Машина или байк с доставкой к кондо."),
+    ('<path d="M2 16l20-6-3-2-6 2-6-5-2 1 4 5-4 1.2-2-1.5-1.5.5z"/><path d="M3 20h18"/>',
+     "Airport transfers", "รับส่งสนามบิน", "Трансфер в аэропорт",
+     "Pick-up and drop-off at Phuket Airport.", "รับส่งสนามบินภูเก็ต", "Встреча и проводы в аэропорту Пхукета."),
+    ('<path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7 6.3 21l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.5 2.5-2.5-.6-.6-2.5z"/>',
+     "Repairs during your lease", "แจ้งซ่อมระหว่างสัญญา", "Ремонт во время аренды",
+     "Message us and we arrange the fix with the owner.", "แจ้งเรา เราประสานเจ้าของห้องและช่างให้", "Напишите нам — мы организуем ремонт с владельцем."),
+]
+
+NEST_CSS = """
+/* Nest+ concierge band */
+.nest{background:#2b231b;color:#f1e9dc}
+.nest .wrap{padding-block:56px;display:grid;gap:22px}
+.nest .eyebrow{font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:#c9a96a}
+.nest h2{font-family:var(--display);font-weight:500;font-size:clamp(34px,5vw,52px);color:#fffaf2;line-height:1.05}
+.nest h2 sup{font-family:var(--body);font-size:.5em;color:#c9a96a;vertical-align:super;margin-left:2px}
+.nest .lead{max-width:56ch;color:rgba(241,233,220,.8)}
+.nest ul{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(241,233,220,.14);border:1px solid rgba(241,233,220,.14);border-radius:16px;overflow:hidden}
+.nest li{background:#2b231b;padding:18px;display:grid;grid-template-columns:28px 1fr;gap:4px 12px;align-items:start;min-width:0}
+.nest li svg{width:24px;height:24px;grid-row:span 2;color:#c9a96a;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round}
+.nest li b{font-weight:600;font-size:15px;color:#fffaf2}
+.nest li span{font-size:13.5px;color:rgba(241,233,220,.72)}
+.nest .cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.nest .cta small{font-size:12.5px;color:rgba(241,233,220,.6)}
+.nest .btn.nest-btn{background:#c9a96a;border-color:#c9a96a;color:#1a1612}
+@media(max-width:860px){.nest ul{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.nest ul{grid-template-columns:1fr}}
+"""
+
+
+def nest_block():
+    items = "\n".join(
+        f'        <li><svg viewBox="0 0 24 24" aria-hidden="true">{icon}</svg>'
+        f'<b data-th="{esc(th)}" data-ru="{esc(ru)}">{esc(en)}</b>'
+        f'<span data-th="{esc(dth)}" data-ru="{esc(dru)}">{esc(d)}</span></li>'
+        for icon, en, th, ru, d, dth, dru in NEST)
+    return f"""<!-- NEST:START (generated by build-rent.py) -->
+<section class="nest" id="nest">
+  <div class="wrap">
+    <div style="display:grid;gap:10px">
+      <p class="eyebrow" data-th="MGROUP Estates ดูแลอะไรให้คุณ" data-ru="Чем помогает MGROUP Estates">What MGROUP Estates takes care of</p>
+      <h2>Nest<sup>+</sup> concierge</h2>
+      <p class="lead" data-th="ถ้าคุณเช่ากับ MGROUP Estates คุณใช้บริการ Nest+ concierge ได้ตลอดสัญญาเช่า" data-ru="Если вы арендуете с MGROUP Estates, вы пользуетесь Nest+ concierge весь срок аренды.">Rent with MGROUP Estates and you can use Nest+ concierge for as long as your lease runs.</p>
+    </div>
+    <ul>
+{items}
+    </ul>
+    <div class="cta"><a class="btn nest-btn" href="https://wa.me/{PHONE}?text=Nest%2B%20concierge" target="_blank" rel="noopener" data-th="สอบถาม Nest+" data-ru="Узнать о Nest+">Ask about Nest+</a><small data-th="สำหรับผู้เช่าของ MGROUP Estates" data-ru="Для арендаторов MGROUP Estates">For MGROUP Estates tenants</small></div>
+  </div>
+</section>
+<!-- NEST:END -->"""
 
 
 # Five sample units per condo: (beds, baths, sqm, floor, view, view_th, price share of the range, photo crop)
@@ -178,6 +257,12 @@ def update_main():
     else:
         i = s.index('<div class="filters" role="group" aria-label="Filter by area">')
         s = s[:i] + box + "\n\n    " + s[i:]
+    if "<!-- NEST:START" in s:
+        s = re.sub(r'<!-- NEST:START.*?<!-- NEST:END -->', lambda m: nest_block(), s, count=1, flags=re.S)
+    else:
+        s = s.replace("<!-- FAQ -->", nest_block() + "\n\n<!-- FAQ -->", 1)
+    if "/* Nest+ concierge band */" not in s:
+        s = s.replace("/* tabs: tenant / owner */", NEST_CSS.strip() + "\n\n/* tabs: tenant / owner */", 1)
     # structured data: each condo points at its own page
     for p in PROJECTS:
         s = re.sub(r'"url":"https://mgroupestates.com/rent-condo#' + re.escape(p["slug"]) + '"',
@@ -277,9 +362,10 @@ section{padding-block:44px}
 .empty{padding:30px;text-align:center;color:var(--mid);border:1px dashed var(--line);border-radius:16px}
 
 .great{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.great div{padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--paper);display:grid;gap:2px;min-width:0}
-.great b{font-weight:600;font-size:15px}
-.great span{font-size:13.5px;color:var(--mid)}
+.great div{padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--paper);display:grid;grid-template-columns:44px 1fr;gap:2px 12px;align-items:center;min-width:0}
+.great svg{grid-row:span 2;width:44px;height:44px;padding:10px;border-radius:50%;background:color-mix(in srgb,var(--accent) 12%,var(--paper));color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round}
+.great b{font-weight:600;font-size:15px;align-self:end}
+.great span{font-size:13.5px;color:var(--mid);align-self:start}
 @media(max-width:720px){.great{grid-template-columns:1fr 1fr}}
 @media(max-width:420px){.great{grid-template-columns:1fr}}
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:16px;background:var(--paper);overflow:hidden}
@@ -403,7 +489,7 @@ def project_page(p):
             {"@type": "RealEstateAgent", "name": "MGROUP Estates", "url": SITE, "telephone": "+" + PHONE, "logo": SITE + "/assets/logo.png"},
         ]}
     great = "\n".join(
-        f'      <div><b data-th="{esc(TAGS[k][1])}" data-ru="{esc(TAGS[k][2])}">{esc(TAGS[k][0])}</b>'
+        f'      <div><svg viewBox="0 0 24 24" aria-hidden="true">{FIT_ICONS[k]}</svg><b data-th="{esc(TAGS[k][1])}" data-ru="{esc(TAGS[k][2])}">{esc(TAGS[k][0])}</b>'
         f'<span data-th="{esc(TAGS[k][4])}" data-ru="{esc(TAGS[k][5])}">{esc(TAGS[k][3])}</span></div>'
         for k in FITS[p["slug"]])
     js = JS.replace("%PHONE%", PHONE).replace("%PAGE%", page_url).replace("%NAME%", json.dumps(p["name"]))
@@ -429,7 +515,7 @@ def project_page(p):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Figtree:wght@300;400;500;600&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
-<style>{CSS}</style>
+<style>{CSS}{NEST_CSS}</style>
 </head>
 <body>
 <header class="top over">
@@ -491,7 +577,9 @@ def project_page(p):
   </div>
 </section>
 
-<section style="padding-top:0">
+{nest_block()}
+
+<section>
   <div class="wrap" style="display:grid;gap:14px">
     <h2 style="font-size:clamp(26px,3.4vw,34px)" data-th="คอนโดอื่นที่น่าสนใจ">Other condos</h2>
     <div class="others">

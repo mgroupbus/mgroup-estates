@@ -98,7 +98,6 @@
  "Are pets allowed?": "Можно с животными?",
  "It depends on the condo's rules and the owner. Tell us about your pet when you book and we only show you units that accept pets.": "Зависит от правил кондо и владельца. Расскажите о питомце при записи — мы покажем только квартиры, где можно с животными.",
  "What does the concierge service include?": "Что входит в консьерж-сервис?",
- "Every tenant gets our Lifestyle Concierge: help with move-in, internet and utilities setup, cleaning, car or scooter rental, airport transfers and maintenance requests during your lease.": "Каждый арендатор получает наш Lifestyle Concierge: помощь с заездом, подключение интернета и коммунальных услуг, уборка, аренда машины или байка, трансфер из аэропорта и заявки на ремонт во время аренды.",
  "Company": "Компания",
  "Affiliated with List Sotheby's International Realty Thailand": "Партнёр List Sotheby's International Realty Thailand",
  "Contact": "Контакты",
@@ -148,5 +147,7 @@
  "What matters to you?": "Что для вас важно?",
  "Tap to filter. Pick more than one.": "Нажмите, чтобы отфильтровать. Можно выбрать несколько.",
  "No condo matches all of these. Remove one to see more.": "Нет кондо, подходящих под всё сразу. Уберите один фильтр.",
- "Great for": "Подходит для"
+ "Great for": "Подходит для",
+ "Every MGROUP Estates tenant can use Nest+ concierge: help with move-in, internet and utilities setup, cleaning and laundry, car or scooter rental, airport transfers and repairs during your lease.": "Каждый арендатор MGROUP Estates может пользоваться Nest+ concierge: помощь с заездом, подключение интернета и коммунальных услуг, уборка и стирка, аренда машины или байка, трансфер в аэропорт и ремонт во время аренды.",
+ "What does Nest+ concierge include?": "Что входит в Nest+ concierge?"
 }
