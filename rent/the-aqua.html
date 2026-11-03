@@ -173,9 +173,18 @@ footer a{text-decoration:none}
 .nest .ask{font-size:13px;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap}
 .nest .ask:hover{text-decoration:underline}
 .nest ul{list-style:none;display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
-.nest li{display:grid;justify-items:center;gap:8px;text-align:center;padding:14px 8px;border-radius:14px;background:var(--paper);border:1px solid var(--line);min-width:0}
-.nest li svg{width:26px;height:26px;color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round}
+.nest li{display:grid;justify-items:center;align-content:start;gap:10px;text-align:center;padding:18px 8px 16px;border-radius:18px;min-width:0;cursor:default;
+  background:linear-gradient(180deg,var(--paper),color-mix(in srgb,var(--paper) 72%,var(--band)));border:1px solid var(--line);
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s}
+.nest li .ic{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 32% 28%,var(--paper) 0,color-mix(in srgb,var(--accent) 20%,var(--paper)) 72%);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 38%,transparent),0 10px 20px -12px color-mix(in srgb,var(--accent) 80%,transparent);
+  transition:background .3s,transform .3s cubic-bezier(.2,.8,.2,1)}
+.nest li svg{width:24px;height:24px;color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round;transition:color .3s}
 .nest li b{font-weight:500;font-size:13px;line-height:1.3;color:var(--ink)}
+.nest li:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent) 45%,var(--line));box-shadow:0 18px 32px -20px rgba(51,41,31,.45)}
+.nest li:hover .ic{background:var(--accent);transform:scale(1.06) rotate(-4deg)}
+.nest li:hover svg{color:var(--accent-ink)}
 @media(max-width:860px){.nest ul{grid-template-columns:repeat(3,1fr)}}
 /* menu drawer */
 .hdr-r{display:flex;align-items:center;gap:10px}
@@ -356,12 +365,12 @@ body.menu-open{overflow:hidden}
       <a class="ask" href="https://wa.me/66899723321?text=Nest%2B%20concierge" target="_blank" rel="noopener" data-th="สอบถาม Nest+ →" data-ru="Узнать о Nest+ →">Ask about Nest+ →</a>
     </div>
     <ul>
-      <li title="We meet you at the condominium, check the unit with you and hand over the keys."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 10a4 4 0 1 1 3.5-2L22 12.5V16h-3v-2h-2v-2l-1.6-1.6A4 4 0 0 1 14 10z" transform="translate(-3 -1)"/><circle cx="10" cy="6" r="1"/></svg><b data-th="ช่วยย้ายเข้า" data-ru="Помощь с заездом">Move-in help</b></li>
-      <li title="We set up Wi-Fi, electricity and water for you."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1"/></svg><b data-th="เน็ต · น้ำไฟ" data-ru="Интернет и коммуналка">Internet &amp; utilities</b></li>
-      <li title="Book weekly cleaning or laundry through us."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg><b data-th="แม่บ้าน · ซักรีด" data-ru="Уборка и стирка">Cleaning &amp; laundry</b></li>
-      <li title="A car or scooter delivered to your condominium."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15l2-6a2 2 0 0 1 1.9-1.4h10.2A2 2 0 0 1 19 9l2 6v3h-3v-2H6v2H3z"/><circle cx="7.5" cy="13.5" r=".8"/><circle cx="16.5" cy="13.5" r=".8"/></svg><b data-th="รถยนต์ · มอเตอร์ไซค์" data-ru="Машина и байк">Car &amp; scooter</b></li>
-      <li title="Pick-up and drop-off at Phuket Airport."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 16l20-6-3-2-6 2-6-5-2 1 4 5-4 1.2-2-1.5-1.5.5z"/><path d="M3 20h18"/></svg><b data-th="รับส่งสนามบิน" data-ru="Трансфер в аэропорт">Airport transfers</b></li>
-      <li title="Message us and we arrange the fix with the owner."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7 6.3 21l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.5 2.5-2.5-.6-.6-2.5z"/></svg><b data-th="แจ้งซ่อม" data-ru="Ремонт">Repairs</b></li>
+      <li title="We meet you at the condominium, check the unit with you and hand over the keys."><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="12" r="4.5"/><circle cx="8" cy="12" r="1.2"/><path d="M12.5 12H21M18 12v3.5M21 12v2.5"/></svg></span><b data-th="ช่วยย้ายเข้า" data-ru="Помощь с заездом">Move-in help</b></li>
+      <li title="We set up Wi-Fi, electricity and water for you."><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1"/></svg></span><b data-th="เน็ต · น้ำไฟ" data-ru="Интернет и коммуналка">Internet &amp; utilities</b></li>
+      <li title="Book weekly cleaning or laundry through us."><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg></span><b data-th="แม่บ้าน · ซักรีด" data-ru="Уборка и стирка">Cleaning &amp; laundry</b></li>
+      <li title="A car or scooter delivered to your condominium."><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15l2-6a2 2 0 0 1 1.9-1.4h10.2A2 2 0 0 1 19 9l2 6v3h-3v-2H6v2H3z"/><circle cx="7.5" cy="13.5" r=".8"/><circle cx="16.5" cy="13.5" r=".8"/></svg></span><b data-th="รถยนต์ · มอเตอร์ไซค์" data-ru="Машина и байк">Car &amp; scooter</b></li>
+      <li title="Pick-up and drop-off at Phuket Airport."><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 16l20-6-3-2-6 2-6-5-2 1 4 5-4 1.2-2-1.5-1.5.5z"/><path d="M3 20h18"/></svg></span><b data-th="รับส่งสนามบิน" data-ru="Трансфер в аэропорт">Airport transfers</b></li>
+      <li title="Message us and we arrange the fix with the owner."><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7 6.3 21l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.5 2.5-2.5-.6-.6-2.5z"/></svg></span><b data-th="แจ้งซ่อม" data-ru="Ремонт">Repairs</b></li>
     </ul>
   </div>
 </section>
@@ -392,6 +401,8 @@ body.menu-open{overflow:hidden}
 </footer>
 
 <div class="sticky"><a class="btn gold" href="#units" data-th="ดูห้องว่าง" data-ru="Квартиры">See units</a><a class="btn wa ask-all" href="https://wa.me/66899723321" target="_blank" rel="noopener">WhatsApp</a></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="sticky"><a class="btn gold" href="#list" data-th="ลงประกาศห้อง" data-ru="Разместить">List my condominium</a><a class="btn wa est" href="https://wa.me/66899723321" target="_blank" rel="noopener" data-th="ประเมินฟรี" data-ru="Оценка">Free estimate</a></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){
