@@ -71,6 +71,7 @@ TAGS = {
     "cafe":     ("Café lover", "ชอบนั่งคาเฟ่", "Любите кафе", "Cafés within a short walk or ride.", "มีคาเฟ่ใกล้ เดินหรือขับไม่ไกล", "Кафе в паре минут пешком или на байке."),
     "beach":    ("Near the beach", "ไปทะเลสะดวก", "Рядом с пляжем", "A few minutes to the sand.", "ไปทะเลได้ในไม่กี่นาที", "До пляжа несколько минут."),
     "parking":  ("Plenty of parking", "ที่จอดรถเยอะ", "Много парковки", "Plenty of resident parking.", "ที่จอดรถสำหรับลูกบ้านเพียงพอ", "Достаточно парковочных мест для жильцов."),
+    "mall":     ("Near a shopping mall", "ใกล้ห้างสรรพสินค้า", "Рядом торговый центр", "Shopping malls a short drive away.", "ใกล้ห้าง ขับรถไปไม่ไกล", "Торговые центры в нескольких минутах езды."),
     "airport":  ("Easy to the airport", "ไปสนามบินง่าย", "Близко к аэропорту", "About 20–30 minutes to Phuket Airport.", "ไปสนามบินภูเก็ตประมาณ 20–30 นาที", "Около 20–30 минут до аэропорта Пхукета."),
     "gym":      ("Technogym fitness", "ฟิตเนส Technogym", "Фитнес Technogym", "A gym fitted with Technogym equipment.", "ฟิตเนสพร้อมอุปกรณ์ Technogym", "Спортзал с оборудованием Technogym."),
     "wellness": ("Near wellness", "ใกล้เวลเนส", "Рядом велнес", "Gyms, yoga and spas nearby.", "ใกล้ยิม โยคะ และสปา", "Рядом спортзалы, йога и спа."),
@@ -84,6 +85,7 @@ FIT_ICONS = {
     "cafe": '<path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3c-.8 1 .8 2 0 3M12 3c-.8 1 .8 2 0 3"/>',
     "beach": '<path d="M2 18c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M12 15V6"/><path d="M4 8a8 8 0 0 1 16 0z"/>',
     "parking": '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M10 16V8h3a2.5 2.5 0 0 1 0 5h-3"/>',
+    "mall": '<path d="M5 8h14l-1 12H6z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/>',
     "airport": '<path d="M2 16l20-6-3-2-6 2-6-5-2 1 4 5-4 1.2-2-1.5-1.5.5z"/><path d="M3 20h18"/>',
     "gym": '<path d="M6 7v10M3.5 9.5v5M18 7v10M20.5 9.5v5M6 12h12"/>',
     "wellness": '<path d="M12 20c-4 0-8-2.5-8-7 3 0 5.5 1.5 8 4 2.5-2.5 5-4 8-4 0 4.5-4 7-8 7z"/><path d="M12 17c-2-2.5-2-6.5 0-10 2 3.5 2 7.5 0 10z"/>',
@@ -93,12 +95,12 @@ FIT_ICONS = {
 FITS = {
     "angsana-oceanview": ["beach", "gym", "wellness", "sauna", "cafe", "cook"],
     "standard-residence-bangtao": ["beach", "gym", "wellness", "sauna", "cafe", "nomad", "cook"],
-    "the-aqua": ["beach", "gym", "cafe", "cook", "pet", "parking"],
-    "the-space": ["nomad", "pet", "cook", "parking", "airport"],
-    "the-base": ["nomad", "cook", "parking", "airport", "pet"],
+    "the-aqua": ["beach", "gym", "cafe", "cook", "pet", "parking", "mall"],
+    "the-space": ["nomad", "pet", "cook", "parking", "airport", "mall"],
+    "the-base": ["nomad", "cook", "parking", "airport", "pet", "mall"],
     "cassia": ["beach", "wellness", "sauna", "cafe"],
-    "sky-park": ["nomad", "cafe", "wellness", "parking", "airport"],
-    "canvas-sansiri": ["pet", "cook", "parking", "sauna", "airport"],
+    "sky-park": ["nomad", "cafe", "wellness", "parking", "airport", "mall"],
+    "canvas-sansiri": ["pet", "cook", "parking", "sauna", "airport", "mall"],
 }
 
 
