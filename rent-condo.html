@@ -302,14 +302,6 @@ footer .legal{border-top:1px solid color-mix(in srgb,var(--page) 18%,transparent
       <a href="#owners" data-tab="owner"><b data-th="ฉันเป็นเจ้าของห้อง →" data-ru="Я владелец →">I own a condominium →</b><span data-th="ลงประกาศให้เช่ากับเรา" data-ru="Сдайте квартиру с нами">List it with us</span></a>
     </div>
 
-    <form class="finder" id="finder" aria-label="Quick booking">
-      <label for="q-condo"><span data-th="คอนโด" data-ru="Кондо">Condominium</span>
-        <select id="q-condo" class="condo-select"><option value="" data-th="ยังไม่แน่ใจ — ช่วยแนะนำ" data-ru="Не знаю — посоветуйте">Not sure — advise me</option></select></label>
-      <label for="q-date"><span data-th="วันเข้าอยู่" data-ru="Заезд">Move-in</span><input id="q-date" type="date"></label>
-      <label for="q-len"><span data-th="ระยะเช่า" data-ru="Срок аренды">Lease</span>
-        <select id="q-len"><option value="" data-th="ยังไม่ระบุ" data-ru="Любой">Any</option><option value="1 month" data-th="1 เดือน" data-ru="1 месяц">1 month</option><option value="3 months" data-th="3 เดือน" data-ru="3 месяца">3 months</option><option value="6 months" data-th="6 เดือน" data-ru="6 месяцев">6 months</option><option value="12 months" data-th="12 เดือน" data-ru="12 месяцев">12 months</option></select></label>
-      <button class="btn gold" type="submit" data-th="นัดดูห้อง" data-ru="Записаться на просмотр">Book a viewing</button>
-    </form>
 
   </div>
 </div>
@@ -576,12 +568,6 @@ footer .legal{border-top:1px solid color-mix(in srgb,var(--page) 18%,transparent
     $("#appointment").scrollIntoView({behavior:"smooth",block:"start"});
     setTimeout(function(){try{$("#f-name").focus({preventScroll:true})}catch(e){}},500);
   }
-  /* quick booking bar copies its values into the full form */
-  $("#finder").addEventListener("submit",function(e){
-    e.preventDefault();
-    $("#f-date").value=$("#q-date").value;$("#f-len").value=$("#q-len").value;
-    goForm($("#q-condo").value);
-  });
   $$('a[href="#appointment"]').forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();goForm("")})});
 
   /* area filter */
