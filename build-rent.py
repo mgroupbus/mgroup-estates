@@ -19,6 +19,12 @@ SB = "https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property
 
 # img: path under the site root, or a full URL. Empty = brown placeholder.
 PROJECTS = [
+    dict(slug="angsana-oceanview", name="Angsana Oceanview", code="AN",
+         area="Laguna · Bang Tao Beach", area_th="ลากูน่า · หาดบางเทา", filt="laguna bangtao", img="",
+         lo=80000, hi=250000, lease="Monthly – yearly", lease_th="รายเดือน – รายปี",
+         best="Beachfront living", best_th="อยู่ริมหาด",
+         desc="Beachfront residences by Angsana in Laguna Phuket, on Bang Tao Beach. Sea views, resort facilities and the Laguna lifestyle on your doorstep.",
+         desc_th="เรสซิเดนซ์ริมหาดโดย Angsana ในลากูน่า ภูเก็ต บนหาดบางเทา วิวทะเล สิ่งอำนวยความสะดวกระดับรีสอร์ต และไลฟ์สไตล์ลากูน่าใกล้ตัว"),
     dict(slug="standard-residence-bangtao", name="The Standard Residence Bangtao", code="SR",
          area="Bang Tao", area_th="บางเทา", filt="bangtao", img="assets/rent/standard-residence-bangtao.jpg",
          lo=70000, hi=180000, lease="Monthly – yearly", lease_th="รายเดือน – รายปี",
@@ -89,6 +95,7 @@ FIT_ICONS = {
 }
 
 FITS = {
+    "angsana-oceanview": ["beach", "wellness", "sauna", "cafe", "cook"],
     "standard-residence-bangtao": ["beach", "wellness", "sauna", "cafe", "nomad", "cook"],
     "the-aqua": ["beach", "cafe", "cook", "pet", "parking"],
     "the-space": ["nomad", "pet", "cook", "parking", "airport"],
@@ -263,6 +270,14 @@ def update_main():
         s = s.replace("<!-- FAQ -->", nest_block() + "\n\n<!-- FAQ -->", 1)
     if "/* Nest+ concierge band */" not in s:
         s = s.replace("/* tabs: tenant / owner */", NEST_CSS.strip() + "\n\n/* tabs: tenant / owner */", 1)
+    n = len(PROJECTS)
+    for pat, rep in [(r"All \(\d+\)", f"All ({n})"), (r"ทั้งหมด \(\d+\)", f"ทั้งหมด ({n})"), (r"Все \(\d+\)", f"Все ({n})"),
+                     (r"See \d+ condos", f"See {n} condos"), (r"ดู \d+ คอนโด", f"ดู {n} คอนโด"), (r"\d+ кондо и запись", f"{n} кондо и запись")]:
+        s = re.sub(pat, rep, s)
+    items = ",\n".join(
+        '   {"@type":"ListItem","position":%d,"item":{"@type":"ApartmentComplex","name":%s,"url":"%s/rent/%s","address":{"@type":"PostalAddress","addressLocality":%s,"addressRegion":"Phuket","addressCountry":"TH"}}}'
+        % (i + 1, json.dumps(p["name"]), SITE, p["slug"], json.dumps(p["area"].replace(" · ", ", "))) for i, p in enumerate(PROJECTS))
+    s = re.sub(r'\{"@type":"ItemList".*?\]\},\n', lambda m: '{"@type":"ItemList","name":"Condominiums for rent in Bang Tao and Cherng Talay, Phuket","numberOfItems":%d,"itemListElement":[\n%s]},\n' % (n, items), s, count=1, flags=re.S)
     # structured data: each condo points at its own page
     for p in PROJECTS:
         s = re.sub(r'"url":"https://mgroupestates.com/rent-condo#' + re.escape(p["slug"]) + '"',
@@ -649,11 +664,16 @@ def update_index_files():
     open(sm, "w", encoding="utf-8").write(s)
     lt = os.path.join(ROOT, "llms.txt")
     s = open(lt, encoding="utf-8").read()
-    if "## Condos for rent" not in s:
+    s = re.sub(r"## Condos for rent \(\d+\)\n\n.*?\n\n(?=## Notes)", "", s, flags=re.S)
+    if True:
         lines = "\n".join(f"- [{p['name']}]({SITE}/rent/{p['slug']}): Condominium for rent, {p['area']}, Phuket, 1–3 bedrooms, ฿{baht(p['lo'])}–{baht(p['hi'])} per month"
                           for p in PROJECTS)
         s = s.replace("## Notes", f"## Condos for rent ({len(PROJECTS)})\n\n{lines}\n\n## Notes")
     open(lt, "w", encoding="utf-8").write(s)
+
+
+ORDER = ["angsana-oceanview", "standard-residence-bangtao", "the-aqua", "the-space", "the-base", "canvas-sansiri", "cassia", "sky-park"]
+PROJECTS.sort(key=lambda p: ORDER.index(p["slug"]))
 
 
 if __name__ == "__main__":
