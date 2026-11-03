@@ -512,7 +512,7 @@ def project_page(p):
                 {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
                 {"@type": "ListItem", "position": 2, "name": "Condos for rent", "item": SITE + "/rent-condo"},
                 {"@type": "ListItem", "position": 3, "name": p["name"], "item": page_url}]},
-            {"@type": "RealEstateAgent", "name": "MGROUP Estates", "url": SITE, "telephone": "+" + PHONE, "logo": SITE + "/assets/logo.png"},
+            {"@type": "RealEstateAgent", "name": "MGROUP Estates", "url": SITE, "logo": SITE + "/assets/logo.png"},
         ]}
     great = "\n".join(
         f'      <div><svg viewBox="0 0 24 24" aria-hidden="true">{FIT_ICONS[k]}</svg><b data-th="{esc(TAGS[k][1])}" data-ru="{esc(TAGS[k][2])}">{esc(TAGS[k][0])}</b>'
@@ -627,7 +627,7 @@ def project_page(p):
   <div class="wrap">
     <small data-th="นำเสนอโดย">Presented by</small>
     <img src="../assets/logo.png" alt="MGROUP Estates" width="157" height="20">
-    <p>M GROUP BUSINESS CO.,LTD · 63/202 Thepkasattri Rd, Kohkaew, Muang, Phuket 83000<br>WhatsApp <a href="https://wa.me/{PHONE}" target="_blank" rel="noopener">+66 89 972 3321</a> · contact@mgroupestates.com</p>
+    <p>M GROUP BUSINESS CO.,LTD · 63/202 Thepkasattri Rd, Kohkaew, Muang, Phuket 83000<br><a href="https://wa.me/{PHONE}" target="_blank" rel="noopener" data-th="แชตกับเราทาง WhatsApp" data-ru="Написать нам в WhatsApp">Chat with us on WhatsApp</a> · contact@mgroupestates.com</p>
   </div>
 </footer>
 
