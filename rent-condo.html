@@ -148,14 +148,6 @@ input,select,textarea{font:400 15px var(--body);color:var(--ink);padding:12px 14
 select{background-image:linear-gradient(45deg,transparent 50%,var(--stone) 50%),linear-gradient(135deg,var(--stone) 50%,transparent 50%);background-position:calc(100% - 18px) 52%,calc(100% - 13px) 52%;background-size:5px 5px;background-repeat:no-repeat;padding-right:34px}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
 
-/* quick answer strip (for people and AI search) */
-.facts-strip{border-bottom:1px solid var(--line);background:var(--paper)}
-.facts-strip .wrap{display:grid;grid-template-columns:repeat(4,1fr);padding-block:18px}
-.facts-strip div{padding:6px 16px;border-left:1px solid var(--line);font-size:13.5px;color:var(--mid)}
-.facts-strip div:first-child{border-left:0;padding-left:0}
-.facts-strip b{display:block;font-family:var(--display);font-size:24px;font-weight:600;color:var(--ink);line-height:1.2}
-@media(max-width:720px){.facts-strip .wrap{grid-template-columns:1fr 1fr;gap:12px 0}.facts-strip div:nth-child(3){border-left:0;padding-left:0}}
-
 section{padding-block:80px}
 section.band{background:var(--band);border-block:1px solid var(--line)}
 .head{max-width:640px;margin-bottom:34px;display:grid;gap:10px}
@@ -310,17 +302,7 @@ footer .legal{border-top:1px solid color-mix(in srgb,var(--page) 18%,transparent
   </div>
 </div>
 
-<!-- QUICK FACTS: short, quotable answers for searchers and AI assistants -->
-<div class="facts-strip" aria-label="Quick facts">
-  <div class="wrap">
-    <div><b>7</b><span data-th="คอนโดให้เลือก">condos to choose from</span></div>
-    <div><b>4</b><span data-th="ขั้นตอน จากนัดถึงเซ็นสัญญา">steps from enquiry to lease</span></div>
-    <div><b data-th="รายเดือน–รายปี">1–12 mo</b><span data-th="สัญญาเช่ายืดหยุ่น">flexible lease terms</span></div>
-    <div><b>TH · EN · RU</b><span data-th="ทีมงานพูดได้ 3 ภาษา">our team speaks</span></div>
-  </div>
-</div>
-
-<!-- RESIDENCES -->
+ <!-- RESIDENCES -->
 <section id="residences">
   <div class="wrap">
     <div class="head">
