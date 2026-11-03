@@ -172,10 +172,10 @@ section.band{background:var(--band);border-block:1px solid var(--line)}
 details.item{scroll-margin-top:84px;overflow:hidden;background:var(--paper);border:1px solid var(--line);border-radius:16px;transition:border-color .2s,box-shadow .2s}
 details.item[open]{border-color:var(--accent);box-shadow:var(--shadow)}
 details.item>summary{list-style:none;cursor:pointer;position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;min-height:clamp(190px,30vw,260px);padding:20px;border-radius:15px;color:#fffaf2;
-  background:linear-gradient(180deg,rgba(20,15,10,0) 30%,rgba(20,15,10,.82)),var(--img,none) center/cover no-repeat,radial-gradient(120% 90% at 85% 0%,#a0865c 0,transparent 55%),linear-gradient(140deg,#5b4936,#241c15)}
+  background:linear-gradient(180deg,rgba(20,15,10,.08) 0%,rgba(20,15,10,.38) 45%,rgba(20,15,10,.88)),var(--img,none) center/cover no-repeat,radial-gradient(120% 90% at 85% 0%,#a0865c 0,transparent 55%),linear-gradient(140deg,#5b4936,#241c15)}
 details.item[open]>summary{border-radius:15px 15px 0 0}
 summary::-webkit-details-marker{display:none}
-.ttl{min-width:0;display:grid;gap:4px}
+.ttl{min-width:0;display:grid;gap:4px;text-shadow:0 1px 12px rgba(0,0,0,.35)}
 .ttl .area{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:#e8d3a8}
 .ttl h3{font-size:clamp(26px,3.4vw,34px);color:#fffaf2}
 .ttl .price{font-size:15.5px;font-weight:600;font-variant-numeric:tabular-nums}
@@ -196,6 +196,19 @@ dl.spec dd{font-size:14px;margin-top:3px}
 .share button{font:500 12px var(--body);padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--page);color:var(--ink);cursor:pointer}
 .share button:hover{border-color:var(--accent);color:var(--accent)}
 @media(max-width:720px){dl.spec{grid-template-columns:1fr 1fr}dl.spec div:nth-child(3){border-left:0}dl.spec div:nth-child(n+3){border-top:1px solid var(--line)}details.item>summary{padding:16px}}
+
+
+/* layout preview switch */
+.layout{display:flex;align-items:center;gap:6px;margin:-6px 0 16px;font-size:12.5px;color:var(--mid)}
+.layout button{font:500 12px var(--body);padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--mid);cursor:pointer}
+.layout button.on{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+/* left to right: swipe row, about 1.2 cards visible on phones */
+.acc.row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;align-items:flex-start;scrollbar-width:thin}
+.acc.row>details.item{flex:0 0 min(82%,340px);scroll-snap-align:start}
+.acc.row>details.item>summary{min-height:clamp(300px,52vw,380px)}
+.acc.row dl.spec{grid-template-columns:1fr 1fr}
+.acc.row dl.spec div:nth-child(3){border-left:0}
+.acc.row dl.spec div:nth-child(n+3){border-top:1px solid var(--line)}
 
 /* tabs: tenant / owner */
 .tabs{display:inline-flex;padding:4px;border-radius:999px;background:var(--paper);border:1px solid var(--line);margin-bottom:30px}
@@ -325,9 +338,10 @@ footer .legal{border-top:1px solid color-mix(in srgb,var(--page) 18%,transparent
       <button type="button" data-f="cherngtalay" data-th="เชิงทะเล">Cherng Talay</button>
     </div>
 
+    <div class="layout" role="group" aria-label="Layout"><span data-th="รูปแบบ:">Layout:</span><button type="button" class="on" data-l="list" data-th="บนลงล่าง">Top to bottom</button><button type="button" data-l="row" data-th="ซ้าย–ขวา">Left to right</button></div>
     <div class="acc" id="acc">
       <details class="item" id="standard-residence-bangtao" data-name="The Standard Residence Bangtao" data-area="bangtao">
-        <summary style="--img:url('https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property-bucket/sale/p6/project/1776605345368-rwkzb8.webp')"><span class="ttl"><span class="area" data-th="บางเทา">Bang Tao</span><h3>The Standard Residence Bangtao</h3><span class="price">฿70,000 – 180,000 <small data-th="/ เดือน">/ month</small></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+        <summary style="--img:url('assets/rent/standard-residence-bangtao.jpg')"><span class="ttl"><span class="area" data-th="บางเทา">Bang Tao</span><h3>The Standard Residence Bangtao</h3><span class="price">฿70,000 – 180,000 <small data-th="/ เดือน">/ month</small></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
         <div class="body">
           <p data-th="แบรนด์เรสซิเดนซ์ระดับลักชัวรีโดย The Standard และ Central Group ในทำเลหลักของบางเทา เหมาะกับผู้ที่ต้องการไลฟ์สไตล์ดีไซน์จัดใกล้ชายหาด">Luxury branded residences by The Standard and Central Group, in one of Bang Tao's prime locations. For tenants who want a design-led home close to the beach.</p>
           <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="บางเทา, เชิงทะเล">Bang Tao, Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="รายเดือน – รายปี">Monthly – yearly</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="ไลฟ์สไตล์ริมหาด">Beach lifestyle</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="ตามห้องและฤดูกาล">Varies by unit &amp; season</dd></div></dl>
@@ -357,7 +371,7 @@ footer .legal{border-top:1px solid color-mix(in srgb,var(--page) 18%,transparent
       </details>
 
       <details class="item" id="the-base" data-name="The Base Choeng Thale" data-area="cherngtalay">
-        <summary><span class="ttl"><span class="area" data-th="เชิงทะเล">Cherng Talay</span><h3>The Base Choeng Thale</h3><span class="price">฿15,000 – 30,000 <small data-th="/ เดือน">/ month</small></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+        <summary style="--img:url('assets/rent/the-base.jpg')"><span class="ttl"><span class="area" data-th="เชิงทะเล">Cherng Talay</span><h3>The Base Choeng Thale</h3><span class="price">฿15,000 – 30,000 <small data-th="/ เดือน">/ month</small></span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5l5 5 5-5"/></svg></span></summary>
         <div class="body">
           <p data-th="คอนโดในเชิงทะเล สำหรับผู้เช่าที่ต้องการทำเลใช้ชีวิตประจำวันได้สะดวก ใกล้โรงเรียนนานาชาติ ร้านค้า และชายหาดฝั่งตะวันตก">A condominium in Cherng Talay for tenants who want an easy everyday base, near international schools, shops and the west-coast beaches.</p>
           <dl class="spec"><div><dt data-th="ทำเล">Area</dt><dd data-th="เชิงทะเล">Cherng Talay</dd></div><div><dt data-th="ระยะเช่า">Lease</dt><dd data-th="6 – 12 เดือน">6 – 12 months</dd></div><div><dt data-th="เหมาะกับ">Best for</dt><dd data-th="ครอบครัว · คนทำงาน">Families · professionals</dd></div><div><dt data-th="ค่าเช่า">Rent</dt><dd data-th="ตามห้องและฤดูกาล">Varies by unit &amp; season</dd></div></dl>
@@ -635,6 +649,12 @@ footer .legal{border-top:1px solid color-mix(in srgb,var(--page) 18%,transparent
     items.forEach(function(d){d.hidden=!(b.dataset.f==="all"||d.dataset.area.split(" ").indexOf(b.dataset.f)>-1)});
   })});
 
+
+  /* layout preview: list (top to bottom) or row (left to right) */
+  $$(".layout button").forEach(function(b){b.addEventListener("click",function(){
+    $$(".layout button").forEach(function(x){x.classList.toggle("on",x===b)});
+    $("#acc").classList.toggle("row",b.dataset.l==="row");
+  })});
   /* one condo open at a time */
   items.forEach(function(d){d.addEventListener("toggle",function(){if(d.open)items.forEach(function(o){if(o!==d)o.open=false})})});
 
