@@ -380,13 +380,27 @@ section{padding-block:44px}
 .great span{font-size:13.5px;color:var(--mid);align-self:start}
 @media(max-width:720px){.great{grid-template-columns:1fr 1fr}}
 @media(max-width:420px){.great{grid-template-columns:1fr}}
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:16px;background:var(--paper);overflow:hidden}
-.steps li{list-style:none;padding:18px;border-left:1px solid var(--line);display:grid;gap:4px}
-.steps li:first-child{border-left:0}
-.steps i{font:italic 500 26px var(--display);color:var(--accent);font-variant-numeric:lining-nums}
-.steps b{font-weight:600;font-size:14.5px}
-.steps span{font-size:13px;color:var(--mid)}
-@media(max-width:720px){.steps{grid-template-columns:1fr 1fr}.steps li:nth-child(3){border-left:0}.steps li:nth-child(n+3){border-top:1px solid var(--line)}}
+.steps-head{display:grid;gap:4px}
+.steps-head p{color:var(--mid);font-size:14.5px}
+.steps{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;position:relative;counter-reset:none}
+.steps li:not(:last-child)::after{content:"";position:absolute;left:44px;right:-12px;top:21px;height:2px;background:var(--line)}
+.steps li.now::after{background:var(--accent)!important}
+.steps li{position:relative;display:grid;gap:12px;align-content:start;min-width:0}
+.steps .n{position:relative;z-index:1;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:600 17px var(--body);font-variant-numeric:tabular-nums;background:var(--paper);color:var(--accent);border:2px solid var(--accent)}
+.steps li.now .n{background:var(--accent);color:var(--accent-ink);box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 20%,transparent)}
+.steps li>div{display:grid;gap:3px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--paper);height:100%}
+.steps li.now>div{border-color:var(--accent)}
+.steps small{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--accent)}
+.steps b{font-weight:600;font-size:15.5px;line-height:1.3}
+.steps span{font-size:13.5px;color:var(--mid)}
+.steps-cta{display:flex;flex-wrap:wrap;gap:10px}
+.steps-cta .btn.wa{min-height:52px;padding:0 24px;font-size:14px}
+@media(max-width:860px){
+  .steps{grid-template-columns:1fr;gap:10px}
+  .steps li:not(:last-child)::after{left:21px;right:auto;top:44px;bottom:-10px;width:2px;height:auto}
+  .steps li{grid-template-columns:44px 1fr;gap:14px}
+  .steps-cta .btn{flex:1 1 100%}
+}
 
 .others{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}
 .others a{flex:0 0 min(70%,260px);scroll-snap-align:start;min-height:150px;border-radius:14px;padding:14px;display:flex;flex-direction:column;justify-content:flex-end;text-decoration:none;color:#fffaf2;background:linear-gradient(180deg,rgba(20,15,10,.1),rgba(20,15,10,.85)),var(--img,none) center/cover no-repeat,radial-gradient(120% 90% at 85% 0%,#a0865c 0,transparent 55%),linear-gradient(140deg,#5b4936,#241c15)}
@@ -579,13 +593,20 @@ def project_page(p):
 
 <section style="padding-top:0">
   <div class="wrap" style="display:grid;gap:14px">
-    <h2 style="font-size:clamp(26px,3.4vw,34px)" data-th="เช่าง่ายใน 4 ขั้นตอน">Rent in four steps</h2>
+    <div class="steps-head">
+      <h2 style="font-size:clamp(26px,3.4vw,34px)" data-th="เช่าง่ายใน 4 ขั้นตอน">Rent in four steps</h2>
+      <p data-th="ใช้เวลาแค่ 1 นาทีสำหรับขั้นตอนแรก ที่เหลือเราดูแลให้">Step 1 takes a minute. We handle the rest.</p>
+    </div>
     <ol class="steps">
-      <li><i>1</i><b data-th="กดนัดหมาย">Book a viewing</b><span data-th="เลือกห้องแล้วส่งทาง WhatsApp">Pick a unit and send on WhatsApp</span></li>
-      <li><i>2</i><b data-th="แอดมินติดต่อกลับ">Admin contacts you</b><span data-th="ภายในวันทำการ">Same business day</span></li>
-      <li><i>3</i><b data-th="นัดวันและยืนยัน">Confirm the date</b><span data-th="ดูห้องจริงหรือวิดีโอคอล">In person or video call</span></li>
-      <li><i>4</i><b data-th="ทำสัญญาเช่า">Sign the lease</b><span data-th="รับกุญแจและย้ายเข้า">Get the keys and move in</span></li>
+      <li class="now"><span class="n">1</span><div><small data-th="ขั้นตอนที่ 1 · ตอนนี้">Step 1 · Now</small><b data-th="เลือกห้องแล้วกดนัดดู">Pick a unit and tap Book viewing</b><span data-th="ข้อความ WhatsApp ถูกเตรียมไว้ให้แล้ว แค่กดส่ง">Your WhatsApp message is ready. Just send it.</span></div></li>
+      <li><span class="n">2</span><div><small data-th="ขั้นตอนที่ 2 · ภายในวันทำการ">Step 2 · Same business day</small><b data-th="แอดมินโทรหรือแชตกลับ">Our admin gets back to you</b><span data-th="ส่งห้องว่าง รูป และราคาล่าสุดให้">With available units, photos and rates.</span></div></li>
+      <li><span class="n">3</span><div><small data-th="ขั้นตอนที่ 3 · วันที่คุณสะดวก">Step 3 · A day that suits you</small><b data-th="ดูห้องจริงหรือวิดีโอคอล">View the unit</b><span data-th="ไปดูที่ห้อง หรือดูผ่านวิดีโอคอลก็ได้">In person or by video call.</span></div></li>
+      <li><span class="n">4</span><div><small data-th="ขั้นตอนที่ 4 · ย้ายเข้า">Step 4 · Move in</small><b data-th="เซ็นสัญญา รับกุญแจ">Sign the lease, get the keys</b><span data-th="เราเตรียมสัญญาและส่งมอบห้องให้">We prepare the agreement and hand over the unit.</span></div></li>
     </ol>
+    <div class="steps-cta">
+      <a class="btn wa ask-all" href="https://wa.me/{PHONE}" target="_blank" rel="noopener">{WA_ICON}<span data-th="เริ่มขั้นตอนที่ 1 · นัดดูห้องทาง WhatsApp">Start step 1 · Book on WhatsApp</span></a>
+      <a class="btn line" href="#units" data-th="ดูห้องว่างก่อน">See units first</a>
+    </div>
   </div>
 </section>
 
