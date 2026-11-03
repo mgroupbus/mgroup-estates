@@ -124,61 +124,57 @@ NEST = [
      "Move-in help", "ช่วยย้ายเข้า", "Помощь с заездом",
      "We meet you at the condo, check the unit with you and hand over the keys.", "พบคุณที่ห้อง ตรวจห้องด้วยกัน และส่งมอบกุญแจ", "Встречаем в квартире, вместе проверяем её и передаём ключи."),
     ('<path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1"/>',
-     "Internet & utilities", "อินเทอร์เน็ตและน้ำไฟ", "Интернет и коммуналка",
+     "Internet & utilities", "เน็ต · น้ำไฟ", "Интернет и коммуналка",
      "We set up Wi-Fi, electricity and water for you.", "ติดตั้ง Wi-Fi และจัดการค่าน้ำค่าไฟให้", "Подключаем Wi-Fi, электричество и воду."),
     ('<path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/>',
-     "Cleaning & laundry", "ทำความสะอาดและซักรีด", "Уборка и стирка",
+     "Cleaning & laundry", "แม่บ้าน · ซักรีด", "Уборка и стирка",
      "Book weekly cleaning or laundry through us.", "จองแม่บ้านรายสัปดาห์หรือซักรีดผ่านเรา", "Еженедельная уборка или стирка через нас."),
     ('<path d="M3 15l2-6a2 2 0 0 1 1.9-1.4h10.2A2 2 0 0 1 19 9l2 6v3h-3v-2H6v2H3z"/><circle cx="7.5" cy="13.5" r=".8"/><circle cx="16.5" cy="13.5" r=".8"/>',
-     "Car & scooter rental", "เช่ารถยนต์และมอเตอร์ไซค์", "Аренда машины и байка",
+     "Car & scooter", "รถยนต์ · มอเตอร์ไซค์", "Машина и байк",
      "A car or scooter delivered to your condo.", "เช่ารถยนต์หรือมอเตอร์ไซค์ ส่งถึงคอนโด", "Машина или байк с доставкой к кондо."),
     ('<path d="M2 16l20-6-3-2-6 2-6-5-2 1 4 5-4 1.2-2-1.5-1.5.5z"/><path d="M3 20h18"/>',
      "Airport transfers", "รับส่งสนามบิน", "Трансфер в аэропорт",
      "Pick-up and drop-off at Phuket Airport.", "รับส่งสนามบินภูเก็ต", "Встреча и проводы в аэропорту Пхукета."),
     ('<path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7 6.3 21l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.5 2.5-2.5-.6-.6-2.5z"/>',
-     "Repairs during your lease", "แจ้งซ่อมระหว่างสัญญา", "Ремонт во время аренды",
+     "Repairs", "แจ้งซ่อม", "Ремонт",
      "Message us and we arrange the fix with the owner.", "แจ้งเรา เราประสานเจ้าของห้องและช่างให้", "Напишите нам — мы организуем ремонт с владельцем."),
 ]
 
 NEST_CSS = """
-/* Nest+ concierge: light band, intro on the left, service cards on the right */
-.nest{background:var(--band);border-block:1px solid var(--line)}
-.nest .wrap{padding-block:64px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
-.nest .intro{display:grid;gap:14px;position:sticky;top:24px}
-.nest .eyebrow{font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:var(--accent)}
-.nest h2{font-family:var(--display);font-weight:500;font-size:clamp(44px,6vw,72px);line-height:.95;color:var(--ink)}
-.nest h2 .plus{color:var(--accent);font-style:italic}
-.nest h2 small{display:block;font-family:var(--body);font-size:.26em;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--mid);margin-top:10px}
-.nest .lead{max-width:40ch;color:var(--mid);font-size:16px}
-.nest .badge{display:inline-flex;align-items:center;gap:8px;justify-self:start;font-size:12.5px;font-weight:500;color:var(--ink);padding:7px 14px 7px 8px;border-radius:999px;background:var(--paper);border:1px solid var(--line)}
-.nest .badge i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-style:normal;font-size:13px;font-weight:700}
-.nest .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
-.nest ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.nest li{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px;display:grid;gap:6px;align-content:start;min-width:0;transition:transform .2s,box-shadow .2s,border-color .2s}
-.nest li:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
-.nest li svg{width:46px;height:46px;padding:11px;margin-bottom:6px;border-radius:14px;background:color-mix(in srgb,var(--accent) 12%,var(--paper));color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round}
-.nest li b{font-weight:600;font-size:16px;color:var(--ink)}
-.nest li span{font-size:14px;color:var(--mid)}
-@media(max-width:900px){.nest .wrap{grid-template-columns:1fr;gap:26px;padding-block:44px}.nest .intro{position:static}}
-@media(max-width:460px){.nest ul{grid-template-columns:1fr}.nest li{grid-template-columns:46px 1fr;gap:2px 14px;padding:16px}.nest li svg{grid-row:span 2;margin:0}}
+/* Nest+ concierge: compact header + six small icon tiles */
+.nest{background:var(--band);border-block:1px solid var(--line);padding-block:0}
+.nest .wrap{padding-block:40px;display:grid;gap:18px}
+.nest .top{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px 24px}
+.nest .top>div{display:grid;gap:4px;min-width:0}
+.nest .eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--accent)}
+.nest h2{font-family:var(--display);font-weight:500;font-size:clamp(30px,4vw,40px);line-height:1;color:var(--ink)}
+.nest h2 .plus{color:var(--accent)}
+.nest .lead{color:var(--mid);font-size:14.5px}
+.nest .ask{font-size:13px;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap}
+.nest .ask:hover{text-decoration:underline}
+.nest ul{list-style:none;display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.nest li{display:grid;justify-items:center;gap:8px;text-align:center;padding:14px 8px;border-radius:14px;background:var(--paper);border:1px solid var(--line);min-width:0}
+.nest li svg{width:26px;height:26px;color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round}
+.nest li b{font-weight:500;font-size:13px;line-height:1.3;color:var(--ink)}
+@media(max-width:860px){.nest ul{grid-template-columns:repeat(3,1fr)}}
 """
 
 
 def nest_block():
     items = "\n".join(
-        f'        <li><svg viewBox="0 0 24 24" aria-hidden="true">{icon}</svg>'
-        f'<b data-th="{esc(th)}" data-ru="{esc(ru)}">{esc(en)}</b>'
-        f'<span data-th="{esc(dth)}" data-ru="{esc(dru)}">{esc(d)}</span></li>'
+        f'      <li title="{esc(d)}"><svg viewBox="0 0 24 24" aria-hidden="true">{icon}</svg>'
+        f'<b data-th="{esc(th)}" data-ru="{esc(ru)}">{esc(en)}</b></li>'
         for icon, en, th, ru, d, dth, dru in NEST)
     return f"""<!-- NEST:START (generated by build-rent.py) -->
 <section class="nest" id="nest">
   <div class="wrap">
-    <div class="intro">
-      <p class="eyebrow" data-th="MGROUP Estates ดูแลอะไรให้คุณ" data-ru="Чем помогает MGROUP Estates">What MGROUP Estates takes care of</p>
-      <h2>Nest<span class="plus">+</span><small>concierge</small></h2>
-      <p class="lead" data-th="เช่ากับเรา ใช้บริการ Nest+ concierge ได้ตลอดสัญญาเช่า" data-ru="Арендуйте у нас и пользуйтесь Nest+ concierge весь срок аренды.">Rent with us and you can use Nest+ concierge for as long as your lease runs.</p>
-      <span class="badge"><i>✓</i><span data-th="รวมในการเช่ากับ MGROUP Estates" data-ru="Входит в аренду с MGROUP Estates">Included when you rent with MGROUP Estates</span></span>
-      <div class="cta"><a class="btn gold" href="https://wa.me/{PHONE}?text=Nest%2B%20concierge" target="_blank" rel="noopener" data-th="สอบถาม Nest+" data-ru="Узнать о Nest+">Ask about Nest+</a></div>
+    <div class="top">
+      <div>
+        <p class="eyebrow" data-th="MGROUP Estates ดูแลอะไรให้คุณ" data-ru="Чем помогает MGROUP Estates">What MGROUP Estates takes care of</p>
+        <h2>Nest<span class="plus">+</span> concierge</h2>
+        <p class="lead" data-th="เช่ากับเรา ใช้บริการ Nest+ concierge ได้ตลอดสัญญาเช่า" data-ru="Арендуйте у нас и пользуйтесь Nest+ concierge весь срок аренды.">Rent with us and you can use Nest+ concierge for as long as your lease runs.</p>
+      </div>
+      <a class="ask" href="https://wa.me/{PHONE}?text=Nest%2B%20concierge" target="_blank" rel="noopener" data-th="สอบถาม Nest+ →" data-ru="Узнать о Nest+ →">Ask about Nest+ →</a>
     </div>
     <ul>
 {items}
