@@ -135,11 +135,25 @@ nav.menu a:hover{color:var(--ink)}
 .hero p.lead{font-size:clamp(16px,2vw,18.5px);max-width:52ch;color:rgba(255,250,242,.86)}
 .pres{display:flex;align-items:center;gap:12px;margin-top:22px;font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,250,242,.7)}
 .pres img{height:14px;width:auto;filter:invert(1)}
-.choose{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:30px;max-width:620px}
-.choose a{display:flex;flex-direction:column;gap:2px;padding:16px 18px;border-radius:14px;text-decoration:none;border:1px solid rgba(255,250,242,.35);background:rgba(255,250,242,.08);backdrop-filter:blur(6px);transition:background .2s,border-color .2s}
-.choose a:hover{background:rgba(255,250,242,.16);border-color:#e8d3a8}
-.choose b{font-weight:600;font-size:15.5px}
-.choose span{font-size:13px;color:rgba(255,250,242,.75)}
+.choose{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:30px;max-width:640px}
+.choose a{position:relative;overflow:hidden;isolation:isolate;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 16px 16px 20px;border-radius:16px;text-decoration:none;color:#fffaf2;border:1px solid rgba(255,250,242,.38);background:rgba(255,250,242,.1);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),background .35s,border-color .35s,box-shadow .35s,color .35s}
+/* light sweep across the card on hover */
+.choose a::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-110%);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.choose .txt{display:grid;gap:2px;min-width:0}
+.choose b{font-weight:600;font-size:16px;transition:color .35s}
+.choose .txt>span{font-size:13px;color:rgba(255,250,242,.78);transition:color .35s}
+.choose .go{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,250,242,.55);color:#fffaf2;transition:transform .35s cubic-bezier(.2,.8,.2,1),background .35s,border-color .35s,color .35s}
+.choose .go svg{width:16px;height:16px}
+.choose a:hover,.choose a:focus-visible{transform:translateY(-5px);background:#fffaf2;border-color:#fffaf2;box-shadow:0 22px 44px -18px rgba(0,0,0,.6)}
+.choose a:hover::before,.choose a:focus-visible::before{transform:translateX(110%)}
+.choose a:hover b,.choose a:focus-visible b{color:#33291f}
+.choose a:hover .txt>span,.choose a:focus-visible .txt>span{color:#6b5a47}
+.choose a:hover .go,.choose a:focus-visible .go{background:#8a6d3b;border-color:#8a6d3b;color:#fff;transform:translateX(4px) scale(1.08)}
+.choose a:hover .go svg{animation:nudge .9s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
+.choose a:active{transform:translateY(-1px) scale(.98)}
+@media (prefers-reduced-motion:reduce){.choose a,.choose a::before,.choose .go{transition:none}.choose a:hover .go svg{animation:none}}
 @media(max-width:520px){.choose{grid-template-columns:1fr}}
 
 /* booking bar */
@@ -194,6 +208,10 @@ details.q .chev svg{width:14px;height:14px}
 .fits button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .fits-box .nofit{color:var(--accent);margin-top:6px}
 .ttl .fitline{font-size:12px;color:#e8d3a8;margin-top:2px}
+
+
+
+
 
 
 
@@ -305,8 +323,8 @@ footer .legal{border-top:1px solid color-mix(in srgb,var(--page) 18%,transparent
   <div class="wrap">
     <h1 data-th="เลือกคอนโด นัดดูห้อง แล้วย้ายเข้าอยู่ได้เลย" data-ru="Выберите кондо. Запишитесь на просмотр. Заезжайте.">Pick a condominium. Book a viewing. <em>Move in.</em></h1>
     <div class="choose">
-      <a href="#residences"><b data-th="ฉันต้องการเช่า →" data-ru="Хочу арендовать →">I want to rent →</b><span data-th="ดู 7 คอนโดและนัดดูห้อง" data-ru="7 кондо и запись на просмотр">See 7 condominiums and book a viewing</span></a>
-      <a href="#owners" data-tab="owner"><b data-th="ฉันเป็นเจ้าของห้อง →" data-ru="Я владелец →">I own a condominium →</b><span data-th="ลงประกาศให้เช่ากับเรา" data-ru="Сдайте квартиру с нами">List it with us</span></a>
+      <a href="#residences"><span class="txt"><b data-th="ฉันต้องการเช่า" data-ru="Хочу арендовать">I want to rent</b><span data-th="ดู 7 คอนโดและนัดดูห้อง" data-ru="7 кондо и запись на просмотр">See 7 condominiums and book a viewing</span></span><i class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 8h10M9 4l4 4-4 4"/></svg></i></a>
+      <a href="#owners" data-tab="owner"><span class="txt"><b data-th="ฉันเป็นเจ้าของห้อง" data-ru="Я владелец">I own a condominium</b><span data-th="ลงประกาศให้เช่ากับเรา" data-ru="Сдайте квартиру с нами">List it with us</span></span><i class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 8h10M9 4l4 4-4 4"/></svg></i></a>
     </div>
 
 

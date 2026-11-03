@@ -268,7 +268,7 @@ def update_main():
     s = s.replace("/* tabs: tenant / owner */", NEST_CSS.strip() + "\n\n/* tabs: tenant / owner */", 1)
     n = len(PROJECTS)
     for pat, rep in [(r"All \(\d+\)", f"All ({n})"), (r"ทั้งหมด \(\d+\)", f"ทั้งหมด ({n})"), (r"Все \(\d+\)", f"Все ({n})"),
-                     (r"See \d+ condos", f"See {n} condos"), (r"ดู \d+ คอนโด", f"ดู {n} คอนโด"), (r"\d+ кондо и запись", f"{n} кондо и запись"),
+                     (r"See \d+ condo", f"See {n} condo"), (r"ดู \d+ คอนโด", f"ดู {n} คอนโด"), (r"\d+ кондо и запись", f"{n} кондо и запись"),
                      (r"\d+ hand-picked", f"{n} hand-picked")]:
         s = re.sub(pat, rep, s)
     items = ",\n".join(
