@@ -32,11 +32,11 @@ PROJECTS = [
          desc="Luxury branded residences by The Standard and Central Group, in one of Bang Tao's prime locations. For tenants who want a design-led home close to the beach.",
          desc_th="แบรนด์เรสซิเดนซ์ระดับลักชัวรีโดย The Standard และ Central Group ในทำเลหลักของบางเทา เหมาะกับผู้ที่ต้องการไลฟ์สไตล์ดีไซน์จัดใกล้ชายหาด"),
     dict(slug="the-aqua", name="The Aqua", code="AQ",
-         area="Bang Tao", area_th="บางเทา", filt="bangtao", img=SB + "rental/1793524859000-ax2co5.jpg",
+         area="Bang Tao", area_th="บางเทา", filt="bangtao", img="assets/rent/the-aqua.jpg",
          lo=60000, hi=120000, lease="Monthly – yearly", lease_th="รายเดือน – รายปี",
          best="Holidays · couples", best_th="พักผ่อน · คู่รัก",
-         desc="A resort-style condominium in Bang Tao, close to the beach, restaurants and Boat Avenue. Suits both short and long stays.",
-         desc_th="คอนโดสไตล์รีสอร์ตในย่านบางเทา ใกล้ชายหาด ร้านอาหาร และ Boat Avenue เหมาะกับการเช่าระยะสั้นและระยะยาว"),
+         desc="A luxury waterfront residence by Boat Pattana in Bang Tao, close to the beach, restaurants and Boat Avenue. Suits both short and long stays.",
+         desc_th="เรสซิเดนซ์ริมน้ำระดับลักชัวรีโดย Boat Pattana ในบางเทา ใกล้ชายหาด ร้านอาหาร และ Boat Avenue เหมาะกับการเช่าระยะสั้นและระยะยาว"),
     dict(slug="the-space", name="The Space Choeng Thale", code="SP",
          area="Cherng Talay", area_th="เชิงทะเล", filt="cherngtalay", img="",
          lo=18000, hi=35000, lease="6 – 12 months", lease_th="6 – 12 เดือน",
@@ -49,12 +49,6 @@ PROJECTS = [
          best="Families · professionals", best_th="ครอบครัว · คนทำงาน",
          desc="A condominium in Cherng Talay for tenants who want an easy everyday base, near international schools, shops and the west-coast beaches.",
          desc_th="คอนโดในเชิงทะเล สำหรับผู้เช่าที่ต้องการทำเลใช้ชีวิตประจำวันได้สะดวก ใกล้โรงเรียนนานาชาติ ร้านค้า และชายหาดฝั่งตะวันตก"),
-    dict(slug="cassia", name="Cassia", code="CA",
-         area="Laguna Phuket", area_th="ลากูน่า ภูเก็ต", filt="laguna bangtao", img="",
-         lo=35000, hi=90000, lease="Monthly – yearly", lease_th="รายเดือน – รายปี",
-         best="Holidays · families", best_th="พักผ่อน · ครอบครัว",
-         desc="A resort-style condominium inside Laguna Phuket, close to the lagoons, golf course and Bang Tao Beach. For a calm, green setting.",
-         desc_th="คอนโดสไตล์รีสอร์ตภายในลากูน่า ภูเก็ต ใกล้ทะเลสาบ สนามกอล์ฟ และหาดบางเทา เหมาะกับการพักผ่อนแบบสงบ"),
     dict(slug="sky-park", name="Sky Park", code="SK",
          area="Laguna · Cherng Talay", area_th="ลากูน่า · เชิงทะเล", filt="laguna cherngtalay", img="",
          lo=25000, hi=55000, lease="Monthly – yearly", lease_th="รายเดือน – รายปี",
@@ -672,7 +666,7 @@ def update_index_files():
     open(lt, "w", encoding="utf-8").write(s)
 
 
-ORDER = ["angsana-oceanview", "standard-residence-bangtao", "the-aqua", "the-space", "the-base", "canvas-sansiri", "cassia", "sky-park"]
+ORDER = ["angsana-oceanview", "standard-residence-bangtao", "the-aqua", "the-space", "the-base", "canvas-sansiri", "sky-park"]
 PROJECTS.sort(key=lambda p: ORDER.index(p["slug"]))
 
 
