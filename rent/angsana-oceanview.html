@@ -165,7 +165,10 @@ footer a{text-decoration:none}
 .nest .top>div{display:grid;gap:4px;min-width:0}
 .nest .eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--accent)}
 .nest h2{font-family:var(--display);font-weight:500;font-size:clamp(30px,4vw,40px);line-height:1;color:var(--ink)}
-.nest h2 .plus{color:var(--accent)}
+.nest h2.mark{display:inline-grid;justify-items:start;gap:2px;margin-block:2px 4px}
+.nest h2 .word{font-size:clamp(38px,5vw,52px);line-height:.9;letter-spacing:-.01em}
+.nest h2 .plus{color:var(--accent);font-style:italic;margin-left:1px}
+.nest h2 .sub{font-family:var(--body);font-size:10px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--mid);padding-left:3px}
 .nest .lead{color:var(--mid);font-size:14.5px}
 .nest .ask{font-size:13px;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap}
 .nest .ask:hover{text-decoration:underline}
@@ -293,7 +296,7 @@ footer a{text-decoration:none}
     <div class="top">
       <div>
         <p class="eyebrow" data-th="MGROUP Estates ดูแลอะไรให้คุณ" data-ru="Чем помогает MGROUP Estates">What MGROUP Estates takes care of</p>
-        <h2>Nest<span class="plus">+</span> concierge</h2>
+        <h2 class="mark" aria-label="Nest+ concierge"><span class="word">Nest<span class="plus">+</span></span><span class="sub">concierge</span></h2>
         <p class="lead" data-th="เช่ากับเรา ใช้บริการ Nest+ concierge ได้ตลอดสัญญาเช่า" data-ru="Арендуйте у нас и пользуйтесь Nest+ concierge весь срок аренды.">Rent with us and you can use Nest+ concierge for as long as your lease runs.</p>
       </div>
       <a class="ask" href="https://wa.me/66899723321?text=Nest%2B%20concierge" target="_blank" rel="noopener" data-th="สอบถาม Nest+ →" data-ru="Узнать о Nest+ →">Ask about Nest+ →</a>
