@@ -1,0 +1,582 @@
+#!/usr/bin/env python3
+"""Build the condo rental pages.
+
+Writes rent/<slug>.html for every condo in PROJECTS and refreshes the condo
+cards on rent-condo.html (between the CARDS markers). Run after editing the data:
+
+    python3 build-rent.py
+"""
+import html
+import json
+import os
+import re
+
+ROOT = os.path.dirname(os.path.abspath(__file__))
+SITE = "https://mgroupestates.com"
+PHONE = "66899723321"
+SAMPLE = True  # listings below are placeholders; set False once real units are in
+SB = "https://iwipvfkjfsveycppqhxc.supabase.co/storage/v1/object/public/Property-bucket/"
+
+# img: path under the site root, or a full URL. Empty = brown placeholder.
+PROJECTS = [
+    dict(slug="standard-residence-bangtao", name="The Standard Residence Bangtao", code="SR",
+         area="Bang Tao", area_th="บางเทา", filt="bangtao", img="assets/rent/standard-residence-bangtao.jpg",
+         lo=70000, hi=180000, lease="Monthly – yearly", lease_th="รายเดือน – รายปี",
+         best="Beach lifestyle", best_th="ไลฟ์สไตล์ริมหาด",
+         desc="Luxury branded residences by The Standard and Central Group, in one of Bang Tao's prime locations. For tenants who want a design-led home close to the beach.",
+         desc_th="แบรนด์เรสซิเดนซ์ระดับลักชัวรีโดย The Standard และ Central Group ในทำเลหลักของบางเทา เหมาะกับผู้ที่ต้องการไลฟ์สไตล์ดีไซน์จัดใกล้ชายหาด"),
+    dict(slug="the-aqua", name="The Aqua", code="AQ",
+         area="Bang Tao", area_th="บางเทา", filt="bangtao", img=SB + "rental/1793524859000-ax2co5.jpg",
+         lo=60000, hi=120000, lease="Monthly – yearly", lease_th="รายเดือน – รายปี",
+         best="Holidays · couples", best_th="พักผ่อน · คู่รัก",
+         desc="A resort-style condominium in Bang Tao, close to the beach, restaurants and Boat Avenue. Suits both short and long stays.",
+         desc_th="คอนโดสไตล์รีสอร์ตในย่านบางเทา ใกล้ชายหาด ร้านอาหาร และ Boat Avenue เหมาะกับการเช่าระยะสั้นและระยะยาว"),
+    dict(slug="the-space", name="The Space Choeng Thale", code="SP",
+         area="Cherng Talay", area_th="เชิงทะเล", filt="cherngtalay", img="",
+         lo=18000, hi=35000, lease="6 – 12 months", lease_th="6 – 12 เดือน",
+         best="Remote workers", best_th="คนทำงานทางไกล",
+         desc="A condominium in Cherng Talay on Phuket's west coast, with easy access to Bang Tao, Laguna and daily shopping. A practical choice for remote workers and long stays.",
+         desc_th="คอนโดในเชิงทะเล ฝั่งตะวันตกของภูเก็ต เดินทางสะดวกไปบางเทา ลากูน่า และซูเปอร์มาร์เก็ต เหมาะกับคนทำงานและผู้เช่าระยะยาว"),
+    dict(slug="the-base", name="The Base Choeng Thale", code="BA",
+         area="Cherng Talay", area_th="เชิงทะเล", filt="cherngtalay", img="assets/rent/the-base.jpg",
+         lo=15000, hi=30000, lease="6 – 12 months", lease_th="6 – 12 เดือน",
+         best="Families · professionals", best_th="ครอบครัว · คนทำงาน",
+         desc="A condominium in Cherng Talay for tenants who want an easy everyday base, near international schools, shops and the west-coast beaches.",
+         desc_th="คอนโดในเชิงทะเล สำหรับผู้เช่าที่ต้องการทำเลใช้ชีวิตประจำวันได้สะดวก ใกล้โรงเรียนนานาชาติ ร้านค้า และชายหาดฝั่งตะวันตก"),
+    dict(slug="cassia", name="Cassia", code="CA",
+         area="Laguna Phuket", area_th="ลากูน่า ภูเก็ต", filt="laguna bangtao", img="",
+         lo=35000, hi=90000, lease="Monthly – yearly", lease_th="รายเดือน – รายปี",
+         best="Holidays · families", best_th="พักผ่อน · ครอบครัว",
+         desc="A resort-style condominium inside Laguna Phuket, close to the lagoons, golf course and Bang Tao Beach. For a calm, green setting.",
+         desc_th="คอนโดสไตล์รีสอร์ตภายในลากูน่า ภูเก็ต ใกล้ทะเลสาบ สนามกอล์ฟ และหาดบางเทา เหมาะกับการพักผ่อนแบบสงบ"),
+    dict(slug="sky-park", name="Sky Park", code="SK",
+         area="Laguna · Cherng Talay", area_th="ลากูน่า · เชิงทะเล", filt="laguna cherngtalay", img="",
+         lo=25000, hi=55000, lease="Monthly – yearly", lease_th="รายเดือน – รายปี",
+         best="Professionals · couples", best_th="คนทำงาน · คู่รัก",
+         desc="A condominium in the Laguna area of Cherng Talay, close to Laguna's restaurants, cafés and facilities. Everything you need within a short walk or drive.",
+         desc_th="คอนโดในย่านลากูน่า เชิงทะเล ใกล้ร้านอาหาร คาเฟ่ และสิ่งอำนวยความสะดวกของลากูน่า เหมาะกับผู้เช่าที่อยากได้ความสะดวกครบในที่เดียว"),
+    dict(slug="canvas-sansiri", name="Canvas Sansiri", code="CV",
+         area="Cherng Talay · Sansiri", area_th="เชิงทะเล · แสนสิริ", filt="cherngtalay", img=SB + "sale/p31/project/1776600364635-zfviyv.jpg",
+         lo=25000, hi=50000, lease="6 – 12 months", lease_th="6 – 12 เดือน",
+         best="Privacy · long stay", best_th="ความเป็นส่วนตัว · อยู่ยาว",
+         desc="A Sansiri condominium in Cherng Talay: 175 units across four low-rise buildings, with a separate facilities building. Quiet and private.",
+         desc_th="คอนโดโดยแสนสิริในเชิงทะเล 175 ยูนิต ใน 4 อาคารโลว์ไรส์ พร้อมอาคารส่วนกลางแยก บรรยากาศเป็นส่วนตัว"),
+]
+
+# Lifestyle fits. Which condo gets which is a first guess; confirm with the team.
+TAGS = {
+    "nomad":    ("Digital nomad", "ดิจิทัลโนแมด", "Цифровые кочевники", "Quiet corners to work and reliable Wi-Fi.", "มุมทำงานเงียบ และ Wi-Fi เสถียร", "Тихие места для работы и стабильный Wi-Fi."),
+    "pet":      ("Pet-friendly", "เลี้ยงสัตว์ได้", "Можно с питомцами", "Units where pets are welcome. Ask us for the rules.", "มีห้องที่เลี้ยงสัตว์ได้ สอบถามกฎได้", "Есть квартиры, где можно с питомцами. Уточните правила."),
+    "cook":     ("Love to cook", "ชอบทำอาหาร", "Любите готовить", "Units with a full kitchen.", "มีห้องที่ครัวครบ", "Квартиры с полноценной кухней."),
+    "cafe":     ("Café lover", "ชอบนั่งคาเฟ่", "Любите кафе", "Cafés within a short walk or ride.", "มีคาเฟ่ใกล้ เดินหรือขับไม่ไกล", "Кафе в паре минут пешком или на байке."),
+    "beach":    ("Near the beach", "ไปทะเลสะดวก", "Рядом с пляжем", "A few minutes to the sand.", "ไปทะเลได้ในไม่กี่นาที", "До пляжа несколько минут."),
+    "parking":  ("Plenty of parking", "ที่จอดรถเยอะ", "Много парковки", "Plenty of resident parking.", "ที่จอดรถสำหรับลูกบ้านเพียงพอ", "Достаточно парковочных мест для жильцов."),
+    "airport":  ("Easy to the airport", "ไปสนามบินง่าย", "Близко к аэропорту", "About 20–30 minutes to Phuket Airport.", "ไปสนามบินภูเก็ตประมาณ 20–30 นาที", "Около 20–30 минут до аэропорта Пхукета."),
+    "wellness": ("Near wellness", "ใกล้เวลเนส", "Рядом велнес", "Gyms, yoga and spas nearby.", "ใกล้ยิม โยคะ และสปา", "Рядом спортзалы, йога и спа."),
+    "sauna":    ("Near a sauna", "ใกล้ซาวน่า", "Рядом сауна", "A sauna on site or close by.", "มีซาวน่าในโครงการหรือใกล้ๆ", "Сауна в комплексе или рядом."),
+}
+FITS = {
+    "standard-residence-bangtao": ["beach", "wellness", "sauna", "cafe", "nomad", "cook"],
+    "the-aqua": ["beach", "cafe", "cook", "pet", "parking"],
+    "the-space": ["nomad", "pet", "cook", "parking", "airport"],
+    "the-base": ["nomad", "cook", "parking", "airport", "pet"],
+    "cassia": ["beach", "wellness", "sauna", "cafe"],
+    "sky-park": ["nomad", "cafe", "wellness", "parking", "airport"],
+    "canvas-sansiri": ["pet", "cook", "parking", "sauna", "airport"],
+}
+
+
+def tag_span(k, cls=""):
+    en, th, ru = TAGS[k][:3]
+    c = f' class="{cls}"' if cls else ""
+    return f'<span{c} data-th="{esc(th)}" data-ru="{esc(ru)}">{esc(en)}</span>'
+
+
+def fits_filter():
+    chips = "".join(f'<button type="button" data-fit="{k}">{tag_span(k)}</button>' for k in TAGS)
+    return ('<div class="fits-box">\n      <!-- FITS:START (generated by build-rent.py) -->\n'
+            '      <h3 data-th="อะไรสำคัญสำหรับคุณ?">What matters to you?</h3>\n'
+            '      <p data-th="แตะเพื่อกรอง เลือกได้หลายข้อ">Tap to filter. Pick more than one.</p>\n'
+            f'      <div class="fits" role="group" aria-label="Lifestyle">{chips}</div>\n'
+            '      <p class="nofit" id="nofit" hidden data-th="ยังไม่มีคอนโดที่ตรงทุกข้อ ลองเอาออกสักข้อ">No condo matches all of these. Remove one to see more.</p>\n'
+            '      <!-- FITS:END -->\n    </div>')
+
+
+# Five sample units per condo: (beds, baths, sqm, floor, view, view_th, price share of the range, photo crop)
+UNITS = [
+    (1, 1, 38, 2, "Garden view", "วิวสวน", 0.0, "20% 30%"),
+    (1, 1, 45, 5, "Pool view", "วิวสระว่ายน้ำ", 0.15, "80% 60%"),
+    (2, 2, 72, 3, "Pool view", "วิวสระว่ายน้ำ", 0.42, "50% 85%"),
+    (2, 2, 80, 6, "Mountain view", "วิวภูเขา", 0.58, "10% 90%"),
+    (3, 3, 125, 7, "Top floor · corner", "ชั้นบนสุด · ห้องมุม", 1.0, "90% 10%"),
+]
+
+
+def esc(s):
+    return html.escape(s, quote=True)
+
+
+def baht(n):
+    return f"{n:,}"
+
+
+def units_for(p):
+    out = []
+    for i, (beds, baths, sqm, floor, view, view_th, share, crop) in enumerate(UNITS):
+        price = p["lo"] + (p["hi"] - p["lo"]) * share
+        price = int(round(price / 1000.0) * 1000)
+        ref = f"{p['code']}-{floor}{chr(65 + i)}"
+        out.append(dict(ref=ref, beds=beds, baths=baths, sqm=sqm, floor=floor, view=view, view_th=view_th, price=price, crop=crop))
+    return out
+
+
+def img_url(p, prefix):
+    if not p["img"]:
+        return ""
+    return p["img"] if p["img"].startswith("http") else prefix + p["img"]
+
+
+def abs_img(p):
+    if not p["img"]:
+        return SITE + "/assets/svc-rent.jpg"
+    return p["img"] if p["img"].startswith("http") else SITE + "/" + p["img"]
+
+
+ARROW = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>'
+WA_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3a.5.5 0 0 0 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3z"/></svg>'
+
+
+# ---------- main page cards ----------
+def card(p):
+    url = img_url(p, "")
+    style = f' style="--img:url(\'{esc(url)}\')"' if url else ""
+    return (
+        f'      <a class="item" id="{p["slug"]}" href="rent/{p["slug"]}.html" data-name="{esc(p["name"])}" data-area="{p["filt"]}" data-tags="{" ".join(FITS[p["slug"]])}">'
+        f'<span class="card"{style}><span class="ttl">'
+        f'<span class="area" data-th="{esc(p["area_th"])}">{esc(p["area"])}</span><h3>{esc(p["name"])}</h3>'
+        f'<span class="price">฿{baht(p["lo"])} – {baht(p["hi"])} <small data-th="/ เดือน">/ month</small></span>'
+        f'<span class="beds" data-th="1–3 ห้องนอน · ดู 5 ห้อง">1–3 bedrooms · see 5 units</span>'
+        f'<span class="fitline">{" · ".join(tag_span(k) for k in FITS[p["slug"]][:3])}</span>'
+        f'</span><span class="chev">{ARROW}</span></span></a>'
+    )
+
+
+def update_main():
+    path = os.path.join(ROOT, "rent-condo.html")
+    s = open(path, encoding="utf-8").read()
+    cards = "\n".join(card(p) for p in PROJECTS)
+    block = f'<div class="acc" id="acc">\n      <!-- CARDS:START (generated by build-rent.py) -->\n{cards}\n      <!-- CARDS:END -->\n    </div>'
+    if "<!-- CARDS:START" in s:
+        s = re.sub(r'<div class="acc" id="acc">.*?<!-- CARDS:END -->\n    </div>', lambda m: block, s, count=1, flags=re.S)
+    else:
+        start = s.index('<div class="acc" id="acc">')
+        end = s.index('\n  </div>\n</section>', start)
+        s = s[:start] + block + s[end:]
+    box = fits_filter()
+    if "<!-- FITS:START" in s:
+        s = re.sub(r'<div class="fits-box">.*?<!-- FITS:END -->\n    </div>', lambda m: box, s, count=1, flags=re.S)
+    else:
+        i = s.index('<div class="filters" role="group" aria-label="Filter by area">')
+        s = s[:i] + box + "\n\n    " + s[i:]
+    # structured data: each condo points at its own page
+    for p in PROJECTS:
+        s = re.sub(r'"url":"https://mgroupestates.com/rent-condo#' + re.escape(p["slug"]) + '"',
+                   f'"url":"{SITE}/rent/{p["slug"]}"', s)
+    open(path, "w", encoding="utf-8").write(s)
+
+
+# ---------- project pages ----------
+CSS = r"""
+/* Layout: photo hero with the price range, then a bedroom filter over a grid of unit cards. */
+:root{
+  --page:#fcfaf7; --paper:#ffffff; --band:#f5f0e8;
+  --ink:#33291f; --mid:#6b5a47; --stone:#9a8467; --line:#e6ded3;
+  --accent:#8a6d3b; --accent-ink:#ffffff; --wa:#1f7a4d; --wa-ink:#ffffff;
+  --logo:none; --shadow:0 18px 50px -24px rgba(51,41,31,.35);
+  --display:"Cormorant Garamond","Noto Sans Thai",Georgia,serif;
+  --body:"Figtree","Noto Sans Thai",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --page:#1a1612; --paper:#231e18; --band:#1f1a15; --ink:#f1e9dc; --mid:#c3b5a2; --stone:#a8926f; --line:#3a3128;
+  --accent:#c9a96a; --accent-ink:#1a1612; --wa:#2f9a64; --wa-ink:#0e1a13;
+  --logo:invert(1) brightness(1.1); --shadow:0 18px 50px -24px rgba(0,0,0,.7); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --page:#1a1612; --paper:#231e18; --band:#1f1a15; --ink:#f1e9dc; --mid:#c3b5a2; --stone:#a8926f; --line:#3a3128;
+  --accent:#c9a96a; --accent-ink:#1a1612; --wa:#2f9a64; --wa-ink:#0e1a13;
+  --logo:invert(1) brightness(1.1); --shadow:0 18px 50px -24px rgba(0,0,0,.7); color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{font-family:var(--body);font-size:16px;line-height:1.6;color:var(--ink);background:var(--page);-webkit-font-smoothing:antialiased;overflow-x:hidden;padding-top:env(safe-area-inset-top,0px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:#2a2119}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:500;line-height:1.1;text-wrap:balance}
+:lang(th) h1,:lang(th) h2,:lang(th) h3{font-family:"Noto Sans Thai",var(--body);line-height:1.3}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border-radius:999px;font:600 13px/1 var(--body);letter-spacing:.05em;text-decoration:none;border:1px solid var(--ink);background:var(--ink);color:var(--page);cursor:pointer}
+.btn svg{width:16px;height:16px;flex:none}
+.btn.gold{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.wa{background:var(--wa);border-color:var(--wa);color:var(--wa-ink)}
+.btn.line{background:transparent;color:var(--ink)}
+.btn.sm{min-height:38px;padding:0 14px;font-size:12px}
+
+header.top{position:absolute;left:0;right:0;top:env(safe-area-inset-top,0px);z-index:50;background:transparent}
+header.top.over{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+header.top.over .back{color:rgba(255,250,242,.85)}
+header.top.over .brand img{filter:invert(1)}
+header.top.over .lang{border-color:rgba(255,250,242,.4)}
+header.top.over .lang button{color:rgba(255,250,242,.8)}
+header.top.over .lang button.on{background:#fffaf2;color:#33291f}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:60px}
+.back{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;text-decoration:none;color:var(--mid)}
+.back svg{width:16px;height:16px;transform:rotate(180deg)}
+.brand img{height:16px;width:auto;filter:var(--logo)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{background:none;border:0;padding:6px 11px;font:600 11px var(--body);letter-spacing:.1em;cursor:pointer;color:var(--mid)}
+.lang button.on{background:var(--ink);color:var(--page)}
+@media(max-width:520px){.brand{display:none}}
+
+.hero{color:#fffaf2;background:linear-gradient(180deg,rgba(20,15,10,.25),rgba(20,15,10,.5) 45%,rgba(20,15,10,.9)),var(--img,none) center/cover no-repeat,radial-gradient(120% 90% at 85% 0%,#a0865c 0,transparent 55%),linear-gradient(140deg,#5b4936,#241c15)}
+.hero .wrap{padding-block:clamp(120px,22vw,220px) 34px;display:grid;gap:10px}
+.hero .area{font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:#e8d3a8}
+.hero h1{font-size:clamp(38px,6.4vw,68px)}
+.hero .price{font-size:clamp(18px,2.4vw,22px);font-weight:600;font-variant-numeric:tabular-nums}
+.hero .price small{font-weight:400;opacity:.8;font-size:.75em}
+.hero p.desc{max-width:60ch;color:rgba(255,250,242,.86);font-size:15.5px}
+.hero .facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.hero .facts>span{font-size:12.5px;padding:6px 12px;border-radius:999px;background:rgba(255,250,242,.12);border:1px solid rgba(255,250,242,.28);backdrop-filter:blur(4px)}
+.hero .facts b{font-weight:600;color:#e8d3a8;margin-right:4px}
+
+section{padding-block:44px}
+.bar-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:14px;margin-bottom:18px}
+.bar-head h2{font-size:clamp(28px,4vw,40px)}
+.bar-head p{color:var(--mid);font-size:14px}
+.sample{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);border:1px dashed var(--accent);border-radius:999px;padding:3px 10px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.filters button{font:500 13px var(--body);padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--mid);cursor:pointer}
+.filters button.on{background:var(--ink);border-color:var(--ink);color:var(--page)}
+.filters button span{opacity:.6;margin-left:4px;font-variant-numeric:tabular-nums}
+
+.units{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:900px){.units{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.units{grid-template-columns:1fr}}
+.unit{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.unit .ph{position:relative;aspect-ratio:16/10;max-width:100%;background:var(--img,none) var(--pos,center)/var(--zoom,cover) no-repeat,radial-gradient(120% 90% at 85% 0%,#a0865c 0,transparent 55%),linear-gradient(140deg,#5b4936,#241c15)}
+.unit .ph .bd{position:absolute;left:12px;top:12px;font:600 12px var(--body);letter-spacing:.04em;padding:5px 11px;border-radius:999px;background:rgba(255,250,242,.92);color:#33291f}
+.unit .ph .ref{position:absolute;right:12px;top:12px;font:600 11px var(--body);letter-spacing:.08em;padding:5px 10px;border-radius:999px;background:rgba(20,15,10,.55);color:#fffaf2}
+.unit .ph .big{position:absolute;left:14px;bottom:8px;font:500 54px/1 var(--display);color:rgba(255,250,242,.28)}
+.unit .in{padding:16px;display:grid;gap:10px;flex:1}
+.unit h3{font-size:24px;font-variant-numeric:lining-nums}
+.unit .meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13.5px;color:var(--mid);font-variant-numeric:tabular-nums}
+.unit .meta span+span::before{content:"·";margin-right:14px;color:var(--stone)}
+.unit .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:12px;border-top:1px solid var(--line)}
+.unit .pr{font:600 20px var(--body);font-variant-numeric:tabular-nums}
+.unit .pr small{font-weight:400;font-size:12.5px;color:var(--mid)}
+.empty{padding:30px;text-align:center;color:var(--mid);border:1px dashed var(--line);border-radius:16px}
+
+.great{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.great div{padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--paper);display:grid;gap:2px;min-width:0}
+.great b{font-weight:600;font-size:15px}
+.great span{font-size:13.5px;color:var(--mid)}
+@media(max-width:720px){.great{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.great{grid-template-columns:1fr}}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:16px;background:var(--paper);overflow:hidden}
+.steps li{list-style:none;padding:18px;border-left:1px solid var(--line);display:grid;gap:4px}
+.steps li:first-child{border-left:0}
+.steps i{font:italic 500 26px var(--display);color:var(--accent);font-variant-numeric:lining-nums}
+.steps b{font-weight:600;font-size:14.5px}
+.steps span{font-size:13px;color:var(--mid)}
+@media(max-width:720px){.steps{grid-template-columns:1fr 1fr}.steps li:nth-child(3){border-left:0}.steps li:nth-child(n+3){border-top:1px solid var(--line)}}
+
+.others{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}
+.others a{flex:0 0 min(70%,260px);scroll-snap-align:start;min-height:150px;border-radius:14px;padding:14px;display:flex;flex-direction:column;justify-content:flex-end;text-decoration:none;color:#fffaf2;background:linear-gradient(180deg,rgba(20,15,10,.1),rgba(20,15,10,.85)),var(--img,none) center/cover no-repeat,radial-gradient(120% 90% at 85% 0%,#a0865c 0,transparent 55%),linear-gradient(140deg,#5b4936,#241c15)}
+.others b{font:500 21px/1.15 var(--display)}
+.others small{font-size:12.5px;opacity:.85;font-variant-numeric:tabular-nums}
+.share{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12.5px;color:var(--mid)}
+.share button{font:500 12px var(--body);padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+
+footer{background:var(--ink);color:color-mix(in srgb,var(--page) 78%,transparent);font-size:14px}
+footer .wrap{padding-block:44px calc(110px + env(safe-area-inset-bottom,0px));display:grid;gap:14px}
+footer small{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase}
+footer img{height:20px;width:auto;filter:invert(1) brightness(1.2)}
+:root[data-theme="dark"] footer img{filter:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) footer img{filter:none}}
+footer a{text-decoration:none}
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:55;display:flex;gap:8px;padding:10px max(14px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--page) 96%,transparent);border-top:1px solid var(--line);backdrop-filter:blur(8px)}
+.sticky .btn{flex:1}
+@media(min-width:861px){.sticky{display:none}footer .wrap{padding-bottom:44px}}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--page);padding:10px 18px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:70;max-width:calc(100% - 32px);text-align:center}
+.toast.show{opacity:1}
+"""
+
+JS = r"""
+(function(){
+  var PHONE="%PHONE%", PAGE="%PAGE%", NAME=%NAME%, lang="en", src="";
+  var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+  try{var qs=new URLSearchParams(location.search);src=qs.get("utm_source")||"";if(/^(th|ru)$/.test(qs.get("lang")||""))lang=qs.get("lang")}catch(e){}
+  function wa(m){return "https://wa.me/"+PHONE+"?text="+encodeURIComponent(m+(src?"\nSource: "+src:""))}
+  var tt;function toast(t){var e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(tt);tt=setTimeout(function(){e.classList.remove("show")},2200)}
+  function copy(t,m){try{navigator.clipboard.writeText(t).then(function(){toast(m)},function(){toast(t)})}catch(e){toast(t)}}
+
+  function build(){
+    var th=lang==="th";
+    $$(".unit").forEach(function(u){
+      var d=u.dataset;
+      $(".ask",u).href=wa(th
+        ?"สวัสดีค่ะ ขอนัดดูห้อง "+NAME+" ห้อง "+d.ref+" ("+d.beds+" ห้องนอน, "+d.sqm+" ตร.ม., ฿"+d.price+"/เดือน) ค่ะ"
+        :"Hello, I'd like to book a viewing at "+NAME+", unit "+d.ref+" ("+d.beds+" bed, "+d.sqm+" sqm, ฿"+d.price+"/month).");
+    });
+    $$(".ask-all").forEach(function(a){a.href=wa(th?"สวัสดีค่ะ สนใจเช่าคอนโด "+NAME+" ค่ะ ขอห้องว่างและราคาล่าสุด":"Hello, I'm interested in renting at "+NAME+". Could you send available units and rates?")});
+  }
+  var tr=$$("[data-th]");tr.forEach(function(el){el.setAttribute("data-en",el.textContent)});
+  function setLang(l){
+    lang=l;document.documentElement.lang=l;
+    tr.forEach(function(el){el.textContent=el.getAttribute("data-"+l)||el.getAttribute("data-en")});
+    $$(".lang button").forEach(function(b){b.classList.toggle("on",b.dataset.lang===l)});
+    build();try{localStorage.setItem("mg-lang",l)}catch(e){}
+  }
+  $$(".lang button").forEach(function(b){b.addEventListener("click",function(){setLang(b.dataset.lang)})});
+
+  /* bedroom filter */
+  $$(".filters button").forEach(function(b){b.addEventListener("click",function(){
+    $$(".filters button").forEach(function(x){x.classList.toggle("on",x===b)});
+    var n=0;$$(".unit").forEach(function(u){var show=b.dataset.b==="all"||u.dataset.beds===b.dataset.b;u.hidden=!show;if(show)n++});
+    $("#empty").hidden=n>0;
+  })});
+
+  /* ad links for this condo */
+  $$(".share button").forEach(function(b){b.addEventListener("click",function(){
+    copy(PAGE+"?utm_source="+b.dataset.ch+"&utm_medium=paid_social&utm_campaign=condo-rent&utm_content="+PAGE.split("/").pop(),
+      lang==="th"?"คัดลอกลิงก์ "+b.textContent+" แล้ว":b.textContent+" ad link copied");
+  })});
+
+
+  if(lang==="en"){try{var sl=localStorage.getItem("mg-lang");if(sl==="th"||sl==="ru")lang=sl}catch(e){}}
+  setLang(lang);
+})();
+"""
+
+
+def unit_card(p, u, i):
+    url = img_url(p, "../")
+    style = []
+    if url:
+        style += [f"--img:url('{esc(url)}')", f"--pos:{u['crop']}", "--zoom:" + ("cover" if i == 0 else f"{150 + i * 12}%")]
+    st = f' style="{";".join(style)}"' if style else ""
+    bed_en = f"{u['beds']} bedroom" + ("s" if u["beds"] > 1 else "")
+    bed_th = f"{u['beds']} ห้องนอน"
+    return f"""      <article class="unit" data-beds="{u['beds']}" data-ref="{u['ref']}" data-sqm="{u['sqm']}" data-price="{baht(u['price'])}">
+        <div class="ph"{st}><span class="bd" data-th="{bed_th}">{bed_en}</span><span class="ref">{u['ref']}</span>{'' if url else f'<span class="big" aria-hidden="true">{u["beds"]} BR</span>'}</div>
+        <div class="in">
+          <h3><span data-th="{bed_th}">{bed_en}</span> · <span data-th="{esc(u['view_th'])}">{esc(u['view'])}</span></h3>
+          <p class="meta"><span data-th="{u['sqm']} ตร.ม.">{u['sqm']} sqm</span><span data-th="{u['baths']} ห้องน้ำ">{u['baths']} bath</span><span data-th="ชั้น {u['floor']}">Floor {u['floor']}</span></p>
+          <div class="row"><span class="pr">฿{baht(u['price'])} <small data-th="/ เดือน">/ month</small></span><a class="btn wa sm ask" href="https://wa.me/{PHONE}" target="_blank" rel="noopener">{WA_ICON}<span data-th="นัดดูห้อง">Book viewing</span></a></div>
+        </div>
+      </article>"""
+
+
+def project_page(p):
+    units = units_for(p)
+    url = img_url(p, "../")
+    hero_style = f' style="--img:url(\'{esc(url)}\')"' if url else ""
+    page_url = f"{SITE}/rent/{p['slug']}"
+    title = f"{p['name']} Condo for Rent, {p['area'].split(' · ')[0]}, Phuket | MGROUP Estates"
+    desc = (f"Rent at {p['name']}, {p['area']}, Phuket. 1–3 bedroom units from ฿{baht(p['lo'])} to ฿{baht(p['hi'])} a month. "
+            f"Book a viewing on WhatsApp with MGROUP Estates.")
+    counts = {b: sum(1 for u in units if u["beds"] == b) for b in (1, 2, 3)}
+    others = "\n".join(
+        f'      <a href="{o["slug"]}.html"' + (f' style="--img:url(\'{esc(img_url(o, "../"))}\')"' if o["img"] else "") +
+        f'><b>{esc(o["name"])}</b><small>฿{baht(o["lo"])} – {baht(o["hi"])} <span data-th="/ เดือน">/ month</span></small></a>'
+        for o in PROJECTS if o is not p)
+    ld = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {"@type": "ApartmentComplex", "name": p["name"], "url": page_url, "image": abs_img(p), "description": p["desc"],
+             "address": {"@type": "PostalAddress", "addressLocality": p["area"].replace(" · ", ", "), "addressRegion": "Phuket", "addressCountry": "TH"},
+             "numberOfBedrooms": "1-3"},
+            {"@type": "BreadcrumbList", "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+                {"@type": "ListItem", "position": 2, "name": "Condos for rent", "item": SITE + "/rent-condo"},
+                {"@type": "ListItem", "position": 3, "name": p["name"], "item": page_url}]},
+            {"@type": "RealEstateAgent", "name": "MGROUP Estates", "url": SITE, "telephone": "+" + PHONE, "logo": SITE + "/assets/logo.png"},
+        ]}
+    great = "\n".join(
+        f'      <div><b data-th="{esc(TAGS[k][1])}" data-ru="{esc(TAGS[k][2])}">{esc(TAGS[k][0])}</b>'
+        f'<span data-th="{esc(TAGS[k][4])}" data-ru="{esc(TAGS[k][5])}">{esc(TAGS[k][3])}</span></div>'
+        for k in FITS[p["slug"]])
+    js = JS.replace("%PHONE%", PHONE).replace("%PAGE%", page_url).replace("%NAME%", json.dumps(p["name"]))
+    sample = ('<span class="sample" data-th="ตัวอย่างข้อมูล">Sample listings</span>' if SAMPLE else "")
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{esc(title)}</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="{esc(desc)}">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="{page_url}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MGROUP Estates">
+<meta property="og:title" content="{esc(p['name'])} · condo for rent in {esc(p['area'])}, Phuket">
+<meta property="og:description" content="{esc(desc)}">
+<meta property="og:url" content="{page_url}">
+<meta property="og:image" content="{esc(abs_img(p))}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Figtree:wght@300;400;500;600&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
+<style>{CSS}</style>
+</head>
+<body>
+<header class="top over">
+  <div class="wrap">
+    <a class="back" href="../rent-condo.html">{ARROW}<span data-th="คอนโดทั้งหมด">All condos</span></a>
+    <a class="brand" href="{SITE}/" aria-label="MGROUP Estates"><img src="../assets/logo.png" alt="MGROUP Estates" width="126" height="16"></a>
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" class="on">EN</button><button type="button" data-lang="ru">RU</button><button type="button" data-lang="th">TH</button></div>
+  </div>
+</header>
+
+<main>
+<div class="hero"{hero_style}>
+  <div class="wrap">
+    <span class="area" data-th="{esc(p['area_th'])}">{esc(p['area'])}</span>
+    <h1>{esc(p['name'])}</h1>
+    <span class="price">฿{baht(p['lo'])} – {baht(p['hi'])} <small data-th="/ เดือน · 1–3 ห้องนอน">/ month · 1–3 bedrooms</small></span>
+    <p class="desc" data-th="{esc(p['desc_th'])}">{esc(p['desc'])}</p>
+    <div class="facts"><span><b data-th="ระยะเช่า">Lease</b><span data-th="{esc(p['lease_th'])}">{esc(p['lease'])}</span></span><span><b data-th="เหมาะกับ">Best for</b><span data-th="{esc(p['best_th'])}">{esc(p['best'])}</span></span></div>
+  </div>
+</div>
+
+<section id="units">
+  <div class="wrap">
+    <div class="bar-head">
+      <div><h2 data-th="ห้องว่างให้เช่า">Units for rent</h2><p data-th="กดนัดดูห้อง ระบบจะเตรียมข้อความใน WhatsApp ให้">Tap Book viewing and your WhatsApp message is ready.</p></div>
+      {sample}
+    </div>
+    <div class="filters" role="group" aria-label="Bedrooms">
+      <button type="button" class="on" data-b="all"><span data-th="ทั้งหมด" style="opacity:1;margin:0">All</span><span>{len(units)}</span></button>
+      <button type="button" data-b="1"><span data-th="1 ห้องนอน" style="opacity:1;margin:0">1 bedroom</span><span>{counts[1]}</span></button>
+      <button type="button" data-b="2"><span data-th="2 ห้องนอน" style="opacity:1;margin:0">2 bedrooms</span><span>{counts[2]}</span></button>
+      <button type="button" data-b="3"><span data-th="3 ห้องนอน" style="opacity:1;margin:0">3 bedrooms</span><span>{counts[3]}</span></button>
+    </div>
+    <div class="units">
+{chr(10).join(unit_card(p, u, i) for i, u in enumerate(units))}
+    </div>
+    <p class="empty" id="empty" hidden data-th="ยังไม่มีห้องแบบนี้ ทักมาทาง WhatsApp เราจะหาให้">No units of this size right now. Message us on WhatsApp and we'll find one.</p>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap" style="display:grid;gap:14px">
+    <h2 style="font-size:clamp(26px,3.4vw,34px)" data-th="เหมาะกับคนที่">Great for</h2>
+    <div class="great">
+{great}
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap" style="display:grid;gap:14px">
+    <h2 style="font-size:clamp(26px,3.4vw,34px)" data-th="เช่าง่ายใน 4 ขั้นตอน">Rent in four steps</h2>
+    <ol class="steps">
+      <li><i>1</i><b data-th="กดนัดหมาย">Book a viewing</b><span data-th="เลือกห้องแล้วส่งทาง WhatsApp">Pick a unit and send on WhatsApp</span></li>
+      <li><i>2</i><b data-th="แอดมินติดต่อกลับ">Admin contacts you</b><span data-th="ภายในวันทำการ">Same business day</span></li>
+      <li><i>3</i><b data-th="นัดวันและยืนยัน">Confirm the date</b><span data-th="ดูห้องจริงหรือวิดีโอคอล">In person or video call</span></li>
+      <li><i>4</i><b data-th="ทำสัญญาเช่า">Sign the lease</b><span data-th="รับกุญแจและย้ายเข้า">Get the keys and move in</span></li>
+    </ol>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap" style="display:grid;gap:14px">
+    <h2 style="font-size:clamp(26px,3.4vw,34px)" data-th="คอนโดอื่นที่น่าสนใจ">Other condos</h2>
+    <div class="others">
+{others}
+    </div>
+    <div class="share"><b data-th="ลิงก์โฆษณาหน้านี้:">Ad link for this page:</b><button type="button" data-ch="facebook">Facebook</button><button type="button" data-ch="instagram">Instagram</button><button type="button" data-ch="whatsapp">WhatsApp</button><button type="button" data-ch="tiktok">TikTok</button><button type="button" data-ch="youtube">YouTube</button></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <small data-th="นำเสนอโดย">Presented by</small>
+    <img src="../assets/logo.png" alt="MGROUP Estates" width="157" height="20">
+    <p>M GROUP BUSINESS CO.,LTD · 63/202 Thepkasattri Rd, Kohkaew, Muang, Phuket 83000<br>WhatsApp <a href="https://wa.me/{PHONE}" target="_blank" rel="noopener">+66 89 972 3321</a> · contact@mgroupestates.com</p>
+  </div>
+</footer>
+
+<div class="sticky"><a class="btn gold" href="#units" data-th="ดูห้องว่าง">See units</a><a class="btn wa ask-all" href="https://wa.me/{PHONE}" target="_blank" rel="noopener">WhatsApp</a></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>{js}</script>
+</body>
+</html>
+"""
+
+
+RU = json.load(open(os.path.join(ROOT, "rent", "i18n-ru.json"), encoding="utf-8"))
+RU_PATTERNS = [(r"^(\d+) sqm$", r"\1 м²"), (r"^(\d+) bath$", r"\1 ванн."), (r"^Floor (\d+)$", r"Этаж \1")]
+
+
+def ru_for(en):
+    if en in RU:
+        return RU[en]
+    for pat, rep in RU_PATTERNS:
+        if re.match(pat, en):
+            return re.sub(pat, rep, en)
+    return None
+
+
+def add_ru(path):
+    """Give every element that has a Thai translation a Russian one too (data-ru)."""
+    s = open(path, encoding="utf-8").read()
+    missing = []
+
+    def tag(m):
+        if "data-ru=" in m.group(0):
+            return m.group(0)
+        en = html.unescape(re.sub(r"<[^>]+>", "", m.group(5))).strip()
+        ru = ru_for(en)
+        if ru is None:
+            missing.append(en)
+            return m.group(0)
+        return f'<{m.group(1)}{m.group(2)} data-th="{m.group(3)}" data-ru="{esc(ru)}"{m.group(4)}>{m.group(5)}</{m.group(1)}>'
+
+    s = re.sub(r'<(\w+)([^>]*?) data-th="([^"]*)"([^>]*)>(.*?)</\1>', tag, s, flags=re.S)
+    open(path, "w", encoding="utf-8").write(s)
+    return missing
+
+
+def update_index_files():
+    sm = os.path.join(ROOT, "sitemap.xml")
+    s = open(sm, encoding="utf-8").read()
+    for p in PROJECTS:
+        loc = f"{SITE}/rent/{p['slug']}"
+        if loc not in s:
+            s = s.replace("</urlset>", f"  <url><loc>{loc}</loc><lastmod>2026-11-03</lastmod><priority>0.8</priority></url>\n</urlset>")
+    open(sm, "w", encoding="utf-8").write(s)
+    lt = os.path.join(ROOT, "llms.txt")
+    s = open(lt, encoding="utf-8").read()
+    if "## Condos for rent" not in s:
+        lines = "\n".join(f"- [{p['name']}]({SITE}/rent/{p['slug']}): Condominium for rent, {p['area']}, Phuket, 1–3 bedrooms, ฿{baht(p['lo'])}–{baht(p['hi'])} per month"
+                          for p in PROJECTS)
+        s = s.replace("## Notes", f"## Condos for rent ({len(PROJECTS)})\n\n{lines}\n\n## Notes")
+    open(lt, "w", encoding="utf-8").write(s)
+
+
+if __name__ == "__main__":
+    os.makedirs(os.path.join(ROOT, "rent"), exist_ok=True)
+    for p in PROJECTS:
+        open(os.path.join(ROOT, "rent", p["slug"] + ".html"), "w", encoding="utf-8").write(project_page(p))
+    update_main()
+    update_index_files()
+    missing = []
+    for f in ["rent-condo.html"] + [os.path.join("rent", p["slug"] + ".html") for p in PROJECTS]:
+        missing += add_ru(os.path.join(ROOT, f))
+    if missing:
+        print("no Russian for:", sorted(set(missing)))
+    print("built", len(PROJECTS), "condo pages")
