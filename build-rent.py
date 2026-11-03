@@ -266,7 +266,8 @@ def update_main():
         s = s.replace("/* tabs: tenant / owner */", NEST_CSS.strip() + "\n\n/* tabs: tenant / owner */", 1)
     n = len(PROJECTS)
     for pat, rep in [(r"All \(\d+\)", f"All ({n})"), (r"ทั้งหมด \(\d+\)", f"ทั้งหมด ({n})"), (r"Все \(\d+\)", f"Все ({n})"),
-                     (r"See \d+ condos", f"See {n} condos"), (r"ดู \d+ คอนโด", f"ดู {n} คอนโด"), (r"\d+ кондо и запись", f"{n} кондо и запись")]:
+                     (r"See \d+ condos", f"See {n} condos"), (r"ดู \d+ คอนโด", f"ดู {n} คอนโด"), (r"\d+ кондо и запись", f"{n} кондо и запись"),
+                     (r"\d+ hand-picked", f"{n} hand-picked")]:
         s = re.sub(pat, rep, s)
     items = ",\n".join(
         '   {"@type":"ListItem","position":%d,"item":{"@type":"ApartmentComplex","name":%s,"url":"%s/rent/%s","address":{"@type":"PostalAddress","addressLocality":%s,"addressRegion":"Phuket","addressCountry":"TH"}}}'
@@ -648,6 +649,30 @@ def add_ru(path):
     return missing
 
 
+WORD = re.compile(r"\b([Cc])ondo(s?)\b")
+
+
+def full_word(text):
+    """English copy says "condominium", never "condo"."""
+    return WORD.sub(lambda m: m.group(1) + "ondominium" + m.group(2), text)
+
+
+def use_full_word(path):
+    s = open(path, encoding="utf-8").read()
+    out = []
+    # leave CSS alone; in scripts only touch quoted text that reads as a sentence or label
+    for part in re.split(r"(<script[^>]*>.*?</script>|<style>.*?</style>)", s, flags=re.S):
+        if part.startswith("<style>"):
+            out.append(part)
+        elif part.startswith("<script"):
+            out.append(re.sub(r'"([^"\n]*)"', lambda m: '"' + (full_word(m.group(1)) if (" " in m.group(1) or ":" in m.group(1)) and "http" not in m.group(1) and "/" not in m.group(1) and "#" not in m.group(1) else m.group(1)) + '"', part))
+        else:
+            part = re.sub(r">([^<]+)<", lambda m: ">" + full_word(m.group(1)) + "<", part)
+            part = re.sub(r'\b(content|alt|aria-label|title)="([^"]*)"', lambda m: f'{m.group(1)}="{m.group(2) if m.group(2).startswith("http") else full_word(m.group(2))}"', part)
+            out.append(part)
+    open(path, "w", encoding="utf-8").write("".join(out))
+
+
 def update_index_files():
     sm = os.path.join(ROOT, "sitemap.xml")
     s = open(sm, encoding="utf-8").read()
@@ -681,4 +706,6 @@ if __name__ == "__main__":
         missing += add_ru(os.path.join(ROOT, f))
     if missing:
         print("no Russian for:", sorted(set(missing)))
+    for f in ["rent-condo.html"] + [os.path.join("rent", p["slug"] + ".html") for p in PROJECTS]:
+        use_full_word(os.path.join(ROOT, f))
     print("built", len(PROJECTS), "condo pages")
