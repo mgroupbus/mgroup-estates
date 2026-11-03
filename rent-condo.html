@@ -65,6 +65,7 @@
 <style>
 /* Layout: one calm column; a photo hero holding a booking bar, then dropdown lists (condos, steps, FAQ) on paper bands. */
 :root{
+  --ill-bg:#efe4d2; --ill-paper:#fffaf2; --skin:#e9c4a0; --hair:#3b2f24; --line-ill:#e3d6c3;
   --page:#fcfaf7; --paper:#ffffff; --band:#f5f0e8;
   --ink:#33291f; --mid:#6b5a47; --stone:#9a8467; --line:#e6ded3;
   --accent:#8a6d3b; --accent-ink:#ffffff; --wa:#1f7a4d; --wa-ink:#ffffff;
@@ -233,6 +234,10 @@ details.q .chev svg{width:14px;height:14px}
 
 
 
+
+
+
+
 /* Nest+ concierge: compact header + six small icon tiles */
 .nest{background:var(--band);border-block:1px solid var(--line);padding-block:0}
 .nest .wrap{padding-block:40px;display:grid;gap:18px}
@@ -293,11 +298,15 @@ body.menu-open{overflow:hidden}
 .grid2>*{min-width:0}
 
 ol.flow{list-style:none;display:grid;gap:0}
-ol.flow li{display:grid;grid-template-columns:44px 1fr;gap:16px;padding-bottom:26px;position:relative}
-ol.flow li:not(:last-child)::before{content:"";position:absolute;left:21px;top:44px;bottom:0;width:1px;background:var(--line)}
+ol.flow li{display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:start;padding-bottom:22px;position:relative}
+ol.flow li:not(:last-child)::before{content:"";position:absolute;left:47px;top:100px;bottom:4px;width:2px;border-radius:2px;background:var(--line)}
+ol.flow .ill{position:relative;width:96px;height:96px;display:block}
+ol.flow .ill svg{width:96px;height:96px;display:block;border-radius:50%;box-shadow:0 10px 24px -14px rgba(51,41,31,.5);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+ol.flow li:hover .ill svg{transform:scale(1.06) rotate(-2deg)}
+ol.flow .ill .n{position:absolute;right:-4px;bottom:-2px;width:30px!important;height:30px!important;font-size:13px!important;border-width:2px!important;box-shadow:0 0 0 3px var(--band)}
 ol.flow .n{font-variant-numeric:lining-nums;font-family:var(--body)!important;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:600 18px var(--display);border:1px solid var(--accent);color:var(--accent);background:var(--paper)}
 ol.flow li:first-child .n{background:var(--accent);color:var(--accent-ink)}
-ol.flow h3{font-size:23px;margin-top:6px}
+ol.flow h3{font-size:23px;margin-top:14px}
 ol.flow p{color:var(--mid);font-size:15px;margin-top:4px}
 ol.flow .when{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--stone);font-weight:600;margin-top:6px}
 
@@ -444,10 +453,63 @@ footer .legal{border-top:1px solid color-mix(in srgb,var(--page) 18%,transparent
     <div id="tenant" class="grid2">
       <div>
         <ol class="flow">
-          <li><span class="n">1</span><div><h3 data-th="กดนัดหมายในระบบ" data-ru="Оставьте заявку">Request an appointment</h3><p data-th="เลือกคอนโด วันเข้าอยู่ และงบประมาณ แล้วกดส่งแบบฟอร์ม" data-ru="Выберите кондо, дату заезда и бюджет и отправьте форму.">Choose a condominium, your move-in date and budget, then send the form.</p><span class="when" data-th="ใช้เวลา 1 นาที" data-ru="Занимает 1 минуту">Takes 1 minute</span></div></li>
-          <li><span class="n">2</span><div><h3 data-th="แอดมินติดต่อกลับ" data-ru="Администратор свяжется с вами">Our admin contacts you</h3><p data-th="ทีมงานตอบกลับทาง WhatsApp พร้อมห้องว่าง รูปภาพ และราคา" data-ru="Мы пришлём в WhatsApp свободные квартиры, фото и цены.">We reply on WhatsApp with available units, photos and rates.</p><span class="when" data-th="ภายในวันทำการ" data-ru="В тот же рабочий день">Same business day</span></div></li>
-          <li><span class="n">3</span><div><h3 data-th="นัดวันและยืนยัน" data-ru="Подтвердите дату просмотра">Confirm the viewing date</h3><p data-th="นัดวันดูห้องที่สะดวก เรายืนยันเวลาอีกครั้งก่อนวันนัด" data-ru="Назначаем удобную дату просмотра и заранее подтверждаем время.">We set a viewing date that suits you and confirm the time beforehand.</p><span class="when" data-th="ดูห้องจริงหรือวิดีโอคอล" data-ru="Лично или по видеосвязи">In person or video call</span></div></li>
-          <li><span class="n">4</span><div><h3 data-th="ทำสัญญาเช่า" data-ru="Подпишите договор">Sign the lease</h3><p data-th="เลือกห้องได้แล้ว เราจัดทำสัญญาเช่าและนัดรับกุญแจ" data-ru="Когда вы выбрали квартиру, мы готовим договор аренды и передаём ключи.">Once you've chosen, we prepare the rental agreement and hand over the keys.</p><span class="when" data-th="พร้อมย้ายเข้า" data-ru="Можно заезжать">Ready to move in</span></div></li>
+          <li><span class="ill"><svg viewBox="0 0 96 96" aria-hidden="true"><defs><clipPath id="ic1"><circle cx="48" cy="48" r="47"/></clipPath></defs><circle cx="48" cy="48" r="47" fill="var(--ill-bg)"/><g clip-path="url(#ic1)">
+<path d="M30 100c0-14 6-24 16-28l10-4 8 6v26z" fill="var(--skin)"/>
+<rect x="30" y="14" width="38" height="66" rx="7" fill="var(--hair)"/>
+<rect x="33.5" y="20" width="31" height="54" rx="3" fill="var(--ill-paper)"/>
+<rect x="44" y="16.5" width="10" height="2" rx="1" fill="#6b5a47"/>
+<rect x="37" y="25" width="24" height="4" rx="2" fill="var(--accent)"/>
+<rect x="37" y="33" width="18" height="3" rx="1.5" fill="var(--line-ill)"/>
+<rect x="37" y="39" width="22" height="3" rx="1.5" fill="var(--line-ill)"/>
+<g fill="var(--line-ill)"><rect x="37" y="46" width="5" height="5" rx="1"/><rect x="44" y="46" width="5" height="5" rx="1"/><rect x="51" y="46" width="5" height="5" rx="1"/><rect x="37" y="53" width="5" height="5" rx="1"/><rect x="51" y="53" width="5" height="5" rx="1"/></g>
+<rect x="44" y="53" width="5" height="5" rx="1" fill="var(--accent)"/>
+<rect x="37" y="62" width="24" height="7" rx="3.5" fill="#1f7a4d"/>
+<path d="M24 66c4-4 9-5 12-2l2 6c-4 4-10 6-14 3z" fill="var(--skin)"/>
+<path d="M62 52c5 0 8 3 8 7s-3 6-6 6" fill="var(--skin)"/>
+<circle cx="76" cy="22" r="9" fill="var(--accent)"/><path d="M72 22l3 3 5-6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g></svg><span class="n">1</span></span><div><h3 data-th="กดนัดหมายในระบบ" data-ru="Оставьте заявку">Request an appointment</h3><p data-th="เลือกคอนโด วันเข้าอยู่ และงบประมาณ แล้วกดส่งแบบฟอร์ม" data-ru="Выберите кондо, дату заезда и бюджет и отправьте форму.">Choose a condominium, your move-in date and budget, then send the form.</p><span class="when" data-th="ใช้เวลา 1 นาที" data-ru="Занимает 1 минуту">Takes 1 minute</span></div></li>
+          <li><span class="ill"><svg viewBox="0 0 96 96" aria-hidden="true"><defs><clipPath id="ic2"><circle cx="48" cy="48" r="47"/></clipPath></defs><circle cx="48" cy="48" r="47" fill="var(--ill-bg)"/><g clip-path="url(#ic2)">
+<path d="M20 100c2-20 13-30 28-30s26 10 28 30z" fill="var(--stone)"/>
+<rect x="43" y="56" width="10" height="12" fill="var(--skin)"/>
+<circle cx="48" cy="44" r="15" fill="var(--skin)"/>
+<path d="M33 44c0-12 7-19 15-19s15 7 15 19c-2-6-7-10-15-10s-13 4-15 10z" fill="var(--hair)"/>
+<circle cx="48" cy="24" r="6" fill="var(--hair)"/>
+<path d="M31 46a17 17 0 0 1 34 0" fill="none" stroke="var(--hair)" stroke-width="2.5"/>
+<rect x="28" y="42" width="6" height="10" rx="3" fill="var(--accent)"/>
+<rect x="62" y="42" width="6" height="10" rx="3" fill="var(--accent)"/>
+<path d="M31 51c0 6 5 9 12 9" fill="none" stroke="var(--hair)" stroke-width="2"/><circle cx="44" cy="60" r="2" fill="var(--hair)"/>
+<path d="M66 14h18a4 4 0 0 1 4 4v9a4 4 0 0 1-4 4h-9l-6 5v-5h-3a4 4 0 0 1-4-4v-9a4 4 0 0 1 4-4z" fill="var(--ill-paper)" stroke="var(--accent)" stroke-width="1.5"/>
+<circle cx="70" cy="22.5" r="1.6" fill="var(--accent)"/><circle cx="75" cy="22.5" r="1.6" fill="var(--accent)"/><circle cx="80" cy="22.5" r="1.6" fill="var(--accent)"/></g></svg><span class="n">2</span></span><div><h3 data-th="แอดมินติดต่อกลับ" data-ru="Администратор свяжется с вами">Our admin contacts you</h3><p data-th="ทีมงานตอบกลับทาง WhatsApp พร้อมห้องว่าง รูปภาพ และราคา" data-ru="Мы пришлём в WhatsApp свободные квартиры, фото и цены.">We reply on WhatsApp with available units, photos and rates.</p><span class="when" data-th="ภายในวันทำการ" data-ru="В тот же рабочий день">Same business day</span></div></li>
+          <li><span class="ill"><svg viewBox="0 0 96 96" aria-hidden="true"><defs><clipPath id="ic3"><circle cx="48" cy="48" r="47"/></clipPath></defs><circle cx="48" cy="48" r="47" fill="var(--ill-bg)"/><g clip-path="url(#ic3)">
+<rect x="8" y="26" width="32" height="64" fill="var(--ill-paper)" stroke="var(--accent)" stroke-width="1.5"/>
+<path d="M6 26l18-10 18 10z" fill="var(--accent)"/>
+<g fill="var(--line-ill)"><rect x="13" y="32" width="8" height="7"/><rect x="27" y="32" width="8" height="7"/><rect x="13" y="44" width="8" height="7"/><rect x="27" y="44" width="8" height="7"/></g>
+<rect x="19" y="58" width="10" height="16" fill="var(--accent)"/>
+<path d="M14 100c1-11 5-17 11-17s10 6 11 17z" fill="var(--stone)"/>
+<circle cx="25" cy="77" r="6.5" fill="var(--skin)"/>
+<path d="M18.5 77c0-5 3-8 6.5-8s6.5 3 6.5 8c-1-3-3-5-6.5-5s-5.5 2-6.5 5z" fill="var(--hair)"/>
+<path d="M48 22v62" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="2 3"/>
+<rect x="44" y="45" width="8" height="10" rx="4" fill="var(--ill-bg)"/>
+<text x="48" y="52.5" text-anchor="middle" font-family="Figtree,system-ui,sans-serif" font-size="6.5" font-weight="700" fill="var(--accent)">OR</text>
+<rect x="56" y="22" width="30" height="52" rx="6" fill="var(--hair)"/>
+<rect x="59" y="28" width="24" height="38" rx="2" fill="#cfe0d4"/>
+<path d="M60 66c1-8 5-12 11-12s10 4 11 12z" fill="var(--stone)"/>
+<circle cx="71" cy="45" r="7" fill="var(--skin)"/>
+<path d="M64 45c0-6 3-9 7-9s7 3 7 9c-1-3-3-6-7-6s-6 3-7 6z" fill="var(--hair)"/>
+<circle cx="78.5" cy="32" r="1.6" fill="#d9534f"/>
+<rect x="64" y="68" width="14" height="3" rx="1.5" fill="#6b5a47"/>
+<rect x="66" y="78" width="16" height="10" rx="2" fill="var(--accent)"/><path d="M82 81l5-3v10l-5-3z" fill="var(--accent)"/>
+</g></svg><span class="n">3</span></span><div><h3 data-th="นัดดูห้อง: ไปดูจริง หรือวิดีโอคอล" data-ru="Просмотр: на месте или по видеосвязи">View on site or by video call</h3><p data-th="นัดวันดูห้องที่สะดวก เรายืนยันเวลาอีกครั้งก่อนวันนัด" data-ru="Назначаем удобную дату просмотра и заранее подтверждаем время.">We set a viewing date that suits you and confirm the time beforehand.</p><span class="when" data-th="ดูห้องจริงหรือวิดีโอคอล" data-ru="Лично или по видеосвязи">In person or video call</span></div></li>
+          <li><span class="ill"><svg viewBox="0 0 96 96" aria-hidden="true"><defs><clipPath id="ic4"><circle cx="48" cy="48" r="47"/></clipPath></defs><circle cx="48" cy="48" r="47" fill="var(--ill-bg)"/><g clip-path="url(#ic4)">
+<path d="M18 100c2-18 12-27 26-27s24 9 26 27z" fill="var(--accent)"/>
+<rect x="39" y="58" width="10" height="12" fill="var(--skin)"/>
+<circle cx="44" cy="46" r="14" fill="var(--skin)"/>
+<path d="M30 46c0-11 6-18 14-18s14 7 14 18c-2-6-6-9-14-9s-12 3-14 9z" fill="var(--hair)"/>
+<g transform="rotate(8 70 52)"><rect x="56" y="30" width="28" height="36" rx="3" fill="var(--ill-paper)" stroke="var(--accent)" stroke-width="1.5"/>
+<rect x="61" y="36" width="18" height="2.5" rx="1.2" fill="var(--line-ill)"/><rect x="61" y="42" width="14" height="2.5" rx="1.2" fill="var(--line-ill)"/><rect x="61" y="48" width="16" height="2.5" rx="1.2" fill="var(--line-ill)"/>
+<path d="M61 59c3-4 5 2 8-2s4 2 8-1" fill="none" stroke="var(--hair)" stroke-width="1.6" stroke-linecap="round"/></g>
+<circle cx="70" cy="80" r="6" fill="none" stroke="var(--accent)" stroke-width="3"/>
+<path d="M75 76l12-10m-4 3.5 3 3m-6-0.5 2.5 2.5" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+<path d="M58 70c4-2 8-1 10 2l-1 5c-4 1-8 0-10-3z" fill="var(--skin)"/></g></svg><span class="n">4</span></span><div><h3 data-th="ทำสัญญาเช่า" data-ru="Подпишите договор">Sign the lease</h3><p data-th="เลือกห้องได้แล้ว เราจัดทำสัญญาเช่าและนัดรับกุญแจ" data-ru="Когда вы выбрали квартиру, мы готовим договор аренды и передаём ключи.">Once you've chosen, we prepare the rental agreement and hand over the keys.</p><span class="when" data-th="พร้อมย้ายเข้า" data-ru="Можно заезжать">Ready to move in</span></div></li>
         </ol>
       </div>
       <form class="card" id="apptForm" autocomplete="on">
