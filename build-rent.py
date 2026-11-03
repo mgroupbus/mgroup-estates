@@ -322,7 +322,7 @@ h1,h2,h3{font-family:var(--display);font-weight:500;line-height:1.1;text-wrap:ba
 header.top{position:absolute;left:0;right:0;top:env(safe-area-inset-top,0px);z-index:50;background:transparent}
 header.top.over{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
 header.top.over .back{color:rgba(255,250,242,.85)}
-header.top.over .brand img{filter:invert(1)}
+header.top.over .brand img{filter:invert(1) drop-shadow(0 1px 6px rgba(0,0,0,.45))}
 header.top.over .lang{border-color:rgba(255,250,242,.4)}
 header.top.over .lang button{color:rgba(255,250,242,.8)}
 header.top.over .lang button.on{background:#fffaf2;color:#33291f}
