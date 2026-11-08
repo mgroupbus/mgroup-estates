@@ -1605,9 +1605,13 @@ async function hydratePropertyDetailRows(propertyId, det) {
     if (!r.ok) return;
     var rows = await r.json();
     if (!Array.isArray(rows) || !rows.length) return;
+    /* The admin saves key facts under 'details'; a few older listings
+       use 'overview'. Reading only the latter meant 92 rows across ten
+       listings never reached the page. */
     var ov = rows.filter(function(x) { return x.category === 'overview'; });
+    var dt = rows.filter(function(x) { return x.category === 'details'; });
     var fi = rows.filter(function(x) { return x.category === 'finance'; });
-    det.details = ov.concat(fi).map(function(x) { return [x.key, x.value]; });
+    det.details = ov.concat(dt, fi).map(function(x) { return [x.key, x.value]; });
 
     /* Key Features and Key Highlights were two blocks saying similar
        things. They are now one — highlights live in property_details
@@ -1643,6 +1647,28 @@ async function hydratePropertyDetailRows(propertyId, det) {
     }
   } catch(e) {
     console.warn('MGROUP: property_details', e.message);
+  }
+}
+
+/* Amenities are ticked in the admin and stored in property_features,
+   but nothing ever read them back, so Features & Amenities sat empty on
+   every listing that was not hand-coded in PD. */
+async function hydratePropertyFeatures(propertyId, det) {
+  if (det.feats && det.feats.length) return;
+  var base = mgRestUrl();
+  var key = mgAnonKey();
+  if (!base || !key) return;
+  try {
+    var r = await fetch(base + '/rest/v1/property_features?property_id=eq.' + propertyId + '&order=sort_order.asc', {
+      headers: { 'apikey': key, 'Authorization': 'Bearer ' + key }
+    });
+    if (!r.ok) return;
+    var rows = await r.json();
+    if (Array.isArray(rows) && rows.length) {
+      det.feats = rows.map(function(x) { return x.feature; }).filter(Boolean);
+    }
+  } catch(e) {
+    console.warn('MGROUP: property_features', e.message);
   }
 }
 
@@ -1809,7 +1835,19 @@ async function openDetail(id) {
   const det = d || { usd:'', yield:'', pool:'Private', desc:'<p>'+p.desc+'</p>', feats:[], details:[['Location',p.loc],['Bedrooms',p.beds],['Bathrooms',p.baths],['Size',p.sqm+' sqm']], finance:[['Asking Price',p.price]], nearby:[], images:[], video:'' };
   det.details = det.details || [];
   det.feats = det.feats || [];
+  /* A listing added through the admin has no hand-written PD entry, so
+     the gallery loader bootstraps a stub with desc:'' and feats:[].
+     That stub then won over the row in the database — which is why
+     every admin-added listing, Canvas by Sansiri among them, showed a
+     blank Property Description. Fall back to the stored text whenever
+     the stub has none, keeping blank lines as separate paragraphs. */
+  if (!det.desc && p.desc) {
+    det.desc = String(p.desc).split(/\n\s*\n/).map(function(para){
+      return '<p>' + para.trim().replace(/\n/g, '<br>') + '</p>';
+    }).join('');
+  }
   await hydratePropertyDetailRows(id, det);
+  await hydratePropertyFeatures(id, det);
   if (!det.images) det.images = [];
   if (!det.video) det.video = '';
   curProp=p;
