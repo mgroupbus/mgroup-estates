@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css?v=180">
+<link rel="stylesheet" href="assets/styles.css?v=181">
 
 <link rel="canonical" href="https://mgroupestates.com/">
 <meta property="og:type" content="website">
@@ -180,6 +180,22 @@
 
 
 
+
+<!-- ─── FEATURED FILM ───────────────────────────────────────────
+     Fills itself from the first Recommended listing that carries a
+     short clip (property_videos, video_type 'loop'). Nothing to edit
+     here when the featured listing changes, and the band hides itself
+     when no featured listing has one. -->
+<section class="ff" id="featuredFilm" hidden>
+  <video class="ff-video" id="ffVideo" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+  <div class="ff-shade"></div>
+  <div class="ff-inner">
+    <div class="ff-eyebrow">New Release</div>
+    <h2 class="ff-title" id="ffTitle"></h2>
+    <div class="ff-meta" id="ffMeta"></div>
+    <a class="ff-cta" id="ffCta" href="collections.html">View the property</a>
+  </div>
+</section>
 
 <section id="investment">
   <div class="inv-header">
@@ -745,6 +761,6 @@
 <!-- The cookie banner is built by analytics.js now, so that every page
      asks the question and so that Decline actually declines. -->
 <script src="assets/analytics.js?v=1"></script>
-<script src="assets/app.js?v=180"></script>
+<script src="assets/app.js?v=181"></script>
 </body>
 </html>

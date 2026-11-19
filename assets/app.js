@@ -1022,9 +1022,58 @@ async function attachInvCardLoops() {
       var v = byId[c.propId];
       if (v && v.url) { c.loopUrl = v.url; c.loopPoster = v.thumbnail_url || ''; hit = true; }
     });
-    if (hit) { renderInvSlider(); applyInvTransform(); invSyncCardVideos(); }
+    if (hit) {
+      renderInvSlider(); applyInvTransform();
+      renderFeaturedFilm();
+      invSyncCardVideos();
+    }
   } catch(e) {
     console.warn('MGROUP: card loops', e.message);
+  }
+}
+
+/* The band above Recommended Collection. It takes the first featured
+   listing that has a clip, so changing which listing is featured is a
+   database edit rather than a code one, and it stays hidden while no
+   featured listing has one. */
+function renderFeaturedFilm() {
+  var sec = document.getElementById('featuredFilm');
+  if (!sec) return;                       /* not the home page */
+  var card = INV_CARDS.filter(function(c){ return c.loopUrl; })[0];
+  if (!card) { sec.hidden = true; return; }
+
+  sec.hidden = false;
+  sec.setAttribute('data-prop', card.propId || '');
+  if (card.loopPoster) sec.style.backgroundImage = 'url(' + card.loopPoster + ')';
+
+  var v = document.getElementById('ffVideo');
+  if (v && v.getAttribute('src') !== card.loopUrl) v.setAttribute('src', card.loopUrl);
+
+  var t = document.getElementById('ffTitle');
+  if (t) t.textContent = card.name || '';
+  var m = document.getElementById('ffMeta');
+  if (m) m.textContent = [card.loc, card.price].filter(Boolean).join('   ·   ');
+  var a = document.getElementById('ffCta');
+  if (a && card.propId && typeof mgPropUrl === 'function') a.href = mgPropUrl(card.propId);
+
+  ffSyncVideo();
+}
+
+function ffSyncVideo() {
+  var sec = document.getElementById('featuredFilm');
+  var v = document.getElementById('ffVideo');
+  if (!sec || !v || sec.hidden) return;
+  var still = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var r = sec.getBoundingClientRect();
+  var onScreen = r.bottom > 0 && r.top < (window.innerHeight || 0);
+  if (onScreen && !still && !document.hidden) {
+    var pr = v.play();
+    if (pr && pr.catch) pr.catch(function(){ /* autoplay refused — the poster stays */ });
+    v.classList.add('is-playing');
+  } else {
+    v.pause();
+    v.classList.remove('is-playing');
   }
 }
 
@@ -1043,10 +1092,19 @@ function invSyncCardVideos() {
     var r = sec.getBoundingClientRect();
     onScreen = r.bottom > 0 && r.top < (window.innerHeight || 0);
   }
+  /* The listing showing in the band above does not also play in its
+     card — one clip decoding per screen, not two of the same. */
+  var banner = document.getElementById('featuredFilm');
+  var bannerProp = (banner && !banner.hidden)
+    ? banner.getAttribute('data-prop') : null;
+
   [].forEach.call(vids, function(v){
     var card = v.closest('.inv-card');
+    var idx = card ? parseInt(card.getAttribute('data-idx'), 10) : -1;
+    var c = INV_CARDS[idx];
+    var inBanner = c && bannerProp && String(c.propId) === String(bannerProp);
     var active = card && card.classList.contains('is-active');
-    if (active && onScreen && !still) {
+    if (active && onScreen && !still && !inBanner) {
       var pr = v.play();
       if (pr && pr.catch) pr.catch(function(){ /* autoplay refused — poster stays */ });
       v.classList.add('is-playing');
@@ -1146,6 +1204,7 @@ function applyInvTransform() {
     requestAnimationFrame(function(){
       queued = false;
       if (typeof invSyncCardVideos === 'function') invSyncCardVideos();
+      if (typeof ffSyncVideo === 'function') ffSyncVideo();
     });
   }
   window.addEventListener('scroll', ping, { passive: true });

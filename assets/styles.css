@@ -6123,3 +6123,65 @@ p + p{margin-top:14px}
    assumed. Stretching them to 256.5px to "close the seam" forces the
    browser to resample a 256px bitmap into a 257px box, which softens
    both edges and draws the very line it was meant to remove. */
+
+/* ═══ FEATURED FILM ═══════════════════════════════════════════════
+   A full-width band above Recommended Collection. The poster is set as
+   the section's own background so the band is a photograph before the
+   clip arrives, and still a photograph for anyone who asks for reduced
+   motion — never a black rectangle. */
+.ff{
+  position:relative; overflow:hidden;
+  background:#0a0806 center/cover no-repeat;
+  height:min(64vh,620px); min-height:420px;
+  display:flex; align-items:flex-end;
+}
+.ff-video{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; opacity:0; transition:opacity 1s ease;
+  pointer-events:none;
+}
+.ff-video.is-playing{opacity:1}
+.ff-shade{
+  position:absolute; inset:0; z-index:1;
+  background:linear-gradient(to top,
+    rgba(10,8,6,.90) 0%, rgba(10,8,6,.58) 38%,
+    rgba(10,8,6,.14) 70%, rgba(10,8,6,.34) 100%);
+}
+.ff-inner{
+  position:relative; z-index:2; width:100%;
+  max-width:1180px; margin-inline:auto;
+  padding-left:max(22px, env(safe-area-inset-left, 0px));
+  padding-right:max(22px, env(safe-area-inset-right, 0px));
+  padding-block:0 48px; color:#fff;
+}
+.ff-eyebrow{
+  font-family:var(--font-body); font-size:10px; font-weight:600;
+  letter-spacing:.22em; text-transform:uppercase;
+  color:rgba(255,255,255,.72); margin-bottom:12px;
+}
+.ff-title{
+  font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  font-weight:400; font-size:clamp(2rem,5vw,3.4rem);
+  line-height:1.06; margin:0 0 10px; color:#fff; text-wrap:balance;
+}
+.ff-meta{
+  font-family:var(--font-body); font-size:14px;
+  color:rgba(255,255,255,.82); margin-bottom:24px;
+}
+.ff-cta{
+  display:inline-block; font-family:var(--font-body);
+  font-size:11px; font-weight:600; letter-spacing:.18em;
+  text-transform:uppercase; color:#1B1510; background:#fff;
+  padding:13px 26px; text-decoration:none;
+  transition:box-shadow .25s ease, transform .25s ease;
+}
+.ff-cta:hover{box-shadow:0 16px 34px rgba(0,0,0,.4); transform:translateY(-1px)}
+.ff-cta:focus-visible{outline:2px solid #fff; outline-offset:3px}
+@media(max-width:700px){
+  .ff{height:min(70vh,540px); min-height:380px}
+  .ff-inner{padding-block:0 34px}
+}
+@media (prefers-reduced-motion:reduce){
+  .ff-video{display:none}
+  .ff-cta{transition:none}
+}
