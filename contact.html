@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css?v=177">
+<link rel="stylesheet" href="assets/styles.css?v=178">
 <link rel="canonical" href="https://mgroupestates.com/contact">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="MGROUP Estates">
@@ -141,8 +141,9 @@ function sendContactPage(e){
   try{
     fetch(SB_URL+'/rest/v1/enquiries',{method:'POST',
       headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({name:name,email:email,phone:phone,message:msg,
-                           enquiry_type:interest,source:'contact_page',status:'new'})
+      body:JSON.stringify((typeof mgWithLeadFields==='function'?mgWithLeadFields:function(p){return p;})(
+                          {name:name,email:email,phone:phone,message:msg,
+                           enquiry_type:interest,source:'contact_page',status:'new'}))
     }).then(function(r){if(!r.ok)r.text().then(function(t){console.error('Supabase enquiry insert failed:',r.status,t)});})
      .catch(function(e){console.error('Supabase enquiry insert error:',e)});
   }catch(err){}
@@ -277,6 +278,7 @@ function sendContactPage(e){
     <div class="policy-updated">Last updated: January 2026</div>
   </div>
 </div>
-<script src="assets/app.js?v=177"></script>
+<script src="assets/analytics.js?v=1"></script>
+<script src="assets/app.js?v=178"></script>
 </body>
 </html>
