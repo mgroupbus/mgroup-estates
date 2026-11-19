@@ -6135,6 +6135,11 @@ p + p{margin-top:14px}
   height:min(64vh,620px); min-height:420px;
   display:flex; align-items:flex-end;
 }
+/* display:flex above outranks the browser's own [hidden]{display:none},
+   so the band rendered as a black slab with an empty title whenever no
+   featured listing had a clip — which is every visitor, until one does.
+   The attribute has to be given back its authority explicitly. */
+.ff[hidden]{display:none}
 .ff-video{
   position:absolute; inset:0; width:100%; height:100%;
   object-fit:cover; opacity:0; transition:opacity 1s ease;
