@@ -6168,14 +6168,23 @@ p + p{margin-top:14px}
   font-family:var(--font-body); font-size:14px;
   color:rgba(255,255,255,.82); margin-bottom:24px;
 }
+/* Transparent over the film, with a hairline rather than a solid slab —
+   the photography stays the loudest thing in the band. No backdrop blur:
+   on iOS that filter has already cost this site a whole-page blur once. */
 .ff-cta{
   display:inline-block; font-family:var(--font-body);
   font-size:11px; font-weight:600; letter-spacing:.18em;
-  text-transform:uppercase; color:#1B1510; background:#fff;
-  padding:13px 26px; text-decoration:none;
-  transition:box-shadow .25s ease, transform .25s ease;
+  text-transform:uppercase; color:#fff;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.55);
+  padding:14px 30px; text-decoration:none;
+  transition:background .3s ease, border-color .3s ease, transform .3s ease;
 }
-.ff-cta:hover{box-shadow:0 16px 34px rgba(0,0,0,.4); transform:translateY(-1px)}
+.ff-cta:hover{
+  background:rgba(255,255,255,.18);
+  border-color:#fff;
+  transform:translateY(-1px);
+}
 .ff-cta:focus-visible{outline:2px solid #fff; outline-offset:3px}
 @media(max-width:700px){
   .ff{height:min(70vh,540px); min-height:380px}
