@@ -993,6 +993,68 @@ function buildInvCardsFromProps() {
       img: p.img || '',
     }));
   if (typeof renderInvSlider === 'function') renderInvSlider();
+  attachInvCardLoops();
+}
+
+/* A listing may carry a short silent clip (property_videos, video_type
+   'loop') that plays in its Recommended card instead of a still. It is a
+   few seconds and about a megabyte — the full walkthrough stays on the
+   listing page, where someone has chosen to watch it. */
+async function attachInvCardLoops() {
+  if (!INV_CARDS.length) return;
+  var base = mgRestUrl(), key = mgAnonKey();
+  if (!base || !key) return;
+  var ids = INV_CARDS.map(function(c){ return c.propId; }).filter(Boolean);
+  if (!ids.length) return;
+  try {
+    var r = await fetch(base + '/rest/v1/property_videos?video_type=eq.loop'
+          + '&property_id=in.(' + ids.join(',') + ')'
+          + '&select=property_id,url,thumbnail_url', {
+      headers: { 'apikey': key, 'Authorization': 'Bearer ' + key }
+    });
+    if (!r.ok) return;
+    var rows = await r.json();
+    if (!Array.isArray(rows) || !rows.length) return;
+    var byId = {};
+    rows.forEach(function(v){ byId[v.property_id] = v; });
+    var hit = false;
+    INV_CARDS.forEach(function(c){
+      var v = byId[c.propId];
+      if (v && v.url) { c.loopUrl = v.url; c.loopPoster = v.thumbnail_url || ''; hit = true; }
+    });
+    if (hit) { renderInvSlider(); applyInvTransform(); invSyncCardVideos(); }
+  } catch(e) {
+    console.warn('MGROUP: card loops', e.message);
+  }
+}
+
+/* Only the card you are looking at plays. Anything else would have
+   several videos decoding behind one another on the home page, and the
+   clips are set to preload nothing, so a card that never becomes active
+   costs no bytes at all. */
+function invSyncCardVideos() {
+  var vids = document.querySelectorAll('.inv-card-video');
+  if (!vids.length) return;
+  var still = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sec = document.getElementById('investment');
+  var onScreen = false;
+  if (sec) {
+    var r = sec.getBoundingClientRect();
+    onScreen = r.bottom > 0 && r.top < (window.innerHeight || 0);
+  }
+  [].forEach.call(vids, function(v){
+    var card = v.closest('.inv-card');
+    var active = card && card.classList.contains('is-active');
+    if (active && onScreen && !still) {
+      var pr = v.play();
+      if (pr && pr.catch) pr.catch(function(){ /* autoplay refused — poster stays */ });
+      v.classList.add('is-playing');
+    } else {
+      v.pause();
+      v.classList.remove('is-playing');
+    }
+  });
 }
 
 let invIndex = 0;
@@ -1011,6 +1073,7 @@ function renderInvSlider() {
     <div class="inv-card" onclick="${c.propId ? `location.href=mgPropUrl(${c.propId})` : ''}" data-idx="${i}" style="${c.propId ? 'cursor:pointer' : 'cursor:default'}">
       <div class="inv-card-img">
         <div class="inv-card-img-inner" style="background-color:#0a0a0a;background-image:${c.img ? 'url('+mgImg(c.img, mgCardW())+')' : c.bg};background-size:cover;background-position:center;background-repeat:no-repeat;width:100%;height:100%;"></div>
+        ${c.loopUrl ? `<video class="inv-card-video" src="${c.loopUrl}" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>` : ''}
         <div class="inv-card-img-overlay"></div>
         ${c.badge ? `<div class="inv-yield-badge">${c.badge}</div>` : ''}
         <button class="inv-save" onclick="event.stopPropagation()">♡</button>
@@ -1070,7 +1133,25 @@ function applyInvTransform() {
   var next = document.querySelector('.inv-arrow--next');
   if (prev) prev.disabled = invIndex <= 0;
   if (next) next.disabled = invIndex >= last;
+  if (typeof invSyncCardVideos === 'function') invSyncCardVideos();
 }
+
+/* …and with the page, so the clip is not running while the section is
+   scrolled off screen. */
+(function(){
+  var queued = false;
+  function ping(){
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(function(){
+      queued = false;
+      if (typeof invSyncCardVideos === 'function') invSyncCardVideos();
+    });
+  }
+  window.addEventListener('scroll', ping, { passive: true });
+  window.addEventListener('resize', ping);
+  document.addEventListener('visibilitychange', ping);
+})();
 
 // Touch / drag support
 (function() {
