@@ -158,7 +158,7 @@ var MGI = (function(){
 
 // sbImg: Supabase image transformation helper
 function sbImg(url,w,q){w=w||1800;q=q||80;if(!url)return url;if(url.includes('/render/image/public/')){return url.split('?')[0]+'?width='+w+'&quality='+q;}if(url.includes('/storage/v1/object/public/')){return url.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+'?width='+w+'&quality='+q;}return url;}
-(function(){var cb=document.getElementById('cookieBanner');if(cb&&localStorage.getItem('ck'))cb.style.display='none';})();
+/* the cookie banner and the consent it records belong to analytics.js */
 ;
 
 function showComingSoon(){
@@ -1381,19 +1381,62 @@ function sidSelVisit(el,type){
    They write to Supabase now, and — this is the point — the customer is
    only told it worked once the row is actually in. A failure says so
    and leaves the form filled in so nothing typed is lost. */
+/* Where this lead came from, in the shape the enquiries table expects.
+   analytics.js captured it on the first page of the session; by now the
+   campaign is long gone from the URL. Empty object if analytics.js is
+   not on the page, so the portals keep working without it. */
+function mgLeadFields(){
+  var a = (typeof window.mgAttribution === 'function') ? window.mgAttribution() : {};
+  var c = (window.mgConsent && window.mgConsent.state && window.mgConsent.state()) || null;
+  var ga = document.cookie.match(/_ga=GA\d\.\d\.(\d+\.\d+)/);
+  return {
+    utm: { source: a.source || '', medium: a.medium || '', campaign: a.campaign || '',
+           term: a.term || '', content: a.content || '',
+           gclid: a.gclid || '', fbclid: a.fbclid || '' },
+    first_page:   a.landing || location.pathname,
+    referrer:     a.referrer || document.referrer || '',
+    ga_client_id: ga ? ga[1] : null,
+    consent_at:   (c && c.analytics) ? c.at : null
+  };
+}
+
+/* Merge without letting attribution overwrite anything the caller set. */
+function mgWithLeadFields(payload){
+  var out = mgLeadFields();
+  for (var k in payload) if (payload.hasOwnProperty(k)) out[k] = payload[k];
+  return out;
+}
+
 function mgPostEnquiry(payload){
+  payload = mgWithLeadFields(payload);
   return fetch(SB_URL + '/rest/v1/enquiries', {
     method: 'POST',
     headers: {
       'apikey': SB_KEY,
       'Authorization': 'Bearer ' + SB_KEY,
       'Content-Type': 'application/json',
-      'Prefer': 'return=representation'
+      /* return=minimal, not representation: enquiries has an INSERT policy
+         but deliberately no SELECT one, so nobody with the public key can
+         read other people's enquiries back. Asking PostgREST to return the
+         new row makes it read what it just wrote, which that policy denies,
+         and the whole insert comes back 401 — which is exactly what had
+         been happening to every property enquiry and viewing request. */
+      'Prefer': 'return=minimal'
     },
     body: JSON.stringify(payload)
   }).then(function(r){
     if (!r.ok) return r.text().then(function(t){ throw new Error(r.status + ' ' + t); });
-    return r.json();
+    /* only once the row is actually in — a conversion we cannot prove
+       is worse than no number at all */
+    if (typeof window.mgTrack === 'function') {
+      window.mgTrack(payload.enquiry_type === 'viewing' ? 'viewing_request' : 'enquiry_submit', {
+        property_id:   payload.property_id || null,
+        property_name: payload.property_name || '',
+        enquiry_type:  payload.enquiry_type || '',
+        lead_source:   payload.source || ''
+      });
+    }
+    return true;
   });
 }
 
@@ -1446,10 +1489,10 @@ function sidConfirmSchedule(){
     source: 'property_viewing',
     property_id: window._currentPropertyId || null,
     property_name: window._currentPropertyName || ''
-  }).then(function(rows){
-    var ref = 'MGE-' + (rows && rows[0] && rows[0].id ? String(rows[0].id).padStart(5,'0') : '');
+  }).then(function(){
+    /* no reference number: it used to be the row id, and reading the id
+       back is the very thing that was breaking the request */
     show('<strong>Viewing requested</strong><br>' +
-         (ref !== 'MGE-' ? 'Reference ' + ref + '<br>' : '') +
          label + '<br>Our advisory team will confirm with you shortly.', true);
     btn.style.display = 'none';
     mgEmailCopy('Viewing request: ' + (window._currentPropertyName || 'Property') + ' — ' + name,
@@ -1915,6 +1958,15 @@ async function openDetail(id) {
   // Pre-fill enquiry form
   window._currentPropertyName=p.name;
   window._currentPropertyId=p.id;          /* the enquiry rows key off this */
+  /* which listings get looked at, and which get looked at and then left,
+     is the question the site has never been able to answer */
+  if (typeof window.mgTrack === 'function') {
+    window.mgTrack('view_property', {
+      property_id: p.id, property_name: p.name,
+      area: p.loc || '', collection: p.coll || '',
+      beds: p.beds || null, price_display: p.price || ''
+    });
+  }
   document.getElementById('enqMsg').value='Hello, I am interested in '+p.name;
   document.getElementById('enqRole').value='';
   document.getElementById('enqName').value='';
@@ -3104,7 +3156,15 @@ function sendContactForm(e) {
     // Check direct video file (.mp4, .webm, .mov)
     if (url.match(/\.(mp4|webm|mov|m4v)(\?|$)/i) || video.video_type === 'mp4') {
       section.style.display = '';
-      wrap.innerHTML = '<video controls preload="metadata" style="width:100%;height:100%;background:#000;" playsinline>' +
+      /* preload="metadata" so a 37MB walkthrough is not pulled down by
+         everyone who scrolls past it, and thumbnail_url — a column that
+         was in the table but never read — as the still frame, so the
+         section is a photograph rather than a black rectangle until
+         someone presses play. */
+      var poster = video.thumbnail_url
+        ? ' poster="' + String(video.thumbnail_url).replace(/"/g, '&quot;') + '"' : '';
+      wrap.innerHTML = '<video controls preload="metadata"' + poster +
+        ' playsinline>' +
         '<source src="' + url + '" type="video/mp4">' +
         'Your browser does not support the video tag.' +
         '</video>';
@@ -3185,8 +3245,8 @@ function sendQuickForm(e){
   try{
     fetch(SB_URL+'/rest/v1/enquiries',{method:'POST',
       headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({name:name,email:email,phone:phone,message:msg,
-                           enquiry_type:'General',source:'home_quick_form',status:'new'})
+      body:JSON.stringify(mgWithLeadFields({name:name,email:email,phone:phone,message:msg,
+                           enquiry_type:'General',source:'home_quick_form',status:'new'}))
     }).then(function(r){ if(!r.ok) r.text().then(function(t){ console.error('Supabase enquiry insert failed:',r.status,t); }); })
       .catch(function(err){ console.error('Supabase enquiry insert error:',err); });
   }catch(err){ console.error(err); }
