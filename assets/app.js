@@ -1068,9 +1068,17 @@ function ffSyncVideo() {
   var r = sec.getBoundingClientRect();
   var onScreen = r.bottom > 0 && r.top < (window.innerHeight || 0);
   if (onScreen && !still && !document.hidden) {
+    /* The class goes on only once playback has actually begun. Marking
+       it up front faded in a frozen first frame wherever autoplay was
+       refused, which looked like a stalled video rather than the
+       photograph the poster was there to show. */
     var pr = v.play();
-    if (pr && pr.catch) pr.catch(function(){ /* autoplay refused — the poster stays */ });
-    v.classList.add('is-playing');
+    if (pr && pr.then) {
+      pr.then(function(){ v.classList.add('is-playing'); })
+        .catch(function(){ v.classList.remove('is-playing'); });
+    } else {
+      v.classList.add('is-playing');
+    }
   } else {
     v.pause();
     v.classList.remove('is-playing');
@@ -1106,8 +1114,12 @@ function invSyncCardVideos() {
     var active = card && card.classList.contains('is-active');
     if (active && onScreen && !still && !inBanner) {
       var pr = v.play();
-      if (pr && pr.catch) pr.catch(function(){ /* autoplay refused — poster stays */ });
-      v.classList.add('is-playing');
+      if (pr && pr.then) {
+        pr.then(function(){ v.classList.add('is-playing'); })
+          .catch(function(){ v.classList.remove('is-playing'); });
+      } else {
+        v.classList.add('is-playing');
+      }
     } else {
       v.pause();
       v.classList.remove('is-playing');
