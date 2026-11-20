@@ -2064,7 +2064,7 @@ async function openDetail(id) {
   // Build thumbnails from real images
   let thumbsHtml = imgs.map((url,i)=>`<div class="det-thumb${i===0?' active':''}" style="background-image:url(${mgImg(url,200)})" onclick="swThumb(this,${i},event)"></div>`).join('');
   if (hasVideo) {
-    thumbsHtml += `<div class="det-thumb det-thumb-video" style="background-image:url(${mgImg(imgs[0]||'',200)})" onclick="openVideoLightbox(event)"></div>`;
+    thumbsHtml += `<div class="det-thumb det-thumb-video" style="background-image:url(${mgImg(window._detVideoPoster || imgs[0] || '',200)})" onclick="openVideoLightbox(event)"></div>`;
   }
   document.getElementById('detThumbs').innerHTML = thumbsHtml;
   // Header
@@ -3236,6 +3236,11 @@ function sendContactForm(e) {
             if (Array.isArray(vids) && vids.length && typeof PD === 'object') {
               if (!PD[id]) PD[id] = { images:[] };
               PD[id].video = vids[0].url;
+              /* Keep the video's own still for its thumbnail. Without it
+                 the video tile borrows photo 1, so the strip shows the
+                 same picture twice and nothing marks the video as a
+                 video. */
+              window._detVideoPoster = vids[0].thumbnail_url || '';
             }
           }
         }
