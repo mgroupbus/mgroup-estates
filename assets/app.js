@@ -974,8 +974,14 @@ let INV_CARDS = [...INV_CARDS_FALLBACK];
 function buildInvCardsFromProps() {
   if (!PROPS || PROPS.length === 0) return;
   const featuredProps = PROPS.filter(p => p.featured || p.recommended);
-  // Put The Standard (id:6) first
-  featuredProps.sort((a, b) => (a.id === 6 ? -1 : b.id === 6 ? 1 : 0));
+  /* The rail shows twelve. They used to arrive in id order, so the
+     twelve lowest ids filled it and everything added afterwards fell
+     off the end — a listing could be marked featured and still never
+     reach the page, which is what happened to The Tales Story Two as
+     the fifteenth. The Standard stays pinned to the first card; the
+     rest run newest first, so a new release actually shows up. */
+  featuredProps.sort((a, b) =>
+    (a.id === 6 ? -1 : b.id === 6 ? 1 : b.id - a.id));
   INV_CARDS = featuredProps
     .slice(0, 12)
     .map((p, i) => ({
