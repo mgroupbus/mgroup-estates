@@ -3756,7 +3756,7 @@ var MG_MUTED = [107, 90, 71];
    /property/anchan-burgundy/ rather than /property?id=13. The readable
    URL is the one indexed, shared and shown in search results; the id
    form still works for anything already linked. */
-var MG_SLUGS = {"34": "villa-anchali", "5": "the-residences-at-intercontinental-phuket", "15": "banyan-tree-oceanus", "24": "pavara-vhana-collection", "31": "canvas-by-sansiri", "28": "the-teak-phuket", "6": "the-standard-residence-phuket-bang-tao", "14": "angsana-beachfront-residences-sea-view", "19": "botanica-grand-avenue-grand-villa-zone-a1", "7": "tri-vananda", "12": "botanica-montazure", "8": "kiara-reserve-villas", "30": "banyan-tree-nammu", "32": "kiara-reserve-condominium", "33": "garden-atlas-bayview", "13": "anchan-burgundy", "18": "botanica-grand-avenue-villa-type-c"};
+var MG_SLUGS = {"5": "the-residences-at-intercontinental-phuket", "6": "the-standard-residence-phuket-bang-tao", "7": "tri-vananda", "8": "kiara-reserve-villas", "12": "botanica-montazure", "13": "anchan-burgundy", "14": "angsana-beachfront-residences-sea-view", "15": "banyan-tree-oceanus", "18": "botanica-grand-avenue-villa-type-c", "19": "botanica-grand-avenue-grand-villa-zone-a1", "24": "pavara-vhana-collection", "28": "the-teak-phuket", "30": "banyan-tree-nammu", "31": "canvas-by-sansiri", "32": "kiara-reserve-condominium", "33": "garden-atlas-bayview", "34": "villa-anchali", "37": "the-tales-story-two-pasak"};
 function mgPropUrl(id){
   var s = MG_SLUGS[id];
   return s ? '/property/' + s + '/' : 'property.html?id=' + id;
