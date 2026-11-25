@@ -367,8 +367,12 @@
     try{
       var guestId;
       if(window.gMode==='new'){
-        var g=await sbPost('guests',{name:gname,email:val('gEmail')||null,phone:val('gPhone')||null,nationality:val('gNat')||null,source:val('srcSel')},true);
-        guestId=g[0].id;
+        // de-dupe: reuse an existing guest with the same name (prefer one whose email/phone also matches)
+        var nm=gname.trim().toLowerCase(), em=(val('gEmail')||'').trim().toLowerCase(), ph=(val('gPhone')||'').trim();
+        var opts=[].slice.call(document.getElementById('guestSel').options).filter(function(o){return o.value && (o.textContent||'').trim().toLowerCase()===nm;});
+        var reuse=opts.filter(function(o){return (em&&(o.getAttribute('data-email')||'').trim().toLowerCase()===em)||(ph&&(o.getAttribute('data-phone')||'').trim()===ph);})[0] || opts[0];
+        if(reuse){ guestId=reuse.value; }
+        else { var g=await sbPost('guests',{name:gname,email:val('gEmail')||null,phone:val('gPhone')||null,nationality:val('gNat')||null,source:val('srcSel')},true); guestId=g[0].id; }
       }else{
         var go=document.getElementById('guestSel').selectedOptions[0];
         guestId=go?go.getAttribute('data-id'):null;

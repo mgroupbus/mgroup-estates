@@ -158,7 +158,7 @@ var MGI = (function(){
 
 // sbImg: Supabase image transformation helper
 function sbImg(url,w,q){w=w||1800;q=q||80;if(!url)return url;if(url.includes('/render/image/public/')){return url.split('?')[0]+'?width='+w+'&quality='+q;}if(url.includes('/storage/v1/object/public/')){return url.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+'?width='+w+'&quality='+q;}return url;}
-(function(){var cb=document.getElementById('cookieBanner');if(cb&&localStorage.getItem('ck'))cb.style.display='none';})();
+/* the cookie banner and the consent it records belong to analytics.js */
 ;
 
 function showComingSoon(){
@@ -974,8 +974,14 @@ let INV_CARDS = [...INV_CARDS_FALLBACK];
 function buildInvCardsFromProps() {
   if (!PROPS || PROPS.length === 0) return;
   const featuredProps = PROPS.filter(p => p.featured || p.recommended);
-  // Put The Standard (id:6) first
-  featuredProps.sort((a, b) => (a.id === 6 ? -1 : b.id === 6 ? 1 : 0));
+  /* The rail shows twelve. They used to arrive in id order, so the
+     twelve lowest ids filled it and everything added afterwards fell
+     off the end — a listing could be marked featured and still never
+     reach the page, which is what happened to The Tales Story Two as
+     the fifteenth. The Standard stays pinned to the first card; the
+     rest run newest first, so a new release actually shows up. */
+  featuredProps.sort((a, b) =>
+    (a.id === 6 ? -1 : b.id === 6 ? 1 : b.id - a.id));
   INV_CARDS = featuredProps
     .slice(0, 12)
     .map((p, i) => ({
@@ -993,6 +999,138 @@ function buildInvCardsFromProps() {
       img: p.img || '',
     }));
   if (typeof renderInvSlider === 'function') renderInvSlider();
+  attachInvCardLoops();
+}
+
+/* A listing may carry a short silent clip (property_videos, video_type
+   'loop') that plays in its Recommended card instead of a still. It is a
+   few seconds and about a megabyte — the full walkthrough stays on the
+   listing page, where someone has chosen to watch it. */
+async function attachInvCardLoops() {
+  if (!INV_CARDS.length) return;
+  var base = mgRestUrl(), key = mgAnonKey();
+  if (!base || !key) return;
+  var ids = INV_CARDS.map(function(c){ return c.propId; }).filter(Boolean);
+  if (!ids.length) return;
+  try {
+    var r = await fetch(base + '/rest/v1/property_videos?video_type=eq.loop'
+          + '&property_id=in.(' + ids.join(',') + ')'
+          + '&select=property_id,url,thumbnail_url', {
+      headers: { 'apikey': key, 'Authorization': 'Bearer ' + key }
+    });
+    if (!r.ok) return;
+    var rows = await r.json();
+    if (!Array.isArray(rows) || !rows.length) return;
+    var byId = {};
+    rows.forEach(function(v){ byId[v.property_id] = v; });
+    var hit = false;
+    INV_CARDS.forEach(function(c){
+      var v = byId[c.propId];
+      if (v && v.url) { c.loopUrl = v.url; c.loopPoster = v.thumbnail_url || ''; hit = true; }
+    });
+    if (hit) {
+      renderInvSlider(); applyInvTransform();
+      renderFeaturedFilm();
+      invSyncCardVideos();
+    }
+  } catch(e) {
+    console.warn('MGROUP: card loops', e.message);
+  }
+}
+
+/* The band above Recommended Collection. It takes the first featured
+   listing that has a clip, so changing which listing is featured is a
+   database edit rather than a code one, and it stays hidden while no
+   featured listing has one. */
+function renderFeaturedFilm() {
+  var sec = document.getElementById('featuredFilm');
+  if (!sec) return;                       /* not the home page */
+  var card = INV_CARDS.filter(function(c){ return c.loopUrl; })[0];
+  if (!card) { sec.hidden = true; return; }
+
+  sec.hidden = false;
+  sec.setAttribute('data-prop', card.propId || '');
+  if (card.loopPoster) sec.style.backgroundImage = 'url(' + card.loopPoster + ')';
+
+  var v = document.getElementById('ffVideo');
+  if (v && v.getAttribute('src') !== card.loopUrl) v.setAttribute('src', card.loopUrl);
+
+  var t = document.getElementById('ffTitle');
+  if (t) t.textContent = card.name || '';
+  var m = document.getElementById('ffMeta');
+  if (m) m.textContent = [card.loc, card.price].filter(Boolean).join('   ·   ');
+  var a = document.getElementById('ffCta');
+  if (a && card.propId && typeof mgPropUrl === 'function') a.href = mgPropUrl(card.propId);
+
+  ffSyncVideo();
+}
+
+function ffSyncVideo() {
+  var sec = document.getElementById('featuredFilm');
+  var v = document.getElementById('ffVideo');
+  if (!sec || !v || sec.hidden) return;
+  var still = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var r = sec.getBoundingClientRect();
+  var onScreen = r.bottom > 0 && r.top < (window.innerHeight || 0);
+  if (onScreen && !still && !document.hidden) {
+    /* The class goes on only once playback has actually begun. Marking
+       it up front faded in a frozen first frame wherever autoplay was
+       refused, which looked like a stalled video rather than the
+       photograph the poster was there to show. */
+    var pr = v.play();
+    if (pr && pr.then) {
+      pr.then(function(){ v.classList.add('is-playing'); })
+        .catch(function(){ v.classList.remove('is-playing'); });
+    } else {
+      v.classList.add('is-playing');
+    }
+  } else {
+    v.pause();
+    v.classList.remove('is-playing');
+  }
+}
+
+/* Only the card you are looking at plays. Anything else would have
+   several videos decoding behind one another on the home page, and the
+   clips are set to preload nothing, so a card that never becomes active
+   costs no bytes at all. */
+function invSyncCardVideos() {
+  var vids = document.querySelectorAll('.inv-card-video');
+  if (!vids.length) return;
+  var still = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sec = document.getElementById('investment');
+  var onScreen = false;
+  if (sec) {
+    var r = sec.getBoundingClientRect();
+    onScreen = r.bottom > 0 && r.top < (window.innerHeight || 0);
+  }
+  /* The listing showing in the band above does not also play in its
+     card — one clip decoding per screen, not two of the same. */
+  var banner = document.getElementById('featuredFilm');
+  var bannerProp = (banner && !banner.hidden)
+    ? banner.getAttribute('data-prop') : null;
+
+  [].forEach.call(vids, function(v){
+    var card = v.closest('.inv-card');
+    var idx = card ? parseInt(card.getAttribute('data-idx'), 10) : -1;
+    var c = INV_CARDS[idx];
+    var inBanner = c && bannerProp && String(c.propId) === String(bannerProp);
+    var active = card && card.classList.contains('is-active');
+    if (active && onScreen && !still && !inBanner) {
+      var pr = v.play();
+      if (pr && pr.then) {
+        pr.then(function(){ v.classList.add('is-playing'); })
+          .catch(function(){ v.classList.remove('is-playing'); });
+      } else {
+        v.classList.add('is-playing');
+      }
+    } else {
+      v.pause();
+      v.classList.remove('is-playing');
+    }
+  });
 }
 
 let invIndex = 0;
@@ -1011,6 +1149,7 @@ function renderInvSlider() {
     <div class="inv-card" onclick="${c.propId ? `location.href=mgPropUrl(${c.propId})` : ''}" data-idx="${i}" style="${c.propId ? 'cursor:pointer' : 'cursor:default'}">
       <div class="inv-card-img">
         <div class="inv-card-img-inner" style="background-color:#0a0a0a;background-image:${c.img ? 'url('+mgImg(c.img, mgCardW())+')' : c.bg};background-size:cover;background-position:center;background-repeat:no-repeat;width:100%;height:100%;"></div>
+        ${c.loopUrl ? `<video class="inv-card-video" src="${c.loopUrl}" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>` : ''}
         <div class="inv-card-img-overlay"></div>
         ${c.badge ? `<div class="inv-yield-badge">${c.badge}</div>` : ''}
         <button class="inv-save" onclick="event.stopPropagation()">♡</button>
@@ -1070,7 +1209,26 @@ function applyInvTransform() {
   var next = document.querySelector('.inv-arrow--next');
   if (prev) prev.disabled = invIndex <= 0;
   if (next) next.disabled = invIndex >= last;
+  if (typeof invSyncCardVideos === 'function') invSyncCardVideos();
 }
+
+/* …and with the page, so the clip is not running while the section is
+   scrolled off screen. */
+(function(){
+  var queued = false;
+  function ping(){
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(function(){
+      queued = false;
+      if (typeof invSyncCardVideos === 'function') invSyncCardVideos();
+      if (typeof ffSyncVideo === 'function') ffSyncVideo();
+    });
+  }
+  window.addEventListener('scroll', ping, { passive: true });
+  window.addEventListener('resize', ping);
+  document.addEventListener('visibilitychange', ping);
+})();
 
 // Touch / drag support
 (function() {
@@ -1381,19 +1539,62 @@ function sidSelVisit(el,type){
    They write to Supabase now, and — this is the point — the customer is
    only told it worked once the row is actually in. A failure says so
    and leaves the form filled in so nothing typed is lost. */
+/* Where this lead came from, in the shape the enquiries table expects.
+   analytics.js captured it on the first page of the session; by now the
+   campaign is long gone from the URL. Empty object if analytics.js is
+   not on the page, so the portals keep working without it. */
+function mgLeadFields(){
+  var a = (typeof window.mgAttribution === 'function') ? window.mgAttribution() : {};
+  var c = (window.mgConsent && window.mgConsent.state && window.mgConsent.state()) || null;
+  var ga = document.cookie.match(/_ga=GA\d\.\d\.(\d+\.\d+)/);
+  return {
+    utm: { source: a.source || '', medium: a.medium || '', campaign: a.campaign || '',
+           term: a.term || '', content: a.content || '',
+           gclid: a.gclid || '', fbclid: a.fbclid || '' },
+    first_page:   a.landing || location.pathname,
+    referrer:     a.referrer || document.referrer || '',
+    ga_client_id: ga ? ga[1] : null,
+    consent_at:   (c && c.analytics) ? c.at : null
+  };
+}
+
+/* Merge without letting attribution overwrite anything the caller set. */
+function mgWithLeadFields(payload){
+  var out = mgLeadFields();
+  for (var k in payload) if (payload.hasOwnProperty(k)) out[k] = payload[k];
+  return out;
+}
+
 function mgPostEnquiry(payload){
+  payload = mgWithLeadFields(payload);
   return fetch(SB_URL + '/rest/v1/enquiries', {
     method: 'POST',
     headers: {
       'apikey': SB_KEY,
       'Authorization': 'Bearer ' + SB_KEY,
       'Content-Type': 'application/json',
-      'Prefer': 'return=representation'
+      /* return=minimal, not representation: enquiries has an INSERT policy
+         but deliberately no SELECT one, so nobody with the public key can
+         read other people's enquiries back. Asking PostgREST to return the
+         new row makes it read what it just wrote, which that policy denies,
+         and the whole insert comes back 401 — which is exactly what had
+         been happening to every property enquiry and viewing request. */
+      'Prefer': 'return=minimal'
     },
     body: JSON.stringify(payload)
   }).then(function(r){
     if (!r.ok) return r.text().then(function(t){ throw new Error(r.status + ' ' + t); });
-    return r.json();
+    /* only once the row is actually in — a conversion we cannot prove
+       is worse than no number at all */
+    if (typeof window.mgTrack === 'function') {
+      window.mgTrack(payload.enquiry_type === 'viewing' ? 'viewing_request' : 'enquiry_submit', {
+        property_id:   payload.property_id || null,
+        property_name: payload.property_name || '',
+        enquiry_type:  payload.enquiry_type || '',
+        lead_source:   payload.source || ''
+      });
+    }
+    return true;
   });
 }
 
@@ -1446,10 +1647,10 @@ function sidConfirmSchedule(){
     source: 'property_viewing',
     property_id: window._currentPropertyId || null,
     property_name: window._currentPropertyName || ''
-  }).then(function(rows){
-    var ref = 'MGE-' + (rows && rows[0] && rows[0].id ? String(rows[0].id).padStart(5,'0') : '');
+  }).then(function(){
+    /* no reference number: it used to be the row id, and reading the id
+       back is the very thing that was breaking the request */
     show('<strong>Viewing requested</strong><br>' +
-         (ref !== 'MGE-' ? 'Reference ' + ref + '<br>' : '') +
          label + '<br>Our advisory team will confirm with you shortly.', true);
     btn.style.display = 'none';
     mgEmailCopy('Viewing request: ' + (window._currentPropertyName || 'Property') + ' — ' + name,
@@ -1605,9 +1806,13 @@ async function hydratePropertyDetailRows(propertyId, det) {
     if (!r.ok) return;
     var rows = await r.json();
     if (!Array.isArray(rows) || !rows.length) return;
+    /* The admin saves key facts under 'details'; a few older listings
+       use 'overview'. Reading only the latter meant 92 rows across ten
+       listings never reached the page. */
     var ov = rows.filter(function(x) { return x.category === 'overview'; });
+    var dt = rows.filter(function(x) { return x.category === 'details'; });
     var fi = rows.filter(function(x) { return x.category === 'finance'; });
-    det.details = ov.concat(fi).map(function(x) { return [x.key, x.value]; });
+    det.details = ov.concat(dt, fi).map(function(x) { return [x.key, x.value]; });
 
     /* Key Features and Key Highlights were two blocks saying similar
        things. They are now one — highlights live in property_details
@@ -1643,6 +1848,28 @@ async function hydratePropertyDetailRows(propertyId, det) {
     }
   } catch(e) {
     console.warn('MGROUP: property_details', e.message);
+  }
+}
+
+/* Amenities are ticked in the admin and stored in property_features,
+   but nothing ever read them back, so Features & Amenities sat empty on
+   every listing that was not hand-coded in PD. */
+async function hydratePropertyFeatures(propertyId, det) {
+  if (det.feats && det.feats.length) return;
+  var base = mgRestUrl();
+  var key = mgAnonKey();
+  if (!base || !key) return;
+  try {
+    var r = await fetch(base + '/rest/v1/property_features?property_id=eq.' + propertyId + '&order=sort_order.asc', {
+      headers: { 'apikey': key, 'Authorization': 'Bearer ' + key }
+    });
+    if (!r.ok) return;
+    var rows = await r.json();
+    if (Array.isArray(rows) && rows.length) {
+      det.feats = rows.map(function(x) { return x.feature; }).filter(Boolean);
+    }
+  } catch(e) {
+    console.warn('MGROUP: property_features', e.message);
   }
 }
 
@@ -1809,7 +2036,19 @@ async function openDetail(id) {
   const det = d || { usd:'', yield:'', pool:'Private', desc:'<p>'+p.desc+'</p>', feats:[], details:[['Location',p.loc],['Bedrooms',p.beds],['Bathrooms',p.baths],['Size',p.sqm+' sqm']], finance:[['Asking Price',p.price]], nearby:[], images:[], video:'' };
   det.details = det.details || [];
   det.feats = det.feats || [];
+  /* A listing added through the admin has no hand-written PD entry, so
+     the gallery loader bootstraps a stub with desc:'' and feats:[].
+     That stub then won over the row in the database — which is why
+     every admin-added listing, Canvas by Sansiri among them, showed a
+     blank Property Description. Fall back to the stored text whenever
+     the stub has none, keeping blank lines as separate paragraphs. */
+  if (!det.desc && p.desc) {
+    det.desc = String(p.desc).split(/\n\s*\n/).map(function(para){
+      return '<p>' + para.trim().replace(/\n/g, '<br>') + '</p>';
+    }).join('');
+  }
   await hydratePropertyDetailRows(id, det);
+  await hydratePropertyFeatures(id, det);
   if (!det.images) det.images = [];
   if (!det.video) det.video = '';
   curProp=p;
@@ -1831,7 +2070,7 @@ async function openDetail(id) {
   // Build thumbnails from real images
   let thumbsHtml = imgs.map((url,i)=>`<div class="det-thumb${i===0?' active':''}" style="background-image:url(${mgImg(url,200)})" onclick="swThumb(this,${i},event)"></div>`).join('');
   if (hasVideo) {
-    thumbsHtml += `<div class="det-thumb det-thumb-video" style="background-image:url(${mgImg(imgs[0]||'',200)})" onclick="openVideoLightbox(event)"></div>`;
+    thumbsHtml += `<div class="det-thumb det-thumb-video" style="background-image:url(${mgImg(window._detVideoPoster || imgs[0] || '',200)})" onclick="openVideoLightbox(event)"></div>`;
   }
   document.getElementById('detThumbs').innerHTML = thumbsHtml;
   // Header
@@ -1877,6 +2116,15 @@ async function openDetail(id) {
   // Pre-fill enquiry form
   window._currentPropertyName=p.name;
   window._currentPropertyId=p.id;          /* the enquiry rows key off this */
+  /* which listings get looked at, and which get looked at and then left,
+     is the question the site has never been able to answer */
+  if (typeof window.mgTrack === 'function') {
+    window.mgTrack('view_property', {
+      property_id: p.id, property_name: p.name,
+      area: p.loc || '', collection: p.coll || '',
+      beds: p.beds || null, price_display: p.price || ''
+    });
+  }
   document.getElementById('enqMsg').value='Hello, I am interested in '+p.name;
   document.getElementById('enqRole').value='';
   document.getElementById('enqName').value='';
@@ -2994,6 +3242,11 @@ function sendContactForm(e) {
             if (Array.isArray(vids) && vids.length && typeof PD === 'object') {
               if (!PD[id]) PD[id] = { images:[] };
               PD[id].video = vids[0].url;
+              /* Keep the video's own still for its thumbnail. Without it
+                 the video tile borrows photo 1, so the strip shows the
+                 same picture twice and nothing marks the video as a
+                 video. */
+              window._detVideoPoster = vids[0].thumbnail_url || '';
             }
           }
         }
@@ -3066,7 +3319,15 @@ function sendContactForm(e) {
     // Check direct video file (.mp4, .webm, .mov)
     if (url.match(/\.(mp4|webm|mov|m4v)(\?|$)/i) || video.video_type === 'mp4') {
       section.style.display = '';
-      wrap.innerHTML = '<video controls preload="metadata" style="width:100%;height:100%;background:#000;" playsinline>' +
+      /* preload="metadata" so a 37MB walkthrough is not pulled down by
+         everyone who scrolls past it, and thumbnail_url — a column that
+         was in the table but never read — as the still frame, so the
+         section is a photograph rather than a black rectangle until
+         someone presses play. */
+      var poster = video.thumbnail_url
+        ? ' poster="' + String(video.thumbnail_url).replace(/"/g, '&quot;') + '"' : '';
+      wrap.innerHTML = '<video controls preload="metadata"' + poster +
+        ' playsinline>' +
         '<source src="' + url + '" type="video/mp4">' +
         'Your browser does not support the video tag.' +
         '</video>';
@@ -3147,8 +3408,8 @@ function sendQuickForm(e){
   try{
     fetch(SB_URL+'/rest/v1/enquiries',{method:'POST',
       headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({name:name,email:email,phone:phone,message:msg,
-                           enquiry_type:'General',source:'home_quick_form',status:'new'})
+      body:JSON.stringify(mgWithLeadFields({name:name,email:email,phone:phone,message:msg,
+                           enquiry_type:'General',source:'home_quick_form',status:'new'}))
     }).then(function(r){ if(!r.ok) r.text().then(function(t){ console.error('Supabase enquiry insert failed:',r.status,t); }); })
       .catch(function(err){ console.error('Supabase enquiry insert error:',err); });
   }catch(err){ console.error(err); }
@@ -3495,7 +3756,7 @@ var MG_MUTED = [107, 90, 71];
    /property/anchan-burgundy/ rather than /property?id=13. The readable
    URL is the one indexed, shared and shown in search results; the id
    form still works for anything already linked. */
-var MG_SLUGS = {"34": "villa-anchali", "5": "the-residences-at-intercontinental-phuket", "15": "banyan-tree-oceanus", "24": "pavara-vhana-collection", "31": "canvas-by-sansiri", "28": "the-teak-phuket", "6": "the-standard-residence-phuket-bang-tao", "14": "angsana-beachfront-residences-sea-view", "19": "botanica-grand-avenue-grand-villa-zone-a1", "7": "tri-vananda", "12": "botanica-montazure", "8": "kiara-reserve-villas", "30": "banyan-tree-nammu", "32": "kiara-reserve-condominium", "33": "garden-atlas-bayview", "13": "anchan-burgundy", "18": "botanica-grand-avenue-villa-type-c"};
+var MG_SLUGS = {"5": "the-residences-at-intercontinental-phuket", "6": "the-standard-residence-phuket-bang-tao", "7": "tri-vananda", "8": "kiara-reserve-villas", "12": "botanica-montazure", "13": "anchan-burgundy", "14": "angsana-beachfront-residences-sea-view", "15": "banyan-tree-oceanus", "18": "botanica-grand-avenue-villa-type-c", "19": "botanica-grand-avenue-grand-villa-zone-a1", "24": "pavara-vhana-collection", "28": "the-teak-phuket", "30": "banyan-tree-nammu", "31": "canvas-by-sansiri", "32": "kiara-reserve-condominium", "33": "garden-atlas-bayview", "34": "villa-anchali", "37": "the-tales-story-two-pasak"};
 function mgPropUrl(id){
   var s = MG_SLUGS[id];
   return s ? '/property/' + s + '/' : 'property.html?id=' + id;

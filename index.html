@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css?v=176">
+<link rel="stylesheet" href="assets/styles.css?v=187">
 
 <link rel="canonical" href="https://mgroupestates.com/">
 <meta property="og:type" content="website">
@@ -180,6 +180,22 @@
 
 
 
+
+<!-- ─── FEATURED FILM ───────────────────────────────────────────
+     Fills itself from the first Recommended listing that carries a
+     short clip (property_videos, video_type 'loop'). Nothing to edit
+     here when the featured listing changes, and the band hides itself
+     when no featured listing has one. -->
+<section class="ff" id="featuredFilm" hidden>
+  <video class="ff-video" id="ffVideo" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+  <div class="ff-shade"></div>
+  <div class="ff-inner">
+    <div class="ff-eyebrow">New Release</div>
+    <h2 class="ff-title" id="ffTitle"></h2>
+    <div class="ff-meta" id="ffMeta"></div>
+    <a class="ff-cta" id="ffCta" href="collections.html">View the property</a>
+  </div>
+</section>
 
 <section id="investment">
   <div class="inv-header">
@@ -742,16 +758,9 @@
     <div class="policy-updated">Last updated: January 2026</div>
   </div>
 </div>
-<div id="cookieBanner" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(13,13,13,0.97);border-top:1px solid rgba(255,255,255,0.08);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
-  <div style="font-size:11px;color:rgba(255,255,255,0.55);font-weight:300;line-height:1.7;max-width:700px;">
-    We use cookies to enhance your experience and analyse site usage. By continuing to browse, you agree to our use of cookies.
-    <a href="#" style="color:rgba(255,255,255,0.8);text-decoration:underline;margin-left:6px;">Privacy Policy</a>
-  </div>
-  <div style="display:flex;gap:10px;flex-shrink:0;">
-    <button onclick="document.getElementById('cookieBanner').style.display='none';localStorage.setItem('ck','1')" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:8px 18px;cursor:pointer;font-family:'Figtree','Noto Sans Thai',sans-serif;">Decline</button>
-    <button onclick="document.getElementById('cookieBanner').style.display='none';localStorage.setItem('ck','1')" style="background:#fff;border:none;color:#0D0D0D;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;padding:8px 22px;cursor:pointer;font-family:'Figtree','Noto Sans Thai',sans-serif;">Accept All</button>
-  </div>
-</div>
-<script src="assets/app.js?v=176"></script>
+<!-- The cookie banner is built by analytics.js now, so that every page
+     asks the question and so that Decline actually declines. -->
+<script src="assets/analytics.js?v=1"></script>
+<script src="assets/app.js?v=187"></script>
 </body>
 </html>

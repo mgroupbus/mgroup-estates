@@ -1102,6 +1102,10 @@ def update_index_files():
     open(sm, "w", encoding="utf-8").write(s)
     lt = os.path.join(ROOT, "llms.txt")
     s = open(lt, encoding="utf-8").read()
+    for line in (f"- [Condominiums for rent in Bang Tao & Cherng Talay]({SITE}/rent-condo)",
+                 f"- [Rent out your condominium in Phuket (for owners)]({SITE}/rent/owners)"):
+        if line.split("](")[1] not in s:
+            s = s.replace("## Pages\n\n", "## Pages\n\n" + line + "\n", 1)
     s = re.sub(r"## Condos for rent \(\d+\)\n\n.*?\n\n(?=## Notes)", "", s, flags=re.S)
     if True:
         lines = "\n".join(f"- [{p['name']}]({SITE}/rent/{p['slug']}): Condominium for rent, {p['area']}, Phuket, 1–3 bedrooms, ฿{baht(p['lo'])}–{baht(p['hi'])} per month"

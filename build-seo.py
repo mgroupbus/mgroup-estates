@@ -230,6 +230,7 @@ def main():
         by_prop_det.setdefault(d.get("property_id"), []).append(d)
 
     urls = []
+    slugs = {}
     for p in props:
         slug, page = build_listing_html(
             p, by_prop_img.get(p["id"], []), by_prop_det.get(p["id"], []), shell)
@@ -237,7 +238,26 @@ def main():
         os.makedirs(d, exist_ok=True)
         open(os.path.join(d, "index.html"), "w", encoding="utf-8").write(page)
         urls.append((f"/property/{slug}/", "0.8", p.get("name")))
+        slugs[str(p["id"])] = slug
         print(f"  {p['id']:>3}  /property/{slug}/")
+
+    # MG_SLUGS in app.js turns an id into the readable /property/<slug>/
+    # link used across the site. It was maintained by hand, so every
+    # listing added after the last edit linked to property.html?id=N
+    # while its slug page sat there unused. It is written from the same
+    # data that just generated those pages.
+    appjs = os.path.join(ROOT, "assets", "app.js")
+    src = open(appjs, encoding="utf-8").read()
+    line = "var MG_SLUGS = " + json.dumps(slugs, ensure_ascii=False) + ";"
+    new_src, n = re.subn(r"^var MG_SLUGS = \{.*?\};$", lambda m: line,
+                         src, count=1, flags=re.M)
+    if n != 1:
+        raise SystemExit("build-seo: could not find the MG_SLUGS line in app.js")
+    if new_src != src:
+        open(appjs, "w", encoding="utf-8").write(new_src)
+        print(f"  app.js       MG_SLUGS rewritten, {len(slugs)} listings")
+    else:
+        print(f"  app.js       MG_SLUGS already current ({len(slugs)})")
 
     today = date.today().isoformat()
     sm = ['<?xml version="1.0" encoding="UTF-8"?>',
@@ -316,6 +336,17 @@ Sitemap: {SITE}/sitemap.xml
               "- Enquiries and viewing requests go through the contact form on any page.",
               ""]
     open(os.path.join(ROOT, "llms.txt"), "w", encoding="utf-8").write("\n".join(lines))
+
+    # The condominium rental pages are built by build-rent.py; list them again
+    # in sitemap.xml and llms.txt, which were just rewritten above.
+    rent = os.path.join(ROOT, "build-rent.py")
+    if os.path.exists(rent):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("build_rent", rent)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        mod.update_index_files()
+        print("  rent pages   listed again (build-rent.py)")
 
     print(f"\n  sitemap.xml  {len(PAGES) + len(urls)} urls")
     print(f"  robots.txt   AI crawlers allowed")
