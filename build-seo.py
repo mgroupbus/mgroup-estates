@@ -337,6 +337,17 @@ Sitemap: {SITE}/sitemap.xml
               ""]
     open(os.path.join(ROOT, "llms.txt"), "w", encoding="utf-8").write("\n".join(lines))
 
+    # The condominium rental pages are built by build-rent.py; list them again
+    # in sitemap.xml and llms.txt, which were just rewritten above.
+    rent = os.path.join(ROOT, "build-rent.py")
+    if os.path.exists(rent):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("build_rent", rent)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        mod.update_index_files()
+        print("  rent pages   listed again (build-rent.py)")
+
     print(f"\n  sitemap.xml  {len(PAGES) + len(urls)} urls")
     print(f"  robots.txt   AI crawlers allowed")
     print(f"  llms.txt     {len(urls)} listings")

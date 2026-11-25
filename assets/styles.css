@@ -3257,6 +3257,12 @@ a, button { touch-action: manipulation; }
    390px  = iPhone 14/15 standard
    ══════════════════════════════════════════════════════════════ */
 
+/* Top menu stays on one line as items are added */
+.nav-center a { white-space: nowrap; }
+@media screen and (max-width: 1320px) { .nav-center { gap: 24px; } .nav-center a { letter-spacing: 0.13em !important; } }
+@media screen and (max-width: 980px) { .nav-center { display: none !important; } #hamburgerBtn { display: flex !important; } }
+@media screen and (max-width: 1160px) { .nav-center { gap: 16px; } .nav-center a { font-size: 9px !important; letter-spacing: 0.1em !important; } nav .nav-logo-img { height: 24px; } }
+
 /* ── 1200px: Wide adjustments ───────────────────────────────── */
 @media screen and (max-width: 1200px) {
   nav { padding: 0 40px; }
