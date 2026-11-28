@@ -40,5 +40,11 @@
       "destination": "/owner",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/agent",
+      "destination": "/admin/agent-portal.html"
+    }
   ]
 }

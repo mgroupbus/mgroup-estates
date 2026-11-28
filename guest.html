@@ -20,6 +20,8 @@
     --tab:calc(58px + env(safe-area-inset-bottom,0px));
   }
   /* one accent per concierge category */
+  .cc-fasttrack{--cc:#b5533a;--ccb:#fbe8e2}
+  .cc-concierge{--cc:#a97e42;--ccb:#f3ecdf}
   .cc-transfer{--cc:#0e86dd;--ccb:#e3f1fd}
   .cc-dining{--cc:#f0870f;--ccb:#fff0dc}
   .cc-wellness{--cc:#12a15f;--ccb:#e0f7ea}
@@ -1134,8 +1136,10 @@
   }
 
   /* ---------- CONCIERGE ---------- */
-  var CATS=[['all','Everything','sparkle'],['transfer','Transfers','car'],['dining','Dining','dine'],
-            ['wellness','Wellness','leaf'],['excursion','On the water','boat'],
+  var CATS=[['all','Everything','sparkle'],['fasttrack','Fast track','clock'],
+            ['transfer','Transfers','car'],['concierge','Concierge','bell'],
+            ['dining','Dining','dine'],['wellness','Wellness','leaf'],
+            ['excursion','On the water','boat'],
             ['home','At the villa','housecheck'],['family','Family','family']];
   function catIcon(c){
     for(var i=0;i<CATS.length;i++)if(CATS[i][0]===c)return CATS[i][2];
@@ -1487,7 +1491,16 @@
       if(k&&val)rows.push(['info',String(k),String(val)]);
     });
     if(v)rows.push(['pin','For your stay at',v.name]);
-    if(r.price!=null)rows.push(['card','Price',money(r.price,r.currency)]);
+    // Two answers the guest always wants: is it approved, and is it included or charged.
+    var bill=r.billing||'chargeable';
+    if(bill==='included')rows.push(['card','Billing','Included in your rate']);
+    else if(bill==='complimentary')rows.push(['card','Billing','With our compliments']);
+    else{
+      if(r.price!=null)rows.push(['card','Price',money(r.price,r.currency)]);
+      rows.push(['card','Billing',{unpaid:'Charged on \u2014 not yet paid',
+        invoiced:'Charged on \u2014 invoiced',paid:'Paid',
+        waived:'Waived'}[r.charge_status||'unpaid']||'Charged on your stay']);
+    }
 
     var body=
       '<div class="svcbox cc-'+esc(r.category||'')+'" style="background:var(--ccb,var(--goldt));border-color:transparent">'

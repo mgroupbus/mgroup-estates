@@ -10,10 +10,12 @@
   body{background:var(--cream);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;font-size:14px}
   /* APP */
   #app{display:none;max-width:960px;margin:0 auto;padding:0 20px 48px}
-  .top{display:flex;justify-content:space-between;align-items:center;background:rgba(240,238,231,.92);
-    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--ink);margin:0 -20px 24px;padding:18px 24px;
+  .top{display:flex;justify-content:space-between;align-items:center;background:#fff;
+    color:var(--ink);margin:0 -20px 24px;padding:15px 24px;
     border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
   .top .b{font-family:var(--serif);font-size:23px;font-weight:600;letter-spacing:.01em}.top .b .e{color:var(--gold)}
+  .toplogo{height:27px;width:auto;display:block}
+  @media(max-width:560px){.toplogo{height:21px}.top{padding:13px 20px}}
   .top .who{font-size:12px;color:var(--muted)}
   .top .who b{color:var(--ink)}.top .out{font-size:12px;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
   .top .out:hover{color:var(--gold)}
@@ -46,6 +48,7 @@
   .st-cancelled,.st-canceled{background:#f8e6e1;color:#b5533a;border-color:#eed0c6}
   .st-deposit{background:var(--goldt);color:var(--gold);border-color:#e6d6ad}
   .st-pending{background:#fbf1da;color:#9a7b3a;border-color:#f0e0b8}
+  .rowhint{font-size:11.5px;color:var(--faint);margin-top:9px}
   .bkrow{cursor:pointer}
   .bkrow:hover td{background:#faf9f5}
   .caret{color:var(--gold);font-weight:800;display:inline-block;width:11px;transition:transform .15s}
@@ -204,6 +207,56 @@
     padding-top:11px;border-top:1px dashed var(--line);font-size:13px}
   .pfoot b{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
   .lcard .alogo{max-width:200px;width:72%;height:auto;display:block;margin:2px auto 10px}
+  /* badges: approved yet, and included or charged */
+  .bdg{display:inline-block;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .bdg.wait{background:#fbf1da;color:#9a7b3a}
+  .bdg.ok{background:#e6f0e4;color:#2f7a3f}
+  .bdg.no{background:#f8e6e1;color:#b5533a}
+  .bdg.inc{background:#e3eef7;color:#2f6f9e}
+  .bdg.chg{background:var(--goldt);color:var(--gold)}
+  /* extra requests */
+  .xlist{display:flex;flex-direction:column;gap:9px}
+  .xcard{border:1px solid var(--line);border-radius:11px;background:#fff;padding:12px 15px}
+  .xcard .xh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .xcard .xt{font-size:14px;font-weight:700}
+  .xcard .xm{font-size:12px;color:var(--muted);margin-top:4px;display:flex;gap:12px;flex-wrap:wrap}
+  .xcard .xb{display:flex;flex-direction:column;gap:5px;align-items:flex-end;text-align:right}
+  .xcard .xn{font-size:12px;color:var(--muted);line-height:1.6;margin-top:9px;padding-top:9px;
+    border-top:1px solid var(--line);white-space:pre-wrap}
+  .xtot{display:flex;justify-content:space-between;gap:12px;margin-top:11px;padding-top:11px;
+    border-top:1px dashed var(--line);font-size:13px}
+  .xtot b{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+  /* service catalogue */
+  .svcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:13px}
+  .svccard{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:15px 17px;
+    display:flex;flex-direction:column;gap:8px}
+  .svccard:hover{border-color:#e0d4b6}
+  .svccard .cat{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--gold)}
+  .svccard h4{font-size:15.5px;font-weight:700;line-height:1.3}
+  .svccard p{font-size:12.5px;color:var(--muted);line-height:1.55}
+  .svccard .pr{font-size:13px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:auto;padding-top:4px}
+  .svccard .pr span{font-size:11.5px;font-weight:600;color:var(--faint)}
+  /* request sheet */
+  .rqov{position:fixed;inset:0;background:rgba(26,32,29,.55);display:none;align-items:center;
+    justify-content:center;z-index:80;padding:22px}
+  .rqov.on{display:flex}
+  .rqbox{background:var(--card);border-radius:16px;max-width:430px;width:100%;padding:22px 24px 20px;
+    box-shadow:0 30px 70px -36px rgba(26,32,29,.6);max-height:90vh;overflow:auto}
+  .rqbox h3{font-family:var(--serif);font-size:22px;font-weight:600;margin-bottom:3px}
+  .rqbox .sb{font-size:12px;color:var(--muted);margin-bottom:16px}
+  .rqbox label{display:block;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--faint);font-weight:700;margin-bottom:5px}
+  .rqbox input,.rqbox select,.rqbox textarea{width:100%;font-family:var(--font);font-size:13.5px;
+    padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fbfaf6;
+    color:var(--ink);margin-bottom:13px}
+  .rqbox textarea{resize:vertical;min-height:62px}
+  .rq2{display:grid;grid-template-columns:1fr 1fr;gap:0 11px}
+  .rqnote{font-size:11.5px;color:var(--faint);line-height:1.6;margin:-4px 0 14px}
+  .rqerr{font-size:12px;color:var(--red);font-weight:600;min-height:16px;margin-bottom:8px}
+  .rqacts{display:flex;gap:9px;justify-content:flex-end}
+  .rqacts .btn.ghost{background:#fff;color:var(--muted);border-color:var(--line)}
+  /* shared (no-login) view */
+  #shared{display:none;max-width:760px;margin:0 auto;padding:0 20px 48px}
 </style></head><body>
 
 <div id="login">
@@ -224,27 +277,38 @@
 
 <div id="app">
   <div class="top">
-    <div class="b">MGROUP<span class="e">estates</span></div>
+    <img class="toplogo" id="topLogo" alt="MGROUP Estates">
     <div style="text-align:right">
       <div class="who">Agent &middot; <b id="aName">&mdash;</b></div>
-      <div class="out" onclick="agentLogout()">Sign out</div>
+      <div class="out" id="agentOut" onclick="agentLogout()">Sign out</div>
     </div>
   </div>
 
   <div class="nav">
     <div class="navlink on" id="navBk" onclick="go('bookings')">Bookings</div>
     <div class="navlink" id="navComm" onclick="go('comm')">Commission</div>
+    <div class="navlink" id="navSvc" onclick="go('svc')">Services</div>
   </div>
 
   <div id="view-bookings">
     <div class="hd"><div><div class="crumb">My referrals</div><h2>Bookings</h2></div></div>
-    <div class="tiles" id="bkTiles"></div>
+    <div class="sharebar" id="roBar" style="display:none"></div>
     <div class="pills" id="bkPills"></div>
     <div style="margin-bottom:14px"><input class="search" id="bkQ" placeholder="Search villa, guest or ref&hellip;" oninput="renderBk()"></div>
     <div class="tablecard"><table><thead><tr><th class="num"></th><th>Stay</th><th>Ref</th><th>Villa</th><th>Guest</th>
-      <th class="money">To client</th><th class="money">My commission</th><th>Status</th></tr></thead>
+      <th class="money">To client</th><th class="money" id="thComm">My commission</th><th>Status</th></tr></thead>
       <tbody id="bkRows"><tr><td colspan="8" class="state">Loading&hellip;</td></tr></tbody></table></div>
-    <div class="appfoot">Amounts shown are what the client pays, plus your own commission. Owner figures are not shared.</div>
+    <div class="rowhint">Tap a booking to see its progress, extras and documents.</div>
+    <div class="tiles" id="bkTiles" style="margin-top:22px"></div>
+    <div class="appfoot" id="bkFoot">Amounts shown are what the client pays, plus your own commission. Owner figures are not shared.</div>
+  </div>
+
+  <div id="view-svc" style="display:none">
+    <div class="hd"><div><div class="crumb">Arrange for your client</div><h2>Services</h2></div></div>
+    <div class="sharebar" id="svcBar" style="display:block">Pick a booking, send the request, and MGROUP answers with
+      <b>approved or not</b> and whether it is <b>included in the rate or charged on</b>.</div>
+    <div class="pills" id="svcCats"></div>
+    <div class="svcgrid" id="svcGrid"><div class="state">Loading&hellip;</div></div>
   </div>
 
   <div id="view-comm" style="display:none">
@@ -253,6 +317,36 @@
     <div class="tablecard"><table><thead><tr><th>Ref</th><th>Villa</th><th>Stay</th>
       <th class="money">To client</th><th class="money">My commission</th><th>Status</th></tr></thead>
       <tbody id="cRows"></tbody></table></div>
+  </div>
+</div>
+
+<div id="shared"></div>
+
+<div class="dv" id="dv">
+  <div class="dvbar"><span id="dvTitle">Document</span><span class="dvx" onclick="closeDoc()">Close &times;</span></div>
+  <div class="dvbody" id="dvBody"><div class="dvmsg">Preparing watermarked copy&hellip;</div></div>
+</div>
+
+<div class="rqov" id="rqOv" onclick="if(event.target===this)rqClose()">
+  <div class="rqbox">
+    <h3 id="rqTitle">Request</h3>
+    <div class="sb" id="rqSub"></div>
+    <label for="rqBk">Booking</label>
+    <select id="rqBk"></select>
+    <div class="rq2">
+      <div><label for="rqDate">Date</label><input id="rqDate" type="date"></div>
+      <div><label for="rqTime">Time</label><input id="rqTime" placeholder="e.g. 14:30"></div>
+      <div><label for="rqPeople">People</label><input id="rqPeople" type="number" min="1" placeholder="&mdash;"></div>
+      <div><label for="rqQty">Quantity</label><input id="rqQty" type="number" min="1" value="1"></div>
+    </div>
+    <label for="rqNotes">Anything we should know</label>
+    <textarea id="rqNotes" placeholder="Flight number, dietary needs, pick-up point&hellip;"></textarea>
+    <div class="rqnote" id="rqPrice"></div>
+    <div class="rqerr" id="rqErr"></div>
+    <div class="rqacts">
+      <button class="btn ghost" onclick="rqClose()">Cancel</button>
+      <button class="btn" id="rqGo" onclick="rqSend()">Send request</button>
+    </div>
   </div>
 </div>
 
@@ -268,15 +362,26 @@
   function money(x){return '฿'+Number(x||0).toLocaleString('en-US');}
   function fmtD(d){if(!d)return '—';var p=String(d).split('-');if(p.length<3)return d;return p[2].padStart(2,'0')+'.'+p[1].padStart(2,'0')+'.'+p[0];}
   function nice(x){x=String(x||'').replace(/[_-]+/g,' ').trim();return x?x.charAt(0).toUpperCase()+x.slice(1):'—';}
-  var AGENT_TOKEN='';
+  function plural(n,one,many){n=N(n);return n+' '+(n===1?one:many);}
+  // The real wordmark ships once, inside the sign-in card; every other header
+  // borrows that same image rather than carrying a second copy.
+  function logoSrc(){var e=document.querySelector('.lcard .alogo');return e?e.getAttribute('src'):'';}
+  function logoTag(){return '<img class="toplogo" src="'+logoSrc()+'" alt="MGROUP Estates">';}
+  var AGENT_TOKEN='';   // signed-in agent
+  var AGENT_SHARE='';   // read-only link that stands in for a login
+  var BOOK_SHARE='';    // read-only link to one booking
 
-  var DATA={bk:[],vmap:{},gmap:{},sched:{},agent:'',filter:'all',year:null};
+  var DATA={bk:[],vmap:{},gmap:{},sched:{},stages:{},extras:{},shares:{},docs:{},
+            services:[],svcCat:'all',agent:'',filter:'all',year:null,
+            ro:false,expires:null};
 
   function go(v){
-    ['bookings','comm'].forEach(function(k){document.getElementById('view-'+k).style.display=(k===v?'':'none');});
+    ['bookings','comm','svc'].forEach(function(k){document.getElementById('view-'+k).style.display=(k===v?'':'none');});
     document.getElementById('navBk').classList.toggle('on',v==='bookings');
     document.getElementById('navComm').classList.toggle('on',v==='comm');
-    if(v==='comm')renderComm();
+    document.getElementById('navSvc').classList.toggle('on',v==='svc');
+    if(v==='comm'&&!DATA.ro)renderComm();
+    if(v==='svc')renderSvc();
     window.scrollTo(0,0);
   }
 
@@ -300,7 +405,24 @@
   }
   function agentLogout(){sessionStorage.removeItem('mg_agent');location.reload();}
 
+  // Two kinds of link, both read-only and neither needing a sign-in:
+  //   /agent#s/TOKEN  one booking, for the agent to forward to their client
+  //   /agent#a/TOKEN  everything one co-agent referred, instead of an account
+  function linkToken(){
+    var h=String(location.hash||'');
+    if(h.indexOf('#s/')===0)return {kind:'booking',tok:h.slice(3)};
+    if(h.indexOf('#a/')===0)return {kind:'agent',tok:h.slice(3)};
+    var q=String(location.search||'');
+    var m=q.match(/[?&]s=([^&]+)/);
+    if(m)return {kind:'booking',tok:decodeURIComponent(m[1])};
+    m=q.match(/[?&]a=([^&]+)/);
+    if(m)return {kind:'agent',tok:decodeURIComponent(m[1])};
+    return null;
+  }
   function boot(){
+    var L=linkToken();
+    if(L&&L.kind==='booking'){BOOK_SHARE=L.tok;openShared(L.tok);return;}
+    if(L&&L.kind==='agent'){openAgentShare(L.tok);return;}
     var raw=sessionStorage.getItem('mg_agent');
     if(!raw)return;
     try{AGENT_TOKEN=(JSON.parse(raw)||{}).token||'';}catch(e){}
@@ -322,21 +444,66 @@
     await loadAll(name);
   }
 
+  // A link is a link, not proof of identity: it opens the portal read-only and
+  // nothing on the page can write.
+  async function openAgentShare(tok){
+    AGENT_SHARE=tok; DATA.ro=true;
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('aName').textContent='\u2026';
+    document.getElementById('navComm').style.display='none';
+    document.getElementById('agentOut').style.display='none';
+    await loadAll();
+    window.scrollTo(0,0);
+  }
+
   // ---------- data ----------
   async function loadAll(name){
     try{
       var r=await fetch(SB_URL+'/functions/v1/agent-data',{method:'POST',
         headers:Object.assign({'Content-Type':'application/json'},H),
-        body:JSON.stringify({token:AGENT_TOKEN})});
-      if(!r.ok)throw new Error('HTTP '+r.status);
+        body:JSON.stringify(AGENT_SHARE?{share:AGENT_SHARE}:{token:AGENT_TOKEN})});
+      if(!r.ok){
+        var e={}; try{e=await r.json();}catch(x){}
+        if(AGENT_SHARE){
+          document.getElementById('app').innerHTML='<div class="state" style="padding:70px 24px">'
+            +({not_found:'This link is not valid.',revoked:'This link has been withdrawn.',
+               expired:'This link has expired.'}[e.error]||'This link cannot be opened.')
+            +'<div style="margin-top:9px;font-size:12.5px">Ask MGROUP Estates for a new one.</div></div>';
+          return;
+        }
+        throw new Error('HTTP '+r.status);
+      }
       var D=await r.json();
+      DATA.ro=(D.mode==='share'); DATA.expires=D.expires_at||null;
+      DATA.docs=D.docs||{};
+      if(D.agent){DATA.agent=D.agent;document.getElementById('aName').textContent=D.agent;}
+      if(DATA.ro)roChrome();
       DATA.bk=D.bookings||[];
       (D.villas||[]).forEach(function(v){DATA.vmap[v.id]=v;});
       (D.guests||[]).forEach(function(g){DATA.gmap[g.id]=g;});
       DATA.sched={}; (D.schedule||[]).forEach(function(x){(DATA.sched[x.booking_id]=DATA.sched[x.booking_id]||[]).push(x);});
+      DATA.stages=D.stages||{}; DATA.extras=D.extras||{}; DATA.shares=D.shares||{};
+      DATA.services=D.services||[];
       renderBk();
+      if(document.getElementById('view-svc').style.display!=='none')renderSvc();
     }catch(e){
       document.getElementById('bkRows').innerHTML='<tr><td colspan="8" class="state" style="color:var(--red)">Could not load your bookings</td></tr>';
+    }
+  }
+  function roChrome(){
+    document.getElementById('navComm').style.display='none';
+    document.getElementById('agentOut').style.display='none';
+    var th=document.getElementById('thComm'); if(th)th.style.display='none';
+    var ft=document.getElementById('bkFoot');
+    if(ft)ft.textContent='Amounts shown are what the client pays. Commission and owner figures '
+      +'are not shared on this link.';
+    var bar=document.getElementById('roBar');
+    if(bar){
+      bar.style.display='block';
+      bar.innerHTML='<b>View only</b> \u00b7 shared by MGROUP Estates'
+        +(DATA.expires?' \u00b7 link valid to '+fmtD(String(DATA.expires).slice(0,10)):'')
+        +' \u00b7 nothing here can be changed';
     }
   }
   function vname(id){return (DATA.vmap[id]||{}).name||'—';}
@@ -362,12 +529,20 @@
         '<span class="c">'+counts[d[0]]+'</span></div>';
     }).join('');
 
-    var cli=0,cm=0;
-    DATA.bk.forEach(function(b){if(bucket(b)!=='cancelled'){cli+=N(b.total);cm+=comm(b);}});
+    var cli=0,cm=0,ex=0;
+    DATA.bk.forEach(function(b){
+      if(bucket(b)==='cancelled')return;
+      cli+=N(b.total); cm+=comm(b);
+      (DATA.extras[b.id]||[]).forEach(function(r){
+        if(r.billing==='chargeable'&&!r.declined)ex+=N(r.price)*(N(r.qty)||1);
+      });
+    });
     document.getElementById('bkTiles').innerHTML=
       '<div class="tile"><div class="l">My bookings</div><div class="v">'+DATA.bk.length+'</div><div class="s">all time</div></div>'+
       '<div class="tile"><div class="l">Value to client</div><div class="v cli">'+money(cli)+'</div><div class="s">excluding cancelled</div></div>'+
-      '<div class="tile"><div class="l">My commission</div><div class="v comm">'+money(cm)+'</div><div class="s">excluding cancelled</div></div>'+
+      (DATA.ro
+        ? '<div class="tile"><div class="l">Extras to collect</div><div class="v">'+money(ex)+'</div><div class="s">on top of the rate</div></div>'
+        : '<div class="tile"><div class="l">My commission</div><div class="v comm">'+money(cm)+'</div><div class="s">excluding cancelled</div></div>')+
       '<div class="tile"><div class="l">Active now</div><div class="v">'+counts.active+'</div><div class="s">guests staying</div></div>';
 
     var term=(document.getElementById('bkQ').value||'').toLowerCase();
@@ -376,19 +551,20 @@
       if(!term)return true;
       return (vname(b.villa_id)+' '+gname(b.guest_id)+' '+(b.booking_ref||'')).toLowerCase().indexOf(term)>-1;
     });
+    var cols=DATA.ro?7:8;
+    var th=document.getElementById('thComm'); if(th)th.style.display=DATA.ro?'none':'';
     document.getElementById('bkRows').innerHTML=rows.length?rows.map(function(b,i){
       return '<tr class="bkrow" id="ar-'+i+'" onclick="toggleBk('+i+')">'+
         '<td class="num"><span class="caret">›</span></td>'+
-        '<td><b>'+fmtD(b.check_in)+'</b> → <b>'+fmtD(b.check_out)+'</b>'+
-          (b.nights?'<div style="font-size:11px;color:var(--faint)">'+b.nights+' nights</div>':'')+'</td>'+
+        '<td><b>'+fmtD(b.check_in)+'</b> → <b>'+fmtD(b.check_out)+'</b></td>'+
         '<td class="ref">'+esc(b.booking_ref||'—')+'</td>'+
         '<td><b>'+esc(vname(b.villa_id))+'</b><div style="font-size:11px;color:var(--faint)">'+esc(varea(b.villa_id))+'</div></td>'+
         '<td>'+esc(gname(b.guest_id))+'</td>'+
         '<td class="money cli">'+money(b.total)+'</td>'+
-        '<td class="money comm">'+money(comm(b))+'</td>'+
+        (DATA.ro?'':'<td class="money comm">'+money(comm(b))+'</td>')+
         '<td><span class="st st-'+esc(b.status||'')+'">'+esc(nice(b.status))+'</span></td></tr>'+
-        '<tr class="det" id="ad-'+i+'"><td colspan="8"><div class="detbox">'+detail(b)+'</div></td></tr>';
-    }).join(''):'<tr><td colspan="8" class="state">'+(DATA.bk.length?'Nothing matches that filter':'No bookings referred yet')+'</td></tr>';
+        '<tr class="det" id="ad-'+i+'"><td colspan="'+cols+'"><div class="detbox">'+detail(b)+'</div></td></tr>';
+    }).join(''):'<tr><td colspan="'+cols+'" class="state">'+(DATA.bk.length?'Nothing matches that filter':'No bookings referred yet')+'</td></tr>';
   }
   function setFilter(f){DATA.filter=f;renderBk();}
   function toggleBk(i){
@@ -402,12 +578,191 @@
       dg('Villa',esc(vname(b.villa_id)))+
       dg('Guest',esc(g.name||'—')+(g.nationality?' <span style="color:var(--faint)">· '+esc(g.nationality)+'</span>':''))+
       dg('Stay',fmtD(b.check_in)+' → '+fmtD(b.check_out))+
-      dg('Nights',b.nights||'—')+
       dg('Value to client','<span class="cli">'+money(b.total)+'</span>')+
-      dg('My commission','<span class="comm">'+money(comm(b))+'</span>')+
+      (DATA.ro?'':dg('My commission','<span class="comm">'+money(comm(b))+'</span>'))+
     '</div>';
+    h+='<div class="dgh">Progress</div>'+stagesHtml(DATA.stages[b.id]);
+    h+='<div class="dgh">Extra requests</div>'+extrasHtml(DATA.extras[b.id]||[]);
+    h+='<div class="dgh">Documents</div>'+docsHtml(b);
     h+=schedule(b);
+    if(!DATA.ro){
+      var sh=DATA.shares[b.id];
+      h+='<div class="dgh">Share with your client</div>'
+        +'<div class="acts" id="shbox-'+b.id+'">'+shareBtns(b,sh)+'</div>';
+    }
     return h;
+  }
+
+  // ---------- documents ----------
+  // The booking's own paperwork, opened as a watermarked copy. Guest documents
+  // hang off the guest record and are never served to a co-agent.
+  // A booking sits behind more than one agreement, between different parties.
+  // A co-agent gets their own commission agreement and the booking paperwork —
+  // the owner agreement is a separate paper and is never listed here.
+  var DOCCAT={agent_agreement:'Co-agent agreement',
+              rental_agreement:'Rental agreement',contract:'Contract',invoice:'Invoice',
+              receipt:'Receipt',booking_confirmation:'Booking confirmation',
+              inventory:'Inventory list',water_bill:'Water bill',
+              electricity_bill:'Electricity bill',document:'Document',other:'Document'};
+  var DOCROW=[['agent_agreement','Co-agent agreement'],['booking_confirmation','Booking confirmation'],
+              ['invoice','Invoice'],['receipt','Receipt']];
+  function docLabel(a){return a.title||DOCCAT[a.category]||'Document';}
+  function docsHtml(b){ return docsList(DATA.docs[b.id]||[]); }
+  function docsList(list){
+    var used={}, out='';
+    list=list||[];
+    DOCROW.forEach(function(d){
+      used[d[0]]=1;
+      var hits=list.filter(function(a){return a.category===d[0];});
+      if(!hits.length){
+        out+='<span class="docbtn off" title="Not shared by MGROUP yet">'+esc(d[1])+'</span>';
+        return;
+      }
+      hits.forEach(function(a,i){
+        var lb=d[1]+(hits.length>1?' '+(i+1):'');
+        out+='<span class="docbtn" onclick="event.stopPropagation();openDoc(\''+a.id+'\',\''
+          +esc(lb).replace(/'/g,'&#39;')+'\')">&#128196; '+esc(lb)+'</span>';
+      });
+    });
+    list.filter(function(a){return !used[a.category];}).forEach(function(a){
+      var lb=docLabel(a);
+      out+='<span class="docbtn" onclick="event.stopPropagation();openDoc(\''+a.id+'\',\''
+        +esc(lb).replace(/'/g,'&#39;')+'\')">&#128196; '+esc(lb)+'</span>';
+    });
+    return '<div class="doclist">'+out+'</div>'
+      +'<div class="docnote">Files open as a watermarked copy. '
+      +'Greyed-out items have not been issued yet.</div>';
+  }
+  async function openDoc(id,title){
+    var dv=document.getElementById('dv'), body=document.getElementById('dvBody');
+    document.getElementById('dvTitle').textContent=title||'Document';
+    body.className='dvbody'; body.innerHTML='<div class="dvmsg">Preparing watermarked copy\u2026</div>';
+    dv.classList.add('on');
+    var payload=AGENT_SHARE?{agent_share:AGENT_SHARE,attachment_id:id}
+               :BOOK_SHARE?{share_token:BOOK_SHARE,attachment_id:id}
+               :{token:AGENT_TOKEN,attachment_id:id};
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/owner-file',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify(payload)});
+      if(!r.ok){
+        var msg={unauthorized:'This link can no longer open documents.',
+                 forbidden:'This document is not part of your booking.',
+                 not_shared:'MGROUP has not shared this document yet.',
+                 revoked:'This link has been withdrawn by MGROUP.',
+                 expired:'This link has expired.',
+                 file_missing:'The file could not be found.',
+                 unsupported_type:'Only PDF, JPG and PNG documents can be shown.'};
+        var j={}; try{j=await r.json();}catch(e){}
+        body.innerHTML='<div class="dvmsg">'+esc(msg[j.error]||'Could not open this document.')+'</div>';
+        return;
+      }
+      body.innerHTML='<iframe src="'+URL.createObjectURL(await r.blob())+'"></iframe>';
+    }catch(e){ body.innerHTML='<div class="dvmsg">Could not open this document.</div>'; }
+  }
+  function closeDoc(){document.getElementById('dv').classList.remove('on');}
+
+  // ---------- progress, extras, sharing ----------
+  function stagesHtml(stages){
+    stages=stages||[];
+    if(!stages.length)
+      return '<div style="font-size:12.5px;color:var(--faint)">MGROUP has not opened the checklist for this stay yet.</div>';
+    var cur=-1; stages.forEach(function(s,i){if(cur<0&&s.done<s.total)cur=i;});
+    return '<div class="stages">'+stages.map(function(s,i){
+      var ok=s.done>=s.total, pct=s.total?Math.round(s.done*100/s.total):0;
+      return '<details class="stage"'+((i===cur||(cur<0&&i===stages.length-1))?' open':'')+'>'
+        +'<summary><span class="sname">'+esc(s.label)+'</span>'
+        +'<span class="scount'+(ok?' ok':'')+'">'+s.done+'/'+s.total+'</span>'
+        +'<span class="sbar"><i class="'+(ok?'ok':'')+'" style="width:'+pct+'%"></i></span>'
+        +'<span class="schev">\u25be</span></summary>'
+        +'<ul class="plist">'+(s.tasks||[]).map(function(t){
+            return '<li><span>'+esc(t.task_name||'')+'</span>'
+              +'<span class="st '+(t.is_done?'st-confirmed':'st-pending')+'">'
+              +(t.is_done?'Done':'Pending')+'</span></li>';
+          }).join('')+'</ul></details>';
+    }).join('')+'</div>';
+  }
+  function stagesNow(stages){
+    stages=stages||[];
+    if(!stages.length)return 'Not started yet';
+    for(var i=0;i<stages.length;i++)if(stages[i].done<stages[i].total)return 'Now at: '+stages[i].label;
+    return 'All steps completed';
+  }
+  function xAmount(r){return N(r.price)*(N(r.qty)||1);}
+  function xBadges(r){
+    var ap=r.approved?'<span class="bdg ok">Approved</span>'
+      :r.declined?'<span class="bdg no">'+(r.status==='declined'?'Not available':'Withdrawn')+'</span>'
+      :'<span class="bdg wait">Waiting approval</span>';
+    // A request we turned down is never charged for.
+    if(r.declined)return '<div class="xb">'+ap+'<div><span class="bdg inc">Nothing to collect</span></div></div>';
+    var bill;
+    if(r.billing==='included')bill='<span class="bdg inc">Included in the rate</span>';
+    else if(r.billing==='complimentary')bill='<span class="bdg inc">Complimentary</span>';
+    else{
+      var lbl={unpaid:'Not paid',invoiced:'Invoiced',paid:'Paid',waived:'Waived'}[r.charge_status||'unpaid']||'Not paid';
+      bill='<span class="bdg chg">To collect '+money(xAmount(r))+'</span> '
+          +'<span class="bdg '+(r.charge_status==='paid'?'ok':r.charge_status==='waived'?'inc':'wait')+'">'+lbl+'</span>';
+    }
+    return '<div class="xb">'+ap+'<div>'+bill+'</div></div>';
+  }
+  function extrasHtml(list){
+    list=list||[];
+    if(!list.length)
+      return '<div style="font-size:12.5px;color:var(--faint)">No extras asked for on this booking yet.</div>';
+    var tot=list.filter(function(r){return r.billing==='chargeable'&&!r.declined;})
+                .reduce(function(s,r){return s+xAmount(r);},0);
+    var wait=list.filter(function(r){return !r.approved&&!r.declined;}).length;
+    return '<div class="xlist">'+list.map(function(r){
+      var who=r.source==='agent'?'asked by you':r.source==='admin'?'added by MGROUP':'asked by the guest';
+      return '<div class="xcard"><div class="xh">'
+        +'<div style="flex:1;min-width:190px"><div class="xt">'+esc(r.title||'Request')+'</div>'
+        +'<div class="xm">'
+          +(r.category?'<span>'+esc(catLabel(r.category))+'</span>':'')
+          +(r.requested_for?'<span>for '+fmtD(r.requested_for)
+            +(r.requested_time?' '+esc(r.requested_time):'')+'</span>':'')
+          +(r.people?'<span>'+plural(r.people,'person','people')+'</span>':'')
+          +(N(r.qty)>1?'<span>\u00d7'+N(r.qty)+'</span>':'')
+          +'<span>'+esc(who)+'</span>'
+        +'</div></div>'+xBadges(r)+'</div>'
+        +(r.admin_note?'<div class="xn"><b>MGROUP:</b> '+esc(r.admin_note)+'</div>'
+          :r.notes?'<div class="xn">'+esc(r.notes)+'</div>':'')
+        +'</div>';
+    }).join('')+'</div>'
+    +'<div class="xtot"><span>To collect on top of the rate'
+    +(wait?' <span style="color:var(--bronze)">\u00b7 '+wait+' still waiting for approval</span>':'')
+    +'</span><b>'+money(tot)+'</b></div>';
+  }
+  function shareBtns(b,sh){
+    if(!sh)
+      return '<span class="abtn" onclick="mkShare(\''+b.id+'\',this)">Create a progress link</span>'
+        +'<span class="abtn" onclick="rqOpen(\'\',\''+b.id+'\')">Request a service</span>';
+    var url=location.origin+'/agent#s/'+sh.token;
+    return '<span class="abtn" onclick="cpShare(\''+esc(url)+'\',this)">Copy link</span>'
+      +'<a class="abtn wa" target="_blank" rel="noopener" href="https://wa.me/?text='
+      +encodeURIComponent('Your stay with MGROUP Estates \u2014 follow the progress here:\n'+url)
+      +'" style="text-decoration:none">WhatsApp</a>'
+      +'<a class="abtn" target="_blank" rel="noopener" href="'+esc(url)+'" style="text-decoration:none">Preview</a>'
+      +'<span class="abtn" onclick="rqOpen(\'\',\''+b.id+'\')">Request a service</span>';
+  }
+  async function mkShare(bid,el){
+    var t=el.textContent; el.textContent='Creating\u2026';
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/booking-share',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({action:'create_agent',agent_token:AGENT_TOKEN,booking_id:bid,days:60})});
+      var d=await r.json();
+      if(!r.ok||!d.token)throw new Error(d.error||'failed');
+      DATA.shares[bid]={token:d.token,expires_at:d.expires_at};
+      var box=document.getElementById('shbox-'+bid);
+      var b=DATA.bk.filter(function(x){return x.id===bid;})[0]||{id:bid};
+      if(box)box.innerHTML=shareBtns(b,DATA.shares[bid]);
+    }catch(e){ el.textContent=t; alert('Could not create the link. Please try again.'); }
+  }
+  async function cpShare(url,el){
+    var t=el.textContent;
+    try{ await navigator.clipboard.writeText(url); el.textContent='Copied'; }
+    catch(e){ prompt('Copy this link:',url); }
+    setTimeout(function(){el.textContent=t;},2000);
   }
   function dg(k,v){return '<div class="dg"><div class="k">'+k+'</div><div class="v2">'+v+'</div></div>';}
 
@@ -460,6 +815,164 @@
   }
   function setYear(y){DATA.year=y;renderComm();}
 
+  // ---------- services ----------
+  var SVCCAT=[['all','Everything'],['fasttrack','Fast track'],['transfer','Transport'],
+              ['concierge','Concierge'],['dining','Dining'],['wellness','Wellness'],
+              ['excursion','On the water'],['home','At the villa'],['family','Family']];
+  function catLabel(c){
+    var m=SVCCAT.filter(function(x){return x[0]===c;})[0];
+    return m?m[1]:nice(c);
+  }
+  function renderSvc(){
+    var all=DATA.services||[];
+    var bar=document.getElementById('svcBar');
+    if(bar&&DATA.ro)bar.innerHTML='What MGROUP can arrange for your guests. '
+      +'<b>Ask MGROUP to add any of these</b> \u2014 this link is view only.';
+    var grid=document.getElementById('svcGrid');
+    if(!all.length){
+      document.getElementById('svcCats').innerHTML='';
+      grid.innerHTML='<div class="state">No services published yet.</div>';
+      return;
+    }
+    var have={}; all.forEach(function(s){have[s.category]=(have[s.category]||0)+1;});
+    document.getElementById('svcCats').innerHTML=SVCCAT
+      .filter(function(c){return c[0]==='all'||have[c[0]];})
+      .map(function(c){
+        return '<div class="pill'+(DATA.svcCat===c[0]?' on':'')+'" onclick="setSvcCat(\''+c[0]+'\')">'+c[1]
+          +'<span class="c">'+(c[0]==='all'?all.length:have[c[0]])+'</span></div>';
+      }).join('');
+    var rank={}; SVCCAT.forEach(function(c,i){rank[c[0]]=i;});
+    var list=all.filter(function(s){return DATA.svcCat==='all'||s.category===DATA.svcCat;})
+      .sort(function(x,y){return (rank[x.category]==null?99:rank[x.category])-(rank[y.category]==null?99:rank[y.category]);});
+    grid.innerHTML=list.map(function(s){
+      var price=N(s.price_from)>0
+        ? money(s.price_from)+' <span>'+esc(s.unit||'')+'</span>'
+        : '<span>'+esc(s.unit==='complimentary'?'Complimentary':'Quoted on request')+'</span>';
+      return '<div class="svccard"><div class="cat">'+esc(catLabel(s.category))+'</div>'
+        +'<h4>'+esc(s.title||'')+'</h4>'
+        +'<p>'+esc(s.blurb||s.detail||'')+'</p>'
+        +(s.lead_time?'<p style="color:var(--faint)">Needs '+esc(s.lead_time)+' notice</p>':'')
+        +'<div class="pr">'+price+'</div>'
+        +(DATA.ro?'':'<span class="abtn" style="align-self:flex-start" onclick="rqOpen(\''
+          +s.id+'\')">Request</span>')+'</div>';
+    }).join('')||'<div class="state">Nothing in that category.</div>';
+  }
+  function setSvcCat(c){DATA.svcCat=c;renderSvc();}
+
+  // ---------- request sheet ----------
+  var RQ={svc:null};
+  function rqOpen(serviceId,bookingId){
+    if(DATA.ro)return;   // a link never writes
+    var s=(DATA.services||[]).filter(function(x){return x.id===serviceId;})[0]||null;
+    RQ.svc=s;
+    var live=DATA.bk.filter(function(b){return bucket(b)!=='cancelled'&&bucket(b)!=='completed';});
+    if(!live.length)live=DATA.bk.slice();
+    if(!live.length){alert('You have no bookings to attach a request to yet.');return;}
+    document.getElementById('rqTitle').textContent=s?s.title:'Request a service';
+    document.getElementById('rqSub').textContent=s
+      ? (catLabel(s.category)+(s.lead_time?' \u00b7 needs '+s.lead_time+' notice':''))
+      : 'Pick what you need from the Services tab, or describe it below.';
+    document.getElementById('rqBk').innerHTML=live.map(function(b){
+      return '<option value="'+b.id+'"'+(b.id===bookingId?' selected':'')+'>'
+        +esc((b.booking_ref||'')+' \u00b7 '+vname(b.villa_id)+' \u00b7 '+fmtD(b.check_in))+'</option>';
+    }).join('');
+    ['rqDate','rqTime','rqPeople','rqNotes'].forEach(function(k){document.getElementById(k).value='';});
+    document.getElementById('rqQty').value='1';
+    document.getElementById('rqErr').textContent='';
+    document.getElementById('rqPrice').innerHTML=s
+      ? (N(s.price_from)>0
+          ? 'Indicative '+money(s.price_from)+' '+esc(s.unit||'')
+            +' \u2014 MGROUP confirms the final price, and whether it is included in the rate or charged on.'
+          : 'Price quoted on request. MGROUP confirms whether it is included in the rate or charged on.')
+      : 'MGROUP answers with approved or not, and whether it is included in the rate or charged on.';
+    var go=document.getElementById('rqGo'); go.disabled=false; go.textContent='Send request';
+    document.getElementById('rqOv').classList.add('on');
+  }
+  function rqClose(){document.getElementById('rqOv').classList.remove('on');}
+  async function rqSend(){
+    var v=function(k){return (document.getElementById(k).value||'').trim();};
+    var bid=v('rqBk'), err=document.getElementById('rqErr'), go=document.getElementById('rqGo');
+    if(!bid){err.textContent='Pick a booking first.';return;}
+    var title=RQ.svc?RQ.svc.title:v('rqNotes').slice(0,80);
+    if(!title){err.textContent='Say what you need in the notes.';return;}
+    err.textContent=''; go.disabled=true; go.textContent='Sending\u2026';
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/agent-data',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({token:AGENT_TOKEN,action:'request',booking_id:bid,
+          service_id:RQ.svc?RQ.svc.id:null,title:title,
+          requested_for:v('rqDate')||null,requested_time:v('rqTime')||null,
+          people:v('rqPeople')||null,qty:v('rqQty')||1,notes:v('rqNotes')||null})});
+      var d=await r.json();
+      if(!r.ok||!d.ok)throw new Error(d.error||'failed');
+      if(d.extra)(DATA.extras[bid]=DATA.extras[bid]||[]).push(d.extra);
+      rqClose(); renderBk(); go.textContent='Send request';
+      alert('Sent. MGROUP will confirm whether it is approved, and whether it is included or charged on.');
+    }catch(e){
+      err.textContent=e.message==='forbidden'?'That booking is not one of yours.':'Could not send the request.';
+      go.disabled=false; go.textContent='Send request';
+    }
+  }
+
+  // ---------- shared progress view (no sign-in) ----------
+  async function openShared(tok){
+    var box=document.getElementById('shared');
+    document.getElementById('login').style.display='none';
+    box.style.display='block';
+    box.innerHTML='<div class="state">Opening\u2026</div>';
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/booking-share',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({token:tok,audience:'agent'})});
+      var d=await r.json();
+      if(!r.ok||!d.ok){
+        box.innerHTML='<div class="state">'+({not_found:'This link is not valid.',
+          revoked:'This link has been withdrawn.',expired:'This link has expired.'}[d.error]
+          ||'This link cannot be opened.')+'<div style="margin-top:9px;font-size:12.5px">'
+          +'Ask MGROUP Estates for a new one.</div></div>';
+        return;
+      }
+      renderShared(d);
+    }catch(e){ box.innerHTML='<div class="state" style="color:var(--red)">Could not open this link.</div>'; }
+  }
+  function renderShared(d){
+    var b=d.booking||{}, v=d.villa||{}, p=d.payment||{};
+    var guests=[N(b.adults)?plural(b.adults,'adult','adults'):'',
+                N(b.children)?plural(b.children,'child','children'):'',
+                N(b.pets)?plural(b.pets,'pet','pets'):''].filter(Boolean).join(' \u00b7 ')
+                ||(b.guests_count?plural(b.guests_count,'guest','guests'):'\u2014');
+    document.getElementById('shared').innerHTML=
+      '<div class="top">'+logoTag()
+      +'<div style="text-align:right"><div class="who">Booking <b>'+esc(b.booking_ref||'\u2014')+'</b></div></div></div>'
+      +'<div class="pvwrap">'
+      +'<div class="sharebar">Shared by <b>'+esc(d.agent_name||'your agent')+'</b>'
+        +(d.expires_at?' \u00b7 link valid to '+fmtD(String(d.expires_at).slice(0,10)):'')+'</div>'
+      +'<div class="pvhead"><h2>'+esc(v.name||'Your villa')+'</h2>'
+        +'<div class="pvsub">'+esc(v.area||'')+(v.area?' \u00b7 ':'')
+        +fmtD(b.check_in)+' \u2192 '+fmtD(b.check_out)+'</div></div>'
+      +'<div class="tiles">'
+        +'<div class="tile"><div class="l">Stay</div><div class="v" style="font-size:17px">'
+          +esc(nice(b.status))+'</div><div class="s">'+esc(stagesNow(d.stages))+'</div></div>'
+        +'<div class="tile"><div class="l">Guests</div><div class="v" style="font-size:17px">'
+          +esc(guests)+'</div><div class="s">'+esc(d.guest_name||'')+'</div></div>'
+        +'<div class="tile"><div class="l">Paid</div><div class="v cli">'+money(p.paid)+'</div>'
+          +'<div class="s">of '+money(p.total)+'</div></div>'
+        +'<div class="tile"><div class="l">Balance</div><div class="v"'
+          +(N(p.balance)?' style="color:var(--red)"':'')+'>'+money(p.balance)+'</div>'
+          +'<div class="s">'+N(p.pct)+'% settled</div></div>'
+      +'</div>'
+      +'<div class="sec"><h4>Payment</h4><div class="paybar"><i style="width:'+N(p.pct)+'%"></i></div>'
+        +'<div class="prow"><span>Received</span><b class="cli">'+money(p.paid)+'</b></div>'
+        +'<div class="prow" style="margin-top:4px"><span>Still due</span><b>'+money(p.balance)+'</b></div></div>'
+      +'<div class="sec stagesec"><h4>Progress</h4>'+stagesHtml(d.stages)+'</div>'
+      +'<div class="sec"><h4>Extra requests</h4>'+extrasHtml(d.extras||[])+'</div>'
+      +'<div class="sec"><h4>Documents</h4>'+docsList(d.docs||[])+'</div>'
+      +'<div class="appfoot">MGROUP Estates \u00b7 Phuket \u00b7 read-only link, no sign-in needed</div>'
+      +'</div>';
+    window.scrollTo(0,0);
+  }
+
+  (function(){var t=document.getElementById('topLogo');if(t)t.src=logoSrc();})();
   boot();
 </script>
 </body></html>

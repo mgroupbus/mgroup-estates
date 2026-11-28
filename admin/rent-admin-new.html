@@ -313,6 +313,49 @@
     white-space:nowrap;background:#8b98a8;color:#fff}
   .crst.new{background:#e0921a}.crst.confirmed{background:#1a7fe0}.crst.done{background:#12a150}
   .crst.declined{background:#e03b2f}.crst.cancelled{background:#7c8a83}
+  /* per-document visibility */
+  .dvis{border:1px solid var(--line);border-radius:11px;background:#fff;overflow:hidden}
+  .dvis .hdr,.dvis .row{display:grid;grid-template-columns:1fr 78px 78px 78px;gap:10px;align-items:center;
+    padding:10px 14px}
+  .dvis .hdr{background:#faf9f5;border-bottom:1px solid var(--line);font-size:9.5px;letter-spacing:.09em;
+    text-transform:uppercase;font-weight:800;color:var(--faint);text-align:center}
+  .dvis .hdr span:first-child{text-align:left}
+  .dvis .row{border-top:1px solid var(--line);font-size:13px}
+  .dvis .row:first-of-type{border-top:none}
+  .dvis .nm{font-weight:600}
+  .dvis .nm small{display:block;font-weight:500;font-size:11px;color:var(--faint);margin-top:2px}
+  .dvis .cb{text-align:center}
+  .dvis input[type=checkbox]{width:17px;height:17px;accent-color:var(--g600);cursor:pointer}
+  .dvis .warn{font-size:11.5px;color:var(--red);font-weight:600;padding:9px 14px;background:#fdf3f0;
+    border-top:1px solid var(--line)}
+  @media(max-width:700px){.dvis .hdr,.dvis .row{grid-template-columns:1fr 54px 54px 54px;gap:5px}}
+  /* shared views (owner / co-agent / guest) */
+  .shgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:12px;margin-bottom:20px}
+  .shcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px 16px;
+    display:flex;flex-direction:column;gap:9px}
+  .shcard.live{border-color:#e6d3ad;box-shadow:0 3px 14px rgba(169,126,66,.13)}
+  .shcard .who{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--g600)}
+  .shcard h5{font-size:15px;font-weight:700}
+  .shcard p{font-size:12px;color:var(--muted);line-height:1.55}
+  .shcard .meta{font-size:11.5px;color:var(--faint);font-weight:600;line-height:1.5}
+  .shcard .acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+  .shurl{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted);word-break:break-all;
+    background:#faf9f5;border:1px solid var(--line);border-radius:8px;padding:7px 9px}
+  /* extra requests */
+  .xrow{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .xrow .xt{font-size:14.5px;font-weight:700}
+  .xrow .xm{font-size:12px;color:var(--muted);margin-top:4px;display:flex;gap:13px;flex-wrap:wrap}
+  .xrow .xc{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:11px;width:100%;
+    padding-top:11px;border-top:1px solid var(--line)}
+  .xrow select,.xrow input{padding:7px 9px;border:1px solid var(--line);border-radius:8px;
+    font-size:12.5px;font-weight:600;background:#fff}
+  .bdg{display:inline-block;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .bdg.wait{background:#fbf1da;color:#9a7b3a}
+  .bdg.ok{background:#e6f0e4;color:#2f7a3f}
+  .bdg.no{background:#f8e6e1;color:#b5533a}
+  .bdg.inc{background:#e3eef7;color:#2f6f9e}
+  .bdg.chg{background:#f3ecdf;color:#a97e42}
+  .bdg.paid{background:#e6f0e4;color:#2f7a3f}
   .crdet{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
   .crdet span{font-size:11.5px;color:var(--muted);background:#f5f3ed;border-radius:7px;padding:4px 9px}
   .crdet span b{color:var(--ink);font-weight:700}
@@ -434,8 +477,12 @@
 
     <!-- AGENTS -->
     <div id="v-agents" class="view">
-      <div class="head"><div><div class="crumb">Referrals</div><h2>Agents</h2></div></div>
-      <div class="tablecard"><table><thead><tr><th>Agent</th><th class="num">Deals</th><th class="money">Total value</th><th class="money">Co-agent commission</th></tr></thead><tbody id="agRows"><tr><td colspan="4" class="state">Loading…</td></tr></tbody></table></div>
+      <div class="head"><div><div class="crumb">Referrals</div><h2>Agents</h2></div>
+        <button class="btn primary" onclick="agAdd(this)">+ Add agency</button></div>
+      <p style="font-size:12px;color:var(--faint);margin:-6px 0 14px">ทุก booking ต้องระบุ agency &mdash;
+        ถ้าไม่มีนายหน้าให้เลือก &ldquo;Direct &mdash; MGROUP&rdquo;. A view link needs no account;
+        an account lets the co-agent ask for services too.</p>
+      <div class="tablecard"><table><thead><tr><th>Agent</th><th class="num">Deals</th><th class="money">Total value</th><th class="money">Co-agent commission</th><th>Portal link &mdash; no sign-in</th></tr></thead><tbody id="agRows"><tr><td colspan="5" class="state">Loading…</td></tr></tbody></table></div>
     </div>
 
     <!-- DOCUMENTS -->
@@ -452,6 +499,14 @@
   <div class="modal">
     <div class="mh"><div><h3 id="ownEdTitle">Add owner</h3><div class="sub" id="ownEdSub"></div></div><button class="cls" onclick="closeOwnerEdit()">&#10005; Close</button></div>
     <div class="mb" id="ownEdBody"></div>
+  </div>
+</div>
+
+<!-- AGENCY ADD / EDIT MODAL -->
+<div class="ov" id="agEdOv" onclick="if(event.target===this)closeAgentEdit()">
+  <div class="modal">
+    <div class="mh"><div><h3 id="agEdTitle">Add agency</h3><div class="sub" id="agEdSub"></div></div><button class="cls" onclick="closeAgentEdit()">&#10005; Close</button></div>
+    <div class="mb" id="agEdBody"></div>
   </div>
 </div>
 
@@ -552,7 +607,8 @@
       json:function(){try{return Promise.resolve(JSON.parse(text));}catch(e){return Promise.resolve([]);}}};
   }
 
-  var DATA={bk:[],villas:[],vmap:{},gmap:{},omap:{},tk:{}};
+  var DATA={bk:[],villas:[],vmap:{},gmap:{},omap:{},tk:{},
+            agents:null,aglinks:[],aglogins:[]};
   var OFIELDS='id,name,email,phone,line_id,notes';
   var VFIELDS='id,name,slug,area,location,villa_type,bedrooms,bathrooms,max_guests,price_per_night,price_per_month,min_nights,cleaning_fee,security_deposit,owner_id,description,is_active,landing_url,features_included,features_excluded';
 
@@ -563,11 +619,12 @@
     try{
       var q=function(t,sel){return sbFetch(SB_URL+'/rest/v1/'+t+'?select='+encodeURIComponent(sel),{headers:H}).then(function(r){return r.json();});};
       var res=await Promise.all([
-        sbFetch(SB_URL+'/rest/v1/bookings?select=id,booking_ref,villa_id,guest_id,owner_id,check_in,check_out,nights,guests_count,adults,children,rate_per_night,total,client_pay,owner_paid,agent_paid,security_deposit,mgroup_commission,owner_net,co_agent_net,agent_name,agent_commission,status,currency,source,special_requests&order=check_in.desc&limit=300',{headers:H}).then(function(r){return r.json();}),
+        sbFetch(SB_URL+'/rest/v1/bookings?select=id,booking_ref,villa_id,guest_id,owner_id,check_in,check_out,nights,guests_count,adults,children,rate_per_night,total,client_pay,owner_paid,agent_paid,security_deposit,mgroup_commission,owner_net,co_agent_net,agent_id,agent_name,agent_commission,status,currency,source,special_requests&order=check_in.desc&limit=300',{headers:H}).then(function(r){return r.json();}),
         q('rental_villas',VFIELDS), q('owners',OFIELDS), q('guests','id,name,email,phone,nationality'),
         sbFetch(SB_URL+'/rest/v1/checkin_tasks?select=booking_id,is_done&limit=5000',{headers:H}).then(function(r){return r.json();})
       ]);
       DATA.bk=res[0]||[];
+      reloadAgentOptions();
       DATA.tk={}; (res[4]||[]).forEach(function(t){var c=DATA.tk[t.booking_id]||(DATA.tk[t.booking_id]={n:0,d:0});c.n++;if(t.is_done)c.d++;});
       setVillas(res[1]||[]);
       DATA.omap={}; (res[2]||[]).forEach(function(o){DATA.omap[o.id]=o;});
@@ -605,7 +662,7 @@
         '<td><div class="vn">'+esc(vname(b.villa_id))+'</div><div class="sub">'+esc(varea(b.villa_id))+'</div></td>'+
         '<td class="num">'+(b.nights||'–')+'</td><td class="money">'+money(b.total)+'</td>'+
         '<td style="white-space:nowrap;text-align:right">'+
-        '<button class="rowbtn" title="Copy a no-login guest link" onclick="shareGuest(\''+b.id+'\',this)">Guest link</button> '+
+        '<button class="rowbtn" title="Owner, co-agent and guest links" onclick="openMng(\''+b.id+'\',\'share\')">Share links</button> '+
         '<span class="rowgo" onclick="openMng(\''+b.id+'\')">Open &#8594;</span></td></tr>';
     }).join('')||'<tr><td colspan="8" class="state">No bookings</td></tr>';
     renderBkSummary();
@@ -622,30 +679,6 @@
     if(el=document.getElementById('bk-upcoming'))el.textContent=upcoming;
     if(el=document.getElementById('bk-total'))el.textContent=bk.length;
   }
-  // Create a read-only link to this booking and hand it to the admin to send to the owner.
-  async function shareOwner(bid,btn){
-    var b=(DATA.bk||[]).filter(function(x){return x.id===bid;})[0];
-    var code=sessionStorage.getItem('mg_admin_code')||prompt('Admin passcode');
-    if(!code)return;
-    var t=btn.textContent; btn.textContent='Creating…'; btn.disabled=true;
-    try{
-      var r=await fetch(SB_URL+'/functions/v1/booking-share',{method:'POST',
-        headers:Object.assign({'Content-Type':'application/json'},H),
-        body:JSON.stringify({action:'create',passcode:code,booking_id:bid,days:60})});
-      var d=await r.json();
-      if(!r.ok){ sessionStorage.removeItem('mg_admin_code');
-        alert(d.error==='unauthorized'?'Wrong admin passcode':'Could not create the link'); return; }
-      sessionStorage.setItem('mg_admin_code',code);
-      var url=location.origin+'/owner#s/'+d.token;
-      var msg='MGROUP Estates — booking '+((b&&b.booking_ref)||'')+'\n'
-        +'Open your booking here (no login needed, link valid 60 days):\n'+url;
-      try{ await navigator.clipboard.writeText(msg); btn.textContent='Copied'; }
-      catch(e){ prompt('Copy this link and send it to the owner:',url); btn.textContent=t; }
-      setTimeout(function(){btn.textContent=t;},2200);
-    }catch(e){ alert('Could not create the link'); btn.textContent=t; }
-    finally{ btn.disabled=false; }
-  }
-
   async function chSt(sel){try{await sbFetch(SB_URL+'/rest/v1/bookings?id=eq.'+sel.getAttribute('data-id'),{method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify({status:sel.value})});sel.className='st-select '+stCls(sel.value);}catch(e){alert('Save failed');}}
 
   function outstanding(b){var t=N(b.total),p=N(b.client_pay);var o=t-p;return (['cancelled','checked_out','no_show'].indexOf(b.status)>-1)?0:(o>0?o:0);}
@@ -843,10 +876,234 @@
       '<td><button class="rowbtn" onclick="guestLogin(\''+g.id+'\',this)">Login…</button></td></tr>';}).join('')||'<tr><td colspan="6" class="state">No clients</td></tr>';
   }
 
+  // ---------- AGENCIES ----------
+  // Agencies are records now, and every booking points at one by id. The old
+  // free-text agent_name is kept in step by a trigger, so nothing reads it here.
+  function agLive(agentId){
+    var now=new Date();
+    return (DATA.aglinks||[]).filter(function(r){
+      return r.agent_id===agentId&&!r.revoked&&(!r.expires_at||new Date(r.expires_at)>now);
+    })[0]||null;
+  }
+  function agLogin(agentId){
+    return (DATA.aglogins||[]).filter(function(r){return r.agent_id===agentId;})[0]||null;
+  }
+  function agUrl(tok){return location.origin+'/agent#a/'+tok;}
+  function agName(id){var a=(DATA.agents||[]).filter(function(x){return x.id===id;})[0];return a?a.name:'—';}
+
   function renderAgents(){
-    var ag={};DATA.bk.forEach(function(b){var a=(b.agent_name||'').trim();if(!a)return;if(!ag[a])ag[a]={n:0,val:0,comm:0};ag[a].n++;ag[a].val+=N(b.total);ag[a].comm+=N(b.co_agent_net);});
-    var keys=Object.keys(ag).sort(function(x,y){return ag[y].n-ag[x].n;});
-    document.getElementById('agRows').innerHTML=keys.length?keys.map(function(a){return '<tr><td><b>'+esc(a)+'</b></td><td class="num">'+ag[a].n+'</td><td class="money">'+money(ag[a].val)+'</td><td class="money">'+money(ag[a].comm)+'</td></tr>';}).join(''):'<tr><td colspan="4" class="state">No agent-referred bookings</td></tr>';
+    if(DATA.agents===null){agLoad();return;}
+    var stat={};
+    DATA.bk.forEach(function(b){
+      var k=b.agent_id||''; if(!k)return;
+      if(!stat[k])stat[k]={n:0,val:0,comm:0};
+      stat[k].n++; stat[k].val+=N(b.total); stat[k].comm+=N(b.co_agent_net);
+    });
+    var rows=(DATA.agents||[]).slice().sort(function(x,y){
+      if(!!x.is_direct!==!!y.is_direct)return x.is_direct?1:-1;
+      return ((stat[y.id]||{}).n||0)-((stat[x.id]||{}).n||0);
+    });
+    document.getElementById('agRows').innerHTML=rows.length?rows.map(function(a){
+      var st=stat[a.id]||{n:0,val:0,comm:0};
+      var sub=a.is_direct?'bookings MGROUP took itself'
+             :[a.company,a.email,a.phone].filter(Boolean).join(' · ');
+      return '<tr><td>'
+        +(a.is_direct?'<b>'+esc(a.name)+'</b>'
+          :'<a class="reflink" onclick="openAgentEdit(\''+a.id+'\')"><b>'+esc(a.name)+'</b></a>')
+        +(sub?'<div class="sub">'+esc(sub)+'</div>':'')
+        +(a.is_active===false?'<div class="sub" style="color:var(--red)">inactive</div>':'')
+        +'</td>'
+        +'<td class="num">'+st.n+'</td>'
+        +'<td class="money">'+money(st.val)+'</td>'
+        +'<td class="money">'+money(st.comm)+'</td>'
+        +'<td style="white-space:nowrap">'
+          +(a.is_direct?'<span class="sub">no portal</span>':agAccessCell(a))
+        +'</td></tr>';
+    }).join(''):'<tr><td colspan="5" class="state">No agencies yet</td></tr>';
+  }
+
+  function agAccessCell(a){
+    var live=agLive(a.id), lg=agLogin(a.id);
+    var link=live
+      ? '<button class="rowbtn" onclick="agCopyLink(\''+live.token+'\',this)">Copy link</button> '
+        +'<button class="rowbtn" onclick="window.open(\''+agUrl(live.token)+'\',\'_blank\')">Open</button> '
+        +'<button class="rowbtn" style="color:var(--red);border-color:#e6c3b8" onclick="agRevokeLink(\''+live.token+'\',this)">Revoke</button>'
+        +'<div class="sub" style="margin-top:3px">View link &middot; to '
+        +fmtD(String(live.expires_at||'').slice(0,10))+' &middot; opened '+(live.opened_count||0)+'&times;</div>'
+      : '<button class="rowbtn" onclick="agCreateLink(\''+a.id+'\',this)">Create view link</button>'
+        +'<div class="sub" style="margin-top:3px">read-only, no sign-in</div>';
+    var login=lg
+      ? '<button class="rowbtn" onclick="agSetLogin(\''+a.id+'\',this)">Change login</button> '
+        +'<button class="rowbtn" style="color:var(--red);border-color:#e6c3b8" onclick="agDelLogin(\''+a.id+'\',this)">Remove</button>'
+        +'<div class="sub" style="margin-top:3px">Account '+esc(lg.username||'')
+        +(lg.last_login?' &middot; last in '+fmtD(String(lg.last_login).slice(0,10)):' &middot; never signed in')+'</div>'
+      : '<button class="rowbtn" onclick="agSetLogin(\''+a.id+'\',this)">Create account</button>'
+        +'<div class="sub" style="margin-top:3px">can ask for services</div>';
+    return '<div style="margin-bottom:9px">'+link+'</div><div>'+login+'</div>';
+  }
+
+  async function agApi(payload){
+    var code=adminCode(); if(!code)return null;
+    var r=await fetch(SB_URL+'/functions/v1/agent-data',{method:'POST',
+      headers:Object.assign({'Content-Type':'application/json'},H),
+      body:JSON.stringify(Object.assign({passcode:code},payload))});
+    var d={}; try{d=await r.json();}catch(e){}
+    if(r.status===401)sessionStorage.removeItem('mg_admin_code');
+    return {ok:r.ok,data:d};
+  }
+  async function agLoad(){
+    DATA.agents=[];DATA.aglinks=[];DATA.aglogins=[];
+    try{
+      var r=await sbFetch(SB_URL+'/rest/v1/agents?select=id,name,company,email,phone,line_id,notes,is_direct,is_active&order=name',{headers:H});
+      var rows=await r.json(); if(Array.isArray(rows))DATA.agents=rows;
+    }catch(e){}
+    var res=await agApi({action:'admin_links'});
+    if(res&&res.ok){DATA.aglinks=res.data.rows||[];DATA.aglogins=res.data.logins||[];}
+    renderAgents();
+  }
+  async function agReload(){DATA.agents=null;renderAgents();}
+
+  // Only the name is required — it is what the booking form offers. Everything
+  // else is there when you have it and empty when you don't.
+  var AGE={id:''};
+  function agAdd(){openAgentEdit('');}
+  function agmsg(t,bad){var e=document.getElementById('ag_msg');if(e){e.textContent=t;e.className=bad?'sub warn':'sub';}}
+  function openAgentEdit(id){
+    var a=(DATA.agents||[]).filter(function(x){return x.id===id;})[0]||{};
+    if(a.is_direct){alert('“Direct — MGROUP” is the built-in option for bookings with no co-agent. It cannot be edited.');return;}
+    AGE.id=id||'';
+    var deals=DATA.bk.filter(function(b){return b.agent_id===id;}).length;
+    document.getElementById('agEdTitle').textContent=id?'Edit agency':'Add agency';
+    document.getElementById('agEdSub').textContent=id
+      ? (a.name||'')+(deals?' · '+deals+' booking'+(deals===1?'':'s'):' · no bookings yet')
+      : 'ชื่อบังคับอย่างเดียว — ที่เหลือใส่ทีหลังได้';
+    document.getElementById('agEdBody').innerHTML=
+      '<div class="frm">'+
+        '<div class="r"><div><label>Agency / co-agent name *</label>'+
+          '<input id="ag_name" type="text" value="'+esc(a.name||'')+'" placeholder="เช่น Natalie หรือ Phuket Luxe Travel"></div></div>'+
+        '<div class="r c2">'+
+          '<div><label>Company <span style="text-transform:none;letter-spacing:0;font-weight:400">· optional</span></label>'+
+            '<input id="ag_company" type="text" value="'+esc(a.company||'')+'" placeholder="ไม่บังคับ"></div>'+
+          '<div><label>Email <span style="text-transform:none;letter-spacing:0;font-weight:400">· optional</span></label>'+
+            '<input id="ag_email" type="email" value="'+esc(a.email||'')+'" placeholder="ไม่บังคับ"></div>'+
+        '</div>'+
+        '<div class="r c3">'+
+          '<div><label>Phone <span style="text-transform:none;letter-spacing:0;font-weight:400">· optional</span></label>'+
+            '<input id="ag_phone" type="text" value="'+esc(a.phone||'')+'" placeholder="ไม่บังคับ"></div>'+
+          '<div><label>LINE ID <span style="text-transform:none;letter-spacing:0;font-weight:400">· optional</span></label>'+
+            '<input id="ag_line" type="text" value="'+esc(a.line_id||'')+'" placeholder="ไม่บังคับ"></div>'+
+          '<div><label>Status</label><select id="ag_active">'+
+            '<option value="1"'+(a.is_active===false?'':' selected')+'>Active</option>'+
+            '<option value="0"'+(a.is_active===false?' selected':'')+'>Inactive — hide from the booking form</option>'+
+          '</select></div>'+
+        '</div>'+
+        '<div class="r"><div><label>Notes <span style="text-transform:none;letter-spacing:0;font-weight:400">· optional</span></label>'+
+          '<input id="ag_notes" type="text" value="'+esc(a.notes||'')+'" placeholder="เงื่อนไขค่าคอม ฯลฯ"></div></div>'+
+      '</div>'+
+      '<div style="display:flex;gap:9px;justify-content:'+(id?'space-between':'flex-end')+';flex-wrap:wrap;align-items:center">'+
+        (id?'<button class="rowbtn" style="color:var(--red);border-color:#e6c3b8" onclick="agDelete(this)">Delete agency</button>':'')+
+        '<span style="display:flex;gap:9px">'+
+          '<button class="btn" onclick="closeAgentEdit()">Cancel</button>'+
+          '<button class="btn primary" onclick="agSave(this)">'+(id?'Save changes':'Add agency')+'</button>'+
+        '</span>'+
+      '</div>'+
+      '<div class="sub" id="ag_msg" style="margin-top:9px"></div>';
+    document.getElementById('agEdOv').classList.add('open');
+    var f=document.getElementById('ag_name'); if(f)f.focus();
+  }
+  function closeAgentEdit(){document.getElementById('agEdOv').classList.remove('open');AGE.id='';}
+
+  async function agSave(btn){
+    var name=vv('ag_name').trim();
+    if(!name)return agmsg('Agency name is required',true);
+    // everything below is optional: empty stays empty rather than becoming ''
+    var row={name:name,
+      company:vv('ag_company').trim()||null,
+      email:vv('ag_email').trim()||null,
+      phone:vv('ag_phone').trim()||null,
+      line_id:vv('ag_line').trim()||null,
+      notes:vv('ag_notes').trim()||null,
+      is_active:vv('ag_active')==='1'};
+    var t=btn.textContent; btn.disabled=true; btn.textContent='Saving…';
+    try{
+      var url=SB_URL+'/rest/v1/agents'+(AGE.id?'?id=eq.'+AGE.id:'');
+      var r=await sbFetch(url,{method:AGE.id?'PATCH':'POST',headers:JH,body:JSON.stringify(row)});
+      if(!r.ok){
+        var txt=await r.text();
+        throw new Error(/duplicate|unique/i.test(txt)?'There is already an agency with that name.':'HTTP '+r.status);
+      }
+      closeAgentEdit();
+      await agReload(); await reloadAgentOptions();
+    }catch(e){ agmsg(e.message,true); }
+    finally{ btn.disabled=false; btn.textContent=t; }
+  }
+
+  async function agDelete(btn){
+    var id=AGE.id; if(!id)return;
+    var deals=DATA.bk.filter(function(b){return b.agent_id===id;}).length;
+    if(deals)return agmsg('This agency has '+deals+' booking'+(deals===1?'':'s')+'. Set it to Inactive instead — deleting would orphan them.',true);
+    if(!confirm('Delete this agency? This cannot be undone.'))return;
+    btn.disabled=true;
+    try{
+      var r=await sbFetch(SB_URL+'/rest/v1/agents?id=eq.'+id,{method:'DELETE',headers:JH});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      closeAgentEdit();
+      await agReload(); await reloadAgentOptions();
+    }catch(e){ agmsg('Could not delete: '+e.message,true); btn.disabled=false; }
+  }
+
+  async function agCreateLink(agentId,btn){
+    var t=btn.textContent; btn.textContent='Creating…'; btn.disabled=true;
+    var res=await agApi({action:'admin_link_create',agent_id:agentId,days:90});
+    if(!res||!res.ok){ alert('Could not create the link'); btn.textContent=t; btn.disabled=false; return; }
+    await agReload();
+  }
+  async function agCopyLink(tok,btn){
+    var url=agUrl(tok), t=btn.textContent;
+    var msg='MGROUP Estates — your bookings\n'
+      +'Follow every booking you referred here. No login needed, view only:\n'+url;
+    try{ await navigator.clipboard.writeText(msg); btn.textContent='Copied'; }
+    catch(e){ prompt('Copy this and send it to the co-agent:',url); }
+    setTimeout(function(){btn.textContent=t;},2200);
+  }
+  async function agRevokeLink(tok,btn){
+    if(!confirm('Revoke this link? The co-agent loses access straight away.'))return;
+    btn.textContent='…'; btn.disabled=true;
+    var res=await agApi({action:'admin_link_revoke',token:tok});
+    if(!res||!res.ok){ alert('Could not revoke the link'); btn.disabled=false; return; }
+    await agReload();
+  }
+
+  // An account, rather than a link, for a co-agent who needs to ask for services.
+  async function agSetLogin(agentId,btn){
+    var lg=agLogin(agentId), nm=agName(agentId);
+    var email=prompt(lg?('Sign-in email for '+nm):('Create a portal account for '+nm+'\n\nSign-in email:'),
+                     lg?lg.username:'');
+    if(!email||!email.trim())return;
+    var pw=prompt(lg?'New password (leave empty to keep the current one):':'Password (at least 6 characters):','');
+    if(pw===null)return;
+    var t=btn.textContent; btn.textContent='Saving…'; btn.disabled=true;
+    var res=await agApi({action:'admin_login_set',agent_id:agentId,username:email.trim(),password:pw});
+    btn.textContent=t; btn.disabled=false;
+    if(!res||!res.ok){
+      alert({username_taken:'That email already belongs to another portal login.',
+             weak_password:'The password needs at least 6 characters.',
+             password_required:'A password is needed to create the account.',
+             bad_username:'That email looks too short.',
+             direct_has_no_portal:'Direct bookings have no portal.'}[(res&&res.data||{}).error]
+            ||'Could not save the account');
+      return;
+    }
+    alert('Account '+(res.data.mode==='created'?'created':'updated')+' for '+nm+'.\n\n'
+      +location.origin+'/agent\nEmail: '+res.data.username+(pw?'\nPassword: '+pw:''));
+    await agReload();
+  }
+  async function agDelLogin(agentId,btn){
+    if(!confirm('Remove this account? The co-agent can no longer sign in.\n\nA view link, if there is one, keeps working.'))return;
+    btn.textContent='…'; btn.disabled=true;
+    var res=await agApi({action:'admin_login_delete',agent_id:agentId});
+    if(!res||!res.ok){ alert('Could not remove the account'); btn.disabled=false; return; }
+    await agReload();
   }
 
   function renderDocs(){
@@ -936,8 +1193,8 @@
     if(!c||!c.n)return '<span class="progcell" onclick="openMng(\''+id+'\')">+ Add checklist</span>';
     return '<span class="progcell" onclick="openMng(\''+id+'\')"><span class="mngchip'+(c.d===c.n?' full':'')+'">'+c.d+'/'+c.n+'</span> <span class="proggo">Track &#8250;</span></span>';}
 
-  async function openMng(id){
-    MNG.id=id;MNG.tasks=[];MNG.files={};MNG.bp={};MNG.tab='checklist';MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;MNG.tdirty={};MNG.closed={};MNG.closedInit=false;
+  async function openMng(id,tab){
+    MNG.id=id;MNG.tasks=[];MNG.files={};MNG.bp={};MNG.extras=[];MNG.docs=[];MNG.shares=null;MNG.tab=tab||'checklist';MNG.payEdit=null;MNG.payForm=false;MNG.dirty=false;MNG.tdirty={};MNG.closed={};MNG.closedInit=false;
     var b=DATA.bk.find(function(x){return x.id===id;})||{};
     document.getElementById('mngTitle').textContent=(b.booking_ref||'Booking');
     document.getElementById('mngSub').textContent=vname(b.villa_id)+' · '+gname(b.guest_id)+' · '+fmtD(b.check_in)+' → '+fmtD(b.check_out);
@@ -992,9 +1249,13 @@
       var res=await Promise.all([
         sbFetch(SB_URL+'/rest/v1/checkin_tasks?select=*&booking_id=eq.'+MNG.id+'&order=sort_order.asc',{headers:H}).then(function(r){return r.json();}),
         sbFetch(SB_URL+'/rest/v1/checkin_task_files?select=*&booking_id=eq.'+MNG.id+'&order=created_at.asc',{headers:H}).then(function(r){return r.json();}),
-        sbFetch(SB_URL+'/rest/v1/bookings?select=internal_notes&id=eq.'+MNG.id,{headers:H}).then(function(r){return r.json();})
+        sbFetch(SB_URL+'/rest/v1/bookings?select=internal_notes&id=eq.'+MNG.id,{headers:H}).then(function(r){return r.json();}),
+        sbFetch(SB_URL+'/rest/v1/concierge_requests?select=*&booking_id=eq.'+MNG.id+'&order=created_at.asc',{headers:H}).then(function(r){return r.json();}),
+        sbFetch(SB_URL+'/rest/v1/attachments?select=id,entity_type,entity_id,category,title,person_name,mime,visible_to_owner,visible_to_agent,visible_to_guest&entity_id=eq.'+MNG.id+'&order=created_at.asc',{headers:H}).then(function(r){return r.json();})
       ]);
       MNG.bp=parseNotes(((res[2]||[])[0]||{}).internal_notes);
+      MNG.extras=Array.isArray(res[3])?res[3]:[];
+      MNG.docs=Array.isArray(res[4])?res[4]:[];
       MNG.tasks=res[0]||[]; MNG.files={};
       (res[1]||[]).forEach(function(f){(MNG.files[f.task_id]=MNG.files[f.task_id]||[]).push(f);});
       DATA.tk[MNG.id]={n:MNG.tasks.length,d:MNG.tasks.filter(function(t){return t.is_done;}).length};
@@ -1024,6 +1285,17 @@
   }
   function markDirty(){var was=MNG.dirty;MNG.dirty=true;if(!was)renderMng();}
   function bkDirty(){MNG.dirty=true;} // booking form: flag only, no re-render (keeps input focus)
+  // Owner net is the remainder of the booking total, the same way the New Booking
+  // form works it out. Typed over by hand it stays as typed until a figure moves.
+  function bkSplit(){
+    var n=function(id){var e=document.getElementById('bk_'+id);return e?(parseFloat(e.value)||0):0;};
+    var owner=Math.max(0,n('total')-n('mgroup_commission')-n('co_agent_net'));
+    var e=document.getElementById('bk_owner_net');
+    if(e)e.value=owner.toFixed(2).replace(/\.00$/,'');
+    var h=document.getElementById('bk_split_hint');
+    if(h)h.textContent='Total − MGROUP − Co-agent = '+money(owner);
+    bkDirty();
+  }
   function bkGuests(){var a=+((document.getElementById('bk_adults')||{}).value)||0,c=+((document.getElementById('bk_children')||{}).value)||0;var g=document.getElementById('bk_guests_count');if(g)g.value=a+c;bkDirty();}
   function toggleGrp(k,h){MNG.closed=MNG.closed||{};MNG.closed[k]=!MNG.closed[k];h.parentElement.classList.toggle('collapsed',!!MNG.closed[k]);}
   function saveBar(){
@@ -1055,7 +1327,9 @@
       ['payments','Payments',pays?String(pays):''],
       ['checklist','Checklist',MNG.tasks.length?done+'/'+MNG.tasks.length:''],
       ['house','Housekeeper',houseCount()?String(houseCount()):''],
-      ['util','Utilities',utilCount()?String(utilCount()):'']
+      ['util','Utilities',utilCount()?String(utilCount()):''],
+      ['extras','Extras',(MNG.extras||[]).length?String((MNG.extras||[]).length):''],
+      ['share','Shared views','']
     ];
     document.getElementById('mngTabs').innerHTML=defs.map(function(d){
       return '<button class="mtab'+(MNG.tab===d[0]?' on':'')+'" onclick="mngTab(\''+d[0]+'\')">'+d[1]+
@@ -1079,6 +1353,8 @@
     if(MNG.tab==='payments'){renderPay();ov.scrollTop=sy;return;}
     if(MNG.tab==='house'){renderHouse();ov.scrollTop=sy;return;}
     if(MNG.tab==='util'){renderUtil();ov.scrollTop=sy;return;}
+    if(MNG.tab==='extras'){renderExtras();ov.scrollTop=sy;return;}
+    if(MNG.tab==='share'){renderShare();ov.scrollTop=sy;return;}
     renderChecklist();
     ov.scrollTop=sy;
   }
@@ -1273,6 +1549,30 @@
       '</div></div>'+
       (b.special_requests?'<div style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:20px 0 6px">Special requests</div><div style="font-size:13px;line-height:1.6">'+esc(b.special_requests)+'</div>':'');
   }
+  // Every booking belongs to an agency; "Direct — MGROUP" is the one for a
+  // booking we took ourselves, so the field is never left blank by accident.
+  function agentOptions(sel){
+    var list=(DATA.agents||[]).filter(function(a){return a.is_active!==false||a.id===sel;});
+    if(!list.length)return '<option value="">Loading agencies…</option>';
+    var direct=list.filter(function(a){return a.is_direct;});
+    var rest=list.filter(function(a){return !a.is_direct;})
+      .sort(function(x,y){return String(x.name).localeCompare(String(y.name));});
+    return (sel?'':'<option value="">— choose an agency —</option>')
+      +direct.concat(rest).map(function(a){
+        return '<option value="'+a.id+'"'+(a.id===sel?' selected':'')+'>'+esc(a.name)+'</option>';
+      }).join('');
+  }
+  function agentField(sel){
+    return '<div><label>Agency <span style="color:var(--red)">*</span></label>'
+      +'<select id="bk_agent_id" onchange="bkDirty()">'+agentOptions(sel)+'</select></div>';
+  }
+  // The Agents screen owns the list; other screens just ask for a refresh.
+  async function reloadAgentOptions(){
+    try{
+      var r=await sbFetch(SB_URL+'/rest/v1/agents?select=id,name,company,email,phone,line_id,notes,is_direct,is_active&order=name',{headers:H});
+      var rows=await r.json(); if(Array.isArray(rows))DATA.agents=rows;
+    }catch(e){}
+  }
   function fld(id,label,val,type,extra){
     return '<div><label>'+label+'</label><input id="bk_'+id+'" type="'+(type||'text')+'"'+(extra||'')+
       ' value="'+esc(val==null?'':val)+'" oninput="bkDirty()"></div>';
@@ -1309,18 +1609,18 @@
       '</div>'+
       '<div style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:4px 0 10px;padding-top:6px;border-top:1px solid var(--line)">Payment terms</div>'+
       '<div class="r c2">'+
-        fld('total','Total (to client)',b.total,'number',' step="0.01"')+
+        fld('total','Total (to client)',b.total,'number',' step="0.01" oninput="bkSplit()"')+
         fld('security_deposit','Security deposit',b.security_deposit,'number',' step="0.01"')+
       '</div><div class="r c2">'+
-        fld('mgroup_commission','MGROUP commission',b.mgroup_commission,'number',' step="0.01"')+
-        fld('co_agent_net','Co-agent net',b.co_agent_net,'number',' step="0.01"')+
+        fld('mgroup_commission','MGROUP commission',b.mgroup_commission,'number',' step="0.01" oninput="bkSplit()"')+
+        fld('co_agent_net','Co-agent net',b.co_agent_net,'number',' step="0.01" oninput="bkSplit()"')+
       '</div><div class="r c2">'+
-        fld('agent_name','Agent name',b.agent_name)+
+        agentField(b.agent_id)+
         fld('source','Source',b.source)+
       '</div>'+
       '<div style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--g600);margin:4px 0 10px;padding-top:6px;border-top:1px solid var(--line)">Owner net <span class="sub" style="text-transform:none;letter-spacing:0;font-weight:600">— shown to the owner in Owner Portal</span></div>'+
       '<div class="r"><div style="max-width:280px">'+
-        '<label>Owner net (THB)</label><input id="bk_owner_net" type="number" step="0.01" value="'+esc(b.owner_net==null?'':b.owner_net)+'" oninput="bkDirty()" style="font-weight:700;color:var(--g600)"></div>'+
+        '<label>Owner net (THB) <span id="bk_split_hint" style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--faint)"></span></label><input id="bk_owner_net" type="number" step="0.01" value="'+esc(b.owner_net==null?'':b.owner_net)+'" oninput="bkDirty()" style="font-weight:700;color:var(--g600)"></div>'+
       '</div>'+
       '<div class="r">'+
         '<div><label>Special requests</label><input id="bk_special_requests" value="'+esc(b.special_requests||'')+'" oninput="bkDirty()"></div>'+
@@ -1338,13 +1638,18 @@
   async function bkSave(){
     var ci=bkStr('check_in'), co=bkStr('check_out');
     if(ci&&co&&Date.parse(co)<=Date.parse(ci)){alert('Check-out must be after check-in.');return;}
+    if(!bkStr('agent_id')){
+      alert('Choose the agency for this booking.\n\nIf MGROUP took it with no co-agent, pick “Direct — MGROUP”.');
+      var el=document.getElementById('bk_agent_id'); if(el)el.focus();
+      return;
+    }
     var body={booking_ref:bkStr('booking_ref'),status:bkStr('status'),currency:bkStr('currency'),
       villa_id:bkStr('villa_id'),guest_id:bkStr('guest_id'),owner_id:bkStr('owner_id'),
       check_in:ci,check_out:co,nights:bkNum('nights'),
       guests_count:bkNum('guests_count'),adults:bkNum('adults'),children:bkNum('children'),pets:bkNum('pets'),
       total:bkNum('total'),
       security_deposit:bkNum('security_deposit'),mgroup_commission:bkNum('mgroup_commission'),
-      owner_net:bkNum('owner_net'),agent_name:bkStr('agent_name'),co_agent_net:bkNum('co_agent_net'),
+      owner_net:bkNum('owner_net'),agent_id:bkStr('agent_id'),co_agent_net:bkNum('co_agent_net'),
       source:bkStr('source'),special_requests:bkStr('special_requests')};
     try{
       var r=await sbFetch(SB_URL+'/rest/v1/bookings?id=eq.'+MNG.id,{method:'PATCH',headers:JH,body:JSON.stringify(body)});
@@ -1483,34 +1788,6 @@
   }
 
   // ---------- GUEST PORTAL ----------
-  // A guest link opens /guest with no sign-in and shows that one booking only.
-  async function shareGuest(bid,btn){
-    var b=(DATA.bk||[]).filter(function(x){return x.id===bid;})[0];
-    if(b&&!b.guest_id){alert('Add a guest to this booking first.');return;}
-    var code=adminCode(); if(!code)return;
-    var t=btn.textContent; btn.textContent='Creating…'; btn.disabled=true;
-    try{
-      var r=await fetch(SB_URL+'/functions/v1/booking-share',{method:'POST',
-        headers:Object.assign({'Content-Type':'application/json'},H),
-        body:JSON.stringify({action:'create',passcode:code,booking_id:bid,days:120,audience:'guest'})});
-      var d=await r.json();
-      if(!r.ok){
-        if(d.error==='unauthorized')sessionStorage.removeItem('mg_admin_code');
-        alert(d.error==='unauthorized'?'Wrong admin passcode':
-              d.error==='booking_has_no_guest'?'Add a guest to this booking first.':
-              'Could not create the link'); return;
-      }
-      var url=location.origin+'/guest#s/'+d.token;
-      var msg='MGROUP Estates'+(b&&b.booking_ref?' — booking '+b.booking_ref:'')+'\n'
-        +(b?vname(b.villa_id)+', '+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'\n':'')
-        +'Your stay, villa details and our concierge (no login needed, link valid 120 days):\n'+url;
-      try{ await navigator.clipboard.writeText(msg); btn.textContent='Copied'; }
-      catch(e){ prompt('Copy this and send it to the guest:',url); btn.textContent=t; }
-      setTimeout(function(){btn.textContent=t;},2200);
-    }catch(e){ alert('Could not create the link'); btn.textContent=t; }
-    finally{ btn.disabled=false; }
-  }
-
   // Optional email/password so a guest can come back to their whole history.
   async function guestLogin(gid,btn){
     var g=DATA.gmap[gid]||{};
@@ -1547,6 +1824,288 @@
         +location.origin+'/guest\nEmail: '+d2.username+(pw?'\nPassword: '+pw:''));
     }catch(e){ alert('Could not save the login'); }
     finally{ btn.textContent=t; btn.disabled=false; }
+  }
+
+  // ---------- SHARED VIEWS ----------
+  // One booking, three audiences. Every link opens with no sign-in, and the edge
+  // function — not this page — decides what each audience is allowed to see.
+  var SHAUD=[
+    ['owner','Owner view','/owner#s/',
+     'The booking as the owner may see it: progress through the stay, their payout schedule, the documents we shared, and the extras raised. No client figures.'],
+    ['agent','Co-agent view','/agent#s/',
+     'Progress through the stay, what the client pays, and where each extra request stands. Never the owner net and never anyone’s commission.'],
+    ['guest','Guest view','/guest#s/',
+     'The guest’s own stay: villa guide, concierge menu and their own requests. Opens the guest portal for this one booking.']
+  ];
+  function shLive(aud){
+    var now=new Date();
+    return (MNG.shares||[]).filter(function(r){
+      return r.audience===aud&&!r.revoked&&(!r.expires_at||new Date(r.expires_at)>now);
+    })[0]||null;
+  }
+  function shUrl(aud,tok){
+    var a=SHAUD.filter(function(x){return x[0]===aud;})[0];
+    return location.origin+(a?a[2]:'/owner#s/')+tok;
+  }
+  async function shLoad(force){
+    if(MNG.shares&&!force)return renderShare();
+    var code=adminCode(); if(!code)return;
+    var id=MNG.id;
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/booking-share',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({action:'list',passcode:code,booking_id:id})});
+      var d=await r.json();
+      if(r.status===401)sessionStorage.removeItem('mg_admin_code');
+      if(MNG.id!==id)return;
+      MNG.shares=Array.isArray(d.rows)?d.rows:[];
+    }catch(e){ if(MNG.id!==id)return; MNG.shares=[]; }
+    if(MNG.tab==='share')renderShare();
+  }
+  function renderShare(){
+    var box=document.getElementById('mngBody');
+    if(!MNG.shares){ box.innerHTML='<div class="state">Loading shared views&hellip;</div>'; shLoad(); return; }
+    var b=DATA.bk.filter(function(x){return x.id===MNG.id;})[0]||{};
+    var cards=SHAUD.map(function(a){
+      var live=shLive(a[0]);
+      var blocked=(a[0]==='guest'&&!b.guest_id)?'Add a guest to this booking first.'
+                 :(a[0]==='agent'&&!String(b.agent_name||'').trim())?'Name the co-agent on the booking first.':'';
+      var state=live
+        ? '<div class="shurl">'+esc(shUrl(a[0],live.token))+'</div>'
+          +'<div class="meta">Valid to '+fmtD(String(live.expires_at||'').slice(0,10))
+          +' &middot; opened '+(live.opened_count||0)+' time'+((live.opened_count||0)===1?'':'s')
+          +(live.last_opened_at?'<br>Last opened '+esc(fmtDT(live.last_opened_at)):'')+'</div>'
+        : '<div class="meta">'+esc(blocked||'No live link yet.')+'</div>';
+      var acts=live
+        ? '<button class="btn" onclick="shCopy(\''+a[0]+'\',\''+live.token+'\',this)">Copy link</button>'
+          +'<button class="btn" onclick="window.open(\''+shUrl(a[0],live.token)+'\',\'_blank\')">Open</button>'
+          +'<button class="rowbtn" onclick="shRevoke(\''+live.token+'\',this)">Revoke</button>'
+        : '<button class="btn primary"'+(blocked?' disabled style="opacity:.4;cursor:default"':'')
+          +' onclick="shCreate(\''+a[0]+'\',this)">Create link</button>';
+      return '<div class="shcard'+(live?' live':'')+'">'
+        +'<div class="who">'+esc(a[0]==='agent'?'Co-agent':a[0])+'</div>'
+        +'<h5>'+esc(a[1])+'</h5><p>'+esc(a[3])+'</p>'+state
+        +'<div class="acts">'+acts+'</div></div>';
+    }).join('');
+    var ex=MNG.extras||[], wait=ex.filter(function(r){return r.status==='new';}).length;
+    var tk=DATA.tk[MNG.id]||{n:0,d:0};
+    box.innerHTML='<div class="sechd"><h4>Shared views</h4>'
+      +'<span class="sub">No sign-in &middot; revoke at any time</span></div>'
+      +'<div class="shgrid">'+cards+'</div>'
+      +'<div class="sechd"><h4>What those links show right now</h4></div>'
+      +'<div class="crcard" style="font-size:12.5px;color:var(--muted);line-height:1.8">'
+      +'Checklist <b>'+tk.d+' of '+tk.n+'</b> done &middot; '
+      +'<b>'+ex.length+'</b> extra request'+(ex.length===1?'':'s')
+      +(wait?' &middot; <b style="color:#9a7b3a">'+wait+' waiting for your approval</b>':'')
+      +'<br>Edit what they see on the <b>Checklist</b> and <b>Extras</b> tabs.</div>'
+      +'<div class="sechd" style="margin-top:20px"><h4>Documents on this booking</h4>'
+      +'<span class="sub">tick who may open each one</span></div>'
+      +docVisHtml();
+  }
+
+  // A booking sits behind separate agreements: MGROUP with the owner, MGROUP with
+  // the co-agent, and the tenancy itself. Each file is released per party, so an
+  // owner agreement is never handed to a co-agent and vice versa.
+  var DOCLBL={owner_agreement:'Owner agreement',agent_agreement:'Co-agent agreement',
+              rental_agreement:'Rental agreement',booking_confirmation:'Booking confirmation',
+              invoice:'Invoice',receipt:'Receipt',passport:'Passport',tm30:'TM30',visa:'Visa',
+              inventory:'Inventory list',water_bill:'Water bill',electricity_bill:'Electricity bill',
+              cleaning_schedule:'Cleaning schedule',document:'Document',other:'Document'};
+  var PRIVATE_CATS=['passport','visa','tm30'];
+  function docVisHtml(){
+    var list=MNG.docs||[];
+    if(!list.length)
+      return '<div class="crcard" style="color:var(--muted);font-size:12.5px;line-height:1.7">'
+        +'No files attached to this booking yet. Once a contract, invoice or receipt is uploaded '
+        +'it appears here and you choose who may open it.</div>';
+    var leak=list.filter(function(a){return a.visible_to_agent&&PRIVATE_CATS.indexOf(a.category)>=0;}).length;
+    return '<div class="dvis">'
+      +'<div class="hdr"><span>File</span><span>Owner</span><span>Co-agent</span><span>Guest</span></div>'
+      +list.map(function(a){
+        var nm=a.title||DOCLBL[a.category]||'Document';
+        return '<div class="row"><div class="nm">'+esc(nm)
+          +'<small>'+esc(DOCLBL[a.category]||a.category||'file')
+          +(a.person_name?' · '+esc(a.person_name):'')+'</small></div>'
+          +['owner','agent','guest'].map(function(k){
+            return '<div class="cb"><input type="checkbox"'+(a['visible_to_'+k]?' checked':'')
+              +' onchange="docVisSet(\''+a.id+'\',\''+k+'\',this)"></div>';
+          }).join('')
+        +'</div>';
+      }).join('')
+      +(leak?'<div class="warn">A passport, visa or TM30 is ticked for the co-agent. '
+        +'Those are the guest\u2019s own papers — untick unless the guest agreed to it.</div>':'')
+      +'</div>';
+  }
+  async function docVisSet(id,who,cb){
+    var row=(MNG.docs||[]).filter(function(x){return x.id===id;})[0];
+    var want=!!cb.checked, field='visible_to_'+who, was=row?!!row[field]:!want;
+    cb.disabled=true;
+    try{
+      var patch={}; patch[field]=want;
+      var r=await sbFetch(SB_URL+'/rest/v1/attachments?id=eq.'+id,
+        {method:'PATCH',headers:JH,body:JSON.stringify(patch)});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      if(row)row[field]=want;
+      renderMng();
+    }catch(e){
+      cb.checked=was; cb.disabled=false;
+      alert('Could not change who may open this file.');
+    }
+  }
+  async function shCreate(aud,btn){
+    var code=adminCode(); if(!code)return;
+    var t=btn.textContent; btn.textContent='Creating…'; btn.disabled=true;
+    try{
+      var r=await fetch(SB_URL+'/functions/v1/booking-share',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({action:'create',passcode:code,booking_id:MNG.id,
+                             audience:aud,days:aud==='guest'?120:60})});
+      var d=await r.json();
+      if(!r.ok){
+        if(d.error==='unauthorized')sessionStorage.removeItem('mg_admin_code');
+        alert({unauthorized:'Wrong admin passcode',
+               booking_has_no_guest:'Add a guest to this booking first.',
+               booking_has_no_agent:'Name the co-agent on the booking first.'}[d.error]
+              ||'Could not create the link');
+        btn.textContent=t; btn.disabled=false; return;
+      }
+      await shLoad(true);
+    }catch(e){ alert('Could not create the link'); btn.textContent=t; btn.disabled=false; }
+  }
+  async function shCopy(aud,tok,btn){
+    var b=DATA.bk.filter(function(x){return x.id===MNG.id;})[0]||{};
+    var url=shUrl(aud,tok);
+    var msg='MGROUP Estates'+(b.booking_ref?' — booking '+b.booking_ref:'')+'\n'
+      +vname(b.villa_id)+', '+fmtD(b.check_in)+' → '+fmtD(b.check_out)+'\n'
+      +'Follow the booking here (no login needed):\n'+url;
+    var t=btn.textContent;
+    try{ await navigator.clipboard.writeText(msg); btn.textContent='Copied'; }
+    catch(e){ prompt('Copy this and send it on:',url); }
+    setTimeout(function(){btn.textContent=t;},2200);
+  }
+  async function shRevoke(tok,btn){
+    if(!confirm('Revoke this link? Anyone holding it loses access straight away.'))return;
+    var code=adminCode(); if(!code)return;
+    btn.textContent='…'; btn.disabled=true;
+    try{
+      await fetch(SB_URL+'/functions/v1/booking-share',{method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({action:'revoke',passcode:code,token:tok})});
+      await shLoad(true);
+    }catch(e){ alert('Could not revoke the link'); btn.disabled=false; }
+  }
+
+  // ---------- EXTRAS ----------
+  // Two separate answers per request: has MGROUP approved it, and is it included
+  // in the rate or charged on. Both are what the owner and co-agent links show.
+  var XBILL=[['chargeable','Charged to the client'],['included','Included in the rate'],
+             ['complimentary','Complimentary']];
+  var XCHG=[['unpaid','Not paid'],['invoiced','Invoiced'],['paid','Paid'],['waived','Waived']];
+  var XCAT={fasttrack:'Fast track',transfer:'Transport',concierge:'Concierge',dining:'Dining',
+            wellness:'Wellness',excursion:'On the water',home:'At the villa',family:'Family'};
+  function xNice(x){
+    if(XCAT[x])return XCAT[x];
+    x=String(x||'').replace(/[_-]+/g,' ').trim();
+    return x?x.charAt(0).toUpperCase()+x.slice(1):'';
+  }
+  function xPlural(n,one,many){n=N(n);return n+' '+(n===1?one:many);}
+  function xAmount(r){return N(r.price)*(N(r.qty)||1);}
+  function xApprovalBadge(r){
+    return (r.status==='confirmed'||r.status==='done')?'<span class="bdg ok">Approved</span>'
+      :r.status==='declined'?'<span class="bdg no">Not available</span>'
+      :r.status==='cancelled'?'<span class="bdg no">Withdrawn</span>'
+      :'<span class="bdg wait">Waiting approval</span>';
+  }
+  function xBillBadge(r){
+    // A request we turned down is never charged for.
+    if(r.status==='declined'||r.status==='cancelled')return '<span class="bdg inc">Nothing to collect</span>';
+    if(r.billing==='included')return '<span class="bdg inc">Included</span>';
+    if(r.billing==='complimentary')return '<span class="bdg inc">Complimentary</span>';
+    var chg=r.charge_status||'unpaid';
+    var lbl={unpaid:'Not paid',invoiced:'Invoiced',paid:'Paid',waived:'Waived'}[chg]||'Not paid';
+    return '<span class="bdg chg">To collect '+money(xAmount(r))+'</span> '
+      +'<span class="bdg '+(chg==='paid'?'paid':chg==='waived'?'inc':'wait')+'">'+lbl+'</span>';
+  }
+  function renderExtras(){
+    var box=document.getElementById('mngBody'), ex=MNG.extras||[];
+    if(!ex.length){
+      box.innerHTML='<div class="state">No extra requests on this booking yet.'
+        +'<div style="margin-top:10px;font-size:12.5px;line-height:1.7">Guests raise these in the guest portal and '
+        +'co-agents in the agent portal.<br>You can add one yourself from the Concierge screen.</div></div>';
+      return;
+    }
+    var answered=ex.filter(function(r){return r.status!=='new';}).length;
+    var tot=ex.filter(function(r){return r.billing==='chargeable'&&r.status!=='declined'&&r.status!=='cancelled';})
+              .reduce(function(s,r){return s+xAmount(r);},0);
+    box.innerHTML='<div class="mngprog"><div class="bar"><i style="width:'
+      +(ex.length?Math.round(answered*100/ex.length):0)+'%"></i></div>'
+      +'<div class="pct">'+answered+' / '+ex.length+' answered</div></div>'
+      +'<div class="sechd"><h4>Extra requests</h4>'
+      +'<span class="sub">On top of the rate: <b>'+money(tot)+'</b></span></div>'
+      +ex.map(xRow).join('');
+  }
+  function xRow(r){
+    var who=r.source==='agent'?('asked by co-agent'+(r.agent_name?' '+r.agent_name:''))
+           :r.source==='admin'?'added by MGROUP':'asked by guest';
+    return '<div class="crcard"><div class="xrow">'
+      +'<div style="flex:1;min-width:220px">'
+        +'<div class="xt">'+esc(r.service_title||'Request')+'</div>'
+        +'<div class="xm">'
+          +(r.category?'<span>'+esc(xNice(r.category))+'</span>':'')
+          +(r.requested_for?'<span>for '+fmtD(r.requested_for)
+            +(r.requested_time?' '+esc(r.requested_time):'')+'</span>':'')
+          +(r.people?'<span>'+xPlural(r.people,'person','people')+'</span>':'')
+          +(N(r.qty)>1?'<span>&times;'+N(r.qty)+'</span>':'')
+          +'<span>'+esc(who)+'</span>'
+        +'</div></div>'
+      +'<div style="text-align:right;display:flex;flex-direction:column;gap:6px;align-items:flex-end">'
+        +xApprovalBadge(r)+'<div>'+xBillBadge(r)+'</div></div>'
+      +(r.notes?'<div class="gnote" style="width:100%">'+esc(r.notes)+'</div>':'')
+      +'<div class="xc">'
+        +'<select id="xs-'+r.id+'" title="Approval">'+CRST.map(function(x){
+            return '<option value="'+x[0]+'"'+(x[0]===r.status?' selected':'')+'>'+x[1]+'</option>';}).join('')+'</select>'
+        +'<select id="xb-'+r.id+'" title="Included or charged" onchange="xToggleCharge(\''+r.id+'\')">'+XBILL.map(function(x){
+            return '<option value="'+x[0]+'"'+(x[0]===(r.billing||'chargeable')?' selected':'')+'>'+x[1]+'</option>';}).join('')+'</select>'
+        +'<span id="xw-'+r.id+'"'+((r.billing||'chargeable')==='chargeable'?'':' style="display:none"')
+          +' style="display:flex;gap:7px">'
+          +'<input id="xp-'+r.id+'" type="number" min="0" step="1" placeholder="Price" style="width:106px" value="'
+            +(r.price==null?'':N(r.price))+'">'
+          +'<select id="xc-'+r.id+'" title="Money">'+XCHG.map(function(x){
+              return '<option value="'+x[0]+'"'+(x[0]===(r.charge_status||'unpaid')?' selected':'')+'>'+x[1]+'</option>';}).join('')+'</select>'
+        +'</span>'
+        +'<input id="xn-'+r.id+'" placeholder="What we told them…" style="flex:1;min-width:180px;font-weight:500" value="'
+          +esc(r.admin_note||'')+'">'
+        +'<button class="btn primary" onclick="xSave(\''+r.id+'\',this)">Save</button>'
+      +'</div></div></div>';
+  }
+  function xToggleCharge(id){
+    var b=document.getElementById('xb-'+id), w=document.getElementById('xw-'+id);
+    if(b&&w)w.style.display=(b.value==='chargeable')?'flex':'none';
+  }
+  async function xSave(id,btn){
+    var g=function(k){var e=document.getElementById(k+'-'+id);return e?e.value:'';};
+    var row=(MNG.extras||[]).filter(function(x){return x.id===id;})[0]||{};
+    var st=g('xs')||'new', bill=g('xb')||'chargeable';
+    var approved=(st==='confirmed'||st==='done');
+    var priceRaw=g('xp');
+    var patch={
+      status:st, billing:bill,
+      price:bill==='chargeable'?(priceRaw===''?null:Number(priceRaw)):0,
+      charge_status:bill==='chargeable'?(g('xc')||'unpaid'):'waived',
+      admin_note:g('xn')||null,
+      approved_at:approved?(row.approved_at||new Date().toISOString()):null,
+      approved_by:approved?'Admin':null,
+      updated_at:new Date().toISOString()
+    };
+    var t=btn.textContent; btn.textContent='Saving…'; btn.disabled=true;
+    try{
+      var r=await sbFetch(SB_URL+'/rest/v1/concierge_requests?id=eq.'+id,
+        {method:'PATCH',headers:JH,body:JSON.stringify(patch)});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      Object.assign(row,patch);
+      (DATA.cr||[]).forEach(function(x){if(x.id===id)Object.assign(x,patch);});
+      renderMng();
+    }catch(e){ alert('Could not save this extra.'); btn.textContent=t; btn.disabled=false; }
   }
 
   // ---------- concierge inbox ----------
@@ -1593,13 +2152,19 @@
         +'</div>'
         +crDetailLine(r)
         +'</div>'
+        +'<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;text-align:right">'
         +'<span class="crst '+esc(r.status)+'">'+esc((CRST.filter(function(x){return x[0]===r.status;})[0]||[0,r.status])[1])+'</span>'
+        +'<div>'+xBillBadge(r)+'</div></div>'
         +'</div>'
         +(r.notes?'<div class="gnote">'+esc(r.notes)+'</div>':'')
         +'<div class="reply">'
           +'<input id="crn-'+r.id+'" placeholder="What we told the guest…" value="'+esc(r.admin_note||'')+'">'
           +'<select id="crs-'+r.id+'">'+CRST.map(function(x){
               return '<option value="'+x[0]+'"'+(x[0]===r.status?' selected':'')+'>'+x[1]+'</option>';}).join('')+'</select>'
+          +'<select id="crb-'+r.id+'" title="Included or charged">'+XBILL.map(function(x){
+              return '<option value="'+x[0]+'"'+(x[0]===(r.billing||'chargeable')?' selected':'')+'>'+x[1]+'</option>';}).join('')+'</select>'
+          +'<select id="crc-'+r.id+'" title="Money">'+XCHG.map(function(x){
+              return '<option value="'+x[0]+'"'+(x[0]===(r.charge_status||'unpaid')?' selected':'')+'>'+x[1]+'</option>';}).join('')+'</select>'
           +'<button class="btn" onclick="crDetails(\''+r.id+'\')">Details\u2026</button>'
           +'<button class="btn primary" onclick="crSave(\''+r.id+'\',this)">Save</button>'
         +'</div></div>';
@@ -1608,13 +2173,22 @@
   async function crSave(id,btn){
     var note=(document.getElementById('crn-'+id)||{}).value||'';
     var st=(document.getElementById('crs-'+id)||{}).value||'new';
+    var bill=(document.getElementById('crb-'+id)||{}).value||'chargeable';
+    var chg=(document.getElementById('crc-'+id)||{}).value||'unpaid';
+    var was=(DATA.cr||[]).filter(function(x){return x.id===id;})[0]||{};
+    var approved=(st==='confirmed'||st==='done');
     var t=btn.textContent; btn.textContent='Saving…'; btn.disabled=true;
     try{
       var r=await sbFetch(SB_URL+'/rest/v1/concierge_requests?id=eq.'+id,
         {method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),
-         body:JSON.stringify({status:st,admin_note:note||null,updated_at:new Date().toISOString()})});
+         body:JSON.stringify({status:st,admin_note:note||null,billing:bill,
+           charge_status:bill==='chargeable'?chg:'waived',
+           approved_at:approved?(was.approved_at||new Date().toISOString()):null,
+           approved_by:approved?'Admin':null,
+           updated_at:new Date().toISOString()})});
       if(!r.ok)throw new Error('save failed');
-      (DATA.cr||[]).forEach(function(x){if(x.id===id){x.status=st;x.admin_note=note||null;}});
+      (DATA.cr||[]).forEach(function(x){if(x.id===id){x.status=st;x.admin_note=note||null;
+        x.billing=bill;x.charge_status=bill==='chargeable'?chg:'waived';}});
       btn.textContent='Saved'; renderConcierge();
     }catch(e){ alert('Could not save'); btn.textContent=t; }
     finally{ btn.disabled=false; }
@@ -2485,6 +3059,16 @@
     }catch(e){ vmsg('Save failed: '+e.message,true); }
     finally{ btn.disabled=false; btn.textContent=t; }
   }
+
+  // Other admin pages link straight to a screen here, e.g. rent-admin-new.html#agents
+  function openFromHash(){
+    var v=String(location.hash||'').replace(/^#/,'').trim();
+    if(!v)return;
+    var btn=document.querySelector('.nav button[data-v="'+v.replace(/[^a-z_]/gi,'')+'"]');
+    if(btn)go(v,btn);
+  }
+  window.addEventListener('hashchange',openFromHash);
+  openFromHash();
 
   loadAll();
 </script>
