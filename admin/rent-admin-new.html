@@ -54,7 +54,7 @@
   .st-select{font-family:var(--font);font-size:11.5px;font-weight:700;border-radius:20px;padding:5px 10px;border:none;background:#8b98a8;cursor:pointer;color:#fff;-webkit-appearance:none;appearance:none}
   .st-select.inquiry{background:#8b98a8}
   .st-select.confirmed{background:#12a150}
-  .st-select.deposit{background:#e0921a}
+  .st-select.depositpaid{background:#e0921a}
   .st-select.fullypaid{background:#0a7d40}
   .st-select.checkedin{background:#1a7fe0}
   .st-select.checkedout{background:#7c8a83}
@@ -641,7 +641,7 @@
   function renderAll(){renderBookings();renderDash();renderFinance();renderVillas();renderOwners();renderClients();renderAgents();renderDocs();}
 
   function renderBookings(){
-    var ST=[['inquiry','Inquiry'],['confirmed','Confirmed'],['deposit','Deposit paid'],['fully_paid','Fully paid'],['checked_in','Checked-in'],['checked_out','Checked-out'],['cancelled','Cancelled'],['no_show','No show']];
+    var ST=[['inquiry','Inquiry'],['confirmed','Confirmed'],['deposit_paid','Deposit paid'],['fully_paid','Fully paid'],['checked_in','Checked-in'],['checked_out','Checked-out'],['cancelled','Cancelled'],['no_show','No show']];
     // year dropdown (built from check_in years)
     var ysel=document.getElementById('bkYear');
     var allYears=Array.from(new Set((DATA.bk||[]).map(function(b){return b.check_in?String(b.check_in).slice(0,4):null;}).filter(Boolean))).sort().reverse();
@@ -679,7 +679,23 @@
     if(el=document.getElementById('bk-upcoming'))el.textContent=upcoming;
     if(el=document.getElementById('bk-total'))el.textContent=bk.length;
   }
-  async function chSt(sel){try{await sbFetch(SB_URL+'/rest/v1/bookings?id=eq.'+sel.getAttribute('data-id'),{method:'PATCH',headers:Object.assign({},H,{'Content-Type':'application/json'}),body:JSON.stringify({status:sel.value})});sel.className='st-select '+stCls(sel.value);}catch(e){alert('Save failed');}}
+  // sbFetch resolves on a rejected write too, so the response has to be read —
+  // otherwise the dropdown keeps a status the database never accepted.
+  async function chSt(sel){
+    var id=sel.getAttribute('data-id');
+    var was=(DATA.bk.filter(function(b){return b.id===id;})[0]||{}).status||'';
+    try{
+      var r=await sbFetch(SB_URL+'/rest/v1/bookings?id=eq.'+id,{method:'PATCH',
+        headers:Object.assign({},H,{'Content-Type':'application/json'}),
+        body:JSON.stringify({status:sel.value})});
+      if(!r.ok)throw new Error(await r.text()||('HTTP '+r.status));
+      DATA.bk.forEach(function(b){if(b.id===id)b.status=sel.value;});
+      sel.className='st-select '+stCls(sel.value);
+    }catch(e){
+      sel.value=was; sel.className='st-select '+stCls(was);
+      alert('Could not change the status — it stays as it was.\n\n'+e.message);
+    }
+  }
 
   function outstanding(b){var t=N(b.total),p=N(b.client_pay);var o=t-p;return (['cancelled','checked_out','no_show'].indexOf(b.status)>-1)?0:(o>0?o:0);}
 
@@ -694,7 +710,7 @@
     var latestYr=Object.keys(yr).filter(function(y){return y!=='----';}).sort().reverse()[0]||THISYR;
     var col=0; DATA.bk.forEach(function(b){ if((b.check_in||'').slice(0,4)===latestYr) col+=outstanding(b); });
     // upcoming = confirmed/deposit/fully_paid AND check-in today or later
-    var upc=DATA.bk.filter(function(b){return ['confirmed','deposit','fully_paid'].indexOf(b.status)>-1 && (b.check_in||'')>=todayStr;})
+    var upc=DATA.bk.filter(function(b){return ['confirmed','deposit_paid','fully_paid'].indexOf(b.status)>-1 && (b.check_in||'')>=todayStr;})
       .sort(function(a,b){return (a.check_in||'').localeCompare(b.check_in||'');});
     document.getElementById('d-up').textContent=upc.length;
     document.getElementById('d-in').textContent=inn;
@@ -1481,7 +1497,8 @@
     var t=MNG.tasks.find(function(x){return x.id===id;}); if(!t)return;
     var v=prompt('Task name',nice(t.task_name)); if(v===null)return; v=v.trim(); if(!v)return;
     try{
-      await sbFetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'PATCH',headers:JH,body:JSON.stringify({task_name:v})});
+      var r=await sbFetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'PATCH',headers:JH,body:JSON.stringify({task_name:v})});
+      if(!r.ok)throw new Error(await r.text()||('HTTP '+r.status));
       t.task_name=v;renderMng();
     }catch(e){alert('Could not rename: '+e.message);}
   }
@@ -1504,8 +1521,10 @@
     var t=MNG.tasks.find(function(x){return x.id===id;}); if(!t)return;
     if(!(await mgConfirm('Remove "'+nice(t.task_name)+'" from this checklist?','Remove')))return;
     try{
-      await sbFetch(SB_URL+'/rest/v1/checkin_task_files?task_id=eq.'+id,{method:'DELETE',headers:H});
-      await sbFetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'DELETE',headers:H});
+      var rf=await sbFetch(SB_URL+'/rest/v1/checkin_task_files?task_id=eq.'+id,{method:'DELETE',headers:H});
+      if(!rf.ok)throw new Error('files: HTTP '+rf.status);
+      var rt=await sbFetch(SB_URL+'/rest/v1/checkin_tasks?id=eq.'+id,{method:'DELETE',headers:H});
+      if(!rt.ok)throw new Error(await rt.text()||('HTTP '+rt.status));
       await loadTasks();
     }catch(e){alert('Could not remove: '+e.message);}
   }
@@ -1526,7 +1545,7 @@
   }
 
   // ---------- BOOKING DETAILS (view / edit) ----------
-  var BKST=[['inquiry','Inquiry'],['confirmed','Confirmed'],['deposit','Deposit paid'],['fully_paid','Fully paid'],
+  var BKST=[['inquiry','Inquiry'],['confirmed','Confirmed'],['deposit_paid','Deposit paid'],['fully_paid','Fully paid'],
             ['checked_in','Checked-in'],['checked_out','Checked-out'],['cancelled','Cancelled'],['no_show','No show']];
   function renderBk(){
     var b=DATA.bk.find(function(x){return x.id===MNG.id;})||{};
@@ -1771,10 +1790,14 @@
     ps.forEach(function(p){ if(p.status==='paid'){ var a=N(p.amount), o=(p.owner_net!=null?N(p.owner_net):0); cli+=a; own+=o; ag+=(a-o); } });
     var body={client_pay:cli,owner_paid:own,agent_paid:ag};
     try{
-      await sbFetch(SB_URL+'/rest/v1/bookings?id=eq.'+MNG.id,{method:'PATCH',headers:JH,body:JSON.stringify(body)});
+      var r=await sbFetch(SB_URL+'/rest/v1/bookings?id=eq.'+MNG.id,{method:'PATCH',headers:JH,body:JSON.stringify(body)});
+      if(!r.ok)throw new Error(await r.text()||('HTTP '+r.status));
       var b=DATA.bk.find(function(x){return x.id===MNG.id;});
       if(b){b.client_pay=cli;b.owner_paid=own;b.agent_paid=ag;}
-    }catch(e){/* columns stay until next save */}
+    }catch(e){
+      alert('The payment plan saved, but the paid totals on the booking did not update.\n\n'
+        +e.message+'\n\nReopen the booking and save the plan again.');
+    }
   }
   async function paySave(){
     var label=document.getElementById('py_label').value.trim();
