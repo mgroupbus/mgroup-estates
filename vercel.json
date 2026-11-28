@@ -44,7 +44,7 @@
   "rewrites": [
     {
       "source": "/agent",
-      "destination": "/admin/agent-portal.html"
+      "destination": "/admin/agent-portal"
     }
   ]
 }

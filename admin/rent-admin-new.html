@@ -979,8 +979,10 @@
       : 'ชื่อบังคับอย่างเดียว — ที่เหลือใส่ทีหลังได้';
     document.getElementById('agEdBody').innerHTML=
       '<div class="frm">'+
-        '<div class="r"><div><label>Agency / co-agent name *</label>'+
-          '<input id="ag_name" type="text" value="'+esc(a.name||'')+'" placeholder="เช่น Natalie หรือ Phuket Luxe Travel"></div></div>'+
+        '<div class="r"><div><label>Name *</label>'+
+          '<input id="ag_name" type="text" value="'+esc(a.name||'Khun ')+'" placeholder="Khun Andrew">'+
+          '<div class="sub" style="margin-top:4px">ขึ้นต้นด้วย <b>Khun</b> เสมอ แล้วตามด้วยชื่อ '+
+          '&mdash; ชื่อบริษัทใส่ในช่องถัดไป</div></div></div>'+
         '<div class="r c2">'+
           '<div><label>Company <span style="text-transform:none;letter-spacing:0;font-weight:400">· optional</span></label>'+
             '<input id="ag_company" type="text" value="'+esc(a.company||'')+'" placeholder="ไม่บังคับ"></div>'+
@@ -1014,8 +1016,10 @@
   function closeAgentEdit(){document.getElementById('agEdOv').classList.remove('open');AGE.id='';}
 
   async function agSave(btn){
-    var name=vv('ag_name').trim();
-    if(!name)return agmsg('Agency name is required',true);
+    var name=vv('ag_name').trim().replace(/\s+/g,' ');
+    if(!name||/^khun$/i.test(name))return agmsg('Name is required',true);
+    // every agency reads "Khun <name>", so add it when it is missing
+    if(!/^khun\s/i.test(name))name='Khun '+name;
     // everything below is optional: empty stays empty rather than becoming ''
     var row={name:name,
       company:vv('ag_company').trim()||null,
@@ -1040,16 +1044,28 @@
 
   async function agDelete(btn){
     var id=AGE.id; if(!id)return;
+    var nm=agName(id);
     var deals=DATA.bk.filter(function(b){return b.agent_id===id;}).length;
-    if(deals)return agmsg('This agency has '+deals+' booking'+(deals===1?'':'s')+'. Set it to Inactive instead — deleting would orphan them.',true);
-    if(!confirm('Delete this agency? This cannot be undone.'))return;
-    btn.disabled=true;
-    try{
-      var r=await sbFetch(SB_URL+'/rest/v1/agents?id=eq.'+id,{method:'DELETE',headers:JH});
-      if(!r.ok)throw new Error('HTTP '+r.status);
-      closeAgentEdit();
-      await agReload(); await reloadAgentOptions();
-    }catch(e){ agmsg('Could not delete: '+e.message,true); btn.disabled=false; }
+    var lg=agLogin(id), live=agLive(id);
+    var warn='Delete '+nm+'? This cannot be undone.';
+    if(deals)warn+='\n\n'+deals+' booking'+(deals===1?'':'s')+' will move to “Direct — MGROUP”, '
+      +'so nothing is lost — but '+nm+' disappears from those bookings.';
+    if(live)warn+='\nTheir view link stops working.';
+    if(lg)warn+='\nTheir account '+lg.username+' is removed.';
+    if(!confirm(warn))return;
+    btn.disabled=true; btn.textContent='Deleting…';
+    var res=await agApi({action:'admin_agent_delete',agent_id:id});
+    if(!res||!res.ok){
+      agmsg({cannot_delete_direct:'“Direct — MGROUP” is built in and cannot be deleted.',
+             agent_not_found:'That agency is already gone.'}[(res&&res.data||{}).error]
+            ||'Could not delete this agency.',true);
+      btn.disabled=false; btn.textContent='Delete agency'; return;
+    }
+    closeAgentEdit();
+    await agReload(); await reloadAgentOptions(); renderAll();
+    var d=res.data;
+    if(d.bookings_moved)alert(d.name+' deleted. '+d.bookings_moved+' booking'
+      +(d.bookings_moved===1?'':'s')+' moved to “Direct — MGROUP”.');
   }
 
   async function agCreateLink(agentId,btn){
