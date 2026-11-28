@@ -898,7 +898,8 @@
   function agLive(agentId){
     var now=new Date();
     return (DATA.aglinks||[]).filter(function(r){
-      return r.agent_id===agentId&&!r.revoked&&(!r.expires_at||new Date(r.expires_at)>now);
+      return r.agent_id===agentId&&!r.revoked&&r.note!=='admin preview'
+        &&(!r.expires_at||new Date(r.expires_at)>now);
     })[0]||null;
   }
   function agLogin(agentId){
@@ -955,7 +956,25 @@
         +(lg.last_login?' &middot; last in '+fmtD(String(lg.last_login).slice(0,10)):' &middot; never signed in')+'</div>'
       : '<button class="rowbtn" onclick="agSetLogin(\''+a.id+'\',this)">Create account</button>'
         +'<div class="sub" style="margin-top:3px">can ask for services</div>';
-    return '<div style="margin-bottom:9px">'+link+'</div><div>'+login+'</div>';
+    return '<div style="margin-bottom:9px">'
+        +'<button class="rowbtn" onclick="agPreview(\''+a.id+'\',this)">View portal</button>'
+        +'<div class="sub" style="margin-top:3px">see it as '+esc(a.name)+' does</div></div>'
+      +'<div style="margin-bottom:9px">'+link+'</div><div>'+login+'</div>';
+  }
+
+  // Open an agency's portal as the admin, without having to mint a link to send
+  // anyone. Their own link is reused when they have one, so what you see is
+  // exactly what they see.
+  async function agPreview(agentId,btn){
+    var t=btn.textContent; btn.textContent='Opening…'; btn.disabled=true;
+    var res=await agApi({action:'admin_preview',agent_id:agentId});
+    btn.textContent=t; btn.disabled=false;
+    if(!res||!res.ok||!res.data.token){
+      alert({direct_has_no_portal:'Direct bookings have no portal.'}[(res&&res.data||{}).error]
+            ||'Could not open that portal.');
+      return;
+    }
+    window.open(agUrl(res.data.token),'_blank');
   }
 
   async function agApi(payload){
